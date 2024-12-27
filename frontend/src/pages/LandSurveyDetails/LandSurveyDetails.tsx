@@ -26,9 +26,7 @@ const LandSurveyDetails = () => {
     const userEmail: string = auth.email;
 
     const [date, setDate] = useState<Date>(new Date());
-    const [originalManager, setOriginalManager] = useState<InputOption>(
-        emptyInputOption()
-    );
+    const [originalManager, setOriginalManager] = useState<InputOption>(emptyInputOption());
     const [manager, setManager] = useState<InputOption>(emptyInputOption());
     const [surveyor, setSurveyor] = useState<InputOption>(emptyInputOption());
     const [address, setAddress] = useState<string>();
@@ -38,9 +36,7 @@ const LandSurveyDetails = () => {
     const [road, setRoad] = useState<string>("CALLE");
     const [corner, setCorner] = useState<boolean>(false);
     const [agency, setAgency] = useState<InputOption>(emptyInputOption());
-    const [particular, setParticular] = useState<InputOption>(
-        emptyInputOption()
-    );
+    const [particular, setParticular] = useState<InputOption>(emptyInputOption());
     const [contact, setContact] = useState<InputOption>(emptyInputOption());
     const [title, setTitle] = useState<boolean>(false);
     const [titleSituation, setTitleSituation] = useState<string>();
@@ -50,16 +46,10 @@ const LandSurveyDetails = () => {
     const [currency, setCurrency] = useState<string>("USD");
     const [fileType, setFileType] = useState<string>("DIGITAL");
     const [source, setSource] = useState<string>("WEB");
-    const [classification, setClassification] =
-        useState<string>("DATO COMPLETO");
+    const [classification, setClassification] =useState<string>("DATO COMPLETO");
     const [observation, setObservation] = useState<string>("");
-    const [assessmentList, setAssessmentList] = useState<Assessment[]>([
-        emptyAssessment(),
-        emptyAssessment(),
-    ]);
-    const [priceVerificationDate, setPriceVerificationDate] = useState<Date>(
-        new Date()
-    );
+    const [assessmentList, setAssessmentList] = useState<Assessment[]>([emptyAssessment(), emptyAssessment()]);
+    const [priceVerificationDate, setPriceVerificationDate] = useState<Date>(new Date());
     const [reassessmentDate, setReassessmentDate] = useState<Date>(new Date());
     const [isRescinded, setIsRescinded] = useState<boolean>();
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
@@ -160,7 +150,6 @@ const LandSurveyDetails = () => {
 
                 if (isMounted) {
                     setMaxDeviation(response.data);
-                    console.log(response.data);
                 }
             } catch (error) {
                 console.error(error);

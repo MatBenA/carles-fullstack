@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3500:3500"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/carles_landsurveys?useSSL=false&serverTimezone=UTC
+      DB_USERNAME: postgres
+      DB_PASSWORD: admin
+      SS_USERNAME: matbena
+      SS_PASSWORD: 5432
+      PRIVATE_KEY: ec9f712b405cbf435bb10e567bd56381b8d97431727abaf5cd3c730f8e8b8fc1
+      USER_GENERATOR: MATBENA
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: carles_landsurveys
+    ports:
+      - "5432:5432"
+      
+      
