@@ -1,0 +1,35 @@
+.filters {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.filters > div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filters .price-eval{
+    width: 290px;
+}
+
+.filters .agency-particular{
+    max-width: 470px;
+}
+
+.filters .section-zone{
+    max-width: 225px;
+    min-width: 108px;
+}
+
+.filters .classification-title{
+    align-self: stretch;
+    justify-content: space-between;
+}
+
+.filters .classification-title input[type="checkbox"]{
+    height: 30px;
+    width: 30px;
+}

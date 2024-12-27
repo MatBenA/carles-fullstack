@@ -1,0 +1,89 @@
+.green-btn {
+    background-color: var(--mint);
+    color: var(--lightest-blue);
+    border-color: transparent;
+}
+
+.transparent-green-btn {
+    background-color: transparent;
+    color: var(--mint);
+    border-color: var(--mint);
+}
+
+.transparent-green-btn:hover {
+    background-color: var(--mint);
+    color: var(--lightest-blue);
+}
+
+.red-btn {
+    background-color: var(--red);
+    color: var(--dark-red);
+    border-color: transparent;
+}
+
+.transparent-red-btn {
+    background-color: transparent;
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.transparent-red-btn:hover {
+    background-color: var(--red);
+    color: var(--dark-red);
+}
+
+.gold-btn {
+    background-color: var(--gold);
+    color: var(--dark-gold);
+    border-color: transparent;
+}
+
+.dflex {
+    display: flex;
+}
+
+.fgrow {
+    flex-grow: 1;
+}
+
+.gap-10 {
+    gap: 10px;
+}
+
+.gap-30 {
+    gap: 30px;
+}
+
+.gap-50 {
+    gap: 50px;
+}
+
+.container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-custom {
+    display: flex;
+    flex-direction: column;
+    width: 80vw;
+    max-width: 680px;
+    background-color: white;
+    padding: 20px;
+    gap: 20px;
+    border-radius: 12px;
+    box-shadow: -2px 4px 6px rgba(0, 0, 0, 0.25);
+    align-self: center;
+}
+
+.current-btn-page{
+    background-color: var(--dark-blue)
+}
+
+.error-input:disabled{
+    color: var(--dark-red);
+    background-color: var(--red-0);
+    border: 1px solid var(--dark-red);
+}

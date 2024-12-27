@@ -1,0 +1,40 @@
+.statistic-report{
+}
+
+.statistic-report .container{
+}
+
+.statistic-report .report{
+    width: 715px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--grey1);
+    align-self: center;
+}
+
+.statistic-report .row {
+    display: flex;
+}
+
+.statistic-report .row:nth-of-type(even) {
+    background-color: var(--violet1);
+}
+
+.statistic-report .row:nth-of-type(odd) {
+    background-color: var(--violet2);
+}
+
+.statistic-report .cells-container:first-child {
+    padding-left: 10px;
+}
+
+.statistic-report .cells-container {
+    width: 180px;
+    align-self: center;
+}
+
+.statistic-report .cell {
+    border-bottom: 1px solid var(--grey2);
+    padding: 5px;
+}
+

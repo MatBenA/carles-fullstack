@@ -1,0 +1,13 @@
+.update-report table th{
+    font-weight: 400;
+    text-align: start;
+}
+
+.update-report .main-cell{
+    max-width: 100px;
+}
+
+.update-report th{
+    max-width: 20px;
+    min-width: 20px;
+}

@@ -1,0 +1,42 @@
+.navbar{
+    flex-grow: 1;
+    display: flex;
+}
+
+.navbar a {
+    display: flex;
+    flex-grow: 1;
+}
+.navbar a button{
+    flex-grow: 1;
+    background-color: transparent;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--light-blue);
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    border-radius: unset;
+}
+.navbar a button:active{
+    background-color: var(--dark-blue);
+    color: var(--lightest-blue);
+}
+
+/* .navbar{
+    display: flex;
+    gap: 10px;
+}
+
+.navbar a {
+    display: flex;
+    flex-grow: 1;
+}
+.navbar a button{
+    flex-grow: 1;
+    background-color: var(--light-blue);
+}
+.navbar a button:active{
+    background-color: var(--dark-blue);
+    color: var(--lightest-blue);
+} */

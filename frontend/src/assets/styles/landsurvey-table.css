@@ -1,0 +1,35 @@
+.date{
+    min-width: 80px;
+}
+
+.surveyor{
+    min-width: 140px;
+}
+
+.manager{
+    min-width: 140px;
+}
+
+.address{
+    min-width: 400px;
+}
+
+.agency{
+    min-width: 250px;
+}
+
+.particular{
+    min-width: 210px;
+}
+
+.pretended{
+    min-width: 80px;
+}
+
+.classification{
+    min-width: 330px;
+}
+
+.observations{
+    min-width: 400px;
+}

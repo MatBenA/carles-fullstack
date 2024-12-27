@@ -1,0 +1,21 @@
+.top-bar {
+    display: flex;
+    background-color: var(--dark-blue);
+    gap: 22px;
+    padding: 10px 40px;
+}
+
+.top-bar > h1 {
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 300;
+    margin: 0;
+    text-align: center;
+    align-content: center;
+    min-width: 225px;
+}
+
+.top-bar .icon {
+    width: 75px;
+    height: 74px;
+}

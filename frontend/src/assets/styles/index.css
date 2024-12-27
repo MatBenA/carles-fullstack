@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --dark-blue: #2d3e50;
+    --lightest-blue: #f8f9fa;
+    --light-blue: #e4e2fb;
+    --nav-hover: #dad7f8;
+    --th-bgcolor: #e4e2fb;
+    --separator: #cbd4df;
+    --input-hover: #eef5ff;
+    --input-border: #d6dfe9;
+    --mint: #2fb383;
+    --dark-mint: #16533d;
+    --light-mint: #d5e5e0;
+    --smooth-blue: #758596;
+    --lighter-gold: #EBD7B6;
+    --light-gold: #DECEB0;
+    --gold : #CEB079;
+    --dark-gold: #524630;
+    --red-0: #ffcec5;
+    --light-red: #ee6c59;
+    --red: #D86251;
+    --dark-red: #68271E;
+    --input: #F8F8FC;
+    --blue-pro: #3197ee;
+    --violet1: #E4E2FB;
+    --violet2: #F3F7FC;
+    --grey1: #848D98;
+    --grey2: #b0b8c2;
+    --color: #e4e2fb;
+}

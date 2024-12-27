@@ -1,0 +1,36 @@
+import { InputOption } from "../models/InputOption";
+
+const columnOptions: InputOption[] = [
+    { value: "Codigo", label: "Codigo" },
+    { value: "Fecha", label: "Fecha" },
+    { value: "Relevó", label: "Relevó" },
+    { value: "Encargado", label: "Encargado" },
+    { value: "Tipo de archivo", label: "Tipo de archivo" },
+    { value: "Ubicacion", label: "Ubicacion" },
+    { value: "Camino", label: "Camino" },
+    { value: "Esquina", label: "Esquina" },
+    { value: "Seccion", label: "Seccion" },
+    { value: "Zona", label: "Zona" },
+    { value: "Proveedor", label: "Proveedor" },
+    { value: "Particular", label: "Particular" },
+    { value: "Contacto", label: "Contacto" },
+    { value: "Fuente", label: "Fuente" },
+    { value: "Titulo", label: "Titulo" },
+    { value: "Medidas", label: "Medidas" },
+    { value: "Superficie", label: "Superficie" },
+    { value: "Verificación precio", label: "Verificación de precio" },
+    { value: "Dias ultima Verificación", label: "Dias ultima Verificación" },
+    { value: "Re-Tasación fecha", label: "Re-Tasación fecha" },
+    { value: "Pretendido", label: "Pretendido" },
+    { value: "pretendido m2", label: "Pretendido m2" },
+    { value: "Promedio asesores", label: "Promedio asesores" },
+    { value: "Promedio asesores m2", label: "Promedio asesosre m2" },
+    { value: "Evaluación", label: "Evaluación" },
+    { value: "Clasificacion", label: "Clasificacion" },
+    { value: "Valor maximo", label: "Valor maximo" },
+    { value: "Valor mínimmo", label: "Valor mínimmo" },
+    { value: "% Desvío", label: "% Desvío" },
+    { value: "Observaciones", label: "Observaciones" },
+];
+
+export default columnOptions;

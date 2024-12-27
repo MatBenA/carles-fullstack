@@ -1,0 +1,21 @@
+.surveys{
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px
+}
+
+.surveys .evaluation {
+    display: flex;
+    flex-direction: column;
+}
+
+.surveys .price-range {
+    display: flex;
+    gap: 10px;
+}
+
+.surveys .icon {
+    width: 75px;
+    height: 74px;
+}

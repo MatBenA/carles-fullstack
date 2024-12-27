@@ -1,0 +1,17 @@
+.users{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.users table{
+    width: 900px;
+    align-self: center;
+}
+
+.users .add {
+    width: 250px;
+}
+
+

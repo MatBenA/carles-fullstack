@@ -1,0 +1,11 @@
+export interface SearchRequest {
+    minPrice: number | undefined;
+    maxPrice: number | undefined;
+    businessEvaluation?: string;
+    section: string | undefined;
+    zone: string | undefined;
+    agency: string | undefined;
+    particular: string | undefined;
+    classification: string | undefined;
+    title: boolean | undefined;
+}
