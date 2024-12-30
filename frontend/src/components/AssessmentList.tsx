@@ -1,4 +1,4 @@
-import Select, { ActionMeta, SingleValue } from "react-select";
+import Select, { SingleValue } from "react-select";
 import select2Styles from "../styled-components/select2style";
 import { InputOption } from "../models/InputOption";
 import Assessment from "../models/Assessment";
@@ -69,7 +69,7 @@ const AssessmentList = ({ userOptions, assessmentList, setAssessmentList }: Asse
                             options={userOptions}
                             name="assessor"
                             value={assessment.assessor}
-                            onChange={(newValue: SingleValue<InputOption>, actionMeta: ActionMeta<InputOption>) =>
+                            onChange={(newValue: SingleValue<InputOption>) =>
                                 handleAssessmentChange(
                                     assessment.assessor.value,
                                     "assessor",

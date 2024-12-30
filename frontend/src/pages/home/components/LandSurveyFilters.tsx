@@ -16,16 +16,16 @@ type LandSurveyFiltersProps = {
 } 
 
 const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
-    const handleGetRescindeds = useHandleGetRescindeds(setLandSurveys);
+    const handleGetRescindeds = useHandleGetRescindeds({setLandSurveys});
 
     const axiosPrivate = useAxiosPrivate();
     const [minPrice, setMinPrice] = useState<number>();
     const [maxPrice, setMaxPrice] = useState<number>();
-    const [businessEvaluation, setBusinessEvaluation] = useState<InputOption>();
-    const [section, setSection] = useState<InputOption>();
-    const [zone, setZone] = useState<InputOption>();
-    const [agency, setAgency] = useState<InputOption>();
-    const [particular, setParticular] = useState<InputOption>();
+    const [businessEvaluation, setBusinessEvaluation] = useState<InputOption | null>(null);
+    const [section, setSection] = useState<InputOption | null>(null);
+    const [zone, setZone] = useState<InputOption | null>(null);
+    const [agency, setAgency] = useState<InputOption | null>(null);
+    const [particular, setParticular] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
     const [title, setTitle] = useState<boolean>(true);
 

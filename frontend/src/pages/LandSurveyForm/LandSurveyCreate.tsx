@@ -20,17 +20,17 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "sonner";
 
 const LandSurveyCreate = () => {
-    const [manager, setManager] = useState<InputOption>();
-    const [surveyor, setSurveyor] = useState<InputOption>();
+    const [manager, setManager] = useState<InputOption | null>(null);
+    const [surveyor, setSurveyor] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>("");
-    const [locality, setLocality] = useState<InputOption>();
-    const [section, setSection] = useState<InputOption>();
-    const [zone, setZone] = useState<InputOption>();
+    const [locality, setLocality] = useState<InputOption | null>(null);
+    const [section, setSection] = useState<InputOption | null>(null);
+    const [zone, setZone] = useState<InputOption | null>(null);
     const [road, setRoad] = useState<string>("CALLE");
     const [corner, setCorner] = useState<boolean>(false);
-    const [agency, setAgency] = useState<InputOption>();
-    const [particular, setParticular] = useState<InputOption>();
-    const [contact, setContact] = useState<InputOption>();
+    const [agency, setAgency] = useState<InputOption | null>(null);
+    const [particular, setParticular] = useState<InputOption | null>(null);
+    const [contact, setContact] = useState<InputOption | null>(null);
     const [title, setTitle] = useState<boolean>(false);
     const [titleSituation, setTitleSituation] = useState<string>();
     const [measurements, setMeasurements] = useState<string>("");

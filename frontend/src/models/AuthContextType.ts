@@ -2,7 +2,7 @@ import Auth from "./Auth";
 
 type AuthContextType = {
     auth: Auth,
-    setAuth: (auth: Auth | null) => void; 
+    setAuth: React.Dispatch<React.SetStateAction<Auth>>;
 }
 
 export default AuthContextType;

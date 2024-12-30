@@ -1,6 +1,7 @@
 import { StylesConfig } from "react-select";
+import { InputOption } from "../models/InputOption";
 
-const select2Styles: StylesConfig = {
+const select2Styles: StylesConfig<InputOption, false> = {
     control: (provided) => ({
         ...provided,
         height: "32px", // Sets the height

@@ -30,7 +30,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                     closeMenuOnSelect={false}
                     components={animatedComponents}
                     options={columnOptions}
-                    onChange={setColumnList}
+                    onChange={option => setColumnList([...option])}
                     value={columnList}
                     placeholder="Seleccione columna a remover"
                 />

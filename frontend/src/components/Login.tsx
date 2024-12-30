@@ -3,14 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import "../assets/styles/login.css";
 import useAuth from "../hooks/useAuth";
+import { AxiosError } from "axios";
 
 const LOGIN_URL = "/auth/login";
 
 const Login = () => {
     const { setAuth } = useAuth();
 
-    const emailRef = useRef(null);
-    const errRef = useRef(null);
+    const emailRef = useRef<HTMLInputElement>(null);
+    const errRef = useRef<HTMLInputElement>(null);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,7 +22,7 @@ const Login = () => {
     const [errMsg, setErrMsg] = useState("");
 
     useEffect(() => {
-        emailRef.current.focus();
+        emailRef.current?.focus();
     }, []);
 
     useEffect(() => {
@@ -47,16 +48,17 @@ const Login = () => {
             setPwd("");
             navigate(from, { replace: true });
         } catch (err) {
-            if (!err?.response) {
+            const error = err as AxiosError;
+            if (!error.response) {
                 setErrMsg("Sin respuesta del servidor");
-            } else if (err.response?.status === 400) {
+            } else if (error.response.status === 400) {
                 setErrMsg("Usuario o Contrasena incorrecta.");
-            } else if (err.response?.status === 401) {
+            } else if (error.response.status === 401) {
                 setErrMsg("No autorizado");
             } else {
                 setErrMsg("Ingreso fallido");
             }
-            errRef.current.focus();
+            errRef.current?.focus();
         }
     };
 

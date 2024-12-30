@@ -23,21 +23,21 @@ import useIsAdmin from "../../hooks/useIsAdmin";
 const LandSurveyDetails = () => {
     const { auth } = useAuth();
     const isAdmin: boolean = useIsAdmin();
-    const userEmail: string = auth.email;
+    const userEmail: string | undefined = auth?.email;
 
     const [date, setDate] = useState<Date>(new Date());
     const [originalManager, setOriginalManager] = useState<InputOption>(emptyInputOption());
-    const [manager, setManager] = useState<InputOption>(emptyInputOption());
-    const [surveyor, setSurveyor] = useState<InputOption>(emptyInputOption());
+    const [manager, setManager] = useState<InputOption | null>(null);
+    const [surveyor, setSurveyor] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
-    const [locality, setLocality] = useState<InputOption>(emptyInputOption());
-    const [section, setSection] = useState<InputOption>(emptyInputOption());
-    const [zone, setZone] = useState<InputOption>(emptyInputOption());
+    const [locality, setLocality] = useState<InputOption | null>(null);
+    const [section, setSection] = useState<InputOption | null>(null);
+    const [zone, setZone] = useState<InputOption | null>(null);
     const [road, setRoad] = useState<string>("CALLE");
     const [corner, setCorner] = useState<boolean>(false);
-    const [agency, setAgency] = useState<InputOption>(emptyInputOption());
-    const [particular, setParticular] = useState<InputOption>(emptyInputOption());
-    const [contact, setContact] = useState<InputOption>(emptyInputOption());
+    const [agency, setAgency] = useState<InputOption | null>(null);
+    const [particular, setParticular] = useState<InputOption | null>(null);
+    const [contact, setContact] = useState<InputOption | null>(null);
     const [title, setTitle] = useState<boolean>(false);
     const [titleSituation, setTitleSituation] = useState<string>();
     const [measurements, setMeasurements] = useState<string>("");
@@ -54,7 +54,7 @@ const LandSurveyDetails = () => {
     const [isRescinded, setIsRescinded] = useState<boolean>();
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
 
-    const userOptions: Array<InputOption> = useFetchOptions("/users/options");
+    const userOptions: InputOption[] = useFetchOptions("/users/options");
 
     const id = useLocation().state;
     const axiosPrivate = useAxiosPrivate();

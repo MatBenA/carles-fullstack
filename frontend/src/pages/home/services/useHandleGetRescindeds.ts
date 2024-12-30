@@ -1,8 +1,13 @@
 import { toast } from "sonner";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import adaptLandSurvey from "../adapters/landSurveysAdapter";
+import LandSurvey from "../../../models/LandSurvey";
 
-const useHandleGetRescindeds = (setLandSurveys) => {
+type LandSurveyFiltersProps = {
+    setLandSurveys: React.Dispatch<React.SetStateAction<LandSurvey[]>>;
+} 
+
+const useHandleGetRescindeds = ({setLandSurveys}: LandSurveyFiltersProps) => {
     const axiosPrivate = useAxiosPrivate();
     const controller = new AbortController();
     const handleGetRescindeds = async () => {

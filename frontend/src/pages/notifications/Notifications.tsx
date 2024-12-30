@@ -10,7 +10,7 @@ import { InputOption } from "../../models/InputOption";
 
 const Notifications = () => {
     const [landSurveys, setLandSurveys] = useState<LandSurvey[]>();
-    const [category, setCategory] = useState<InputOption>();
+    const [category, setCategory] = useState<InputOption | null>(null);
     const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
