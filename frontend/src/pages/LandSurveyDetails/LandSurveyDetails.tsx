@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FormEvent, useEffect, useState } from "react";
 import AssessmentList from "../../components/AssessmentList";
 import Select from "react-select";
@@ -21,12 +21,15 @@ import useAuth from "../../hooks/useAuth";
 import useIsAdmin from "../../hooks/useIsAdmin";
 
 const LandSurveyDetails = () => {
+    const navigate = useNavigate();
     const { auth } = useAuth();
     const isAdmin: boolean = useIsAdmin();
     const userEmail: string | undefined = auth?.email;
 
     const [date, setDate] = useState<Date>(new Date());
-    const [originalManager, setOriginalManager] = useState<InputOption>(emptyInputOption());
+    const [originalManager, setOriginalManager] = useState<InputOption>(
+        emptyInputOption()
+    );
     const [manager, setManager] = useState<InputOption | null>(null);
     const [surveyor, setSurveyor] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
@@ -46,13 +49,20 @@ const LandSurveyDetails = () => {
     const [currency, setCurrency] = useState<string>("USD");
     const [fileType, setFileType] = useState<string>("DIGITAL");
     const [source, setSource] = useState<string>("WEB");
-    const [classification, setClassification] =useState<string>("DATO COMPLETO");
+    const [classification, setClassification] =
+        useState<string>("DATO COMPLETO");
     const [observation, setObservation] = useState<string>("");
-    const [assessmentList, setAssessmentList] = useState<Assessment[]>([emptyAssessment(), emptyAssessment()]);
-    const [priceVerificationDate, setPriceVerificationDate] = useState<Date>(new Date());
+    const [assessmentList, setAssessmentList] = useState<Assessment[]>([
+        emptyAssessment(),
+        emptyAssessment(),
+    ]);
+    const [priceVerificationDate, setPriceVerificationDate] = useState<Date>(
+        new Date()
+    );
     const [reassessmentDate, setReassessmentDate] = useState<Date>(new Date());
     const [isRescinded, setIsRescinded] = useState<boolean>();
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
+    const [toDelete, setToDelete] = useState<boolean>(false);
 
     const userOptions: InputOption[] = useFetchOptions("/users/options");
 
@@ -233,6 +243,27 @@ const LandSurveyDetails = () => {
             const result = await sendRescinde;
             console.log(result);
             setIsRescinded(result.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleDelete = async () => {
+        const controller = new AbortController();
+        const deleteLandSurvey = axiosPrivate.delete(
+            `/land-surveys/delete/${id}`,
+            { signal: controller.signal }
+        );
+
+        toast.promise(deleteLandSurvey, {
+            error: "Error",
+            success: "Relevamiento eliminado exitosamente",
+            loading: "Cargando..."
+        })
+
+        try {
+            await deleteLandSurvey;
+            navigate("/land-surveys")
         } catch (error) {
             console.error(error);
         }
@@ -888,8 +919,14 @@ const LandSurveyDetails = () => {
                         </button>
                     </Link>
                     {isAdmin || userEmail === originalManager?.value ? (
-                        <button className="f-stretch green-btn" type="submit">
-                            Guardar
+                        <button
+                            className={`f-stretch ${
+                                toDelete ? "green-btn" : "red-btn"
+                            }`}
+                            onClick={() => setToDelete(!toDelete)}
+                            type="button"
+                        >
+                            {toDelete ? "Cancelar baja" : "Dar de baja"}
                         </button>
                     ) : (
                         <></>
@@ -905,6 +942,29 @@ const LandSurveyDetails = () => {
                             type="button"
                         >
                             {isRescinded ? "Restablecer" : "Rescindir"}
+                        </button>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+                <div className="dflex gap-30">
+                    {isAdmin || userEmail === originalManager?.value ? (
+                        <button className="f-stretch green-btn" type="submit">
+                            Guardar
+                        </button>
+                    ) : (
+                        <></>
+                    )}
+                </div>
+                <div className="dflex gap-30">
+                    {(isAdmin || userEmail === originalManager?.value) &&
+                    toDelete ? (
+                        <button
+                            className="red-btn"
+                            type="submit"
+                            onClick={handleDelete}
+                        >
+                            Confirmar dar de baja permanentemente
                         </button>
                     ) : (
                         <></>

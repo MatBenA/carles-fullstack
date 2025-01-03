@@ -1,6 +1,7 @@
 export interface SearchRequest {
     minPrice: number | undefined;
     maxPrice: number | undefined;
+    address: string | undefined;
     businessEvaluation?: string;
     section: string | undefined;
     zone: string | undefined;

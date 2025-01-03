@@ -37,6 +37,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [classification, setClassification] = useState<string>();
     const [title, setTitle] = useState<boolean>(true);
     const [manager, setManager] = useState<InputOption | null>(null);
+    const [address, setAddress] = useState<string>();
 
     useEffect(() => {
         let isMounted = true;
@@ -51,6 +52,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                 {
                     minPrice,
                     maxPrice,
+                    address,
                     businessEvaluation: businessEvaluation?.value,
                     section: section?.label,
                     zone: zone?.label,
@@ -75,6 +77,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     }, [
         maxPrice,
         minPrice,
+        address,
         businessEvaluation,
         section?.label,
         zone?.label,
@@ -87,7 +90,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
         manager,
     ]);
 
-    const handleSetManager = () => {
+    const handleSetManager = () => { 
         console.log(manager)
         if (manager?.value) {
             setManager(null);
@@ -137,6 +140,16 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         isClearable
                     />
                 </div>
+
+                <div>
+                        <label htmlFor="min-price">Buscar por ubicacion</label>
+                        <input
+                            type="text"
+                            id="min-price"
+                            value={address}
+                            onChange={e => setAddress(e.target.value)}
+                        />
+                    </div>
             </div>
 
             <div className="section-zone">

@@ -33,6 +33,7 @@ public class LandSurveyController {
     public HomeDTO searchLandSurveys(
             @RequestParam(required = false) Integer minPrice,
             @RequestParam(required = false) Integer maxPrice,
+            @RequestParam(required = false) String address,
             @RequestParam(required = false) String businessEvaluation,
             @RequestParam(required = false) String section,
             @RequestParam(required = false) String zone,
@@ -47,6 +48,7 @@ public class LandSurveyController {
         Page<LandSurveyDTO> landSurveyFilteredPage = landSurveyService.searchLandSurveys(
                 minPrice,
                 maxPrice,
+                address,
                 businessEvaluation,
                 section,
                 zone,

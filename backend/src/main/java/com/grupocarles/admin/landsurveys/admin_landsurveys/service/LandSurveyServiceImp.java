@@ -165,6 +165,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Override
     public Page<LandSurveyDTO> searchLandSurveys(Integer minPrice,
                                                  Integer maxPrice,
+                                                 String address,
                                                  String businessEvaluation,
                                                  String section,
                                                  String zone,
@@ -181,6 +182,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         SearchLandSurveySpecification specification = new SearchLandSurveySpecification(
                 minPrice,
                 maxPrice,
+                address,
                 businessEvaluation,
                 section,
                 zone,

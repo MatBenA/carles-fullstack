@@ -14,6 +14,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
 
     private Integer minPrice;
     private Integer maxPrice;
+    private String address;
     private String businessEvaluation;
     private String section;
     private String zone;
@@ -38,6 +39,12 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
         if (maxPrice != null && maxPrice > 0) {
             Predicate priceLessThanEqualPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
             predicateList.add(priceLessThanEqualPredicate);
+        }
+
+        if (StringUtils.hasText(address)) {
+            Expression<String> addressToUpperCase = criteriaBuilder.upper(root.get("address"));
+            Predicate addressLikePredicate = criteriaBuilder.like(addressToUpperCase, "%" + address.toUpperCase() + "%");
+            predicateList.add(addressLikePredicate);
         }
 
         /*if (StringUtils.hasText(businessEvaluation) && "cheapFilter".equals(businessEvaluation)) {

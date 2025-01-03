@@ -3,6 +3,7 @@ import { SearchRequest } from "../models/SearchRequest";
 export function searchRequestAdapter({
     minPrice,
     maxPrice,
+    address,
     businessEvaluation,
     section,
     zone,
@@ -22,6 +23,7 @@ export function searchRequestAdapter({
     return {
         minPrice,
         maxPrice,
+        address,
         businessEvaluation,
         section,
         zone,

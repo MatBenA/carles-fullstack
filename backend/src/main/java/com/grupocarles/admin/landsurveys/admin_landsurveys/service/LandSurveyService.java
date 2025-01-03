@@ -14,6 +14,7 @@ public interface LandSurveyService {
 
     Page<LandSurveyDTO> searchLandSurveys(Integer minPrice,
                                           Integer maxPrice,
+                                          String address,
                                           String businessEvaluation,
                                           String section,
                                           String zone,

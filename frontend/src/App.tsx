@@ -15,7 +15,7 @@ import StatisticTable from "./pages/statisticTable/StatisticTable";
 import StatisticReport from "./pages/statisticReport/StatisticReport";
 import Notifications from "./pages/notifications/Notifications";
 import UpdateReportDetail from "./pages/updateReportDetail/UpdateReportDetail";
-import UpdateReportTable from "./pages/updateReportTable/UpdateReportTable"
+import UpdateReportTable from "./pages/updateReportTable/UpdateReportTable";
 
 const ROLES = {
     USER: "USER",
@@ -24,7 +24,6 @@ const ROLES = {
 };
 
 function App() {
-
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
@@ -75,11 +74,7 @@ function App() {
                     <Route path="/users" element={<Users />} />
                 </Route>
 
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN]} />
-                    }
-                >
+                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
                     <Route path="/users/detail" element={<UserDetails />} />
                 </Route>
 
@@ -91,24 +86,53 @@ function App() {
                     <Route path="/settings" element={<Settings />} />
                 </Route>
 
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />}>
+                <Route
+                    element={
+                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
+                    }
+                >
                     <Route path="/statistics" element={<StatisticTable />} />
                 </Route>
 
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />}>
-                    <Route path="/statistics/report" element={<StatisticReport />} />
+                <Route
+                    element={
+                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
+                    }
+                >
+                    <Route
+                        path="/statistics/report"
+                        element={<StatisticReport />}
+                    />
                 </Route>
-                
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />}>
+
+                <Route
+                    element={
+                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
+                    }
+                >
                     <Route path="/notifications" element={<Notifications />} />
                 </Route>
-                
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />}>
-                    <Route path="/update-reports" element={<UpdateReportTable />} />
+
+                <Route
+                    element={
+                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
+                    }
+                >
+                    <Route
+                        path="/update-reports"
+                        element={<UpdateReportTable />}
+                    />
                 </Route>
-                
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />}>
-                    <Route path="/update-reports/details" element={<UpdateReportDetail />} />
+
+                <Route
+                    element={
+                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
+                    }
+                >
+                    <Route
+                        path="/update-reports/details"
+                        element={<UpdateReportDetail />}
+                    />
                 </Route>
 
                 <Route path="*" element={<Missing />} />
