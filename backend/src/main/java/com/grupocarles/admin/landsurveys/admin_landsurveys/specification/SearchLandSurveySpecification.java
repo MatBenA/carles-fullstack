@@ -20,6 +20,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private String agency;
     private String particular;
     private String classification;
+    private String managerEmail;
     private Boolean title;
 
     private Long cheapFlag;
@@ -41,9 +42,9 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
 
         /*if (StringUtils.hasText(businessEvaluation) && "cheapFilter".equals(businessEvaluation)) {
             Join<LandSurvey, Assessment> landSurveyAssessmentJoin = root.join("assessmentList");
-            Subquery<Double> averageAssessmenteSubquery = criteriaBuilder.createQuery().subquery(Double.class);
-            Root<Assessment> subqueryRoot = averageAssessmenteSubquery.from(Assessment.class);
-            averageAssessmenteSubquery.select(criteriaBuilder.avg(subqueryRoot.get("price")))
+            Subquery<Double> averageAssessmentSubquery = criteriaBuilder.createQuery().subquery(Double.class);
+            Root<Assessment> subqueryRoot = averageAssessmentSubquery.from(Assessment.class);
+            averageAssessmentSubquery.select(criteriaBuilder.avg(subqueryRoot.get("price")))
                     .where(criteriaBuilder.equal(subqueryRoot.get("landSurvey").get("id"), root.get("id")));
 
             Expression<Double> assessmentAverage = criteriaBuilder.avg(landSurveyAssessmentJoin.get("price"));
@@ -95,7 +96,17 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(hasTitlePredicate);
         }
 
-        query.orderBy(criteriaBuilder.asc(root.get("price")));
+        Join<LandSurvey, UserSec> landSurveyManagerJoin = root.join("manager");
+        if (managerEmail != null){
+            Predicate managerEmailLikePredicate = criteriaBuilder.like(landSurveyManagerJoin.get("email"), managerEmail);
+            predicateList.add(managerEmailLikePredicate);
+        }
+
+        if(managerEmail != null) {
+            query.orderBy(criteriaBuilder.asc(root.get("priceVerificationDate")));
+        }else {
+            query.orderBy(criteriaBuilder.asc(root.get("price")));
+        }
 
         return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
     }

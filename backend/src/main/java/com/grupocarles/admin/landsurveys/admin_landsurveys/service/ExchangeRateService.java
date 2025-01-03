@@ -34,11 +34,11 @@ public class ExchangeRateService {
     public void scheduledExchangeRate(){
         getBlueDollarRate()
                 .subscribe(rate -> {
-                    Currency dolarCurrency = currencyRepository
-                            .findByCode("USD")
-                            .orElseThrow(EntityNotFoundException::new);
-                    dolarCurrency.setExchangeReference(rate);
-                    currencyRepository.save(dolarCurrency);
+//                    Currency dolarCurrency = currencyRepository
+//                            .findByCode("USD")
+//                            .orElseThrow(EntityNotFoundException::new);
+//                    dolarCurrency.setExchangeReference(rate);
+//                    currencyRepository.save(dolarCurrency);
                 });
     }
 }

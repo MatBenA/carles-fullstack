@@ -39,6 +39,7 @@ public class LandSurveyController {
             @RequestParam(required = false) String agency,
             @RequestParam(required = false) String particular,
             @RequestParam(required = false) String classification,
+            @RequestParam(required = false) String managerEmail,
             @RequestParam(required = false) Boolean title,
             @RequestParam(defaultValue = "0") int page
     ) {
@@ -52,6 +53,7 @@ public class LandSurveyController {
                 agency,
                 particular,
                 classification,
+                managerEmail,
                 title,
                 page
         );

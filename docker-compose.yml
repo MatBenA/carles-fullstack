@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   frontend:
@@ -17,7 +17,7 @@ services:
     ports:
       - "3500:3500"
     environment:
-      DB_URL: jdbc:postgresql://db:5432/carles_landsurveys?useSSL=false&serverTimezone=UTC
+      DB_URL: jdbc:postgresql://db:5432/carles_landsurveys?sslmode=disable&serverTimezone=UTC
       DB_USERNAME: postgres
       DB_PASSWORD: admin
       SS_USERNAME: matbena
@@ -26,6 +26,11 @@ services:
       USER_GENERATOR: MATBENA
     depends_on:
       - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3500/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   db:
     image: postgres:15
@@ -35,5 +40,8 @@ services:
       POSTGRES_DB: carles_landsurveys
     ports:
       - "5432:5432"
-      
-      
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:

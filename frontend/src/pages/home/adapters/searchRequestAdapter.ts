@@ -9,6 +9,7 @@ export function searchRequestAdapter({
     agency,
     particular,
     classification,
+    managerEmail,
     title,
 }: SearchRequest): SearchRequest {
     if (minPrice === undefined || isNaN(minPrice)) {
@@ -27,6 +28,7 @@ export function searchRequestAdapter({
         agency,
         particular,
         classification,
+        managerEmail,
         title,
     };
 }

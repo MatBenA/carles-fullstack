@@ -10,28 +10,39 @@ import useFetchOptions from "../../../services/useFetchOptions";
 import useHandleGetRescindeds from "../services/useHandleGetRescindeds";
 import evaluationOptions from "../../../utilities/businessEvaluationOptions";
 import LandSurvey from "../../../models/LandSurvey";
+import useAuth from "../../../hooks/useAuth";
+import useIsAdmin from "../../../hooks/useIsAdmin";
 
 type LandSurveyFiltersProps = {
     setLandSurveys: React.Dispatch<React.SetStateAction<LandSurvey[]>>;
-} 
+};
 
 const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
-    const handleGetRescindeds = useHandleGetRescindeds({setLandSurveys});
+    const { auth } = useAuth();
+    const isAdmin: boolean = useIsAdmin();
+    const userEmail: string | undefined = auth?.email;
+    const userOptions = useFetchOptions("/users/options");
+
+    const handleGetRescindeds = useHandleGetRescindeds({ setLandSurveys });
 
     const axiosPrivate = useAxiosPrivate();
     const [minPrice, setMinPrice] = useState<number>();
     const [maxPrice, setMaxPrice] = useState<number>();
-    const [businessEvaluation, setBusinessEvaluation] = useState<InputOption | null>(null);
+    const [businessEvaluation, setBusinessEvaluation] =
+        useState<InputOption | null>(null);
     const [section, setSection] = useState<InputOption | null>(null);
     const [zone, setZone] = useState<InputOption | null>(null);
     const [agency, setAgency] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
     const [title, setTitle] = useState<boolean>(true);
+    const [manager, setManager] = useState<InputOption | null>(null);
 
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
+
+        console.log(manager?.value)
 
         const getLandSurveys = async () => {
             const newLandSurveys = await fetchLandSurveys(
@@ -45,6 +56,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     zone: zone?.label,
                     agency: agency?.label,
                     particular: particular?.label,
+                    managerEmail: manager?.value,
                     classification,
                     title,
                 }
@@ -61,18 +73,28 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             controller.abort();
         };
     }, [
-        agency?.label,
-        axiosPrivate,
-        businessEvaluation,
-        classification,
         maxPrice,
         minPrice,
-        particular?.label,
+        businessEvaluation,
         section?.label,
+        zone?.label,
+        agency?.label,
+        axiosPrivate,
+        classification,
+        particular?.label,
         setLandSurveys,
         title,
-        zone?.label,
+        manager,
     ]);
+
+    const handleSetManager = () => {
+        console.log(manager)
+        if (manager?.value) {
+            setManager(null);
+        } else {
+            setManager({ value: userEmail, label: "" });
+        }
+    };
 
     return (
         <section className="filters">
@@ -217,6 +239,29 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <span>Añadir Relevamiento</span>
                     </button>
                 </Link>
+                {isAdmin ? (
+                    <div>
+                        <label htmlFor="manager">Encargado</label>
+                        <Select
+                        id="manager"
+                        styles={select2Styles}
+                        options={userOptions}
+                        value={manager}
+                        onChange={setManager}
+                        placeholder="Encargado"
+                        isClearable/>
+                    </div>
+                ) : (
+                    <div className="dflex gap-10">
+                        <input
+                            id="showMine"
+                            type="checkbox"
+                            checked={!!manager}
+                            onChange={handleSetManager}
+                        />
+                        <label htmlFor="showMine">Relevamientos propios</label>
+                    </div>
+                )}
             </div>
         </section>
     );

@@ -19,7 +19,7 @@ const Notifications = () => {
 
         const getNotifications = async () => {
             const response = await axiosPrivate.get(
-                `/notifications/${category?.value}`,
+                "/land-surveys/",
                 { signal: controller.signal }
             );
 

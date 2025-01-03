@@ -7,5 +7,6 @@ export interface SearchRequest {
     agency: string | undefined;
     particular: string | undefined;
     classification: string | undefined;
+    managerEmail: string | undefined;
     title: boolean | undefined;
 }

@@ -20,6 +20,7 @@ public interface LandSurveyService {
                                           String agency,
                                           String particular,
                                           String classification,
+                                          String managerEmail,
                                           Boolean title,
                                           int pageNumber);
 

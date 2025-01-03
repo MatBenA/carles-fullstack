@@ -171,6 +171,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                                                  String agency,
                                                  String particular,
                                                  String classification,
+                                                 String managerEmail,
                                                  Boolean title,
                                                  int pageNumber) {
 
@@ -186,6 +187,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 agency,
                 particular,
                 classification,
+                managerEmail,
                 title,
                 cheapFlag,
                 expensiveFlag
