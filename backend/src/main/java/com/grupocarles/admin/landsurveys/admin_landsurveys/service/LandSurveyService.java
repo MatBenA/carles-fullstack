@@ -8,7 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface LandSurveyService {
-    LandSurvey createLandSurvey(LandSurveyDTO landSurvey);
+    LandSurveyDTO createLandSurvey(LandSurveyDTO landSurvey);
 
     List<LandSurveyDTO> getAllLandSurveys();
 
@@ -27,7 +27,7 @@ public interface LandSurveyService {
 
     LandSurveyDTO getLandSurveyById(long id);
 
-    LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurvey);
+    LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurveyDTO);
 
     void deleteLandSurvey(long id);
 

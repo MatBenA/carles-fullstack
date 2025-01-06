@@ -70,11 +70,71 @@ public class LandSurveyServiceImp implements LandSurveyService {
     private SettingRepository settingRepository;
 
     @Override
-    public LandSurvey createLandSurvey(LandSurveyDTO landSurveyDTO) {
+    public LandSurveyDTO createLandSurvey(LandSurveyDTO landSurveyDTO) {
 
         LandSurvey landSurvey = DTOToLandSurvey(landSurveyDTO);
         landSurvey.setIsRescinded(false);
         landSurvey.setIsArchived(false);
+
+        return adaptToDTO(saveSecure(landSurvey));
+    }
+
+    private LandSurvey DTOToLandSurvey(LandSurveyDTO landSurveyDTO) {
+
+        LandSurvey landSurvey = new LandSurvey();
+        UserSec surveyor = userRepository.findUserEntityByEmail(landSurveyDTO.surveyor().value()).orElseThrow(EntityNotFoundException::new);
+        UserSec manager = userRepository.findUserEntityByEmail(landSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
+        FileType fileType = fileTypeRepository.findByName(landSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
+        RoadType roadType = roadTypeRepository.findByName(landSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
+        Locality locality = localityRepository.findByName(landSurveyDTO.locality()).orElseThrow(EntityNotFoundException::new);
+        Section section = sectionRepository.findByName(landSurveyDTO.section()).orElseThrow(EntityNotFoundException::new);
+        Zone zone = zoneRepository.findByName(landSurveyDTO.zone()).orElseThrow(EntityNotFoundException::new);
+        Source source = sourceRepository.findByName(landSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
+        Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
+        Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
+
+        Agency agency = agencyRepository.findByName(landSurveyDTO.agency()).orElse(null);
+        if(agency == null) {
+            Agency newAgency = new Agency();
+            newAgency.setName(landSurveyDTO.agency());
+            agencyRepository.save(newAgency);
+        }
+
+        Particular particular = particularRepository.findByName(landSurveyDTO.particular()).orElse(null);
+        if(particular == null) {
+            Particular newParticular = new Particular();
+            newParticular.setName(landSurveyDTO.particular());
+            particularRepository.save(newParticular);
+        }
+
+        Contact contact = contactRepository.findByPhone(landSurveyDTO.contact()).orElse(null);
+        if(contact == null) {
+            Contact newContact = new Contact();
+            newContact.setPhone(landSurveyDTO.contact());
+            contactRepository.save(newContact);
+        }
+
+        landSurvey.setAddress(landSurveyDTO.address());
+        landSurvey.setCorner(landSurveyDTO.corner());
+        landSurvey.setTitle(landSurveyDTO.title());
+        landSurvey.setTitleSituation(landSurveyDTO.titleSituation());
+        landSurvey.setMeasurements(landSurveyDTO.measurements());
+        landSurvey.setSurface(landSurveyDTO.surface());
+        landSurvey.setObservation(landSurveyDTO.observation());
+        landSurvey.setSurveyor(surveyor);
+        landSurvey.setManager(manager);
+        landSurvey.setFileType(fileType);
+        landSurvey.setRoadType(roadType);
+        landSurvey.setLocality(locality);
+        landSurvey.setSection(section);
+        landSurvey.setZone(zone);
+        landSurvey.setSource(source);
+        landSurvey.setClassification(classification);
+        landSurvey.setAgency(agency);
+        landSurvey.setParticular(particular);
+        landSurvey.setContact(contact);
+        landSurvey.setPrice(landSurveyDTO.price());
+        landSurvey.setCurrency(currency);
 
         for (AssessmentDTO assessment : landSurveyDTO.assessmentList()){
             UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
@@ -87,58 +147,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return saveSecure(landSurvey);
-    }
-
-    private LandSurvey DTOToLandSurvey(LandSurveyDTO landSurvey) {
-
-        UserSec surveyor = userRepository.findUserEntityByEmail(landSurvey.surveyor().value()).orElseThrow(EntityNotFoundException::new);
-        UserSec manager = userRepository.findUserEntityByEmail(landSurvey.manager().value()).orElseThrow(EntityNotFoundException::new);
-        FileType fileType = fileTypeRepository.findByName(landSurvey.fileType()).orElseThrow(EntityNotFoundException::new);
-        RoadType roadType = roadTypeRepository.findByName(landSurvey.roadType()).orElseThrow(EntityNotFoundException::new);
-        Locality locality = localityRepository.findByName(landSurvey.locality()).orElseThrow(EntityNotFoundException::new);
-        Section section = sectionRepository.findByName(landSurvey.section()).orElseThrow(EntityNotFoundException::new);
-        Zone zone = zoneRepository.findByName(landSurvey.zone()).orElseThrow(EntityNotFoundException::new);
-        Source source = sourceRepository.findByName(landSurvey.source()).orElseThrow(EntityNotFoundException::new);
-        Classification classification = classificationRepository.findByName(landSurvey.classification()).orElseThrow(EntityNotFoundException::new);
-        Currency currency = currencyRepository.findByCode(landSurvey.currency()).orElseThrow(EntityNotFoundException::new);
-
-        Agency agency;
-        if (agencyRepository.findByName(landSurvey.agency()).isEmpty()) {
-            Agency newAgency = new Agency();
-            newAgency.setName(landSurvey.agency());
-            agency = agencyRepository.save(newAgency);
-        } else {
-            agency = agencyRepository.findByName(landSurvey.agency()).orElse(new Agency(landSurvey.agency()));
-        }
-
-
-        Particular particular = particularRepository.findByName(landSurvey.particular()).orElseThrow(EntityNotFoundException::new);
-        Contact contact = contactRepository.findByPhone(landSurvey.contact()).orElseThrow(EntityNotFoundException::new);
-
-        return LandSurvey.builder()
-                .address(landSurvey.address())
-                .corner(landSurvey.corner())
-                .title(landSurvey.title())
-                .titleSituation(landSurvey.titleSituation())
-                .measurements(landSurvey.measurements())
-                .surface(landSurvey.surface())
-                .observation(landSurvey.observation())
-                .surveyor(surveyor)
-                .manager(manager)
-                .fileType(fileType)
-                .roadType(roadType)
-                .locality(locality)
-                .section(section)
-                .zone(zone)
-                .source(source)
-                .classification(classification)
-                .agency(agency)
-                .particular(particular)
-                .contact(contact)
-                .price(landSurvey.price())
-                .currency(currency)
-                .build();
+        return landSurvey;
     }
 
     @Override
@@ -202,42 +211,75 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    public LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurvey) {
+    public LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurveyDTO) {
 
         LandSurvey updateLandSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
 
-        updateLandSurvey.setAddress(newLandSurvey.address());
-        updateLandSurvey.setCorner(newLandSurvey.corner());
-        updateLandSurvey.setTitle(newLandSurvey.title());
-        updateLandSurvey.setTitleSituation(newLandSurvey.titleSituation());
-        updateLandSurvey.setMeasurements(newLandSurvey.measurements());
-        updateLandSurvey.setSurface(newLandSurvey.surface());
-        updateLandSurvey.setPriceVerificationDate(newLandSurvey.priceVerificationDate());
-        updateLandSurvey.setReassessmentDate(newLandSurvey.reassessmentDate());
-        updateLandSurvey.setObservation(newLandSurvey.observation());
-        updateLandSurvey.setPrice(newLandSurvey.price());
+        LandSurvey landSurvey = new LandSurvey();
+        UserSec surveyor = userRepository.findUserEntityByEmail(newLandSurveyDTO.surveyor().value()).orElseThrow(EntityNotFoundException::new);
+        UserSec manager = userRepository.findUserEntityByEmail(newLandSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
+        FileType fileType = fileTypeRepository.findByName(newLandSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
+        RoadType roadType = roadTypeRepository.findByName(newLandSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
+        Locality locality = localityRepository.findByName(newLandSurveyDTO.locality()).orElseThrow(EntityNotFoundException::new);
+        Section section = sectionRepository.findByName(newLandSurveyDTO.section()).orElseThrow(EntityNotFoundException::new);
+        Zone zone = zoneRepository.findByName(newLandSurveyDTO.zone()).orElseThrow(EntityNotFoundException::new);
+        Source source = sourceRepository.findByName(newLandSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
+        Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
+        Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
 
-        updateLandSurvey.setSurveyor(userRepository.findUserEntityByEmail(newLandSurvey.surveyor().value()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setManager(userRepository.findUserEntityByEmail(newLandSurvey.manager().value()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setFileType(fileTypeRepository.findByName(newLandSurvey.fileType()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setRoadType(roadTypeRepository.findByName(newLandSurvey.roadType()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setLocality(localityRepository.findByName(newLandSurvey.locality()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setSection(sectionRepository.findByName(newLandSurvey.section()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setZone(zoneRepository.findByName(newLandSurvey.zone()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setSource(sourceRepository.findByName(newLandSurvey.source()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setClassification(classificationRepository.findByName(newLandSurvey.classification()).orElseThrow(EntityNotFoundException::new));
-        updateLandSurvey.setCurrency(currencyRepository.findByCode(newLandSurvey.currency()).orElseThrow(EntityNotFoundException::new));
+        Agency agency = agencyRepository.findByName(newLandSurveyDTO.agency()).orElse(null);
+        if(agency == null) {
+            Agency newAgency = new Agency();
+            newAgency.setName(newLandSurveyDTO.agency());
+            agencyRepository.save(newAgency);
+        }
 
+        Particular particular = particularRepository.findByName(newLandSurveyDTO.particular()).orElse(null);
+        if(particular == null) {
+            Particular newParticular = new Particular();
+            newParticular.setName(newLandSurveyDTO.particular());
+            particularRepository.save(newParticular);
+        }
 
-        updateLandSurvey.setAgency(agencyRepository.findByName(newLandSurvey.agency()).orElse(new Agency(newLandSurvey.agency())));
-        updateLandSurvey.setParticular(particularRepository.findByName(newLandSurvey.particular()).orElse(null));
-        updateLandSurvey.setContact(contactRepository.findByPhone(newLandSurvey.contact()).orElse(null));
+        Contact contact = contactRepository.findByPhone(newLandSurveyDTO.contact()).orElse(null);
+        if(contact == null) {
+            Contact newContact = new Contact();
+            newContact.setPhone(newLandSurveyDTO.contact());
+            contactRepository.save(newContact);
+        }
 
-        List<Assessment> newAssessmentList = new ArrayList<>();
-        newLandSurvey.assessmentList().forEach(assessmentOneDTO ->
-                newAssessmentList.add(assessmentService.convertFromDTO(assessmentOneDTO, updateLandSurvey)));
-        updateLandSurvey.getAssessmentList().clear();
-        updateLandSurvey.getAssessmentList().addAll(newAssessmentList);
+        landSurvey.setAddress(newLandSurveyDTO.address());
+        landSurvey.setCorner(newLandSurveyDTO.corner());
+        landSurvey.setTitle(newLandSurveyDTO.title());
+        landSurvey.setTitleSituation(newLandSurveyDTO.titleSituation());
+        landSurvey.setMeasurements(newLandSurveyDTO.measurements());
+        landSurvey.setSurface(newLandSurveyDTO.surface());
+        landSurvey.setObservation(newLandSurveyDTO.observation());
+        landSurvey.setSurveyor(surveyor);
+        landSurvey.setManager(manager);
+        landSurvey.setFileType(fileType);
+        landSurvey.setRoadType(roadType);
+        landSurvey.setLocality(locality);
+        landSurvey.setSection(section);
+        landSurvey.setZone(zone);
+        landSurvey.setSource(source);
+        landSurvey.setClassification(classification);
+        landSurvey.setAgency(agency);
+        landSurvey.setParticular(particular);
+        landSurvey.setContact(contact);
+        landSurvey.setPrice(newLandSurveyDTO.price());
+        landSurvey.setCurrency(currency);
+
+        for (AssessmentDTO assessment : newLandSurveyDTO.assessmentList()){
+            UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
+            landSurvey.addAssessment(Assessment.builder()
+                    .id(new AssessmentId(assessor.getId(), landSurvey.getId()))
+                    .assessor(assessor)
+                    .price(assessment.price())
+                    .currency(currencyRepository.findByCode(assessment.currency())
+                            .orElseThrow(EntityNotFoundException::new))
+                    .build());
+        }
 
         return adaptToDTO(saveSecure(updateLandSurvey));
     }
@@ -255,14 +297,14 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 .map(assessment -> assessmentService.adaptToDTO(assessment))
                 .toList();
 
-        if(landSurvey.getAgency() == null){ landSurvey.setAgency(new Agency()); }
-        if(landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
-        if(landSurvey.getContact() == null){ landSurvey.setContact(new Contact()); }
-        if(landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
-        if(landSurvey.getZone() == null){ landSurvey.setZone(new Zone()); }
-        if(landSurvey.getManager() == null){ landSurvey.setManager(new UserSec()); }
-        if(landSurvey.getSource() == null){ landSurvey.setSource(new Source()); }
-        if(landSurvey.getSection() == null){ landSurvey.setSection(new Section()); }
+        if (landSurvey.getAgency() == null){ landSurvey.setAgency(new Agency()); }
+        if (landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
+        if (landSurvey.getContact() == null){ landSurvey.setContact(new Contact()); }
+        if (landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
+        if (landSurvey.getZone() == null){ landSurvey.setZone(new Zone()); }
+        if (landSurvey.getManager() == null){ landSurvey.setManager(new UserSec()); }
+        if (landSurvey.getSource() == null){ landSurvey.setSource(new Source()); }
+        if (landSurvey.getSection() == null){ landSurvey.setSection(new Section()); }
 
         return new LandSurveyDTO(landSurvey.getId(),
                 landSurvey.getCreationDate(),

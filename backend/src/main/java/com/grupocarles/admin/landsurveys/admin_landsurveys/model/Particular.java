@@ -17,4 +17,8 @@ public class Particular {
 
     @Column(nullable = false, unique = true)
     private String name;
+
+    public Particular(String name) {
+        this.name = name;
+    }
 }

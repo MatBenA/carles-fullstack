@@ -26,7 +26,7 @@ public class LandSurveyController {
 
     @PostMapping("/create")
     public LandSurveyDTO createLandSurvey(@RequestBody LandSurveyDTO landSurvey) {
-        return landSurveyService.adaptToDTO(landSurveyService.createLandSurvey(landSurvey));
+        return landSurveyService.createLandSurvey(landSurvey);
     }
 
     @GetMapping

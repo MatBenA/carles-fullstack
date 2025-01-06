@@ -8,6 +8,8 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.SelectOptionDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.UserDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Role;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,5 +84,14 @@ public class UserServiceImp implements UserService{
                         user.getLastName(),
                         user.getEmail(),
                         roles);
+    }
+
+    @Override
+    public int deleteUserByEmail(String email) {
+        UserSec user = repository.findUserEntityByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found."));
+        user.setRoleSet(null);
+        repository.save(user);
+        return repository.deleteByEmail(email);
     }
 }

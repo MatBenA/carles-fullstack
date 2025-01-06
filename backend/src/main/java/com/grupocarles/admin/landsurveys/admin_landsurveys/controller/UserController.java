@@ -12,13 +12,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserService;
 
@@ -67,5 +61,10 @@ public class UserController {
     @GetMapping("/options")
     public List<SelectOptionDTO> getUserOptions() {
         return userService.getAllUsersAsOptions();
+    }
+
+    @DeleteMapping("/delete/{email}")
+    public int deleteUserByEmail(@PathVariable String email){
+        return userService.deleteUserByEmail(email);
     }
 }

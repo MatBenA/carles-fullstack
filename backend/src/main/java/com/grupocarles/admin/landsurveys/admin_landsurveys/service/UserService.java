@@ -26,4 +26,6 @@ public interface UserService {
     List<SelectOptionDTO> getAllUsersAsOptions();
 
     UserDTO convertToDTO(UserSec user);
+
+    int deleteUserByEmail(String email);
 }
