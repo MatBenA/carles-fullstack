@@ -25,11 +25,11 @@ public interface LandSurveyService {
                                           Boolean title,
                                           int pageNumber);
 
-    LandSurveyDTO getLandSurveyById(long id);
+    LandSurveyDTO getLandSurveyById(Long id);
 
-    LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurveyDTO);
+    LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO);
 
-    void deleteLandSurvey(long id);
+    String deleteLandSurvey(Long id);
 
     Page<LandSurveyDTO> getPaginatedLandSurveys(Pageable pageable);
 

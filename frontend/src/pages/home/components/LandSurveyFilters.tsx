@@ -229,29 +229,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <option value="No Trabajable">No Trabajable</option>
                     </select>
                 </div>
-                <div className="dflex gap-10">
-                    <input
-                        id="title"
-                        type="checkbox"
-                        checked={title}
-                        onChange={(e) => setTitle(e.target.checked)}
-                    />
-                    <label htmlFor="title">Posee Titulo</label>
-                </div>
-            </div>
-
-            <div>
-                <button
-                    className="transparent-red-btn"
-                    onClick={handleGetRescindeds}
-                >
-                    Ver solo Rescindidas
-                </button>
-                <Link to="/land-surveys/create">
-                    <button className="green-btn">
-                        <span>Añadir Relevamiento</span>
-                    </button>
-                </Link>
+                
                 {isAdmin ? (
                     <div>
                         <label htmlFor="manager">Encargado</label>
@@ -275,6 +253,29 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <label htmlFor="showMine">Relevamientos propios</label>
                     </div>
                 )}
+                <div className="dflex gap-10">
+                    <input
+                        id="title"
+                        type="checkbox"
+                        checked={title}
+                        onChange={(e) => setTitle(e.target.checked)}
+                    />
+                    <label htmlFor="title">Posee Titulo</label>
+                </div>
+            </div>
+
+            <div>
+                <button
+                    className="transparent-red-btn"
+                    onClick={handleGetRescindeds}
+                >
+                    Ver solo Rescindidas
+                </button>
+                <Link to="/land-surveys/create">
+                    <button className="green-btn">
+                        <span>Añadir Relevamiento</span>
+                    </button>
+                </Link>
             </div>
         </section>
     );

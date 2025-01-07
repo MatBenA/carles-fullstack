@@ -1,6 +1,6 @@
 package com.grupocarles.admin.landsurveys.admin_landsurveys.service;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -75,6 +75,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
         LandSurvey landSurvey = DTOToLandSurvey(landSurveyDTO);
         landSurvey.setIsRescinded(false);
         landSurvey.setIsArchived(false);
+        landSurvey.setPriceVerificationDate(LocalDateTime.now());
+        landSurvey.setReassessmentDate(LocalDateTime.now()); //TODO TEST WHY NEW AGENCY, PARTICULAR AND CONTACT ARE NOT STORED
 
         return adaptToDTO(saveSecure(landSurvey));
     }
@@ -93,26 +95,26 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
 
-        Agency agency = agencyRepository.findByName(landSurveyDTO.agency()).orElse(null);
-        if(agency == null) {
-            Agency newAgency = new Agency();
-            newAgency.setName(landSurveyDTO.agency());
-            agencyRepository.save(newAgency);
-        }
+        Agency agency = agencyRepository.findByName(landSurveyDTO.agency())
+                .orElseGet(() -> {
+                    Agency newAgency = new Agency();
+                    newAgency.setName(landSurveyDTO.agency());
+                    return agencyRepository.save(newAgency);
+                });
 
-        Particular particular = particularRepository.findByName(landSurveyDTO.particular()).orElse(null);
-        if(particular == null) {
-            Particular newParticular = new Particular();
-            newParticular.setName(landSurveyDTO.particular());
-            particularRepository.save(newParticular);
-        }
+        Particular particular = particularRepository.findByName(landSurveyDTO.particular())
+                .orElseGet(() -> {
+                    Particular newParticular = new Particular();
+                    newParticular.setName(landSurveyDTO.particular());
+                    return particularRepository.save(newParticular);
+                });
 
-        Contact contact = contactRepository.findByPhone(landSurveyDTO.contact()).orElse(null);
-        if(contact == null) {
-            Contact newContact = new Contact();
-            newContact.setPhone(landSurveyDTO.contact());
-            contactRepository.save(newContact);
-        }
+        Contact contact = contactRepository.findByPhone(landSurveyDTO.contact())
+                .orElseGet(() -> {
+                    Contact newContact = new Contact();
+                    newContact.setPhone(landSurveyDTO.contact());
+                    return contactRepository.save(newContact);
+                });
 
         landSurvey.setAddress(landSurveyDTO.address());
         landSurvey.setCorner(landSurveyDTO.corner());
@@ -136,6 +138,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setPrice(landSurveyDTO.price());
         landSurvey.setCurrency(currency);
 
+        landSurvey = landSurveyRepository.save(landSurvey);
+
         for (AssessmentDTO assessment : landSurveyDTO.assessmentList()){
             UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
             landSurvey.addAssessment(Assessment.builder()
@@ -151,8 +155,9 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    public void deleteLandSurvey(long id) {
+    public String deleteLandSurvey(Long id) {
         landSurveyRepository.deleteById(id);
+        return "delete successfully";
     }
 
     @Override
@@ -161,7 +166,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    public LandSurveyDTO getLandSurveyById(long id) {
+    public LandSurveyDTO getLandSurveyById(Long id) {
         return adaptToDTO(landSurveyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Entity with ID " + id + " not found")));
     }
@@ -211,7 +216,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    public LandSurveyDTO updateLandSurvey(long id, LandSurveyDTO newLandSurveyDTO) {
+    public LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO) {
 
         LandSurvey updateLandSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
 
@@ -227,26 +232,27 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
 
-        Agency agency = agencyRepository.findByName(newLandSurveyDTO.agency()).orElse(null);
-        if(agency == null) {
-            Agency newAgency = new Agency();
-            newAgency.setName(newLandSurveyDTO.agency());
-            agencyRepository.save(newAgency);
-        }
 
-        Particular particular = particularRepository.findByName(newLandSurveyDTO.particular()).orElse(null);
-        if(particular == null) {
-            Particular newParticular = new Particular();
-            newParticular.setName(newLandSurveyDTO.particular());
-            particularRepository.save(newParticular);
-        }
+        Agency agency = agencyRepository.findByName(newLandSurveyDTO.agency())
+                .orElseGet(() -> {
+                    Agency newAgency = new Agency();
+                    newAgency.setName(newLandSurveyDTO.agency());
+                    return agencyRepository.save(newAgency);
+                });
 
-        Contact contact = contactRepository.findByPhone(newLandSurveyDTO.contact()).orElse(null);
-        if(contact == null) {
-            Contact newContact = new Contact();
-            newContact.setPhone(newLandSurveyDTO.contact());
-            contactRepository.save(newContact);
-        }
+        Particular particular = particularRepository.findByName(newLandSurveyDTO.particular())
+                .orElseGet(() -> {
+                    Particular newParticular = new Particular();
+                    newParticular.setName(newLandSurveyDTO.particular());
+                    return particularRepository.save(newParticular);
+                });
+
+        Contact contact = contactRepository.findByPhone(newLandSurveyDTO.contact())
+                .orElseGet(() -> {
+                    Contact newContact = new Contact();
+                    newContact.setPhone(newLandSurveyDTO.contact());
+                    return contactRepository.save(newContact);
+                });
 
         landSurvey.setAddress(newLandSurveyDTO.address());
         landSurvey.setCorner(newLandSurveyDTO.corner());
@@ -270,6 +276,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setPrice(newLandSurveyDTO.price());
         landSurvey.setCurrency(currency);
 
+        landSurvey = landSurveyRepository.save(landSurvey);
+
         for (AssessmentDTO assessment : newLandSurveyDTO.assessmentList()){
             UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
             landSurvey.addAssessment(Assessment.builder()
@@ -281,7 +289,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return adaptToDTO(saveSecure(updateLandSurvey));
+        return adaptToDTO(saveSecure(landSurvey));
     }
 
     @Override

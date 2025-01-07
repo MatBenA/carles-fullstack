@@ -32,7 +32,7 @@ import jakarta.persistence.Table;
 public class LandSurvey {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
 
     @Column (updatable = false)
     @CreationTimestamp
@@ -62,19 +62,19 @@ public class LandSurvey {
     //FOREIGN KEYS
     
     @ManyToOne
-    @JoinColumn(name = "surveyor_id")
+    @JoinColumn(name = "surveyor_id", nullable = false)
     private UserSec surveyor;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = false)
     private UserSec manager;
 
     @ManyToOne
-    @JoinColumn(name = "file_type")
+    @JoinColumn(name = "file_type", nullable = false)
     private FileType fileType;
 
     @ManyToOne
-    @JoinColumn(name = "road_type")
+    @JoinColumn(name = "road_type", nullable = false)
     private RoadType roadType;
 
     @ManyToOne
@@ -82,19 +82,19 @@ public class LandSurvey {
     private Locality locality;
 
     @ManyToOne
-    @JoinColumn(name = "section_id")
+    @JoinColumn(name = "section_id", nullable = false)
     private Section section;
 
     @ManyToOne
-    @JoinColumn(name = "zone_id")
+    @JoinColumn(name = "zone_id", nullable = false)
     private Zone zone;
 
     @ManyToOne
-    @JoinColumn(name = "source")
+    @JoinColumn(name = "source", nullable = false)
     private Source source;
 
     @ManyToOne
-    @JoinColumn(name = "classification")
+    @JoinColumn(name = "classification", nullable = false)
     private Classification classification;
 
     @ManyToOne
@@ -106,11 +106,11 @@ public class LandSurvey {
     private Particular particular;
 
     @ManyToOne
-    @JoinColumn(name = "contact_id")
+    @JoinColumn(name = "contact_id", nullable = false)
     private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id")
+    @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
     @OneToMany(mappedBy = "landSurvey", cascade = CascadeType.ALL, orphanRemoval = true)

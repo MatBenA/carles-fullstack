@@ -87,8 +87,7 @@ public class LandSurveyController {
     
     @DeleteMapping("/delete/{id}")
     public String deleteLandSurvey(@PathVariable long id){
-        landSurveyService.deleteLandSurvey(id);
-        return "LandSurvey deleted successfully";
+        return landSurveyService.deleteLandSurvey(id);
     }
 
     @PatchMapping("/rescind/{id}")

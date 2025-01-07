@@ -19,6 +19,7 @@ import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "sonner";
 import useAuth from "../../hooks/useAuth";
 import useIsAdmin from "../../hooks/useIsAdmin";
+import CreatableSelect from "react-select/creatable";
 
 const LandSurveyDetails = () => {
     const navigate = useNavigate();
@@ -420,7 +421,7 @@ const LandSurveyDetails = () => {
                     {/* agency - PARTICULAR */}
                     <div className="f-stretch">
                         <label htmlFor="agency">Proveedor</label>
-                        <Select
+                        <CreatableSelect
                             id="agency"
                             styles={select2Styles}
                             options={useFetchOptions("/agencies/options")}
@@ -430,7 +431,7 @@ const LandSurveyDetails = () => {
                     </div>
                     <div className="f-stretch">
                         <label htmlFor="particular">Particular</label>
-                        <Select
+                        <CreatableSelect
                             id="particular"
                             styles={select2Styles}
                             options={useFetchOptions("/particulars/options")}
@@ -443,7 +444,7 @@ const LandSurveyDetails = () => {
                     {/* CONTACT - TITLE */}
                     <div className="f-stretch">
                         <label htmlFor="contact">Telefono</label>
-                        <Select
+                        <CreatableSelect
                             id="contact"
                             styles={select2Styles}
                             options={useFetchOptions("/contacts/options")}
@@ -961,7 +962,7 @@ const LandSurveyDetails = () => {
                     toDelete ? (
                         <button
                             className="red-btn"
-                            type="submit"
+                            type="button"
                             onClick={handleDelete}
                         >
                             Confirmar dar de baja permanentemente
