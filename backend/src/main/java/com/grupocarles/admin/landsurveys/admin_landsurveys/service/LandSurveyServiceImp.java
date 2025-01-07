@@ -76,7 +76,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setIsRescinded(false);
         landSurvey.setIsArchived(false);
         landSurvey.setPriceVerificationDate(LocalDateTime.now());
-        landSurvey.setReassessmentDate(LocalDateTime.now()); //TODO TEST WHY NEW AGENCY, PARTICULAR AND CONTACT ARE NOT STORED
+        landSurvey.setReassessmentDate(LocalDateTime.now());
 
         return adaptToDTO(saveSecure(landSurvey));
     }
@@ -232,6 +232,12 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
 
+        LocalDateTime priceVerificationDate;
+        if (updateLandSurvey.getPrice() != newLandSurveyDTO.price()){
+            priceVerificationDate = LocalDateTime.now();
+        } else {
+            priceVerificationDate = newLandSurveyDTO.priceVerificationDate();
+        }
 
         Agency agency = agencyRepository.findByName(newLandSurveyDTO.agency())
                 .orElseGet(() -> {
@@ -260,6 +266,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setTitleSituation(newLandSurveyDTO.titleSituation());
         landSurvey.setMeasurements(newLandSurveyDTO.measurements());
         landSurvey.setSurface(newLandSurveyDTO.surface());
+        landSurvey.setPriceVerificationDate(priceVerificationDate);
         landSurvey.setObservation(newLandSurveyDTO.observation());
         landSurvey.setSurveyor(surveyor);
         landSurvey.setManager(manager);
@@ -275,13 +282,14 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setContact(contact);
         landSurvey.setPrice(newLandSurveyDTO.price());
         landSurvey.setCurrency(currency);
+        landSurvey.setReassessmentDate(newLandSurveyDTO.reassessmentDate());
 
-        landSurvey = landSurveyRepository.save(landSurvey);
+        LandSurvey savedLandSurvey = landSurveyRepository.save(landSurvey);
 
         for (AssessmentDTO assessment : newLandSurveyDTO.assessmentList()){
             UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
-            landSurvey.addAssessment(Assessment.builder()
-                    .id(new AssessmentId(assessor.getId(), landSurvey.getId()))
+            savedLandSurvey.addAssessment(Assessment.builder()
+                    .id(new AssessmentId(assessor.getId(), savedLandSurvey.getId()))
                     .assessor(assessor)
                     .price(assessment.price())
                     .currency(currencyRepository.findByCode(assessment.currency())
@@ -289,7 +297,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return adaptToDTO(saveSecure(landSurvey));
+        return adaptToDTO(saveSecure(savedLandSurvey));
     }
 
     @Override
