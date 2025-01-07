@@ -1,8 +1,10 @@
 import { FormEvent, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { toast } from "sonner";
 
 const UserCreate = () => {
+    const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
 
     const [firstName, setFirstName] = useState<string>("");
@@ -16,25 +18,37 @@ const UserCreate = () => {
         event: FormEvent<HTMLFormElement>
     ): Promise<void> => {
         event.preventDefault();
+        if(password !== matchPwd) {
+            toast.error("Las contraseñas deben coincidir, intentelo de nuevo.");
+            return;
+        }
         const controller = new AbortController();
-        try {
-            const response = await axiosPrivate.post(
-                "/users/create",
-                JSON.stringify({
-                    firstName,
-                    lastName,
-                    email,
-                    role,
-                    password,
-                }),
-                {
-                    signal: controller.signal,
-                }
-            );
+        const createUser = axiosPrivate.post(
+            "/users/create",
+            JSON.stringify({
+                firstName,
+                lastName,
+                email,
+                role,
+                password,
+            }),
+            {
+                signal: controller.signal,
+            }
+        );
 
+        toast.promise(createUser, {
+            loading: "Cargando...",
+            error: "Error!",
+            success: `Usuario ${lastName}, ${firstName} creado exitosamente`,
+        })
+        
+        try {
+            const response = await createUser;
             console.log(response.data);
+            navigate("/users")
         } catch (error) {
-            console.error("Error:", error);
+            console.error(error);
         }
     };
 
@@ -93,7 +107,7 @@ const UserCreate = () => {
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="password">Contrasena</label>
+                    <label htmlFor="password">Contraseña</label>
                     <input
                         type="password"
                         id="password"
