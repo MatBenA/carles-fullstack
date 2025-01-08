@@ -7,12 +7,11 @@ import LandSurveyTable from "../../../components/Table.tsx";
 
 const LandSurveys = () => {
     useContext(AuthContext);
-    const [landSurveys, setLandSurveys] = useState<LandSurvey[]>([landSurveyEmpty()]);
-
-    /*     const logout = () => {
-        setAuth({});
-        navigate("/login");
-    }; */
+    const [landSurveys, setLandSurveys] = useState<LandSurvey[]>([
+        landSurveyEmpty(),
+    ]);
+    
+    
 
     return (
         <section className="surveys">

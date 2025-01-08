@@ -62,19 +62,19 @@ public class LandSurvey {
     //FOREIGN KEYS
     
     @ManyToOne
-    @JoinColumn(name = "surveyor_id", nullable = false)
+    @JoinColumn(name = "surveyor_id")
     private UserSec surveyor;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
+    @JoinColumn(name = "manager_id")
     private UserSec manager;
 
     @ManyToOne
-    @JoinColumn(name = "file_type", nullable = false)
+    @JoinColumn(name = "file_type")
     private FileType fileType;
 
     @ManyToOne
-    @JoinColumn(name = "road_type", nullable = false)
+    @JoinColumn(name = "road_type")
     private RoadType roadType;
 
     @ManyToOne
@@ -82,19 +82,19 @@ public class LandSurvey {
     private Locality locality;
 
     @ManyToOne
-    @JoinColumn(name = "section_id", nullable = false)
+    @JoinColumn(name = "section_id")
     private Section section;
 
     @ManyToOne
-    @JoinColumn(name = "zone_id", nullable = false)
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     @ManyToOne
-    @JoinColumn(name = "source", nullable = false)
+    @JoinColumn(name = "source")
     private Source source;
 
     @ManyToOne
-    @JoinColumn(name = "classification", nullable = false)
+    @JoinColumn(name = "classification")
     private Classification classification;
 
     @ManyToOne
@@ -106,11 +106,11 @@ public class LandSurvey {
     private Particular particular;
 
     @ManyToOne
-    @JoinColumn(name = "contact_id", nullable = false)
+    @JoinColumn(name = "contact_id")
     private Contact contact;
 
     @ManyToOne
-    @JoinColumn(name = "currency_id", nullable = false)
+    @JoinColumn(name = "currency_id")
     private Currency currency;
 
     @OneToMany(mappedBy = "landSurvey", cascade = CascadeType.ALL, orphanRemoval = true)

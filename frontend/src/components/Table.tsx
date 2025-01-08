@@ -6,6 +6,7 @@ import { InputOption } from "../models/InputOption";
 import makeAnimated from "react-select/animated";
 import columnOptions from "../utilities/columns";
 import "../assets/styles/landsurvey-table.css"
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 interface Props {
     landSurveys: LandSurvey[] | undefined;
@@ -19,6 +20,37 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
     const animatedComponents = makeAnimated();
     useEffect(() => console.log(columnList), [columnList])
     const isSelected = (columnName: string) => columnList?.some(column => column.value === columnName)
+
+    const axiosPrivate = useAxiosPrivate();
+    const [rePricing, setRepricing] = useState<number>(1.1);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        let isMounted = true;
+
+        const getRepricingPercentage = async () => {
+            try {
+                const response = await axiosPrivate.get(
+                    "/settings/rePricingPercentaje",
+                    { signal: controller.signal }
+                );
+
+                if (isMounted) {
+                    console.log(response);
+                    setRepricing((response.data / 100) + 1);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getRepricingPercentage();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [axiosPrivate]);
     
     return (
         <div>
@@ -60,7 +92,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                         <th hidden={isSelected("Re-Tasación fecha")}>Fecha de Re-Tasación</th>
                         <th hidden={isSelected("Pretendido")} className="pretended">Precio Pretendido</th>
                         <th hidden={isSelected("pretendido m2")}>Precio pretendido m2 - USD</th>
-                        <th hidden={isSelected("Promedio asesores")}>Precio promedio asesores USD</th>
+                        <th hidden={isSelected("Tasacion promedio ajustada")}>Tasacion promedio ajustada</th>
                         <th hidden={isSelected("Promedio asesores m2")}>M2 opinión de asesores USD</th>
                         <th hidden={isSelected("Evaluación")}>Evaluación del negocio</th>
                         <th hidden={isSelected("Clasificacion")} className="classification">Clasificacion</th>
@@ -100,7 +132,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Re-Tasación fecha")}>{landSurvey.reassessmentDate}</td>
                                 <td hidden={isSelected("Pretendido")}>USD {landSurvey.price}</td>
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
-                                <td hidden={isSelected("Promedio asesores")}>{landSurvey.averageAssessmentUsd}</td>
+                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * rePricing)}</td>
                                 <td hidden={isSelected("Promedio asesores m2")}>{landSurvey.assessmentsPerSquareMeterUsd}</td>
                                 <td hidden={isSelected("Evaluación")}>{landSurvey.businessEvaluation}</td>
                                 <td hidden={isSelected("Clasificacion")}>{landSurvey.classification}</td>

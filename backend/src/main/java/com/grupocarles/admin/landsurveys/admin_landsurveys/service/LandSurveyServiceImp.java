@@ -167,8 +167,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
 
     @Override
     public LandSurveyDTO getLandSurveyById(Long id) {
-        return adaptToDTO(landSurveyRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Entity with ID " + id + " not found")));
+        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
     }
 
     @Override
@@ -188,6 +187,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                                                  String classification,
                                                  String managerEmail,
                                                  Boolean title,
+                                                 Boolean rescinded,
                                                  int pageNumber) {
 
         Long cheapFlag = settingService.getSettingByName("businessEvaluationCheapFlag");
@@ -205,6 +205,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 classification,
                 managerEmail,
                 title,
+                rescinded,
                 cheapFlag,
                 expensiveFlag
         );
@@ -218,9 +219,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Override
     public LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO) {
 
-        LandSurvey updateLandSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
+        LandSurvey landSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
 
-        LandSurvey landSurvey = new LandSurvey();
         UserSec surveyor = userRepository.findUserEntityByEmail(newLandSurveyDTO.surveyor().value()).orElseThrow(EntityNotFoundException::new);
         UserSec manager = userRepository.findUserEntityByEmail(newLandSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
         FileType fileType = fileTypeRepository.findByName(newLandSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
@@ -233,7 +233,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
 
         LocalDateTime priceVerificationDate;
-        if (updateLandSurvey.getPrice() != newLandSurveyDTO.price()){
+        if (landSurvey.getPrice() != newLandSurveyDTO.price()){
             priceVerificationDate = LocalDateTime.now();
         } else {
             priceVerificationDate = newLandSurveyDTO.priceVerificationDate();
@@ -284,12 +284,11 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setCurrency(currency);
         landSurvey.setReassessmentDate(newLandSurveyDTO.reassessmentDate());
 
-        LandSurvey savedLandSurvey = landSurveyRepository.save(landSurvey);
-
+        landSurvey.getAssessmentList().clear();
         for (AssessmentDTO assessment : newLandSurveyDTO.assessmentList()){
             UserSec assessor = userRepository.findUserEntityByEmail(assessment.assessor().value()).orElseThrow(EntityNotFoundException::new);
-            savedLandSurvey.addAssessment(Assessment.builder()
-                    .id(new AssessmentId(assessor.getId(), savedLandSurvey.getId()))
+            landSurvey.addAssessment(Assessment.builder()
+                    .id(new AssessmentId(assessor.getId(), landSurvey.getId()))
                     .assessor(assessor)
                     .price(assessment.price())
                     .currency(currencyRepository.findByCode(assessment.currency())
@@ -297,16 +296,11 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return adaptToDTO(saveSecure(savedLandSurvey));
+        return adaptToDTO(saveSecure(landSurvey));
     }
 
     @Override
     public LandSurveyDTO adaptToDTO(LandSurvey landSurvey){
-
-        Long repricing = Long.parseLong(
-                settingRepository.findById("rePricingPercentaje")
-                        .orElseThrow(() -> new EntityNotFoundException("re pricing setting not found"))
-                        .getValue());
 
         List<AssessmentDTO> assessmentList = landSurvey.getAssessmentList()
                 .stream()
@@ -347,7 +341,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getAgency().getName(),
                 landSurvey.getParticular().getName(),
                 landSurvey.getContact().getPhone(),
-                (landSurvey.getPrice() * repricing),
+                landSurvey.getPrice(),
                 landSurvey.getCurrency().getCode(),
                 assessmentList);
     }
@@ -360,14 +354,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setIsRescinded(!landSurvey.getIsRescinded());
         saveSecure(landSurvey);
         return landSurvey.getIsRescinded();
-    }
-
-    @Override
-    public List<LandSurveyDTO> getRescinds() {
-        return landSurveyRepository
-                .findByIsRescinded(true)
-                .stream()
-                .map(this::adaptToDTO).toList();
     }
 
     @Override

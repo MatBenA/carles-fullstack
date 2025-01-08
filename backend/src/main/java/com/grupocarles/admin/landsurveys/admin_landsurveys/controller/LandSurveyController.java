@@ -2,6 +2,7 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.controller;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.HomeDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.LandSurveyDTO;
+import com.grupocarles.admin.landsurveys.admin_landsurveys.model.LandSurvey;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.CurrencyRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class LandSurveyController {
             @RequestParam(required = false) String classification,
             @RequestParam(required = false) String managerEmail,
             @RequestParam(required = false) Boolean title,
+            @RequestParam(required = false) Boolean rescinded,
             @RequestParam(defaultValue = "0") int page
     ) {
 
@@ -57,6 +59,7 @@ public class LandSurveyController {
                 classification,
                 managerEmail,
                 title,
+                rescinded,
                 page
         );
 
@@ -75,14 +78,10 @@ public class LandSurveyController {
         return landSurveyService.getLandSurveyById(id);
     }
 
-    @GetMapping("/rescinded-list")
-    public List<LandSurveyDTO> getLandSurveyById() {
-        return landSurveyService.getRescinds();
-    }
-
     @PutMapping("/update/{id}")
     public LandSurveyDTO updateLandSurvey(@PathVariable long id, @RequestBody LandSurveyDTO landSurvey){
-        return landSurveyService.updateLandSurvey(id, landSurvey);
+        LandSurveyDTO response = landSurveyService.updateLandSurvey(id, landSurvey);
+        return response;
     }
     
     @DeleteMapping("/delete/{id}")

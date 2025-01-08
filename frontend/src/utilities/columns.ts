@@ -23,7 +23,7 @@ const columnOptions: InputOption[] = [
     { value: "Re-Tasación fecha", label: "Re-Tasación fecha" },
     { value: "Pretendido", label: "Pretendido" },
     { value: "pretendido m2", label: "Pretendido m2" },
-    { value: "Promedio asesores", label: "Promedio asesores" },
+    { value: "Tasacion promedio ajustada", label: "Tasacion promedio ajustada" },
     { value: "Promedio asesores m2", label: "Promedio asesosre m2" },
     { value: "Evaluación", label: "Evaluación" },
     { value: "Clasificacion", label: "Clasificacion" },

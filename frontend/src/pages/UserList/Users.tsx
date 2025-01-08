@@ -21,7 +21,9 @@ const Users = () => {
                     signal: controller.signal,
                 });
                 console.log(response.data);
-                isMounted && setUsers(response.data);
+                if(isMounted){
+                    setUsers(response.data);
+                }
             } catch (err) {
                 if (axios.isCancel(err)) {
                     console.error("Request canceled", err.message);

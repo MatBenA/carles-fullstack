@@ -10,4 +10,5 @@ export interface SearchRequest {
     classification: string | undefined;
     managerEmail: string | undefined;
     title: boolean | undefined;
+    rescinded: boolean | undefined;
 }

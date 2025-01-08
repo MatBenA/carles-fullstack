@@ -64,15 +64,10 @@ public class AssessmentServiceImp implements AssessmentService {
     @Override
     public AssessmentDTO adaptToDTO(Assessment assessment){
 
-        Long repricing = Long.parseLong(
-                settingRepository.findById("rePricingPercentaje")
-                        .orElseThrow(() -> new EntityNotFoundException("re pricing setting not found"))
-                        .getValue());
-
         assert assessment != null;
         return new AssessmentDTO(
                 userService.userToOption(assessment.getAssessor()),
-                (assessment.getPrice() * repricing),
+                (assessment.getPrice()),
                 assessment.getCurrency().getCode());
     }
 

@@ -23,6 +23,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private String classification;
     private String managerEmail;
     private Boolean title;
+    private Boolean rescinded;
 
     private Long cheapFlag;
     private Long expensiveFlag;
@@ -107,6 +108,11 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
         if (managerEmail != null){
             Predicate managerEmailLikePredicate = criteriaBuilder.like(landSurveyManagerJoin.get("email"), managerEmail);
             predicateList.add(managerEmailLikePredicate);
+        }
+
+        if (rescinded != null) {
+            Predicate isRescindedPredicate = criteriaBuilder.equal(root.get("isRescinded"), rescinded);
+            predicateList.add(isRescindedPredicate);
         }
 
         if(managerEmail != null) {

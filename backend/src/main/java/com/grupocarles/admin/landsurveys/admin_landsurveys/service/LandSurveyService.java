@@ -23,6 +23,7 @@ public interface LandSurveyService {
                                           String classification,
                                           String managerEmail,
                                           Boolean title,
+                                          Boolean rescinded,
                                           int pageNumber);
 
     LandSurveyDTO getLandSurveyById(Long id);
@@ -36,8 +37,6 @@ public interface LandSurveyService {
     LandSurveyDTO adaptToDTO(LandSurvey landSurvey);
 
     Boolean switchRescind(Long id);
-
-    List<LandSurveyDTO> getRescinds();
 
     LandSurvey saveSecure(LandSurvey landSurvey);
 }

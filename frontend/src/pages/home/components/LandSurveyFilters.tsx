@@ -7,7 +7,6 @@ import { InputOption } from "../../../models/InputOption";
 import fetchLandSurveys from "../services/fetchLandSurveys";
 import select2Styles from "../../../styled-components/select2style";
 import useFetchOptions from "../../../services/useFetchOptions";
-import useHandleGetRescindeds from "../services/useHandleGetRescindeds";
 import evaluationOptions from "../../../utilities/businessEvaluationOptions";
 import LandSurvey from "../../../models/LandSurvey";
 import useAuth from "../../../hooks/useAuth";
@@ -23,7 +22,6 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const userEmail: string | undefined = auth?.email;
     const userOptions = useFetchOptions("/users/options");
 
-    const handleGetRescindeds = useHandleGetRescindeds({ setLandSurveys });
 
     const axiosPrivate = useAxiosPrivate();
     const [minPrice, setMinPrice] = useState<number>();
@@ -38,12 +36,11 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [title, setTitle] = useState<boolean>(true);
     const [manager, setManager] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
+    const [rescinded, setRescinded] = useState<boolean>(false);
 
     useEffect(() => {
         let isMounted = true;
         const controller = new AbortController();
-
-        console.log(manager?.value)
 
         const getLandSurveys = async () => {
             const newLandSurveys = await fetchLandSurveys(
@@ -61,6 +58,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     managerEmail: manager?.value,
                     classification,
                     title,
+                    rescinded,
                 }
             );
             if (isMounted && newLandSurveys) {
@@ -88,6 +86,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
         setLandSurveys,
         title,
         manager,
+        rescinded
     ]);
 
     const handleSetManager = () => { 
@@ -265,12 +264,15 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             </div>
 
             <div>
-                <button
-                    className="transparent-red-btn"
-                    onClick={handleGetRescindeds}
-                >
-                    Ver solo Rescindidas
-                </button>
+                <div>
+                    <input 
+                        type="checkbox" 
+                        id="rescinded" 
+                        checked={rescinded}
+                        onChange={(e) => setRescinded(e.target.checked)}
+                    />
+                    <label htmlFor="rescinded">Ver solo rescindidas</label>
+                </div>
                 <Link to="/land-surveys/create">
                     <button className="green-btn">
                         <span>Añadir Relevamiento</span>
