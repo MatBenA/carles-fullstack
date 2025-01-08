@@ -17,31 +17,15 @@ services:
     ports:
       - "3500:3500"
     environment:
-      DB_URL: jdbc:postgresql://db:5432/carles_landsurveys?sslmode=disable&serverTimezone=UTC
+      DB_URL: jdbc:postgresql://host.docker.internal:5432/carles_landsurveys?useSSL=false&serverTimezone=UTC
       DB_USERNAME: postgres
       DB_PASSWORD: admin
       SS_USERNAME: matbena
       SS_PASSWORD: 5432
       PRIVATE_KEY: ec9f712b405cbf435bb10e567bd56381b8d97431727abaf5cd3c730f8e8b8fc1
       USER_GENERATOR: MATBENA
-    depends_on:
-      - db
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3500/actuator/health"]
       interval: 10s
       timeout: 5s
       retries: 3
-
-  db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: carles_landsurveys
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-
-volumes:
-  db_data:
