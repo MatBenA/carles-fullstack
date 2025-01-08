@@ -67,4 +67,9 @@ public class UserController {
     public int deleteUserByEmail(@PathVariable String email){
         return userService.deleteUserByEmail(email);
     }
+
+    @PatchMapping("/toggle-enable/{email}")
+    public Boolean toggleEnabled(@PathVariable String email) {
+        return userService.toggleEnabled(email);
+    }
 }

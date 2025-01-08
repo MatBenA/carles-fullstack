@@ -25,7 +25,7 @@ public class UserSec {
     @Column(nullable = false)
     private String password;
 
-    private boolean enabled = true;
+    private Boolean enabled = true;
     private boolean accountNotExpired = true;
     private boolean accountNotLocked = true;
     private boolean credentialNotExpired = true;

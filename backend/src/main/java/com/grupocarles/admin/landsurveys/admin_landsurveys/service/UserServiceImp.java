@@ -71,7 +71,7 @@ public class UserServiceImp implements UserService{
 
     @Override
     public List<SelectOptionDTO> getAllUsersAsOptions() {
-        return repository.findAll()
+        return repository.findByEnabledTrue()
                 .stream()
                 .map(user -> new SelectOptionDTO(user.getEmail(), user.getLastName() + ", " + user.getFirstName()))
                 .toList();
@@ -83,6 +83,7 @@ public class UserServiceImp implements UserService{
         return new UserDTO(user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
+                        user.getEnabled(),
                         roles);
     }
 
@@ -93,5 +94,13 @@ public class UserServiceImp implements UserService{
         user.setRoleSet(null);
         repository.save(user);
         return repository.deleteByEmail(email);
+    }
+
+    @Override
+    public Boolean toggleEnabled(String email) {
+        UserSec user = repository.findUserEntityByEmail(email).orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found."));
+        user.setEnabled(!user.getEnabled());
+        repository.save(user);
+        return user.getEnabled();
     }
 }

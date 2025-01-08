@@ -18,6 +18,7 @@ const UserDetails = () => {
     const [email, setEmail] = useState<string>(user.email);
     const [roles, setRoles] = useState<string[]>(user.roles);
     const [toDelete, setToDelete] = useState<boolean>(false);
+    const [enabled, setEnabled] = useState<boolean>(user.enabled);
 
     const handleSubmit = async (
         event: FormEvent<HTMLFormElement>
@@ -54,21 +55,48 @@ const UserDetails = () => {
 
     const handleDelete = async () => {
         const controller = new AbortController();
-        const deleteUser = () => axiosPrivate.delete(`/users/delete/${email}`, {signal: controller.signal});
-        
+        const deleteUser = () =>
+            axiosPrivate.delete(`/users/delete/${email}`, {
+                signal: controller.signal,
+            });
+
         toast.promise(deleteUser, {
             loading: "Cargando...",
             error: "Error!",
-            success: `Usuario ${lastName}, ${firstName} eliminado exitosamente"`
-        })
-        
+            success: `Usuario ${lastName}, ${firstName} eliminado exitosamente"`,
+        });
+
         try {
             await deleteUser;
             navigate("/users");
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
     };
+
+    const handleEnableUser = async () => {
+        const controller = new AbortController();
+        const enableUser = axiosPrivate.patch(
+            `/users/toggle-enable/${email}`,
+            {},
+            { signal: controller.signal }
+        );
+
+        toast.promise(enableUser, {
+            loading: "Cargando...",
+            error: "Hubo un error",
+            success: `Usuario ${lastName}, ${firstName} ${
+                enabled ? "deshabilitado" : "restablecido"
+            }`,
+        });
+
+        try {
+            const response = await enableUser;
+            setEnabled(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }; 
 
     return (
         <section className="user-details">
@@ -133,6 +161,15 @@ const UserDetails = () => {
                     ) : (
                         <></>
                     )}
+                    <button
+                        type="button"
+                        className={
+                            enabled ? "transparent-red-btn" : "green-btn"
+                        }
+                        onClick={handleEnableUser}
+                    >
+                        {enabled ? "Deshabilitar" : "Restablecer"}
+                    </button>
                     {isAdmin ? (
                         <button className="green-btn fgrow">Guardar</button>
                     ) : (

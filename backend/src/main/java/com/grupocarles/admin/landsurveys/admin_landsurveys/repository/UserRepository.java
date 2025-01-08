@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -14,4 +15,6 @@ public interface UserRepository extends JpaRepository<UserSec, Long>{
     @Modifying
     @Transactional
     int deleteByEmail( String email );
+
+    List<UserSec> findByEnabledTrue();
 }

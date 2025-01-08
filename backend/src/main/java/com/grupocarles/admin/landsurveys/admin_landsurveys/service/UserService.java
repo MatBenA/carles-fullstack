@@ -28,4 +28,6 @@ public interface UserService {
     UserDTO convertToDTO(UserSec user);
 
     int deleteUserByEmail(String email);
+
+    Boolean toggleEnabled(String email);
 }
