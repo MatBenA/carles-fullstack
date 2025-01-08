@@ -2,6 +2,7 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.security.config;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.security.config.filter.JwtTokenValidator;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.util.JwtUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +45,12 @@ public class SecurityConfig {
                         .requestMatchers("/auth/login").permitAll()
                         // All other requests should be authenticated
                         .anyRequest().permitAll()
+                )
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Unauthorized");
+                        })
                 )
                 .addFilterBefore(new JwtTokenValidator(jwtUtils), BasicAuthenticationFilter.class)
                 .build();
