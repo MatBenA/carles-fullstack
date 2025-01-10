@@ -17,15 +17,13 @@ services:
     ports:
       - "3500:3500"
     environment:
-      DB_URL: jdbc:postgresql://host.docker.internal:5432/carles_landsurveys?useSSL=false&serverTimezone=UTC
+      DB_URL: jdbc:postgresql://postgres:5432/carles_landsurveys?useSSL=false&serverTimezone=UTC
       DB_USERNAME: postgres
       DB_PASSWORD: admin
       SS_USERNAME: matbena
       SS_PASSWORD: 5432
       PRIVATE_KEY: ec9f712b405cbf435bb10e567bd56381b8d97431727abaf5cd3c730f8e8b8fc1
       USER_GENERATOR: MATBENA
-    extra_hosts:
-      - "host.docker.internal:host-gateway" #this is used so host.docker.internal works correctly on linux
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3500/actuator/health"]
       interval: 10s
