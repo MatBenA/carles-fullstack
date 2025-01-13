@@ -24,8 +24,3 @@ services:
       USER_GENERATOR: MATBENA
     extra_hosts:
       - "host.docker.internal:host-gateway" #this is used so host.docker.internal works correctly on linux
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3500/actuator/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
