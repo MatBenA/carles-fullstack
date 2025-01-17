@@ -1,4 +1,5 @@
 import { InputOption } from "../models/InputOption";
+import { v4 as uuidv4 } from "uuid";
 
 export default interface Assessment {
     assessor: InputOption;
@@ -7,7 +8,7 @@ export default interface Assessment {
 }
 
 export const emptyAssessment = (): Assessment => ({
-    assessor: {value: crypto.randomUUID(), label: ""},
+    assessor: {value: uuidv4(), label: ""},
     price: 0,
     currency: "USD",
 });

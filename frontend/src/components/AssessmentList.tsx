@@ -2,6 +2,7 @@ import Select, { SingleValue } from "react-select";
 import select2Styles from "../styled-components/select2style";
 import { InputOption } from "../models/InputOption";
 import Assessment from "../models/Assessment";
+import { v4 as uuidv4 } from "uuid";
 
 type AssessmentListProps = {
     userOptions: InputOption[];
@@ -29,7 +30,7 @@ const AssessmentList = ({ userOptions, assessmentList, setAssessmentList }: Asse
         setAssessmentList([
             ...assessmentList,
             {
-                assessor: { value: crypto.randomUUID(), label: "" },
+                assessor: { value: uuidv4(), label: "" },
                 price: 0,
                 currency: "USD",
             },
