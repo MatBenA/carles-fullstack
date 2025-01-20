@@ -23,7 +23,6 @@ const StatisticTable = () => {
                 });
 
                 if (isMounted && result.data) {
-                    console.log(result.data);
                     const statisticsResponse = result.data;
                     setStatisticList(statisticsResponse);
                 }
@@ -55,7 +54,6 @@ const StatisticTable = () => {
 
         try {
             const result = await generateReport;
-            console.log(result.data);
             navigate("/statistics/report", { state: result.data });
         } catch (error) {
             console.error(error);

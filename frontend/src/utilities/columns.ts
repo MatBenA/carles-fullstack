@@ -1,7 +1,7 @@
 import { InputOption } from "../models/InputOption";
 
 const columnOptions: InputOption[] = [
-    { value: "Codigo", label: "Codigo" },
+    { value: "Carpeta", label: "Carpeta" },
     { value: "Fecha", label: "Fecha" },
     { value: "Relevó", label: "Relevó" },
     { value: "Encargado", label: "Encargado" },

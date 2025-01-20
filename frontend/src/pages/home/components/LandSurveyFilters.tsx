@@ -22,7 +22,6 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const userEmail: string | undefined = auth?.email;
     const userOptions = useFetchOptions("/users/options");
 
-
     const axiosPrivate = useAxiosPrivate();
     const [minPrice, setMinPrice] = useState<number>();
     const [maxPrice, setMaxPrice] = useState<number>();
@@ -31,10 +30,11 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [section, setSection] = useState<InputOption | null>(null);
     const [zone, setZone] = useState<InputOption | null>(null);
     const [agency, setAgency] = useState<InputOption | null>(null);
+    const [manager, setManager] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
+    const [folder, setFolder] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
     const [title, setTitle] = useState<boolean>(true);
-    const [manager, setManager] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
     const [rescinded, setRescinded] = useState<boolean>(false);
 
@@ -56,6 +56,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     agency: agency?.label,
                     particular: particular?.label,
                     managerEmail: manager?.value,
+                    folder: folder?.value,
                     classification,
                     title,
                     rescinded,
@@ -86,11 +87,12 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
         setLandSurveys,
         title,
         manager,
-        rescinded
+        rescinded,
+        folder?.value,
     ]);
 
-    const handleSetManager = () => { 
-        console.log(manager)
+    const handleSetManager = () => {
+        console.log(manager);
         if (manager?.value) {
             setManager(null);
         } else {
@@ -141,19 +143,19 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                 </div>
 
                 <div>
-                        <label htmlFor="min-price">Buscar por ubicacion</label>
-                        <input
-                            type="text"
-                            id="min-price"
-                            value={address}
-                            onChange={e => setAddress(e.target.value)}
-                        />
-                    </div>
+                    <label htmlFor="min-price">Buscar por ubicacion</label>
+                    <input
+                        type="text"
+                        id="min-price"
+                        value={address}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
+                </div>
             </div>
 
             <div className="section-zone">
                 <div>
-                    <label htmlFor="section">Seccion: </label>
+                    <label htmlFor="section">Seccion</label>
                     <Select
                         id="section"
                         styles={select2Styles}
@@ -165,7 +167,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="zone">Zona: </label>
+                    <label htmlFor="zone">Zona</label>
                     <Select
                         id="zone"
                         styles={select2Styles}
@@ -176,11 +178,23 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         isClearable
                     />
                 </div>
+                <div>
+                    <label htmlFor="folder">Carpeta</label>
+                    <Select
+                        id="folder"
+                        styles={select2Styles}
+                        options={useFetchOptions("/folder/options")}
+                        value={folder}
+                        onChange={setFolder}
+                        placeholder="V"
+                        isClearable
+                    />
+                </div>
             </div>
 
             <div className="fgrow agency-particular">
                 <div>
-                    <label htmlFor="agency">Proveedor: </label>
+                    <label htmlFor="agency">Proveedor</label>
                     <Select
                         id="agency"
                         styles={select2Styles}
@@ -192,7 +206,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     />
                 </div>
                 <div>
-                    <label htmlFor="particular">Particular: </label>
+                    <label htmlFor="particular">Particular</label>
                     <Select
                         id="particular"
                         styles={select2Styles}
@@ -228,18 +242,19 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <option value="No Trabajable">No Trabajable</option>
                     </select>
                 </div>
-                
+
                 {isAdmin ? (
                     <div>
                         <label htmlFor="manager">Encargado</label>
                         <Select
-                        id="manager"
-                        styles={select2Styles}
-                        options={userOptions}
-                        value={manager}
-                        onChange={setManager}
-                        placeholder="Encargado"
-                        isClearable/>
+                            id="manager"
+                            styles={select2Styles}
+                            options={userOptions}
+                            value={manager}
+                            onChange={setManager}
+                            placeholder="Encargado"
+                            isClearable
+                        />
                     </div>
                 ) : (
                     <div className="dflex gap-10">
@@ -265,9 +280,9 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
 
             <div>
                 <div>
-                    <input 
-                        type="checkbox" 
-                        id="rescinded" 
+                    <input
+                        type="checkbox"
+                        id="rescinded"
                         checked={rescinded}
                         onChange={(e) => setRescinded(e.target.checked)}
                     />

@@ -93,8 +93,7 @@ const Settings = () => {
         });
 
         try {
-            const result = await updateSetting;
-            console.log(result.data);
+            await updateSetting;
         } catch (error) {
             console.error(error);
         }

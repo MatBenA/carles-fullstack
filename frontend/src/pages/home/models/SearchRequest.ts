@@ -11,4 +11,5 @@ export interface SearchRequest {
     managerEmail: string | undefined;
     title: boolean | undefined;
     rescinded: boolean | undefined;
+    folder: string | undefined;
 }

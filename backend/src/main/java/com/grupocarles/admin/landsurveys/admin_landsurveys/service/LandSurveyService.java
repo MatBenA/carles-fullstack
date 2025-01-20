@@ -24,6 +24,7 @@ public interface LandSurveyService {
                                           String managerEmail,
                                           Boolean title,
                                           Boolean rescinded,
+                                          String folder,
                                           int pageNumber);
 
     LandSurveyDTO getLandSurveyById(Long id);

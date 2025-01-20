@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import { toast } from "sonner";
+import axios from "axios";
 
 const UserCreate = () => {
     const navigate = useNavigate();
@@ -48,7 +49,11 @@ const UserCreate = () => {
             console.log(response.data);
             navigate("/users")
         } catch (error) {
-            console.error(error);
+            if (axios.isCancel(error)) {
+                return
+            } else {
+                console.error(error);
+            }
         }
     };
 

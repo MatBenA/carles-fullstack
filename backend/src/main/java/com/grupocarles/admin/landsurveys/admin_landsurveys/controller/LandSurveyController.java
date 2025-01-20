@@ -44,6 +44,7 @@ public class LandSurveyController {
             @RequestParam(required = false) String managerEmail,
             @RequestParam(required = false) Boolean title,
             @RequestParam(required = false) Boolean rescinded,
+            @RequestParam(required = false) String folder,
             @RequestParam(defaultValue = "0") int page
     ) {
 
@@ -60,6 +61,7 @@ public class LandSurveyController {
                 managerEmail,
                 title,
                 rescinded,
+                folder,
                 page
         );
 

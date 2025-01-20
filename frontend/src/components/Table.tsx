@@ -18,7 +18,6 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
 
     const [columnList, setColumnList] = useState<InputOption[]>();
     const animatedComponents = makeAnimated();
-    useEffect(() => console.log(columnList), [columnList])
     const isSelected = (columnName: string) => columnList?.some(column => column.value === columnName)
 
     const axiosPrivate = useAxiosPrivate();
@@ -70,7 +69,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
             <table>
                 <thead>
                     <tr>
-                        <th hidden={isSelected("Codigo")}>Codigo</th>
+                        <th hidden={isSelected("Carpeta")}>Carpeta</th>
                         <th hidden={isSelected("Fecha")} className="date">Fecha</th>
                         <th hidden={isSelected("Relevó")} className="surveyor">Relevó</th>
                         <th hidden={isSelected("Encargado")} className="manager">Encargado</th>
@@ -110,7 +109,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 {/* {Object.values(landSurvey).map((data, j) => (
                                     <td key={j}>{data}</td>
                                 ))} */}
-                                <td hidden={isSelected("Codigo")}>{landSurvey.id}</td>
+                                <td hidden={isSelected("Carpeta")}>{landSurvey.folder}</td>
                                 <td hidden={isSelected("Fecha")}>{landSurvey.date}{/* new Date(landSurvey.date).toLocaleDateString("es-AR") */}</td>
                                 <td hidden={isSelected("Relevó")}>{landSurvey.surveyor.label}</td>
                                 <td hidden={isSelected("Encargado")}>{landSurvey.manager.label}</td>

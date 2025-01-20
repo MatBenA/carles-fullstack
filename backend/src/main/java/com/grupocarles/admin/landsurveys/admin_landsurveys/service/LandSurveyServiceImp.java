@@ -69,6 +69,9 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Autowired
     private SettingRepository settingRepository;
 
+    @Autowired
+    private FolderRepository folderRepository;
+
     @Override
     public LandSurveyDTO createLandSurvey(LandSurveyDTO landSurveyDTO) {
 
@@ -94,6 +97,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Source source = sourceRepository.findByName(landSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
         Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
+        Folder folder = folderRepository.findByCode(landSurveyDTO.folder()).orElseThrow(EntityNotFoundException::new);
 
         Agency agency = agencyRepository.findByName(landSurveyDTO.agency())
                 .orElseGet(() -> {
@@ -137,6 +141,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setContact(contact);
         landSurvey.setPrice(landSurveyDTO.price());
         landSurvey.setCurrency(currency);
+        landSurvey.setFolder(folder);
 
         landSurvey = landSurveyRepository.save(landSurvey);
 
@@ -188,6 +193,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                                                  String managerEmail,
                                                  Boolean title,
                                                  Boolean rescinded,
+                                                 String folder,
                                                  int pageNumber) {
 
         Long cheapFlag = settingService.getSettingByName("businessEvaluationCheapFlag");
@@ -206,6 +212,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 managerEmail,
                 title,
                 rescinded,
+                folder,
                 cheapFlag,
                 expensiveFlag
         );
@@ -231,6 +238,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Source source = sourceRepository.findByName(newLandSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
         Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
+        Folder folder = folderRepository.findByCode(newLandSurveyDTO.folder()).orElseThrow(EntityNotFoundException::new);
 
         LocalDateTime priceVerificationDate;
         if (landSurvey.getPrice() != newLandSurveyDTO.price()){
@@ -282,6 +290,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setContact(contact);
         landSurvey.setPrice(newLandSurveyDTO.price());
         landSurvey.setCurrency(currency);
+        landSurvey.setFolder(folder);
         landSurvey.setReassessmentDate(newLandSurveyDTO.reassessmentDate());
 
         landSurvey.getAssessmentList().clear();
@@ -315,6 +324,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         if (landSurvey.getManager() == null){ landSurvey.setManager(new UserSec()); }
         if (landSurvey.getSource() == null){ landSurvey.setSource(new Source()); }
         if (landSurvey.getSection() == null){ landSurvey.setSection(new Section()); }
+        if (landSurvey.getFolder() == null){ landSurvey.setFolder(new Folder()); }
 
         return new LandSurveyDTO(landSurvey.getId(),
                 landSurvey.getCreationDate(),
@@ -343,6 +353,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getContact().getPhone(),
                 landSurvey.getPrice(),
                 landSurvey.getCurrency().getCode(),
+                landSurvey.getFolder().getCode(),
                 assessmentList);
     }
 
@@ -352,6 +363,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 .findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Relevamiento con id " + id + " no encontrado"));
         landSurvey.setIsRescinded(!landSurvey.getIsRescinded());
+        landSurvey.setFolder(null);
         saveSecure(landSurvey);
         return landSurvey.getIsRescinded();
     }

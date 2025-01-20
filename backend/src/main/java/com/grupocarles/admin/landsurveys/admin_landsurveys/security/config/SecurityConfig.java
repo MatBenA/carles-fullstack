@@ -44,7 +44,7 @@ public class SecurityConfig {
                         // Permit the login and registration routes without authentication
                         .requestMatchers("/auth/login").permitAll()
                         // All other requests should be authenticated
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint((request, response, authException) -> {

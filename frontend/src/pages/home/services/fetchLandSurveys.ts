@@ -22,7 +22,7 @@ const fetchLandSurveys = async (
         return landSurveys;
     } catch (err) {
         if (axios.isCancel(err)) {
-            console.error("Request Canceled: ", err.message);
+            return
         } else {
             console.error(err);
         }

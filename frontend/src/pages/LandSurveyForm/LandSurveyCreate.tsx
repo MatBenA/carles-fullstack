@@ -31,6 +31,7 @@ const LandSurveyCreate = () => {
     const [agency, setAgency] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [contact, setContact] = useState<InputOption | null>(null);
+    const [folder, setFolder] = useState<InputOption | null>(null);
     const [title, setTitle] = useState<boolean>(false);
     const [titleSituation, setTitleSituation] = useState<string>();
     const [measurements, setMeasurements] = useState<string>("");
@@ -50,10 +51,6 @@ const LandSurveyCreate = () => {
 
     const userOptions: Array<InputOption> = useFetchOptions("/users/options");
     const axiosPrivate = useAxiosPrivate();
-
-    useEffect(() => {
-        console.log(agency);
-    }, [agency]);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -113,6 +110,7 @@ const LandSurveyCreate = () => {
                 contact: contact?.label,
                 price,
                 currency,
+                folder: folder?.label,
                 assessmentList,
             }),
             { signal: controller.signal }
@@ -147,7 +145,16 @@ const LandSurveyCreate = () => {
                 </div>
                 <div className="dflex gap-30">
                     {/* CODE - DATE */}
-                    <div>Codigo:V654</div>
+                    <div>
+                        <label htmlFor="folder">Carpeta</label>
+                        <Select id="folder"
+                                styles={select2Styles}
+                                options={useFetchOptions("/folder/options")}
+                                value={folder}
+                                onChange={setFolder}
+                                placeholder="V"
+                                required/>
+                    </div>
                     <div>Fecha: {new Date().toLocaleDateString("es-AR")}</div>
                 </div>
                 <div className="dflex gap-30">

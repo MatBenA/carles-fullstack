@@ -24,6 +24,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private String managerEmail;
     private Boolean title;
     private Boolean rescinded;
+    private String folder;
 
     private Long cheapFlag;
     private Long expensiveFlag;
@@ -119,6 +120,13 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             query.orderBy(criteriaBuilder.asc(root.get("priceVerificationDate")));
         }else {
             query.orderBy(criteriaBuilder.asc(root.get("price")));
+        }
+
+        if(folder != null){
+            predicateList.clear();
+            Join<LandSurvey, Folder> landSurveyFolderJoin = root.join("folder");
+            Predicate folderPredicate = criteriaBuilder.equal(landSurveyFolderJoin.get("code"), folder);
+            predicateList.add(folderPredicate);
         }
 
         return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));

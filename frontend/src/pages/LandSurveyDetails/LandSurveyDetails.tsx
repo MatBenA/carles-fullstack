@@ -42,6 +42,7 @@ const LandSurveyDetails = () => {
     const [agency, setAgency] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [contact, setContact] = useState<InputOption | null>(null);
+    const [folder, setFolder] = useState<InputOption | null>(null);
     const [title, setTitle] = useState<boolean>(false);
     const [titleSituation, setTitleSituation] = useState<string>();
     const [measurements, setMeasurements] = useState<string>("");
@@ -113,6 +114,10 @@ const LandSurveyDetails = () => {
                     setContact({
                         value: landsurvey.contact,
                         label: landsurvey.contact,
+                    });
+                    setFolder({
+                        value: landsurvey.folder,
+                        label: landsurvey.folder,
                     });
                     setTitle(landsurvey.title);
                     setTitleSituation(landsurvey.titleSituation);
@@ -205,6 +210,7 @@ const LandSurveyDetails = () => {
                 priceVerificationDate,
                 reassessmentDate,
                 currency: currency,
+                folder: folder?.label,
                 assessmentList,
             }),
             { signal: controller.signal }
@@ -259,12 +265,12 @@ const LandSurveyDetails = () => {
         toast.promise(deleteLandSurvey, {
             error: "Error",
             success: "Relevamiento eliminado exitosamente",
-            loading: "Cargando..."
-        })
+            loading: "Cargando...",
+        });
 
         try {
             await deleteLandSurvey;
-            navigate("/land-surveys")
+            navigate("/land-surveys");
         } catch (error) {
             console.error(error);
         }
@@ -291,7 +297,18 @@ const LandSurveyDetails = () => {
                 </div>
                 <div className="dflex gap-30">
                     {/* CODE - DATE */}
-                    <div>Codigo:V654</div>
+                    <div>
+                        <label htmlFor="folder">Carpeta</label>
+                        <Select
+                            id="folder"
+                            styles={select2Styles}
+                            options={useFetchOptions("/folder/options")}
+                            value={folder}
+                            onChange={setFolder}
+                            placeholder="V"
+                            required
+                        />
+                    </div>
                     <div>Fecha: {date.toLocaleDateString("es-AR")}</div>
                 </div>
                 <div className="dflex gap-30">

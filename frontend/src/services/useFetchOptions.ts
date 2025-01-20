@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import {InputOption} from "../models/InputOption";
+import axios from "axios";
 
 const useFetchOptions = (url: string): InputOption[] => {
     const axiosPrivate = useAxiosPrivate();
@@ -19,10 +20,10 @@ const useFetchOptions = (url: string): InputOption[] => {
                     setData(response.data);
                 }
             } catch (err) {
-                if (err instanceof Error) {
-                    console.error(err.message);
+                if (axios.isCancel(err)) {
+                    return
                 } else {
-                    console.error("An unknown error occurred");
+                    console.error(err);
                 }
             }
         };

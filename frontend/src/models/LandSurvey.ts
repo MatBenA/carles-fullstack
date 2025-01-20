@@ -38,6 +38,7 @@ export default interface LandSurvey {
     title: boolean;
     titleSituation: string;
     zone: string;
+    folder: string;
 }
 
 export const landSurveyEmpty = (): LandSurvey => {
@@ -78,5 +79,6 @@ export const landSurveyEmpty = (): LandSurvey => {
         title: false,
         titleSituation: "",
         zone: "",
+        folder: ""
     };
 };

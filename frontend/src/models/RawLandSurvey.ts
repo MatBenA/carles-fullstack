@@ -29,6 +29,7 @@ export default interface RawLandSurvey {
     contact: string;
     price: number;
     currency: string;
+    folder: string;
     assessmentList: Assessment[];
 }
 
@@ -61,5 +62,6 @@ export const emptyRawLandSurvey = (): RawLandSurvey => {
     contact: "",
     price: 0,
     currency: "",
+    folder: "",
     assessmentList: [emptyAssessment()],}
 }

@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface RoadTypeRepository extends JpaRepository<RoadType, Long>{
-
     Optional<RoadType> findByName(String s);
 }
