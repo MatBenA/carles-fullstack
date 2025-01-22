@@ -15,7 +15,7 @@ public class Particular {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = true)
     private String name;
 
     public Particular(String name) {

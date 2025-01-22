@@ -90,7 +90,7 @@ public class LandSurvey {
     private Agency agency;
 
     @ManyToOne
-    @JoinColumn(name = "particular_id")
+    @JoinColumn(name = "particular_id", nullable = true)
     private Particular particular;
 
     @ManyToOne
@@ -101,8 +101,8 @@ public class LandSurvey {
     @JoinColumn(name = "currency_id")
     private Currency currency;
 
-    @OneToOne
-    @JoinColumn(name = "folder_id", unique = true)
+    @ManyToOne
+    @JoinColumn(name = "folder_id", unique = false)
     private Folder folder;
 
     @OneToMany(mappedBy = "landSurvey", cascade = CascadeType.ALL, orphanRemoval = true)
