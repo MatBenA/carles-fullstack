@@ -217,10 +217,9 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 expensiveFlag
         );
 
-
-        return landSurveyRepository
-                .findAll(specification, PageRequest.of(pageNumber, 100))
-                .map(this::adaptToDTO);
+        Page<LandSurvey> landSurveyList = landSurveyRepository.findAll(specification, PageRequest.of(pageNumber, 100));
+        Page<LandSurveyDTO> landSurveyListDTO = landSurveyList.map(this::adaptToDTO);
+        return landSurveyListDTO;
     }
 
     @Override

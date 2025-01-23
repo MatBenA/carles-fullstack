@@ -86,8 +86,9 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(agencyNameLikePredicate);
         }
 
-        Join<LandSurvey, Particular> landSurveyParticularJoin = root.join("particular");
         if (StringUtils.hasText(particular)) {
+            //This Left Join is necessary cause otherwise LandSurveys with null Particular would not be retrieved
+            Join<LandSurvey, Particular> landSurveyParticularJoin = root.join("particular", JoinType.LEFT);
             Expression<String> particularNameToUpperCase = criteriaBuilder.upper(landSurveyParticularJoin.get("name"));
             Predicate particularNameLikePredicate = criteriaBuilder.like(particularNameToUpperCase, "%" + particular.toUpperCase() + "%");
             predicateList.add(particularNameLikePredicate);
