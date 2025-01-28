@@ -69,6 +69,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
             <table>
                 <thead>
                     <tr>
+                        <th>Accion</th>
                         <th hidden={isSelected("Carpeta")}>Carpeta</th>
                         <th hidden={isSelected("Fecha")} className="date">Fecha</th>
                         <th hidden={isSelected("Relevó")} className="surveyor">Relevó</th>
@@ -99,7 +100,6 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                         <th hidden={isSelected("Valor mínimmo")}>Valor mínimmo</th>
                         <th hidden={isSelected("% Desvío")}>% Desvío</th>
                         <th hidden={isSelected("Observaciones")} className="observations">Observaciones</th>
-                        <th>Accion</th>
                     </tr>
                 </thead>
                 {landSurveys ? (
@@ -109,6 +109,17 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 {/* {Object.values(landSurvey).map((data, j) => (
                                     <td key={j}>{data}</td>
                                 ))} */}
+                                <td>
+                                    <Link
+                                        to="/land-surveys/detail"
+                                        state={landSurvey.id}
+                                        onClick={() =>
+                                            window.scrollTo({ top: 0 })
+                                        }
+                                    >
+                                        <button>Detalles</button>
+                                    </Link>
+                                </td>
                                 <td hidden={isSelected("Carpeta")}>{landSurvey.folder}</td>
                                 <td hidden={isSelected("Fecha")}>{landSurvey.date}{/* new Date(landSurvey.date).toLocaleDateString("es-AR") */}</td>
                                 <td hidden={isSelected("Relevó")}>{landSurvey.surveyor.label}</td>
@@ -139,17 +150,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Valor mínimmo")}>{landSurvey.minPrice}</td>
                                 <td hidden={isSelected("% Desvío")}>{landSurvey.deviation}</td>
                                 <td hidden={isSelected("Observaciones")}>{landSurvey.observation}</td>
-                                <td>
-                                    <Link
-                                        to="/land-surveys/detail"
-                                        state={landSurvey.id}
-                                        onClick={() =>
-                                            window.scrollTo({ top: 0 })
-                                        }
-                                    >
-                                        <button>Detalles</button>
-                                    </Link>
-                                </td>
+                                
                             </tr>
                         ))}
                     </tbody>
