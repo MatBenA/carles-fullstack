@@ -33,3 +33,18 @@
 .observations{
     min-width: 400px;
 }
+
+.green-font{
+    color: green;
+    font-weight: 500;
+}
+
+.red-font{
+    color: red;
+    font-weight: 500;
+}
+
+.blue-font{
+    color: darkblue;
+    font-weight: 500;
+}

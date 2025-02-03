@@ -49,21 +49,15 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(addressLikePredicate);
         }
 
-        /*if (StringUtils.hasText(businessEvaluation) && "cheapFilter".equals(businessEvaluation)) {
-            Join<LandSurvey, Assessment> landSurveyAssessmentJoin = root.join("assessmentList");
-            Subquery<Double> averageAssessmentSubquery = criteriaBuilder.createQuery().subquery(Double.class);
-            Root<Assessment> subqueryRoot = averageAssessmentSubquery.from(Assessment.class);
-            averageAssessmentSubquery.select(criteriaBuilder.avg(subqueryRoot.get("price")))
-                    .where(criteriaBuilder.equal(subqueryRoot.get("landSurvey").get("id"), root.get("id")));
-
-            Expression<Double> assessmentAverage = criteriaBuilder.avg(landSurveyAssessmentJoin.get("price"));
-            Expression<Number> absoluteEvaluation = criteriaBuilder.quot(root.get("price"), assessmentAverage);
-            Expression<Number> relativeEvaluation = criteriaBuilder.diff(absoluteEvaluation, 1);
-            Expression<Number> businessEvaluation = criteriaBuilder.prod(relativeEvaluation, 100);
-            Expression<Long> cheapFlagExpression = criteriaBuilder.literal(cheapFlag);
-            Predicate businessEvaluationGreaterThanPredicate = criteriaBuilder.lessThanOrEqualTo(businessEvaluation.as(Long.class), cheapFlagExpression);
-            predicateList.add(businessEvaluationGreaterThanPredicate);
-        }*/
+        if (StringUtils.hasText(businessEvaluation) && "cheapFilter".equals(businessEvaluation)) {
+            Join<LandSurvey, Assessment> assessmentJoin = root.join("assessmentList");
+            query.groupBy(root.get("id"));
+            Predicate avgPricePredicate = criteriaBuilder.gt(
+                    criteriaBuilder.avg(assessmentJoin.get("price")),
+                    10.0
+            );
+            query.having(avgPricePredicate);
+        }
 
         if (StringUtils.hasText(section)) {
             Join<LandSurvey, Section> landSurveySectionJoin = root.join("section");
@@ -116,6 +110,8 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             Predicate isRescindedPredicate = criteriaBuilder.equal(root.get("isRescinded"), rescinded);
             predicateList.add(isRescindedPredicate);
         }
+
+
 
         if(managerEmail != null) {
             query.orderBy(criteriaBuilder.asc(root.get("priceVerificationDate")));

@@ -7,6 +7,7 @@ import makeAnimated from "react-select/animated";
 import columnOptions from "../utilities/columns";
 import "../assets/styles/landsurvey-table.css"
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import { businessEvaluation } from "../utilities/landSurveyCalcs";
 
 interface Props {
     landSurveys: LandSurvey[] | undefined;
@@ -105,7 +106,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                 {landSurveys ? (
                     <tbody>
                         {landSurveys.map((landSurvey, i) => (
-                            <tr key={i}>
+                            <tr key={i} className={landSurvey.classification == "IMPOSIBILIDAD DE TRABAJAR" ? "red-font" : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" : ""}>
                                 {/* {Object.values(landSurvey).map((data, j) => (
                                     <td key={j}>{data}</td>
                                 ))} */}
@@ -144,7 +145,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
                                 <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * rePricing)}</td>
                                 <td hidden={isSelected("Promedio asesores m2")}>{landSurvey.assessmentsPerSquareMeterUsd}</td>
-                                <td hidden={isSelected("Evaluación")}>{landSurvey.businessEvaluation}</td>
+                                <td hidden={isSelected("Evaluación")} className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>{landSurvey.businessEvaluation}</td>
                                 <td hidden={isSelected("Clasificacion")}>{landSurvey.classification}</td>
                                 <td hidden={isSelected("Valor maximo")}>{landSurvey.maxPrice}</td>
                                 <td hidden={isSelected("Valor mínimmo")}>{landSurvey.minPrice}</td>
