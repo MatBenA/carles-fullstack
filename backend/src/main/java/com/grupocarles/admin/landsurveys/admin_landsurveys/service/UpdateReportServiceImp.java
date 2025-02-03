@@ -15,7 +15,7 @@ public class UpdateReportServiceImp implements UpdateReportService{
     @Override
     public UpdateReportDTO generate() {
         UpdateReport updateReport = new UpdateReport();
-        
+
         return null;
     }
 }

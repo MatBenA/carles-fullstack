@@ -147,7 +147,7 @@ const LandSurveyCreate = () => {
                     {/* CODE - DATE */}
                     <div>
                         <label htmlFor="folder">Carpeta</label>
-                        <Select id="folder"
+                        <CreatableSelect id="folder"
                                 styles={select2Styles}
                                 options={useFetchOptions("/folder/options")}
                                 value={folder}

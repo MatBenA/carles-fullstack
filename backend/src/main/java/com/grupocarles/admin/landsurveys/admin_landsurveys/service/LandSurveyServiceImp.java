@@ -97,7 +97,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Source source = sourceRepository.findByName(landSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
         Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
-        Folder folder = folderRepository.findByCode(landSurveyDTO.folder()).orElseThrow(EntityNotFoundException::new);
 
         Agency agency = agencyRepository.findByName(landSurveyDTO.agency())
                 .orElseGet(() -> {
@@ -118,6 +117,13 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     Contact newContact = new Contact();
                     newContact.setPhone(landSurveyDTO.contact());
                     return contactRepository.save(newContact);
+                });
+
+        Folder folder = folderRepository.findByCode(landSurveyDTO.folder())
+                .orElseGet(() -> {
+                    Folder newFolder = new Folder();
+                    newFolder.setCode(landSurveyDTO.folder());
+                    return folderRepository.save(newFolder);
                 });
 
         landSurvey.setAddress(landSurveyDTO.address());
