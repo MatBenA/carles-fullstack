@@ -197,7 +197,7 @@ const LandSurveyCreate = () => {
                     {/* LOCALITY - SECTION - ZONE */}
                     <div className="f-stretch">
                         <label htmlFor="locality">Localidad</label>
-                        <Select
+                        <CreatableSelect
                             id="locality"
                             styles={select2Styles}
                             options={useFetchOptions("/localities/options")}
@@ -208,7 +208,7 @@ const LandSurveyCreate = () => {
                     </div>
                     <div className="f-stretch">
                         <label htmlFor="section">Seccion</label>
-                        <Select
+                        <CreatableSelect
                             id="section"
                             styles={select2Styles}
                             options={useFetchOptions("/sections/options")}
@@ -219,7 +219,7 @@ const LandSurveyCreate = () => {
                     </div>
                     <div className="f-stretch">
                         <label htmlFor="zone">Zona</label>
-                        <Select
+                        <CreatableSelect
                             id="zone"
                             styles={select2Styles}
                             options={useFetchOptions("/zones/options")}

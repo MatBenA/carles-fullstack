@@ -91,9 +91,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
         UserSec manager = userRepository.findUserEntityByEmail(landSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
         FileType fileType = fileTypeRepository.findByName(landSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
         RoadType roadType = roadTypeRepository.findByName(landSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
-        Locality locality = localityRepository.findByName(landSurveyDTO.locality()).orElseThrow(EntityNotFoundException::new);
-        Section section = sectionRepository.findByName(landSurveyDTO.section()).orElseThrow(EntityNotFoundException::new);
-        Zone zone = zoneRepository.findByName(landSurveyDTO.zone()).orElseThrow(EntityNotFoundException::new);
         Source source = sourceRepository.findByName(landSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
         Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
@@ -124,6 +121,27 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     Folder newFolder = new Folder();
                     newFolder.setCode(landSurveyDTO.folder());
                     return folderRepository.save(newFolder);
+                });
+
+        Locality locality = localityRepository.findByName(landSurveyDTO.locality())
+                .orElseGet(() -> {
+                    Locality newLocality = new Locality();
+                    newLocality.setName(landSurveyDTO.locality());
+                    return localityRepository.save(newLocality);
+                });
+
+        Section section = sectionRepository.findByName(landSurveyDTO.section())
+                .orElseGet(() -> {
+                    Section newSection = new Section();
+                    newSection.setName(landSurveyDTO.section());
+                    return sectionRepository.save(newSection);
+                });
+
+        Zone zone = zoneRepository.findByName(landSurveyDTO.zone())
+                .orElseGet(() -> {
+                    Zone newZone = new Zone();
+                    newZone.setName(landSurveyDTO.zone());
+                    return zoneRepository.save(newZone);
                 });
 
         landSurvey.setAddress(landSurveyDTO.address());
@@ -237,9 +255,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
         UserSec manager = userRepository.findUserEntityByEmail(newLandSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
         FileType fileType = fileTypeRepository.findByName(newLandSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
         RoadType roadType = roadTypeRepository.findByName(newLandSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
-        Locality locality = localityRepository.findByName(newLandSurveyDTO.locality()).orElseThrow(EntityNotFoundException::new);
-        Section section = sectionRepository.findByName(newLandSurveyDTO.section()).orElseThrow(EntityNotFoundException::new);
-        Zone zone = zoneRepository.findByName(newLandSurveyDTO.zone()).orElseThrow(EntityNotFoundException::new);
         Source source = sourceRepository.findByName(newLandSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
         Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
         Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
@@ -271,6 +286,28 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     Contact newContact = new Contact();
                     newContact.setPhone(newLandSurveyDTO.contact());
                     return contactRepository.save(newContact);
+                });
+
+
+        Locality locality = localityRepository.findByName(newLandSurveyDTO.locality())
+                .orElseGet(() -> {
+                    Locality newLocality = new Locality();
+                    newLocality.setName(newLandSurveyDTO.locality());
+                    return localityRepository.save(newLocality);
+                });
+
+        Section section = sectionRepository.findByName(newLandSurveyDTO.section())
+                .orElseGet(() -> {
+                    Section newSection = new Section();
+                    newSection.setName(newLandSurveyDTO.section());
+                    return sectionRepository.save(newSection);
+                });
+
+        Zone zone = zoneRepository.findByName(newLandSurveyDTO.zone())
+                .orElseGet(() -> {
+                    Zone newZone = new Zone();
+                    newZone.setName(newLandSurveyDTO.zone());
+                    return zoneRepository.save(newZone);
                 });
 
         landSurvey.setAddress(newLandSurveyDTO.address());
