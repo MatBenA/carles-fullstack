@@ -7,7 +7,6 @@ import makeAnimated from "react-select/animated";
 import columnOptions from "../utilities/columns";
 import "../assets/styles/landsurvey-table.css"
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { businessEvaluation } from "../utilities/landSurveyCalcs";
 
 interface Props {
     landSurveys: LandSurvey[] | undefined;

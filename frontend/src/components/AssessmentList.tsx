@@ -122,7 +122,7 @@ const AssessmentList = ({ userOptions, assessmentList, setAssessmentList }: Asse
                             <option value="ARS">ARS</option>
                         </select>
                     </div>
-                    {assessmentList.length > 2 && (
+                    {/*assessmentList.length > 2 &&*/ (
                         <button
                             className="transparent-red-btn remove-btn"
                             type="button"

@@ -413,8 +413,12 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Override
     public LandSurvey saveSecure(LandSurvey landSurvey) {
 
-        if (landSurvey.getAssessmentList().size() < 2){
+        /*if (landSurvey.getAssessmentList().size() < 2){
             throw new IllegalArgumentException("Debe haber al menos dos Assessment para un LandSurvey.");
+        }*/
+
+        if (landSurvey.getAssessmentList().isEmpty()) {
+            return landSurveyRepository.save(landSurvey);
         }
 
         Long maxPriceAssessment = landSurvey.getAssessmentList().stream()
