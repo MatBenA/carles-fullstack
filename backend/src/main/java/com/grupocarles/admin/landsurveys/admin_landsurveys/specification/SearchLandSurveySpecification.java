@@ -66,15 +66,15 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(sectionNameLikePredicate);
         }
 
-        Join<LandSurvey, Zone> landSurveyZoneJoin = root.join("zone");
         if (StringUtils.hasText(zone)) {
+            Join<LandSurvey, Zone> landSurveyZoneJoin = root.join("zone");
             Expression<String> zoneNameToUpperCase = criteriaBuilder.upper(landSurveyZoneJoin.get("name"));
             Predicate zoneNameLikePredicate = criteriaBuilder.equal(zoneNameToUpperCase, zone.toUpperCase());
             predicateList.add(zoneNameLikePredicate);
         }
 
-        Join<LandSurvey, Agency> landSurveyAgencyJoin = root.join("agency");
         if (StringUtils.hasText(agency)) {
+            Join<LandSurvey, Agency> landSurveyAgencyJoin = root.join("agency");
             Expression<String> agencyNameToUpperCase = criteriaBuilder.upper(landSurveyAgencyJoin.get("name"));
             Predicate agencyNameLikePredicate = criteriaBuilder.like(agencyNameToUpperCase, "%" + agency.toUpperCase() + "%");
             predicateList.add(agencyNameLikePredicate);
@@ -88,8 +88,8 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(particularNameLikePredicate);
         }
 
-        Join<LandSurvey, Classification> landSurveyClassificationJoin = root.join("classification");
         if (StringUtils.hasText(classification)){
+            Join<LandSurvey, Classification> landSurveyClassificationJoin = root.join("classification");
             Expression<String> classificationNameToUpperCase = criteriaBuilder.upper(landSurveyClassificationJoin.get("name"));
             Predicate classifiactionNameLikePredicate = criteriaBuilder.like(classificationNameToUpperCase, "%" + classification.toUpperCase() + "%");
             predicateList.add(classifiactionNameLikePredicate);
@@ -100,8 +100,8 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(hasTitlePredicate);
         }
 
-        Join<LandSurvey, UserSec> landSurveyManagerJoin = root.join("manager");
         if (managerEmail != null){
+            Join<LandSurvey, UserSec> landSurveyManagerJoin = root.join("manager");
             Predicate managerEmailLikePredicate = criteriaBuilder.like(landSurveyManagerJoin.get("email"), managerEmail);
             predicateList.add(managerEmailLikePredicate);
         }
@@ -110,8 +110,6 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             Predicate isRescindedPredicate = criteriaBuilder.equal(root.get("isRescinded"), rescinded);
             predicateList.add(isRescindedPredicate);
         }
-
-
 
         if(managerEmail != null) {
             query.orderBy(criteriaBuilder.asc(root.get("priceVerificationDate")));
