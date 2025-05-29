@@ -510,7 +510,7 @@ const LandSurveyDetails = () => {
                         type="number"
                         id="surface"
                         value={surface}
-                        onChange={(e) => setSurface(parseInt(e.target.value))}
+                        onChange={(e) => setSurface(parseFloat(e.target.value))}
                         required
                     />
                 </div>
