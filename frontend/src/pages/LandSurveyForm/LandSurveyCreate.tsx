@@ -45,7 +45,6 @@ const LandSurveyCreate = () => {
     const [observation, setObservation] = useState<string>("");
     const [assessmentList, setAssessmentList] = useState<Assessment[]>([
         emptyAssessment(),
-        emptyAssessment(),
     ]);
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
 
@@ -167,7 +166,6 @@ const LandSurveyCreate = () => {
                             options={userOptions}
                             value={manager}
                             onChange={setManager}
-                            required
                         />
                     </div>
                     <div className="f-stretch">
@@ -203,7 +201,7 @@ const LandSurveyCreate = () => {
                             options={useFetchOptions("/localities/options")}
                             value={locality}
                             onChange={setLocality}
-                            required
+                            isClearable
                         />
                     </div>
                     <div className="f-stretch">
@@ -290,6 +288,7 @@ const LandSurveyCreate = () => {
                             options={useFetchOptions("/agencies/options")}
                             value={agency}
                             onChange={setAgency}
+                            isClearable
                             required
                         />
                     </div>
@@ -301,6 +300,7 @@ const LandSurveyCreate = () => {
                             options={useFetchOptions("/particulars/options")}
                             value={particular}
                             onChange={setParticular}
+                            isClearable
                         />
                     </div>
                 </div>
@@ -359,6 +359,7 @@ const LandSurveyCreate = () => {
                         id="surface"
                         value={surface}
                         onChange={(e) => setSurface(parseFloat(e.target.value))}
+                        onWheel={(e) => (e.target as HTMLInputElement).blur()}
                         required
                     />
                 </div>
@@ -372,6 +373,7 @@ const LandSurveyCreate = () => {
                             id="price"
                             value={price}
                             onChange={(e) => setPrice(parseInt(e.target.value))}
+                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
                             required
                         />
                     </div>
@@ -547,19 +549,19 @@ const LandSurveyCreate = () => {
                 </div>
                 <div className="dflex gap-30">
                     <div className="f-stretch">
-                        <label htmlFor="maxAssessment">Tasación Minima</label>
+                        <label htmlFor="minAssessment">Tasación Mínima</label>
                         <input
                             type="number"
-                            id="maxAssessment"
+                            id="minAssessment"
                             value={minPrice(assessmentList)}
                             disabled
                         />
                     </div>
                     <div className="f-stretch">
-                        <label htmlFor="minAssessment">Tasación Maxima</label>
+                        <label htmlFor="maxAssessment">Tasación Máxima</label>
                         <input
                             type="number"
-                            id="minAssessment"
+                            id="maxAssessment"
                             value={maxPrice(assessmentList)}
                             disabled
                         />

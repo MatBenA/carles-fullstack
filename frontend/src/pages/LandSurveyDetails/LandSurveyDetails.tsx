@@ -321,7 +321,6 @@ const LandSurveyDetails = () => {
                             options={userOptions}
                             value={manager}
                             onChange={setManager}
-                            required
                         />
                     </div>
                     <div className="f-stretch">
@@ -357,7 +356,6 @@ const LandSurveyDetails = () => {
                             options={useFetchOptions("/localities/options")}
                             value={locality}
                             onChange={setLocality}
-                            required
                         />
                     </div>
                     <div className="f-stretch">
@@ -444,6 +442,7 @@ const LandSurveyDetails = () => {
                             options={useFetchOptions("/agencies/options")}
                             value={agency}
                             onChange={setAgency}
+                            isClearable
                         />
                     </div>
                     <div className="f-stretch">
@@ -454,6 +453,7 @@ const LandSurveyDetails = () => {
                             options={useFetchOptions("/particulars/options")}
                             value={particular}
                             onChange={setParticular}
+                            isClearable
                         />
                     </div>
                 </div>
@@ -758,7 +758,7 @@ const LandSurveyDetails = () => {
                 </div>
                 <div className="dflex gap-30">
                     <div className="f-stretch">
-                        <label htmlFor="maxAssessment">Tasación Minima</label>
+                        <label htmlFor="maxAssessment">Tasación Mínima</label>
                         <input
                             type="number"
                             id="maxAssessment"
@@ -767,7 +767,7 @@ const LandSurveyDetails = () => {
                         />
                     </div>
                     <div className="f-stretch">
-                        <label htmlFor="minAssessment">Tasación Maxima</label>
+                        <label htmlFor="minAssessment">Tasación Máxima</label>
                         <input
                             type="number"
                             id="minAssessment"

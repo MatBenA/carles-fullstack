@@ -96,6 +96,7 @@ const AssessmentList = ({ userOptions, assessmentList, setAssessmentList }: Asse
                                     parseInt(e.target.value)
                                 )
                             }
+                            onWheel={(e) => (e.target as HTMLInputElement).blur()}
                             required={true}
                         />
                     </div>
