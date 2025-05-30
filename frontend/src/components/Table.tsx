@@ -21,7 +21,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
     const isSelected = (columnName: string) => columnList?.some(column => column.value === columnName)
 
     const axiosPrivate = useAxiosPrivate();
-    const [rePricing, setRepricing] = useState<number>(1.1);
+    const [rePricing, setRepricing] = useState<number>(0);
 
     useEffect(() => {
         const controller = new AbortController();
@@ -36,7 +36,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
 
                 if (isMounted) {
                     console.log(response);
-                    setRepricing((response.data / 100) + 1);
+                    setRepricing(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -142,9 +142,9 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Re-Tasación fecha")}>{landSurvey.reassessmentDate}</td>
                                 <td hidden={isSelected("Pretendido")}>USD {landSurvey.price}</td>
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
-                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * rePricing)}</td>
-                                <td hidden={isSelected("Promedio asesores m2")}>{landSurvey.assessmentsPerSquareMeterUsd}</td>
-                                <td hidden={isSelected("Evaluación")} className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>{landSurvey.businessEvaluation}</td>
+                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * (1 + rePricing / 100))}</td>
+                                <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd * (1 + rePricing / 100))}</td>
+                                <td hidden={isSelected("Evaluación")} className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>{Math.round(landSurvey.businessEvaluation * (1 + rePricing / 100))}</td>
                                 <td hidden={isSelected("Clasificacion")}>{landSurvey.classification}</td>
                                 <td hidden={isSelected("Valor maximo")}>{landSurvey.maxPrice}</td>
                                 <td hidden={isSelected("Valor mínimmo")}>{landSurvey.minPrice}</td>

@@ -47,6 +47,7 @@ const LandSurveyCreate = () => {
         emptyAssessment(),
     ]);
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
+    const [rePricing, setRepricing] = useState<number>(0)
 
     const userOptions: Array<InputOption> = useFetchOptions("/users/options");
     const axiosPrivate = useAxiosPrivate();
@@ -72,6 +73,34 @@ const LandSurveyCreate = () => {
         };
 
         getMaxDeviation();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [axiosPrivate]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        let isMounted = true;
+
+        const getRepricingPercentage = async () => {
+            try {
+                const response = await axiosPrivate.get(
+                    "/settings/rePricingPercentaje",
+                    { signal: controller.signal }
+                );
+
+                if (isMounted) {
+                    console.log(response);
+                    setRepricing(response.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getRepricingPercentage();
 
         return () => {
             isMounted = false;
@@ -404,7 +433,7 @@ const LandSurveyCreate = () => {
                         </label>
                         <input
                             type="number"
-                            value={averageAssessment(assessmentList)}
+                            value={Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100))}
                             disabled
                         />
                     </div>
