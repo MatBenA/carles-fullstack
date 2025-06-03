@@ -10,7 +10,7 @@ export function getDaysSincePrice(priceVerificationDate: Date): number {
 
 //TODO FIX THIS FUNCTION
 export function averageAssessment(assessmentList: Assessment[]): number {
-    return Math.round(
+    return (
         assessmentList.reduce(
             (total: number, assessment) => 
                 total + assessment.price,
@@ -37,7 +37,7 @@ export function businessEvaluation(
     pretendedPrice: number,
     assessmentAveragePrice: number
 ): number {
-    return Math.round((pretendedPrice / assessmentAveragePrice - 1) * 100);
+    return ((pretendedPrice / assessmentAveragePrice - 1) * 100);
 }
 
 export function priceXMeterSquared(price: number, surface: number) {

@@ -46,7 +46,7 @@ const LandSurveyCreate = () => {
     const [assessmentList, setAssessmentList] = useState<Assessment[]>([
         emptyAssessment(),
     ]);
-    const [maxDeviation, setMaxDeviation] = useState<number>(1);
+    const [maxDeviation, setMaxDeviation] = useState<number>(10);
     const [rePricing, setRepricing] = useState<number>(0)
 
     const userOptions: Array<InputOption> = useFetchOptions("/users/options");
@@ -58,14 +58,11 @@ const LandSurveyCreate = () => {
 
         const getMaxDeviation = async () => {
             try {
-                const response = await axiosPrivate.post("/settings", null, {
-                    params: { settingName: "rePricingPercentaje" },
-                    signal: controller.signal,
-                });
+                const response = await axiosPrivate.get("/settings/maxDeviation", 
+                    {signal: controller.signal});
 
                 if (isMounted) {
                     setMaxDeviation(response.data);
-                    console.log(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -92,7 +89,6 @@ const LandSurveyCreate = () => {
                 );
 
                 if (isMounted) {
-                    console.log(response);
                     setRepricing(response.data);
                 }
             } catch (error) {
@@ -429,31 +425,27 @@ const LandSurveyCreate = () => {
                 <div className="dflex gap-30">
                     <div className="f-stretch">
                         <label htmlFor="averageAssessment">
-                            Tasación promedio de asesores
+                            Tasación promedio asesores USD Actualizado
                         </label>
                         <input
-                            type="number"
-                            value={Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100))}
+                            type="text"
+                            value={"$" + Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100))}
                             disabled
                         />
-                    </div>
-                    <div className="f-stretch">
-                        <label htmlFor="curency">Divisa</label>
-                        <input id="currency" type="text" />
                     </div>
                 </div>
 
                 <div>
-                    <label htmlFor="deviation">Porcentaje de desvio</label>
+                    <label htmlFor="deviation">Porcentaje de desvío</label>
                     <input
                         className={
                             assessmentDeviation(assessmentList) > maxDeviation
                                 ? "error-input"
                                 : ""
                         }
-                        type="number"
+                        type="text"
                         id="deviation"
-                        value={assessmentDeviation(assessmentList)}
+                        value= {assessmentDeviation(assessmentList) + "%"}
                         disabled
                     />
                     {/* TODO add calculated value */}
@@ -615,7 +607,7 @@ const LandSurveyCreate = () => {
                         type="number"
                         id="averageAssessmentUsd"
                         value={priceXMeterSquared(
-                            averageAssessment(assessmentList),
+                            Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100)),
                             surface
                         )}
                         disabled
@@ -733,11 +725,11 @@ const LandSurveyCreate = () => {
                 <div>
                     <div>Estado</div>
                     <div>
-                        <p>Oportunidad de negocio</p>
-                        {businessEvaluation(
+                        <p>Evaluación de negocio</p>
+                        {Math.round(businessEvaluation(
                             price,
-                            averageAssessment(assessmentList)
-                        )}
+                            averageAssessment(assessmentList) * (1 + rePricing / 100)
+                        )) + "%"}
                     </div>
                 </div>
                 <div>
