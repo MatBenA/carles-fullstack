@@ -64,12 +64,40 @@ const LandSurveyDetails = () => {
     const [reassessmentDate, setReassessmentDate] = useState<Date>(new Date());
     const [isRescinded, setIsRescinded] = useState<boolean>();
     const [maxDeviation, setMaxDeviation] = useState<number>(1);
+    const [rePricing, setRepricing] = useState<number>(0)
     const [toDelete, setToDelete] = useState<boolean>(false);
 
     const userOptions: InputOption[] = useFetchOptions("/users/options");
 
     const id = useLocation().state;
     const axiosPrivate = useAxiosPrivate();
+
+    useEffect(() => {
+        const controller = new AbortController();
+        let isMounted = true;
+
+        const getRepricingPercentage = async () => {
+            try {
+                const response = await axiosPrivate.get(
+                    "/settings/rePricingPercentaje",
+                    { signal: controller.signal }
+                );
+
+                if (isMounted) {
+                    setRepricing(response.data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getRepricingPercentage();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [axiosPrivate]);
 
     useEffect(() => {
         let isMounted = true;
@@ -159,11 +187,9 @@ const LandSurveyDetails = () => {
 
         const getMaxDeviation = async () => {
             try {
-                const response = await axiosPrivate.post("/settings", null, {
-                    params: { settingName: "maxDeviation" },
-                    signal: controller.signal,
-                });
-
+                const response = await axiosPrivate.get("/settings/maxDeviation", 
+                    {signal: controller.signal}
+                );
                 if (isMounted) {
                     setMaxDeviation(response.data);
                 }
@@ -586,17 +612,13 @@ const LandSurveyDetails = () => {
                 <div className="dflex gap-30">
                     <div className="f-stretch">
                         <label htmlFor="averageAssessment">
-                            Tasación promedio de asesores
+                            Tasación promedio asesores USD Actualizado
                         </label>
                         <input
-                            type="number"
-                            value={averageAssessment(assessmentList)}
+                            type="text"
+                            value={"$" + Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100))}
                             disabled
                         />
-                    </div>
-                    <div className="f-stretch">
-                        <label htmlFor="curency">Divisa</label>
-                        <input id="currency" type="text" />
                     </div>
                 </div>
 
@@ -795,7 +817,7 @@ const LandSurveyDetails = () => {
                         type="number"
                         id="averageAssessmentUsd"
                         value={priceXMeterSquared(
-                            averageAssessment(assessmentList),
+                            Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100)),
                             surface
                         )}
                         disabled
@@ -832,7 +854,7 @@ const LandSurveyDetails = () => {
                                     }
                                 />
                                 <label htmlFor="identified">
-                                    Identificadio
+                                    Identificado
                                 </label>
                             </p>
                             <p>
@@ -913,11 +935,11 @@ const LandSurveyDetails = () => {
                 <div>
                     <div>Estado</div>
                     <div>
-                        <p>Oportunidad de negocio</p>
-                        {businessEvaluation(
+                        <p>Evaluación de negocio</p>
+                        {Math.round(businessEvaluation(
                             price,
-                            averageAssessment(assessmentList)
-                        )}
+                            averageAssessment(assessmentList) * (1 + rePricing / 100)
+                        )) + "%"}
                     </div>
                 </div>
                 <div>

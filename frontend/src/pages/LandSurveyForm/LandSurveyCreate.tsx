@@ -644,7 +644,7 @@ const LandSurveyCreate = () => {
                                     }
                                 />
                                 <label htmlFor="identified">
-                                    Identificadio
+                                    Identificado
                                 </label>
                             </p>
                             <p>
