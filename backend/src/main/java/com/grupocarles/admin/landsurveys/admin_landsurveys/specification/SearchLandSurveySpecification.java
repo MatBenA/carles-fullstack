@@ -22,9 +22,9 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private String particular;
     private String classification;
     private String managerEmail;
-    private Boolean title;
     private Boolean rescinded;
     private String folder;
+    private String title;
 
     private Long cheapFlag;
     private Long expensiveFlag;
@@ -94,10 +94,10 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             Predicate classifiactionNameLikePredicate = criteriaBuilder.like(classificationNameToUpperCase, "%" + classification.toUpperCase() + "%");
             predicateList.add(classifiactionNameLikePredicate);
         }
-
-        if (title != null){
-            Predicate hasTitlePredicate = criteriaBuilder.equal(root.get("title"), title);
-            predicateList.add(hasTitlePredicate);
+        if (title != null){ //todo fix
+            Join<LandSurvey, Title> landSurveyTitleJoin = root.join("title");
+            Predicate titleSituationLikePredicate = criteriaBuilder.equal(landSurveyTitleJoin.get("situation"), title);
+            predicateList.add(titleSituationLikePredicate);
         }
 
         if (managerEmail != null){

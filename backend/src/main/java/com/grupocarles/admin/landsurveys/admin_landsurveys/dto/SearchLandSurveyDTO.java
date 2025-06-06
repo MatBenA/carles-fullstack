@@ -4,5 +4,5 @@ public record SearchLandSurveyDTO(Integer minPrice,
                                   Integer maxPrice,
                                   String businessEvaluation,
                                   String classification,
-                                  Boolean title) {
+                                  String title) {
 }

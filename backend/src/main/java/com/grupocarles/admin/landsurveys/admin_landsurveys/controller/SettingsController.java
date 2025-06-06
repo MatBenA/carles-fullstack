@@ -23,8 +23,8 @@ public class SettingsController {
         return settingService.updateSetting(settingDTO);
     }
 
-    @PostMapping
-    public Long getSettingByName(@RequestParam String settingName) {
+    @GetMapping("/{settingName}")
+    public Long getSettingByName(@PathVariable String settingName) {
         return settingService.getSettingByName(settingName);
     }
 }

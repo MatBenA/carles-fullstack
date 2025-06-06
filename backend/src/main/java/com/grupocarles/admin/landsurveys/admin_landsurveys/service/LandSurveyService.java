@@ -22,7 +22,7 @@ public interface LandSurveyService {
                                           String particular,
                                           String classification,
                                           String managerEmail,
-                                          Boolean title,
+                                          String title,
                                           Boolean rescinded,
                                           String folder,
                                           int pageNumber);

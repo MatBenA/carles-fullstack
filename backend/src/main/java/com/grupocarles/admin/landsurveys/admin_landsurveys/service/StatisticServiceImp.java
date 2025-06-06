@@ -123,7 +123,7 @@ public class StatisticServiceImp implements StatisticService{
                 .count();
 
         Long withTitle = landSurveyList.stream()
-                .filter(LandSurvey::getTitle)
+                .filter(landSurvey -> landSurvey.getTitle().getSituation().contains("Si"))
                 .count();
 
         Long totalUnworkable = landSurveyList.stream()

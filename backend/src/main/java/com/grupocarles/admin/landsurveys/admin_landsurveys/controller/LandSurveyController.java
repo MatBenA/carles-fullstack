@@ -42,7 +42,7 @@ public class LandSurveyController {
             @RequestParam(required = false) String particular,
             @RequestParam(required = false) String classification,
             @RequestParam(required = false) String managerEmail,
-            @RequestParam(required = false) Boolean title,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) Boolean rescinded,
             @RequestParam(required = false) String folder,
             @RequestParam(defaultValue = "0") int page

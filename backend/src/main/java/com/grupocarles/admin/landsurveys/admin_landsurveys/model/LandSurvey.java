@@ -30,8 +30,6 @@ public class LandSurvey {
 
     private Boolean corner;
     private Boolean unworkable = false;
-    private Boolean title;
-    private String titleSituation;
     private String measurements;
     private BigDecimal surface;
     private LocalDateTime priceVerificationDate;
@@ -104,6 +102,10 @@ public class LandSurvey {
     @ManyToOne
     @JoinColumn(name = "folder_id", unique = false)
     private Folder folder;
+
+    @ManyToOne
+    @JoinColumn(name = "title_id")
+    private Title title;
 
     @OneToMany(mappedBy = "landSurvey", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

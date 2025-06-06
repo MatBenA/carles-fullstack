@@ -72,6 +72,9 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Autowired
     private FolderRepository folderRepository;
 
+    @Autowired
+    private TitleRepository titleRepository;
+
     @Override
     public LandSurveyDTO createLandSurvey(LandSurveyDTO landSurveyDTO) {
 
@@ -144,10 +147,16 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     return zoneRepository.save(newZone);
                 });
 
+        Title title = titleRepository.findBySituation(landSurveyDTO.title())
+                .orElseGet(() -> {
+                    Title newTitle = new Title();
+                    newTitle.setSituation(landSurveyDTO.title());
+                    return titleRepository.save(newTitle);
+                });
+
         landSurvey.setAddress(landSurveyDTO.address());
         landSurvey.setCorner(landSurveyDTO.corner());
-        landSurvey.setTitle(landSurveyDTO.title());
-        landSurvey.setTitleSituation(landSurveyDTO.titleSituation());
+        landSurvey.setTitle(title);
         landSurvey.setMeasurements(landSurveyDTO.measurements());
         landSurvey.setSurface(landSurveyDTO.surface());
         landSurvey.setObservation(landSurveyDTO.observation());
@@ -215,7 +224,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                                                  String particular,
                                                  String classification,
                                                  String managerEmail,
-                                                 Boolean title,
+                                                 String title,
                                                  Boolean rescinded,
                                                  String folder,
                                                  int pageNumber) {
@@ -234,9 +243,9 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 particular,
                 classification,
                 managerEmail,
-                title,
                 rescinded,
                 folder,
+                title,
                 cheapFlag,
                 expensiveFlag
         );
@@ -310,10 +319,16 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     return zoneRepository.save(newZone);
                 });
 
+        Title title = titleRepository.findBySituation(newLandSurveyDTO.title())
+                .orElseGet(() -> {
+                    Title newTitle = new Title();
+                    newTitle.setSituation(newLandSurveyDTO.title());
+                    return  titleRepository.save(newTitle);
+                });
+
         landSurvey.setAddress(newLandSurveyDTO.address());
         landSurvey.setCorner(newLandSurveyDTO.corner());
-        landSurvey.setTitle(newLandSurveyDTO.title());
-        landSurvey.setTitleSituation(newLandSurveyDTO.titleSituation());
+        landSurvey.setTitle(title);
         landSurvey.setMeasurements(newLandSurveyDTO.measurements());
         landSurvey.setSurface(newLandSurveyDTO.surface());
         landSurvey.setPriceVerificationDate(priceVerificationDate);
@@ -372,8 +387,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getCreationDate(),
                 landSurvey.getAddress(),
                 landSurvey.getCorner(),
-                landSurvey.getTitle(),
-                landSurvey.getTitleSituation(),
+                landSurvey.getTitle().getSituation(),
                 landSurvey.getMeasurements(),
                 landSurvey.getSurface(),
                 landSurvey.getPriceVerificationDate(),
