@@ -1,7 +1,6 @@
 package com.grupocarles.admin.landsurveys.admin_landsurveys.service;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.*;
@@ -431,28 +430,54 @@ public class LandSurveyServiceImp implements LandSurveyService {
             throw new IllegalArgumentException("Debe haber al menos dos Assessment para un LandSurvey.");
         }*/
 
-        if (landSurvey.getAssessmentList().isEmpty()) {
-            return landSurveyRepository.save(landSurvey);
-        }
+        validateAssessmentDeviation(landSurvey);
 
-        Long maxPriceAssessment = landSurvey.getAssessmentList().stream()
-                .max(Comparator.comparingLong(Assessment::getPrice))
-                .get()
-                .getPrice();
-
-        Long minPriceAssessment = landSurvey.getAssessmentList().stream()
-                .min(Comparator.comparingLong(Assessment::getPrice))
-                .get()
-                .getPrice();
-
-        Double deviation = ((double)maxPriceAssessment / minPriceAssessment - 1) * 100;
-
-        Long maxDeviation = Long.parseLong(settingRepository.findById("maxDeviation").orElse(null).getValue());
-
-        if (deviation > maxDeviation) {
-            throw new IllegalArgumentException("Se supero la desviacion maxima.");
-        }
 
         return landSurveyRepository.save(landSurvey);
     }
+
+    public void validateAssessmentDeviation(LandSurvey landSurvey) {
+        List<Assessment> assessments = landSurvey.getAssessmentList();
+        if (assessments == null || assessments.isEmpty()) return;
+
+        Double currentRate = currencyRepository.findByCode("USD")
+                .orElseThrow(EntityNotFoundException::new)
+                .getExchangeReference();
+
+        double minPriceInUsd = Double.MAX_VALUE;
+        double maxPriceInUsd = Double.MIN_VALUE;
+
+        for (Assessment assessment : assessments) {
+            if (assessment.getPrice() == null || assessment.getCurrency() == null) continue;
+
+            double price = assessment.getPrice();
+            String currencyCode = assessment.getCurrency().getCode();
+
+            double priceInUsd;
+            if ("USD".equalsIgnoreCase(currencyCode)) {
+                priceInUsd = price;
+            } else if ("ARS".equalsIgnoreCase(currencyCode)) {
+                priceInUsd = price / currentRate;
+            } else {
+                throw new IllegalArgumentException("Unsupported currency: " + currencyCode);
+            }
+
+            minPriceInUsd = Math.min(minPriceInUsd, priceInUsd);
+            maxPriceInUsd = Math.max(maxPriceInUsd, priceInUsd);
+        }
+
+        // Ensure we have at least two prices to compare
+        if (minPriceInUsd == Double.MAX_VALUE || maxPriceInUsd == Double.MIN_VALUE || minPriceInUsd == 0) return;
+
+        double deviation = ((maxPriceInUsd / minPriceInUsd) - 1) * 100;
+
+        Long maxDeviation = Long.parseLong(settingRepository.findById("maxDeviation")
+                .orElse(null)
+                .getValue());
+
+        if (deviation > maxDeviation) {
+            throw new IllegalArgumentException("Se superó la desviación máxima permitida.");
+        }
+    }
+
 }
