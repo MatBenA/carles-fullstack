@@ -43,8 +43,7 @@ const LandSurveyDetails = () => {
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [contact, setContact] = useState<InputOption | null>(null);
     const [folder, setFolder] = useState<InputOption | null>(null);
-    const [title, setTitle] = useState<boolean>(false);
-    const [titleSituation, setTitleSituation] = useState<string>();
+    const [title, setTitle] = useState<InputOption | null>(null);
     const [measurements, setMeasurements] = useState<string>("");
     const [surface, setSurface] = useState<number>(0);
     const [price, setPrice] = useState<number>(0);
@@ -147,8 +146,10 @@ const LandSurveyDetails = () => {
                         value: landsurvey.folder,
                         label: landsurvey.folder,
                     });
-                    setTitle(landsurvey.title);
-                    setTitleSituation(landsurvey.titleSituation);
+                    setTitle({
+                        value: landsurvey.title,
+                        label: landsurvey.title
+                    });
                     setMeasurements(landsurvey.measurements);
                     setSurface(landsurvey.surface);
                     setPrice(landsurvey.price);
@@ -215,8 +216,7 @@ const LandSurveyDetails = () => {
             JSON.stringify({
                 address,
                 corner,
-                title,
-                titleSituation,
+                title: title?.label,
                 measurements,
                 surface,
                 observation,
@@ -493,29 +493,24 @@ const LandSurveyDetails = () => {
                             options={useFetchOptions("/contacts/options")}
                             value={contact}
                             onChange={setContact}
+                            isClearable
                             required
                         />
                     </div>
                 </div>
 
                 <div className="dflex gap-30">
-                    <div className="dflex gap-10">
-                        <input
-                            type="checkbox"
-                            id="title"
-                            checked={title}
-                            onChange={(e) => setTitle(e.target.checked)}
-                        />
-                        <label htmlFor="title">Titulo</label>
-                    </div>
+                    
                     <div className="f-stretch">
-                        <label htmlFor="contact">Situacion de Titulo</label>
-                        <input
-                            type="tel"
-                            id="contact"
+                        <label htmlFor="title">Título</label>
+                        <CreatableSelect
+                            id="title"
+                            styles={select2Styles}
+                            options={useFetchOptions("/titles/options")}
+                            value={title}
+                            onChange={setTitle}
+                            isClearable
                             required
-                            value={titleSituation}
-                            onChange={(e) => setTitleSituation(e.target.value)}
                         />
                     </div>
                 </div>
@@ -805,7 +800,9 @@ const LandSurveyDetails = () => {
                     <input
                         type="number"
                         id="pricePerSquareMeter"
-                        value={priceXMeterSquared(price, surface)}
+                        value={currency == "ARS" ? 
+                            priceXMeterSquared((price / 1165), surface) : 
+                            priceXMeterSquared(price, surface)}
                         disabled
                     />
                 </div>
@@ -937,7 +934,7 @@ const LandSurveyDetails = () => {
                     <div>
                         <p>Evaluación de negocio</p>
                         {Math.round(businessEvaluation(
-                            price,
+                            currency == "ARS" ? (price / 1165) : price,
                             averageAssessment(assessmentList) * (1 + rePricing / 100)
                         )) + "%"}
                     </div>

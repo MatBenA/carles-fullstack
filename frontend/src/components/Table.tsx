@@ -69,34 +69,34 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
             <table>
                 <thead>
                     <tr>
-                        <th>Accion</th>
+                        <th>Acción</th>
                         <th hidden={isSelected("Carpeta")}>Carpeta</th>
                         <th hidden={isSelected("Fecha")} className="date">Fecha</th>
                         <th hidden={isSelected("Relevó")} className="surveyor">Relevó</th>
                         <th hidden={isSelected("Encargado")} className="manager">Encargado</th>
                         <th hidden={isSelected("Tipo de archivo")}>Tipo de archivo</th>
-                        <th hidden={isSelected("Ubicacion")} className="address">Ubicacion</th>
+                        <th hidden={isSelected("Ubicacion")} className="address">Ubicación</th>
                         <th hidden={isSelected("Camino")}>Camino</th>
                         <th hidden={isSelected("Esquina")}>Esquina</th>
-                        <th hidden={isSelected("Seccion")}>Seccion</th>
+                        <th hidden={isSelected("Seccion")}>Sección</th>
                         <th hidden={isSelected("Zona")}>Zona</th>
                         <th hidden={isSelected("Proveedor")} className="agency">Proveedor</th>
                         <th hidden={isSelected("Particular")} className="particular">Particular</th>
                         <th hidden={isSelected("Contacto")}>Contacto</th>
                         <th hidden={isSelected("Fuente")}>Fuente</th>
-                        <th hidden={isSelected("Titulo")}>Titulo</th>
+                        <th hidden={isSelected("Titulo")}>Título</th>
                         <th hidden={isSelected("Medidas")}>Medidas</th>
                         <th hidden={isSelected("Superficie")}>Superficie</th>
                         <th hidden={isSelected("Verificación precio")}>Ultima verificación del precio</th>
-                        <th hidden={isSelected("Dias ultima Verificación")}>Dias de Ultima Verificación de Precio</th>
+                        <th hidden={isSelected("Dias ultima Verificación")}>Días de Ultima Verificación de Precio</th>
                         <th hidden={isSelected("Re-Tasación fecha")}>Fecha de Re-Tasación</th>
                         <th hidden={isSelected("Pretendido")} className="pretended">Precio Pretendido</th>
-                        <th hidden={isSelected("pretendido m2")}>Precio pretendido m2 - USD</th>
-                        <th hidden={isSelected("Tasacion promedio ajustada")}>Tasacion promedio ajustada</th>
+                        <th hidden={isSelected("pretendido m2 USD")}>Precio pretendido m2</th>
+                        <th hidden={isSelected("Tasacion promedio ajustada")}>Tasación promedio ajustada</th>
                         <th hidden={isSelected("Promedio asesores m2")}>M2 opinión de asesores USD</th>
                         <th hidden={isSelected("Evaluación")}>Evaluación del negocio</th>
-                        <th hidden={isSelected("Clasificacion")} className="classification">Clasificacion</th>
-                        <th hidden={isSelected("Valor maximo")}>Valor maximo</th>
+                        <th hidden={isSelected("Clasificacion")} className="classification">Clasificación</th>
+                        <th hidden={isSelected("Valor maximo")}>Valor máximo</th>
                         <th hidden={isSelected("Valor mínimmo")}>Valor mínimmo</th>
                         <th hidden={isSelected("% Desvío")}>% Desvío</th>
                         <th hidden={isSelected("Observaciones")} className="observations">Observaciones</th>
@@ -134,13 +134,13 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Particular")}>{landSurvey.particular}</td>
                                 <td hidden={isSelected("Contacto")}>{landSurvey.contact}</td>
                                 <td hidden={isSelected("Fuente")}>{landSurvey.source}</td>
-                                <td hidden={isSelected("Titulo")}>{landSurvey.title ? "Si" : "No"}</td>
+                                <td hidden={isSelected("Titulo")}>{landSurvey.title}</td>
                                 <td hidden={isSelected("Medidas")}>{landSurvey.measurements}</td>
                                 <td hidden={isSelected("Superficie")}>{landSurvey.surface}</td>
                                 <td hidden={isSelected("Verificación precio")}>{landSurvey.priceVerificationDate}</td>
                                 <td hidden={isSelected("Dias ultima Verificación")}>{landSurvey.daysSincePriceVerification}</td>
                                 <td hidden={isSelected("Re-Tasación fecha")}>{landSurvey.reassessmentDate}</td>
-                                <td hidden={isSelected("Pretendido")}>USD {landSurvey.price}</td>
+                                <td hidden={isSelected("Pretendido")}>{landSurvey.price}</td>
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
                                 <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * (1 + rePricing / 100))}</td>
                                 <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd * (1 + rePricing / 100))}</td>

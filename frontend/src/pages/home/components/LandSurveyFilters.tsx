@@ -34,7 +34,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [folder, setFolder] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
-    const [title, setTitle] = useState<boolean>(true);
+    const [title, setTitle] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
     const [rescinded, setRescinded] = useState<boolean>(false);
 
@@ -58,7 +58,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     managerEmail: manager?.value,
                     folder: folder?.value,
                     classification,
-                    title,
+                    title: title?.label,
                     rescinded,
                 }
             );
@@ -73,23 +73,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             isMounted = false;
             controller.abort();
         };
-    }, [
-        maxPrice,
-        minPrice,
-        address,
-        businessEvaluation,
-        section?.label,
-        zone?.label,
-        agency?.label,
-        axiosPrivate,
-        classification,
-        particular?.label,
-        setLandSurveys,
-        title,
-        manager,
-        rescinded,
-        folder?.value,
-    ]);
+    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value]);
 
     const handleSetManager = () => {
         console.log(manager);
@@ -105,7 +89,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             <div className="price-eval">
                 <div className="price-range">
                     <div>
-                        <label htmlFor="min-price">Precio minimo:</label>
+                        <label htmlFor="min-price">Precio mínimo:</label>
                         <input
                             type="number"
                             id="min-price"
@@ -117,7 +101,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="max-price">Precio maximo:</label>
+                        <label htmlFor="max-price">Precio máximo:</label>
                         <input
                             type="number"
                             id="max-price"
@@ -131,7 +115,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                 </div>
 
                 <div className="evaluation">
-                    <label htmlFor="evaluation">Evaluacion de Negocio:</label>
+                    <label htmlFor="evaluation">Evaluación de Negocio:</label>
                     <Select
                         id="evaluation"
                         styles={select2Styles}
@@ -143,7 +127,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                 </div>
 
                 <div>
-                    <label htmlFor="min-price">Buscar por ubicacion</label>
+                    <label htmlFor="min-price">Buscar por ubicación</label>
                     <input
                         type="text"
                         id="min-price"
@@ -155,7 +139,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
 
             <div className="section-zone">
                 <div>
-                    <label htmlFor="section">Seccion</label>
+                    <label htmlFor="section">Sección</label>
                     <Select
                         id="section"
                         styles={select2Styles}
@@ -217,10 +201,22 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         isClearable
                     />
                 </div>
+                <div>
+                    <label htmlFor="title">Título</label>
+                    <Select
+                        id="title"
+                        styles={select2Styles}
+                        options={useFetchOptions("/titles/options")}
+                        value={title}
+                        onChange={setTitle}
+                        placeholder="Título"
+                        isClearable
+                    />
+                </div>
             </div>
             <div className="classification-title">
                 <div>
-                    <label htmlFor="classification">Clasificacion</label>
+                    <label htmlFor="classification">Clasificación</label>
                     <select
                         name="classification"
                         id="classification"
@@ -267,15 +263,6 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <label htmlFor="showMine">Relevamientos propios</label>
                     </div>
                 )}
-                <div className="dflex gap-10">
-                    <input
-                        id="title"
-                        type="checkbox"
-                        checked={title}
-                        onChange={(e) => setTitle(e.target.checked)}
-                    />
-                    <label htmlFor="title">Posee Titulo</label>
-                </div>
             </div>
 
             <div>

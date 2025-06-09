@@ -13,18 +13,18 @@ export function averageAssessment(assessmentList: Assessment[]): number {
     return (
         assessmentList.reduce(
             (total: number, assessment) => 
-                total + assessment.price,
+                total + (assessment.currency == "ARS" ? assessment.price / 1165 : assessment.price),
             0
         ) / assessmentList.length
     );
 }
 
 export function maxPrice(assessmentList: Assessment[]): number {
-    return Math.max(...assessmentList.map((assessment) => assessment.price));
+    return Math.max(...assessmentList.map((assessment) => assessment.currency == "ARS" ? (assessment.price / 1165) : assessment.price));
 }
 
 export function minPrice(assessmentList: Assessment[]): number {
-    return Math.min(...assessmentList.map((assessment) => assessment.price));
+    return Math.min(...assessmentList.map((assessment) => assessment.currency == "ARS" ? (assessment.price / 1165) : assessment.price));
 }
 
 export function assessmentDeviation(assessmentList: Assessment[]): number {

@@ -8,7 +8,7 @@ const Header = () => {
     return (
         <header className="top-bar">
             <img className="icon" src={logo} alt="#" />
-            <h1>Carles Terrenos</h1>
+            <h1>Carlés Terrenos</h1>
             {auth?.accessToken ? <NavBar /> : <></>}
         </header>
     );

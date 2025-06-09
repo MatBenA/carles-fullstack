@@ -9,7 +9,7 @@ export interface SearchRequest {
     particular: string | undefined;
     classification: string | undefined;
     managerEmail: string | undefined;
-    title: boolean | undefined;
+    title: string | undefined;
     rescinded: boolean | undefined;
     folder: string | undefined;
 }
