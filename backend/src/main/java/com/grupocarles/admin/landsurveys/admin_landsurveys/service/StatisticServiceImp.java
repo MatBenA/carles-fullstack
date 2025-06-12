@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,9 +33,12 @@ public class StatisticServiceImp implements StatisticService{
     @Autowired
     private LocalityRepository localityRepository;
 
+    @Autowired
+    private CurrencyService currencyService;
+
     @Override
     public List<StatisticDTO> getAllAsDTO() {
-        return statisticRepository.findAll()
+        return statisticRepository.findAllByOrderByCreationDateDesc()
                 .stream()
                 .map(this::toDTO)
                 .toList();
@@ -42,6 +46,8 @@ public class StatisticServiceImp implements StatisticService{
 
     @Override
     public StatisticDTO generateReport() {
+
+        Currency usdCurrency = currencyService.getAllCurrencies().getLast();
 
         List<LandSurvey> landSurveyList = landSurveyRepository.findAll();
 
@@ -62,68 +68,101 @@ public class StatisticServiceImp implements StatisticService{
                 .getValue());
 
         Long averageValue = landSurveyList.stream()
-                .map(LandSurvey::getPrice)
+                .map(landSurvey -> {
+                    if ("ARS".equals(landSurvey.getCurrency().getCode())){
+                        landSurvey.setPrice((long)(landSurvey.getPrice() / usdCurrency.getExchangeReference()));
+                    }
+                    return landSurvey.getPrice();
+                })
                 .reduce(0L, Long::sum) / landSurveyRepository.count();
 
         Long totalCarles = landSurveyList.stream()
                 .filter(landSurvey -> landSurvey.getAgency() != null)
-                .filter(landSurvey -> Objects.equals(landSurvey.getAgency().getName(), "CARLÉS TERRENOS"))
+                .filter(landSurvey -> landSurvey.getAgency().getName().toUpperCase().contains("CARLÉS TERRENOS"))
                 .count();
 
         Long totalAgencies = landSurveyList.stream()
                 .filter(landSurvey -> landSurvey.getAgency() != null)
-                .filter(landSurvey -> !Objects.equals(landSurvey.getAgency().getName(), "CARLÉS TERRENOS"))
+                .filter(landSurvey -> !landSurvey.getAgency().getName().toUpperCase().contains("CARLÉS TERRENOS"))
+                .filter(landSurvey -> !landSurvey.getAgency().getName().toUpperCase().startsWith("PROP"))
                 .count();
 
         Long totalOwner = landSurveyList.stream()
                 .filter(landSurvey -> landSurvey.getAgency() != null)
-                .filter(landSurvey -> landSurvey.getAgency().getName().contains("PROPIETARIO"))
+                .filter(landSurvey -> landSurvey.getAgency().getName().toUpperCase().contains("PROPIETARIO"))
                 .count();
 
         Long totalCarlesRed = landSurveyList.stream()
                 .filter(landSurvey -> landSurvey.getAgency() != null)
-                .filter(landSurvey -> assessmentService.averageAssessment(landSurvey) > 0)
-                .filter(landSurvey ->
-                        landSurvey.getPrice() / assessmentService.averageAssessment(landSurvey) > expensiveFlag
-                        && Objects.equals(landSurvey.getAgency().getName(), "CARLÉS TERRENOS"))
+                .filter(landSurvey -> landSurvey.getAgency().getName().toUpperCase().contains("CARLÉS TERRENOS"))
+                .mapToDouble(landSurvey -> {
+                    Long avgAssessment = assessmentService.averageAssessment(landSurvey);
+                    if (avgAssessment <= 0) return -1; // Marca para filtrar después
+
+                    // Cálculo exacto como en SQL: (ls.price / (AVG(amt.price) * 0.95) - 1) * 100
+                    return (landSurvey.getPrice().doubleValue() / (avgAssessment.doubleValue() * 0.95) - 1) * 100;
+                })
+                .filter(calculation -> calculation > expensiveFlag && calculation != -1)
                 .count();
 
         Long totalReds = landSurveyList.stream()
                 .filter(landSurvey -> landSurvey.getAgency() != null)
-                .filter(landSurvey -> assessmentService.averageAssessment(landSurvey) > 0)
-                .filter(landSurvey ->
-                        landSurvey.getPrice() / assessmentService.averageAssessment(landSurvey) > expensiveFlag
-                                && !Objects.equals(landSurvey.getAgency().getName(), "CARLÉS TERRENOS"))
+                .filter(landSurvey -> !landSurvey.getAgency().getName().toUpperCase().contains("CARLÉS TERRENOS"))
+                .mapToDouble(landSurvey -> {
+                    Long avgAssessment = assessmentService.averageAssessment(landSurvey);
+                    if (avgAssessment <= 0) return -1; // Marca para filtrar después
+
+                    // Cálculo exacto como en SQL: (ls.price / (AVG(amt.price) * 0.95) - 1) * 100
+                    return (landSurvey.getPrice().doubleValue() / (avgAssessment.doubleValue() * 0.95) - 1) * 100;
+                })
+                .filter(calculation -> calculation > expensiveFlag && calculation != -1)
                 .count();
 
         Long totalNormals = landSurveyList.stream()
-                .filter(landSurvey -> assessmentService.averageAssessment(landSurvey) > 0)
-                .filter(landSurvey ->
-                        landSurvey.getPrice() / assessmentService.averageAssessment(landSurvey) <= expensiveFlag &&
-                        landSurvey.getPrice() / assessmentService.averageAssessment(landSurvey) >= cheapFlag)
+                .filter(landSurvey -> landSurvey.getAgency() != null)
+                .mapToDouble(landSurvey -> {
+                    Long avgAssessment = assessmentService.averageAssessment(landSurvey);
+                    if (avgAssessment <= 0) return -1; // Marca para filtrar después
+
+                    // Cálculo exacto como en SQL: (ls.price / (AVG(amt.price) * 0.95) - 1) * 100
+                    return (landSurvey.getPrice().doubleValue() / (avgAssessment.doubleValue() * 0.95) - 1) * 100;
+                })
+                .filter(calculation -> calculation <= expensiveFlag && calculation != -1)
+                .filter(calculation -> calculation >= cheapFlag && calculation != -1)
                 .count();
 
         Long totalGreens = landSurveyList.stream()
-                .filter(landSurvey -> assessmentService.averageAssessment(landSurvey) > 0)
-                .filter(landSurvey ->
-                        landSurvey.getPrice() / assessmentService.averageAssessment(landSurvey) < cheapFlag)
+                .filter(landSurvey -> landSurvey.getAgency() != null)
+                .mapToDouble(landSurvey -> {
+                    Long avgAssessment = assessmentService.averageAssessment(landSurvey);
+                    if (avgAssessment <= 0) return -1; // Marca para filtrar después
+
+                    // Cálculo exacto como en SQL: (ls.price / (AVG(amt.price) * 0.95) - 1) * 100
+                    return (landSurvey.getPrice().doubleValue() / (avgAssessment.doubleValue() * 0.95) - 1) * 100;
+                })
+                .filter(calculation -> calculation < cheapFlag && calculation != -1)
                 .count();
 
         Long belowMinLimit = landSurveyList.stream()
-                .filter(landSurvey -> Period.between(landSurvey.getCreationDate().toLocalDate(), LocalDate.now()).getDays() < statisticTopLimit)
+                .filter(landSurvey ->
+                        ChronoUnit.DAYS.between(landSurvey.getPriceVerificationDate().toLocalDate(), LocalDate.now()) < statisticBottomLimit)
                 .count();
 
         Long belowMaxLimit = landSurveyList.stream()
-                .filter(landSurvey -> Period.between(landSurvey.getCreationDate().toLocalDate(), LocalDate.now()).getDays() <= statisticBottomLimit &&
-                        Period.between(landSurvey.getCreationDate().toLocalDate(), LocalDate.now()).getDays() >= statisticTopLimit)
+                .filter(landSurvey ->
+                        ChronoUnit.DAYS.between(landSurvey.getPriceVerificationDate().toLocalDate(), LocalDate.now()) >= statisticBottomLimit &&
+                        ChronoUnit.DAYS.between(landSurvey.getPriceVerificationDate().toLocalDate(), LocalDate.now()) <= statisticTopLimit)
                 .count();
 
         Long overLimits = landSurveyList.stream()
-                .filter(landSurvey -> Period.between(landSurvey.getCreationDate().toLocalDate(), LocalDate.now()).getDays() > statisticBottomLimit)
+                .filter(landSurvey ->
+                        ChronoUnit.DAYS.between(landSurvey.getPriceVerificationDate().toLocalDate(), LocalDate.now()) > statisticTopLimit)
                 .count();
 
         Long withTitle = landSurveyList.stream()
-                .filter(landSurvey -> landSurvey.getTitle().getSituation().contains("Si"))
+                .filter(landSurvey -> landSurvey.getTitle() != null)
+                .filter(landSurvey -> landSurvey.getTitle().getSituation() != null)
+                .filter(landSurvey -> landSurvey.getTitle().getSituation().startsWith("Si"))
                 .count();
 
         Long totalUnworkable = landSurveyList.stream()
@@ -184,7 +223,6 @@ public class StatisticServiceImp implements StatisticService{
                 .orElseThrow();
 
 
-        //TODO MUST BE FIXED
         return new StatisticDTO(
                 statisticReport.getId(),
                 statisticReport.getCreationDate(),

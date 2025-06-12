@@ -86,9 +86,12 @@ public class AssessmentServiceImp implements AssessmentService {
 
     @Override
     public Long averageAssessment(LandSurvey landSurvey) {
-        return landSurvey.getAssessmentList()
-                .stream()
-                .map(Assessment::getPrice)
-                .reduce(0L, (Long::sum));
+        return Math.round(
+                landSurvey.getAssessmentList()
+                        .stream()
+                        .mapToLong(Assessment::getPrice)
+                        .average()
+                        .orElse(0.0)  // Maneja lista vacía
+        );
     }
 }
