@@ -27,7 +27,8 @@ const UpdateReports = () => {
                     signal: controller.signal,
                 });
                 if (isMounted) {
-                    setUpdateReportGroups(response.data);
+                    console.log(response)
+                    setUpdateReportGroups([updateReportGroupTest]);
                 }
             } catch (error) {
                 console.error(error);
@@ -78,17 +79,28 @@ const UpdateReports = () => {
             <table>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Fecha</th>
                         <th>Total Propietarios Vencidos</th>
                         <th>Total inmobiliaria e intermediarios Vencidos</th>
                         <th>Total inmuebles en rojo</th>
                         <th>Total</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {updateReportGroups.map((reportGroup) => (
                         <tr>
+                            <td>
+                                <button
+                                    onClick={() =>
+                                        navigate("/update-reports/details", {
+                                            state: reportGroup,
+                                        })
+                                    }
+                                >
+                                    Detalles
+                                </button>
+                            </td>
                             <td>{reportGroup.date}</td>
                             <td>
                                 {
@@ -117,17 +129,6 @@ const UpdateReports = () => {
                                         reportGroup.reportList
                                     ).total
                                 }
-                            </td>
-                            <td>
-                                <button
-                                    onClick={() =>
-                                        navigate("/update-reports/details", {
-                                            state: reportGroup,
-                                        })
-                                    }
-                                >
-                                    Detalles
-                                </button>
                             </td>
                         </tr>
                     ))}

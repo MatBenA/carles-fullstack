@@ -75,6 +75,7 @@ const StatisticTable = () => {
             <table className="custom-table">
                 <thead>
                     <tr>
+                        <th>Accion</th>
                         <th>Fecha</th>
                         <th>Total Relevamientos</th>
                         <th>Valor Medio</th>
@@ -94,12 +95,20 @@ const StatisticTable = () => {
                         <th>Con Titulo</th>
                         <th>Sin Titulo</th>
                         <th>No trabajable</th>
-                        <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>
                     {statisticList?.map((statistic) => (
                         <tr key={statistic.id}>
+                            <td>
+                                <Link
+                                    to="/statistics/report"
+                                    state={statistic}
+                                    onClick={() => window.scrollTo({ top: 0 })}
+                                >
+                                    <button>Detalle</button>
+                                </Link>
+                            </td>
                             <td>
                                 {new Date(
                                     statistic.creationDate
@@ -126,15 +135,6 @@ const StatisticTable = () => {
                                     statistic.WithTitle}
                             </td>
                             <td>{statistic.totalUnworkable}</td>
-                            <td>
-                                <Link
-                                    to="/statistics/report"
-                                    state={statistic}
-                                    onClick={() => window.scrollTo({ top: 0 })}
-                                >
-                                    <button>Detalle</button>
-                                </Link>
-                            </td>
                         </tr>
                     ))}
                 </tbody>
