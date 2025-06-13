@@ -1,28 +1,31 @@
 package com.grupocarles.admin.landsurveys.admin_landsurveys.model;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+
+@Entity
 public class UserReport {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
 
-    @EmbeddedId
-    private UserReportId id;
+    Long overBottomLimit;
 
-    @ManyToOne
-    @JoinColumn(name = "update_report_id")
-    @MapsId("updateReport")
-    private UpdateReport updateReport;
+    Long overMidLimit;
+
+    Long overTopLimit;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @MapsId("userId")
     private UserSec user;
 
-    Integer overBottomLimit;
-
-    Integer overMidLimit;
-
-    Integer overTopLimit;
+    @ManyToOne
+    @JoinColumn(nullable=false)
+    private UpdateReport updateReport;
 }

@@ -381,6 +381,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         if (landSurvey.getSource() == null){ landSurvey.setSource(new Source()); }
         if (landSurvey.getSection() == null){ landSurvey.setSection(new Section()); }
         if (landSurvey.getFolder() == null){ landSurvey.setFolder(new Folder()); }
+        if (landSurvey.getTitle() == null){ landSurvey.setTitle(new Title()); }
 
         return new LandSurveyDTO(landSurvey.getId(),
                 landSurvey.getCreationDate(),

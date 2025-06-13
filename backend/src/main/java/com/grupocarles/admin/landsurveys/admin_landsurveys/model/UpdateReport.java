@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -21,4 +22,7 @@ public class UpdateReport {
     @Column(updatable = false)
     @CreationTimestamp
     private LocalDateTime creationDate;
+
+    @OneToMany(mappedBy = "updateReport")
+    private List<UserReport> userReportList;
 }
