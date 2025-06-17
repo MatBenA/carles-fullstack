@@ -313,13 +313,13 @@ const LandSurveyDetails = () => {
                             Volver
                         </button>
                     </Link>
-                    {isAdmin || userEmail === originalManager.value ? (
+                    {/* isAdmin || userEmail === originalManager.value ? */ (
                         <button className="f-stretch green-btn" type="submit">
                             Guardar
                         </button>
-                    ) : (
+                    ) /* : (
                         <></>
-                    )}
+                    ) */}
                 </div>
                 <div className="dflex gap-30">
                     {/* CODE - DATE */}
@@ -347,6 +347,7 @@ const LandSurveyDetails = () => {
                             options={userOptions}
                             value={manager}
                             onChange={setManager}
+                            isDisabled={!(isAdmin || userEmail === originalManager?.value)}
                         />
                     </div>
                     <div className="f-stretch">
@@ -985,13 +986,13 @@ const LandSurveyDetails = () => {
                     )}
                 </div>
                 <div className="dflex gap-30">
-                    {isAdmin || userEmail === originalManager?.value ? (
+                    {/* isAdmin || userEmail === originalManager?.value ? */ (
                         <button className="f-stretch green-btn" type="submit">
                             Guardar
                         </button>
-                    ) : (
+                    ) /* : (
                         <></>
-                    )}
+                    ) */}
                 </div>
                 <div className="dflex gap-30">
                     {(isAdmin || userEmail === originalManager?.value) &&
