@@ -28,7 +28,7 @@ const UpdateReports = () => {
                 });
                 if (isMounted) {
                     console.log(response)
-                    setUpdateReportGroups([updateReportGroupTest]);
+                    setUpdateReportGroups(response.data);
                 }
             } catch (error) {
                 console.error(error);
@@ -45,7 +45,7 @@ const UpdateReports = () => {
 
     const handleGenerateReport = async () => {
         const controller = new AbortController();
-        const generateReport = axiosPrivate.post("/update-reports", null, {
+        const generateReport = axiosPrivate.post("/update-reports/create", null, {
             signal: controller.signal,
         });
 
@@ -57,7 +57,7 @@ const UpdateReports = () => {
 
         try {
             const response = await generateReport;
-            navigate("/update-report/details", { state: response.data });
+            navigate("/update-reports/details", { state: response.data });
         } catch (error) {
             console.error(error);
         }
