@@ -26,6 +26,6 @@ public class UserReport {
     private UserSec user;
 
     @ManyToOne
-    @JoinColumn(nullable=false)
+    @JoinColumn(name = "update_report_id", nullable = true)
     private UpdateReport updateReport;
 }

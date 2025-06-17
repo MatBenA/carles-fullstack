@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -21,8 +23,8 @@ public class UpdateReport {
 
     @Column(updatable = false)
     @CreationTimestamp
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
-    @OneToMany(mappedBy = "updateReport")
-    private List<UserReport> userReportList;
+    @OneToMany(mappedBy = "updateReport", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserReport> userReportList = new ArrayList<>();
 }
