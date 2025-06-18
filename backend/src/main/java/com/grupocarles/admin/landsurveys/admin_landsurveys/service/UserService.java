@@ -30,4 +30,6 @@ public interface UserService {
     int deleteUserByEmail(String email);
 
     Boolean toggleEnabled(String email);
+
+    UserDTO updatePassword(String email, String newPassword);
 }

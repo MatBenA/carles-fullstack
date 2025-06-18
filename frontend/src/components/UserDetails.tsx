@@ -19,6 +19,7 @@ const UserDetails = () => {
     const [roles, setRoles] = useState<string[]>(user.roles);
     const [toDelete, setToDelete] = useState<boolean>(false);
     const [enabled, setEnabled] = useState<boolean>(user.enabled);
+    const [newPass, setNewPass] = useState<string>("")
 
     const handleSubmit = async (
         event: FormEvent<HTMLFormElement>
@@ -98,6 +99,28 @@ const UserDetails = () => {
         }
     }; 
 
+    const handleUpdatePassword = async () => {
+        const controller = new AbortController();
+        const newPassword = axiosPrivate.put(
+            `/users/${email}/password`,
+            {password: newPass},
+            { signal: controller.signal }
+        );
+
+        toast.promise(newPassword, {
+            loading: "Cargando...",
+            error: "Hubo un error",
+            success: `Contraseña actualizada correctamente`,
+        });
+
+        try {
+            const response = await newPassword;
+            console.log(response.status);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <section className="user-details">
             <form onSubmit={handleSubmit}>
@@ -141,6 +164,25 @@ const UserDetails = () => {
                         <option value="USER">USER</option>
                         <option value="ADMIN">ADMIN</option>
                     </select>
+                </div>
+                
+                <div className="dflex gap-30">
+                    <div>
+                        <label htmlFor="newpass">Cambiar contraseña</label>
+                        <input
+                            type="password"
+                            id="newpass"
+                            value={newPass}
+                            onChange={(e) => setNewPass(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        className="green-btn alignself-end"
+                        onClick={handleUpdatePassword}
+                        type="button"
+                    >
+                        Actualizar contraseña
+                    </button>
                 </div>
                 <div className="dflex fgrow gap-30">
                     <button

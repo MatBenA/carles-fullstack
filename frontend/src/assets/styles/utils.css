@@ -89,3 +89,7 @@
     background-color: var(--red-0);
     border: 1px solid var(--dark-red);
 }
+
+.alignself-end{
+    align-self: end;
+}

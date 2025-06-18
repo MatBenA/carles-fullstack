@@ -11,6 +11,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import jakarta.persistence.EntityNotFoundException;
 import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -102,5 +103,19 @@ public class UserServiceImp implements UserService{
         user.setEnabled(!user.getEnabled());
         repository.save(user);
         return user.getEnabled();
+    }
+
+    @Override
+    public UserDTO updatePassword(String email, String newPassword) {
+
+        if (newPassword == null || newPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be empty");
+        }
+
+        UserSec user = repository.findUserEntityByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
+        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        return convertToDTO(repository.save(user));
     }
 }

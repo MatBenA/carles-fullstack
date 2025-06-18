@@ -2,6 +2,7 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.controller;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.UserCreateDTO;
@@ -12,6 +13,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserService;
@@ -71,5 +73,21 @@ public class UserController {
     @PatchMapping("/toggle-enable/{email}")
     public Boolean toggleEnabled(@PathVariable String email) {
         return userService.toggleEnabled(email);
+    }
+
+    @PutMapping("/{userEmail}/password")
+    public ResponseEntity<UserDTO> changeUserPassword(
+            @PathVariable String userEmail,
+            @RequestBody Map<String, String> requestBody) {
+
+        String password = requestBody.get("password");
+        try {
+            UserDTO updatedUser = userService.updatePassword(userEmail, password);
+            return ResponseEntity.ok(updatedUser);
+        } catch (UsernameNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
