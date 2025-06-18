@@ -111,18 +111,14 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             predicateList.add(isRescindedPredicate);
         }
 
-        if(managerEmail != null) {
-            query.orderBy(criteriaBuilder.asc(root.get("priceVerificationDate")));
-        }else {
-            query.orderBy(criteriaBuilder.asc(root.get("price")));
-        }
-
+        Join<LandSurvey, Folder> landSurveyFolderJoin = root.join("folder");
         if(folder != null){
             predicateList.clear();
-            Join<LandSurvey, Folder> landSurveyFolderJoin = root.join("folder");
             Predicate folderPredicate = criteriaBuilder.equal(landSurveyFolderJoin.get("code"), folder);
             predicateList.add(folderPredicate);
         }
+
+        query.orderBy(criteriaBuilder.asc(landSurveyFolderJoin.get("id")));
 
         return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
     }
