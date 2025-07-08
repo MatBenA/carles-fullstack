@@ -94,7 +94,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
             Predicate classifiactionNameLikePredicate = criteriaBuilder.like(classificationNameToUpperCase, "%" + classification.toUpperCase() + "%");
             predicateList.add(classifiactionNameLikePredicate);
         }
-        if (title != null){ //todo fix
+        if (title != null){
             Join<LandSurvey, Title> landSurveyTitleJoin = root.join("title");
             Predicate titleSituationLikePredicate = criteriaBuilder.equal(landSurveyTitleJoin.get("situation"), title);
             predicateList.add(titleSituationLikePredicate);

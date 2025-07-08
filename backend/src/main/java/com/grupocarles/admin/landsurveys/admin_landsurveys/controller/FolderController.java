@@ -19,8 +19,11 @@ public class FolderController {
 
     @GetMapping("/options")
     public List<SelectOptionDTO> getFolderOptions(){
-        return folderService.getFreeFolderOptions();
+        return folderService.getFolderOptions();
     };
+
+    @GetMapping("/options/free")
+    public List<SelectOptionDTO> getFreeFolderOptions() { return folderService.getFreeFolderOptions();}
 
     @GetMapping("/create")
     public Folder createFolder(){

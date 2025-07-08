@@ -6,7 +6,8 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Folder;
 import java.util.List;
 
 public interface FolderService {
-    List<SelectOptionDTO> getFreeFolderOptions();
+    List<SelectOptionDTO> getFolderOptions();
     Folder createFolder();
     void deleteFolder(String code);
+    List<SelectOptionDTO> getFreeFolderOptions();
 }

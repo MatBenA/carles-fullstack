@@ -16,10 +16,10 @@ public class FolderServiceImp implements FolderService{
     private FolderRepository folderRepository;
 
     @Override
-    public List<SelectOptionDTO> getFreeFolderOptions() {
+    public List<SelectOptionDTO> getFolderOptions() {
         return folderRepository.findAll()
                 .stream()
-                .map(folder -> new SelectOptionDTO(folder.getCode(), folder.getCode()))
+                .map(this::toDto)
                 .toList();
     }
 
@@ -49,4 +49,15 @@ public class FolderServiceImp implements FolderService{
         Long folderId = folderRepository.findByCode(code).orElseThrow(EntityNotFoundException::new).getId();
         folderRepository.deleteById(folderId);
     }
+
+    @Override
+    public List<SelectOptionDTO> getFreeFolderOptions() {
+        return folderRepository
+                .findFolderWithoutLandSurvey()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public SelectOptionDTO toDto(Folder folder){return new SelectOptionDTO(folder.getCode(), folder.getCode());}
 }
