@@ -1,0 +1,8048 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 17.5 (Ubuntu 17.5-1.pgdg22.04+1)
+-- Dumped by pg_dump version 17.5 (Ubuntu 17.5-1.pgdg22.04+1)
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: agency; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.agency (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.agency OWNER TO postgres;
+
+--
+-- Name: agency_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.agency_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.agency_seq OWNER TO postgres;
+
+--
+-- Name: assessment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.assessment (
+    price bigint,
+    assessor_id bigint NOT NULL,
+    currency_id bigint,
+    landsurvey_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.assessment OWNER TO postgres;
+
+--
+-- Name: classification; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.classification (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.classification OWNER TO postgres;
+
+--
+-- Name: classification_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.classification_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.classification_seq OWNER TO postgres;
+
+--
+-- Name: contact; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.contact (
+    id bigint NOT NULL,
+    phone character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.contact OWNER TO postgres;
+
+--
+-- Name: contact_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.contact_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.contact_seq OWNER TO postgres;
+
+--
+-- Name: currency; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.currency (
+    id bigint NOT NULL,
+    code character varying(255) NOT NULL,
+    exchange_reference double precision
+);
+
+
+ALTER TABLE public.currency OWNER TO postgres;
+
+--
+-- Name: currency_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.currency_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.currency_seq OWNER TO postgres;
+
+--
+-- Name: file_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.file_type (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.file_type OWNER TO postgres;
+
+--
+-- Name: file_type_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.file_type_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.file_type_seq OWNER TO postgres;
+
+--
+-- Name: folder; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.folder (
+    id bigint NOT NULL,
+    code character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.folder OWNER TO postgres;
+
+--
+-- Name: folder_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.folder_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.folder_seq OWNER TO postgres;
+
+--
+-- Name: land_survey; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.land_survey (
+    id bigint NOT NULL,
+    address character varying(255),
+    corner boolean,
+    creation_date timestamp(6) without time zone,
+    is_archived boolean DEFAULT false,
+    is_rescinded boolean DEFAULT false,
+    measurements character varying(255),
+    observation text,
+    price bigint,
+    price_verification_date timestamp(6) without time zone,
+    reassessment_date timestamp(6) without time zone,
+    surface numeric(38,2),
+    unworkable boolean,
+    agency_id bigint,
+    classification bigint,
+    contact_id bigint,
+    currency_id bigint,
+    file_type bigint,
+    folder_id bigint,
+    locality_id bigint,
+    manager_id bigint,
+    particular_id bigint,
+    road_type bigint,
+    section_id bigint,
+    source bigint,
+    surveyor_id bigint,
+    zone_id bigint,
+    title_id bigint
+);
+
+
+ALTER TABLE public.land_survey OWNER TO postgres;
+
+--
+-- Name: land_survey_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.land_survey_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.land_survey_seq OWNER TO postgres;
+
+--
+-- Name: locality; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.locality (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.locality OWNER TO postgres;
+
+--
+-- Name: locality_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.locality_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.locality_seq OWNER TO postgres;
+
+--
+-- Name: locality_statistic; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.locality_statistic (
+    total bigint,
+    locality_id bigint NOT NULL,
+    statistic_report_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.locality_statistic OWNER TO postgres;
+
+--
+-- Name: particular; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.particular (
+    id bigint NOT NULL,
+    name character varying(255)
+);
+
+
+ALTER TABLE public.particular OWNER TO postgres;
+
+--
+-- Name: particular_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.particular_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.particular_seq OWNER TO postgres;
+
+--
+-- Name: permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.permission (
+    id bigint NOT NULL,
+    permission character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.permission OWNER TO postgres;
+
+--
+-- Name: permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.permission ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: road_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.road_type (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.road_type OWNER TO postgres;
+
+--
+-- Name: road_type_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.road_type_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.road_type_seq OWNER TO postgres;
+
+--
+-- Name: role; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.role OWNER TO postgres;
+
+--
+-- Name: role_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.role ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.role_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: role_permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.role_permission (
+    role_id bigint NOT NULL,
+    permission_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.role_permission OWNER TO postgres;
+
+--
+-- Name: section; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.section (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.section OWNER TO postgres;
+
+--
+-- Name: section_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.section_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.section_seq OWNER TO postgres;
+
+--
+-- Name: setting; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.setting (
+    name character varying(255) NOT NULL,
+    value character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.setting OWNER TO postgres;
+
+--
+-- Name: source; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.source (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.source OWNER TO postgres;
+
+--
+-- Name: source_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.source_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.source_seq OWNER TO postgres;
+
+--
+-- Name: statistic_report; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.statistic_report (
+    id bigint NOT NULL,
+    with_title bigint,
+    average_value bigint,
+    below_max_limit bigint,
+    below_min_limit bigint,
+    creation_date timestamp(6) without time zone,
+    over_limits bigint,
+    total_agencies bigint,
+    total_carles bigint,
+    total_carles_red bigint,
+    total_greens bigint,
+    total_land_surveys bigint,
+    total_normals bigint,
+    total_owners bigint,
+    total_reds bigint,
+    total_unworkable bigint
+);
+
+
+ALTER TABLE public.statistic_report OWNER TO postgres;
+
+--
+-- Name: statistic_report_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.statistic_report_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.statistic_report_seq OWNER TO postgres;
+
+--
+-- Name: title; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.title (
+    id bigint NOT NULL,
+    situation character varying(255)
+);
+
+
+ALTER TABLE public.title OWNER TO postgres;
+
+--
+-- Name: title_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.title_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.title_seq OWNER TO postgres;
+
+--
+-- Name: update_report; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.update_report (
+    id bigint NOT NULL,
+    creation_date date
+);
+
+
+ALTER TABLE public.update_report OWNER TO postgres;
+
+--
+-- Name: update_report_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.update_report_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.update_report_seq OWNER TO postgres;
+
+--
+-- Name: user_account; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_account (
+    id bigint NOT NULL,
+    account_not_expired boolean NOT NULL,
+    account_not_locked boolean NOT NULL,
+    credential_not_expired boolean NOT NULL,
+    email character varying(255),
+    enabled boolean NOT NULL,
+    first_name character varying(255),
+    last_name character varying(255),
+    password character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.user_account OWNER TO postgres;
+
+--
+-- Name: user_account_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.user_account ALTER COLUMN id ADD GENERATED BY DEFAULT AS IDENTITY (
+    SEQUENCE NAME public.user_account_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: user_report; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_report (
+    id bigint NOT NULL,
+    over_bottom_limit bigint,
+    over_mid_limit bigint,
+    over_top_limit bigint,
+    update_report_id bigint NOT NULL,
+    user_id bigint
+);
+
+
+ALTER TABLE public.user_report OWNER TO postgres;
+
+--
+-- Name: user_report_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.user_report_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.user_report_seq OWNER TO postgres;
+
+--
+-- Name: user_role; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_role (
+    user_id bigint NOT NULL,
+    role_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.user_role OWNER TO postgres;
+
+--
+-- Name: zone; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.zone (
+    id bigint NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.zone OWNER TO postgres;
+
+--
+-- Name: zone_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.zone_seq
+    START WITH 1
+    INCREMENT BY 50
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.zone_seq OWNER TO postgres;
+
+--
+-- Data for Name: agency; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.agency (id, name) FROM stdin;
+1	ACM Inmobilairia
+51	Administrar Inmobiliaria
+101	Administrar negocios
+151	Administrar Propiedades
+201	Admnistrar Negocios Inmobiliarios
+251	Alba Posse & Moreira Inmobilairia
+301	Angel Cardozo Inmobiliaria
+351	APM Consultora
+401	Arce Inmobiliaria
+451	Armanini & Barnada
+501	Armann Bienes Raices
+551	Arquín Inmobialiria
+601	Arquín inmobiliaria
+651	Arquín Inmobiliaria/Propietario
+701	Balmaceda Inmobiliaria
+751	Beretta, Daiana Inmobiliaria
+801	Bienes Raíces Inmobilairia
+851	Borges Do Canto Inmobiliaria
+901	Brumad Construcciones
+951	Candelaria Propiedades
+1001	Cardenal Inmobiliaria
+1051	Carlés Terrenos
+1101	Carmen Stitz Estudio Inmobiliario
+1151	Carmen Stiz Inmobiliaria
+1201	Carrafa Flores Inmobiliaria
+1251	Carrizo Inmobiliaria
+1301	Casa Campo estudio Inmobiliario
+1351	Celman Propiedades
+1401	Chacanzuk Inmobiilaria
+1451	Chiofalo & Naidich Propiedades
+1501	CM Inmobiliria
+1551	Conectarte Inmobiliaria
+1601	Contabin estudio contable e inmobiliario
+1651	Contabin Inmobiliaria
+1701	Cora Campos Inmobiliaria
+1751	Corá Campos Inmobiliaria
+1801	Cortés Propiedades
+1851	Craciuk Propiedades
+1901	D y A Propiedades
+1951	D.A. Propiedades
+2001	Daviña Inmobiliaria
+2051	Del Guayrá propiedades
+2101	Del Oeste Propiedades
+2151	Desarrollos del Litoral
+2201	EBZ Gestiones Inmobilairias
+2251	Enlaces Bienes raices
+2301	Esteban Rodas Inmobiliaria
+2351	Expansión Inmobiliaria
+2401	Fénix Inmobiliaria
+2451	Fernana Cebey Inmobiliaria
+2501	Fernanda Cebey Servicios Inmobilairios
+2551	Fernandez Inmobiliaria
+2601	Ferreira Inmobiliaria
+2651	Ferreyra Inmobiliaria
+2701	FerVer Inmobiliaria
+2751	Fidanza Inmobiliaria
+2801	Flores Inmobiliaria
+2851	Forestal La Rama
+2901	Fuentes propiedades
+2951	Fulquet Inmobiliaria/Propietaria
+3001	Fulquet y Losavio Inmobiliaria
+3051	G30 Inmobiliaria
+3101	Garupá Propiedades
+3151	Gauto Fletchner Inmobiliaria
+3201	Gestoría Comodoro
+3251	Gimenez & Gimenez Inmobiliaria
+3301	Global Inmobiliaria
+3351	Grupo Pinheiro
+3401	Guacurarí Inmobiliaria
+3451	Guembé Brokers
+3501	Gutleber Propiedades
+3551	Hábitat Inmobiliaria
+3601	Haene Casturiense Inmobilairia
+3651	Haene costauriense inmobiliaria
+3701	Hoy Negocio Inmobiliario
+3751	Informes y mandatos
+3801	Informes y mandatos Inmobiliaria
+3851	Inmobiliaria Lourdes Hobecker
+3901	Inmobiliaria Sladic
+3951	Inmoclick 
+4001	Innova Servicios Inmobiliarios
+4051	Intermediario
+4101	Juan Gomez Inmobiliaria
+4151	Korley Propiedades
+4201	Latina Inmobiliaria
+4251	Latina Servicios Inmobiliarios
+4301	Laudín Negocios inmobiliarios
+4351	Laura Magan Inmobiliaria
+4401	Leiva y Hidalgo Inmobiliaria
+4451	Leiva, Horacio (Martillero y Corredor)
+4501	Levitt & Macagno Inmobiliaria
+4551	Liliana Duran Inmobiliaria
+4601	Liliana M. de Olivera - Bienes Raices
+4651	Losavio Inmobiliaria
+4701	Lotes Ebenezer
+4751	Lualta Propiedades
+4801	Luis M. Krieger Inmobiliaria 
+4851	M & M Inmobiliaria
+4901	Macri Inmobiliaria
+4951	Maneco Inmobilairia
+5001	Maneco Inmobiliaria
+5051	Marcela Proc Inmobiliaria
+5101	Marcelo Marini Inversiones Inmobiliarias
+5151	Marcón Inmobiliaria
+5201	Maria Bower Inmobiliaria
+5251	María Bower Propiedades
+5301	Mariela Amarilla Inmobiliaria
+5351	Mercedes Bonetti Inmobiliaria
+5401	Misión Inmobiliaria
+5451	Monica Fogeler
+5501	Monica Fogeler / Misiones inmob. / Rima inmob.
+5551	Mónica Fógeler Inmobiliaria
+5601	Monsú propiedades
+5651	MT Gestiones
+5701	Mundo Inmobiliario
+5751	Mundo propiedades
+5801	N y B Bienes Raices
+5851	Negocios del Plata
+5901	Nely Inmobiliaria
+5951	Nexos Inmobiliaria
+6001	Noelia Carrizo Inmobilairia
+6051	NyB Bienes Raíces
+6101	Orbe Inmobiliaria
+6151	Orígenes inmobiliaria/Daviña inmobiliaria
+6201	Origenes Propiedades
+6251	Orígenes Propiedades
+6301	Orígenes Propiedades/Fénix Inmobiliaria
+6351	Paraná Soluciones Inmobiliarias
+6401	Particular / Ingeniero Carrafa Flores
+6451	Patricia La fuente Inmobiliaria
+6501	Paula Chiappe Inmobiliaria
+6551	Pauluk Bienes Raices
+6601	Pieve Inmobiliaria
+6651	Posadas Inmobiliaria
+6701	Propietario
+6751	Propietario 
+6801	Propietario/Alba Posse y Moreira Inmobiliaria
+6851	Propietario/Daviña Inmobiliaria
+6901	Propietario/Fénix inmobiliaria
+6951	Propietario/Fenix Inmobiliaria (sin exlusividad)
+7001	Propietario/Gimenez & Gimenez
+7051	Propietario/inmobiliaria Posadas
+7101	Propietario/Marini Inmobiliaria
+7151	Propietario/Nexos Inmobiliaria
+7201	Propietario/Paraná Soluciones inmobiliarias
+7251	Propietario/Platinum inmobiliaria
+7301	Propietario-Fénix Inmobiliaria
+7351	Proyecto Inmobiliaria
+7401	Raul Carrizo Inmobiliaria
+7451	Raúl Carrizo Inmobiliaria
+7501	Remax
+7551	Resek Constructora
+7601	RH Desarrollos Inmobiliarios
+7651	RH Inmobiliaria
+7701	Rima Inmobiliaria
+7751	Río Paraná Inmobiliaria
+7801	Rivero y Asociados
+7851	Rocio Clérici Inmobiliaria
+7901	Rosana Dandeu Inmobilairia
+7951	Rottoli Inmobiliaria
+8001	Servicios Integrales Inmobiliaria
+8051	SG Inmobiliaria
+8101	SilArq Estudio
+8151	Singular Inmobiaria
+8201	Sitios Inmobiliaria
+8251	Solari Bienes Raices
+8301	Soluciones Inmobilairias
+8351	Sonia Pereyra Inmobiliaria
+8401	Sosa Inmobiliaria
+8451	Stiz Propiedades
+8501	Tasaciones Misioneras Inmobiliaria
+8551	Teijeiro Inmobiliaria
+8601	Tobias Bialy Inmobiliaria
+8651	Torres inmobiliaria
+8701	Trevisán
+8751	Trevisan Inmobiliaria
+8801	Ulises Vallaro Inmobilairia
+8851	Vera Inmobiliaria
+8901	Vita Bienes Raices
+8951	Vpropiedades
+9001	XL Inmobialiaria
+9051	Zapani Inmobiliaria
+9101	Zully Fernandez Inmobiliaria
+9151	Zuny Fernandez inmobiliaria
+9201	Kubsch Negocios Inmobiliarios
+9251	Temporetti-Martinez
+9252	Fulquet Inmobiliaria
+9253	Chalanczuk Propiedades
+9302	Paraná Soluciones Inmobilairias
+9303	Matías Barúa Propiedades
+9304	Contabín Estudio Inmobiliario
+9305	Inmobiliaria
+9352	Avanzar Inmobiliaria
+9353	Viviendas Roca Misiones
+9354	Origen Propiedades
+9355	Orbe Inmobiliaria estudio jurídico
+9356	Contabin Estudio Inmobilairio
+9357	Corps Loteos Inmobiliaria
+9358	Kubsch Propiedades
+9359	AB&B Inmobiliaria
+9360	Norte Propiedades
+9361	Huntter Bienes Raices
+9362	K.G. Soluciones Inmobiliarias
+\.
+
+
+--
+-- Data for Name: assessment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.assessment (price, assessor_id, currency_id, landsurvey_id) FROM stdin;
+230000	21	51	51
+210000	1	51	51
+85000	2	51	101
+163100	2	51	151
+23000	4	51	201
+21000	9	51	201
+20000	21	51	251
+23000	2	51	251
+23000	21	51	301
+25000	2	51	301
+38000	9	51	351
+28000	9	51	401
+34500	9	51	451
+17000	20	51	501
+17000	20	51	551
+17000	20	51	601
+17000	20	51	651
+17000	20	51	701
+17000	20	51	751
+17000	20	51	801
+17000	20	51	851
+360000	21	51	901
+330000	20	51	901
+380000	9	51	901
+24000	2	51	951
+190000	1	51	1001
+8000000	14	1	1051
+100000	1	51	1051
+24000	1	51	1101
+30000	1	51	1151
+40000	1	51	1201
+43000	4	51	1201
+260000	9	51	1251
+130000	2	51	1301
+120000	9	51	1301
+24000	20	51	1351
+30000	20	51	1401
+3500	21	51	1451
+3500	2	51	1451
+3500	25	51	1451
+3500	4	51	1451
+18000	1	51	1501
+18000	4	51	1501
+18000	27	51	1551
+18000	25	51	1551
+26000	9	51	1551
+40000	9	51	1601
+170000	4	51	1651
+200000	9	51	1651
+200000	4	51	1701
+230000	9	51	1701
+85000	2	51	1751
+2900000	1	1	1801
+6500	25	51	1801
+73000	20	51	1851
+75000	4	51	1851
+75000	9	51	1851
+43000	1	51	1901
+35000	1	51	1951
+35000	25	51	1951
+30000	9	51	1951
+49000	1	51	2001
+50000	9	51	2001
+11000000	14	1	2051
+110000	21	51	2051
+115000	25	51	2051
+110000	4	51	2051
+105000	9	51	2051
+95000	23	51	2101
+90000	1	51	2101
+28300000	4	1	2101
+150000	21	51	2201
+130000	1	51	2201
+130000	9	51	2201
+7500	27	51	2251
+7000	4	51	2251
+8000	9	51	2301
+19000	27	51	2351
+19000	25	51	2351
+50000	9	51	2451
+65000	21	51	2501
+54000000	14	1	2551
+17000	2	51	2551
+18000	27	51	2551
+20000	9	51	2551
+13000	2	51	2601
+14300	2	51	2651
+325000	9	51	2701
+60000	9	51	2751
+90000	21	51	2801
+80000	2	51	2801
+16000000	16	1	2801
+90000	9	51	2801
+22000	22	51	2851
+180000	4	51	2901
+165000	9	51	2901
+165000	1	51	2951
+26000	9	51	3001
+340000	21	51	3051
+390000	9	51	3051
+16000	20	51	3101
+40000	25	51	3151
+22000	9	51	3201
+19000000	14	1	3251
+17000	2	51	3251
+65000	2	51	3301
+65000	9	51	3301
+5500	1	51	3351
+15000000	14	1	3401
+6700	20	51	3401
+260000	2	51	3451
+240000	9	51	3451
+98000	1	51	3501
+96000	2	51	3501
+47000	1	51	3551
+56000	1	51	3601
+25000	2	51	3651
+55000	1	51	3701
+45000	9	51	3701
+110000	1	51	3751
+88000	9	51	3751
+200000	21	51	3801
+200000	9	51	3801
+120000	21	51	3851
+100000	9	51	3851
+55000	21	51	3901
+50000	1	51	3901
+65000	9	51	3901
+200000	27	51	3951
+250000	1	51	4001
+300000	4	51	4001
+715000	1	51	4051
+745000	4	51	4051
+9000	4	51	4101
+30000	4	51	4151
+40000000	14	1	4201
+22000	9	51	4201
+8000	20	51	4251
+7000	20	51	4301
+65000	9	51	4351
+120000	2	51	4401
+100000	9	51	4401
+90000	1	51	4451
+35000	1	51	4501
+25000	1	51	4551
+30000	2	51	4551
+180000	1	51	4601
+190000	2	51	4601
+300000	9	51	4601
+404000	1	51	4651
+410000	2	51	4651
+650000	9	51	4651
+85000	2	51	4701
+35000	21	51	4751
+35000	23	51	4751
+35000	2	51	4751
+35000	9	51	4751
+35000	21	51	4801
+35000	23	51	4801
+35000	2	51	4801
+35000	9	51	4801
+40000	21	51	4851
+40000	23	51	4851
+40000	2	51	4851
+40000	9	51	4851
+25000	21	51	4901
+25000	23	51	4901
+25000	2	51	4901
+25000	9	51	4901
+30000	21	51	4951
+30000	23	51	4951
+30000	2	51	4951
+30000	9	51	4951
+325000	1	51	5001
+300000	9	51	5001
+22000	2	51	5051
+23000	1	51	5101
+21500	22	51	5101
+65000	2	51	5151
+70000	27	51	5151
+85000	9	51	5151
+4080000	2	1	5201
+170000	9	51	5201
+80000	1	51	5251
+190000	21	51	5301
+16000	1	51	5401
+20000	4	51	5401
+110000	9	51	5451
+34000	1	51	5501
+34000	2	51	5501
+50000	9	51	5551
+15000	2	51	5601
+15000	2	51	5651
+90000	1	51	5701
+100000	2	51	5701
+100000	4	51	5701
+90000	9	51	5701
+14000	2	51	5751
+14500	27	51	5751
+17000	2	51	5801
+17000	27	51	5801
+56000	1	51	5851
+13000	1	51	5901
+13000	25	51	5901
+290000	1	51	5951
+300000	25	51	5951
+55000	27	51	6001
+50000	25	51	6001
+19000	1	51	6051
+16000	1	51	6101
+33000	1	51	6251
+33000	25	51	6251
+36000	1	51	6301
+36000	25	51	6301
+6700	23	51	6351
+6000	9	51	6351
+7500	23	51	6401
+7000	9	51	6401
+8000	23	51	6451
+7500	9	51	6451
+55000	1	51	6501
+35000	1	51	6551
+35000	25	51	6551
+125000	20	51	6601
+125000	22	51	6601
+180000	1	51	6651
+170000	9	51	6651
+128000	26	51	6701
+54000000	14	1	6801
+190000	27	51	6801
+180000	25	51	6801
+30000	21	51	6851
+35000	15	51	6851
+25000	4	51	6901
+100000	2	51	6951
+100000	27	51	6951
+29000	9	51	7001
+31000	9	51	7051
+29000	9	51	7101
+29000	9	51	7151
+31000	9	51	7201
+200000	1	51	7251
+160000	20	51	7251
+175000	4	51	7251
+100000	9	51	7251
+535000	21	51	7301
+500000	1	51	7301
+475000	2	51	7301
+400000	20	51	7301
+430000	4	51	7301
+600000	9	51	7301
+50000	2	51	7351
+45000	2	51	7401
+40000	2	51	7451
+16000	21	51	7501
+50000	21	51	7601
+55000	9	51	7601
+70000	1	51	7651
+75000	9	51	7651
+135000	1	51	7751
+100000	9	51	7751
+20000	20	51	7801
+47000	1	51	7851
+42000	1	51	7901
+25000	9	51	4551
+13000	1	51	7951
+12000	9	51	7951
+21000	1	51	8001
+21000	25	51	8001
+25000	1	51	8051
+25000	25	51	8051
+7900	22	51	8101
+12000	4	51	8251
+70000	1	51	8301
+70000	9	51	8301
+120000	2	51	8351
+270000	2	51	8401
+110000	9	51	8451
+8000	1	51	8501
+8000	25	51	8501
+7500	9	51	8501
+16500	9	51	8551
+40000	9	51	8601
+75000	1	51	8651
+75000	25	51	8651
+70000	9	51	8651
+150000	1	51	8701
+150000	25	51	8701
+140000	9	51	8701
+45000	1	51	8751
+50000	9	51	8751
+40000	21	51	8801
+42000	2	51	8801
+30000	21	51	8851
+32000	2	51	8851
+15500	2	51	8901
+18500	2	51	8951
+115000	22	51	9001
+140000	22	51	9051
+28000	23	51	9101
+20000	1	51	9101
+35000	23	51	9151
+28000	1	51	9151
+30000	1	51	9201
+34000	22	51	9201
+35000	9	51	9201
+15000	4	51	9251
+16000	9	51	9251
+13500	20	51	9301
+14000	9	51	9301
+22000	20	51	9351
+23000	9	51	9351
+64000	1	51	9401
+80000	9	51	9401
+106500	1	51	9451
+120000	9	51	9451
+73000	2	51	9501
+12000	9	51	9601
+12000	1	51	9651
+23500	25	51	9701
+23000	4	51	9701
+20000	9	51	9701
+24000	9	51	9751
+18000	25	51	9801
+22000	2	51	9851
+300000	9	51	9901
+35000	27	51	9951
+35000	25	51	9951
+30000	9	51	9951
+55000	27	51	10001
+55000	4	51	10001
+110000	9	51	10051
+9630	4	51	10101
+28000	2	51	10151
+4000	4	51	10201
+9500	4	51	10251
+11000	4	51	10301
+7500	4	51	10351
+100000	21	51	10401
+122000	25	51	10401
+110000	9	51	10401
+180000	9	51	10451
+200000	9	51	10501
+350000	9	51	10551
+15000	1	51	10601
+40000	1	51	10651
+40000	27	51	10651
+43000	4	51	10651
+48000	9	51	10651
+38000	4	51	10801
+80000	1	51	10951
+90000	9	51	10951
+13000	20	51	11001
+9000	21	51	11051
+9000	1	51	11051
+40000	1	51	11101
+38000	9	51	11101
+47000	1	51	11151
+48000	9	51	11151
+24000	9	51	11201
+28000	9	51	11251
+10500	9	51	11301
+29000	1	51	11351
+29000	4	51	11351
+37000	1	51	11401
+37000	4	51	11401
+130000	1	51	11501
+110000	4	51	11501
+110000	9	51	11501
+55000	1	51	11551
+5250000	9	1	11551
+65000	1	51	11601
+5250000	9	1	11601
+26000	9	51	11651
+8500	2	51	11701
+9000	27	51	11701
+9500	9	51	11701
+35000	1	51	11751
+36000	25	51	11751
+35000	9	51	11801
+60000	9	51	11851
+38000	1	51	11901
+24000	20	51	11901
+30000	22	51	11901
+24000	9	51	11901
+44000	1	51	11951
+30000	9	51	11951
+6000	2	51	12001
+32000	1	51	12051
+32000	4	51	12051
+40000	9	51	12101
+200000	2	51	12151
+40000	27	51	12201
+8500	9	51	10101
+40000	4	51	12201
+48000	27	51	12251
+48000	4	51	12251
+16500	1	51	12301
+60000	14	51	12351
+60500000	1	1	12351
+28000	1	51	12401
+23000	9	51	12401
+40000	25	51	12451
+40000	4	51	12451
+9000	25	51	12501
+32000	2	51	12551
+11500	9	51	12601
+11000	9	51	12651
+38000	9	51	12701
+25000	1	51	12751
+60600	2	51	12801
+60000	9	51	12801
+121200	2	51	12851
+140000	9	51	12851
+12000	9	51	12901
+11000	9	51	12951
+45000	9	51	13001
+70000	2	51	13051
+60000	9	51	13051
+14000	25	51	13101
+95000	1	51	13151
+85000	2	51	13201
+80000	21	51	13251
+5200000	9	1	13251
+123000	21	51	13301
+5200000	9	1	13301
+30000	9	51	13451
+161000	26	51	13501
+190000	26	51	13551
+35000	9	51	13601
+165000	2	51	13651
+270500	2	51	13701
+16000	25	51	13751
+100000	14	51	13801
+100000	9	51	13801
+125000	9	51	13851
+60000	1	51	13901
+62000	26	51	13901
+70000	2	51	13951
+65000	22	51	13951
+90000	20	51	14001
+100000	9	51	14001
+28500	25	51	14051
+25600000	4	1	14051
+45000	9	51	14101
+27500	1	51	14151
+27500	4	51	14151
+30000	1	51	14201
+55000	1	51	14251
+30000	1	51	14301
+13000	22	51	14351
+12000	15	51	14351
+14000	9	51	14351
+58000	2	51	14401
+19000000	14	1	14451
+9000	1	51	14451
+8000	25	51	14451
+10200	4	51	14501
+11100	4	51	14551
+13000	4	51	14601
+25000	21	51	14651
+30000	25	51	14701
+35000	9	51	14701
+8500	1	51	14751
+8500	25	51	14751
+11000	9	51	14801
+34000	26	51	14851
+27000	22	51	14851
+35000	26	51	14901
+40000	22	51	14901
+9500	2	51	14951
+9000	20	51	14951
+28000	2	51	15001
+22000	9	51	15001
+37500	2	51	15051
+37500	9	51	15051
+10500000	14	1	15101
+57000	2	51	15101
+45000	9	51	15101
+10500000	14	1	15151
+110000	2	51	15151
+115000	9	51	15151
+7600	27	51	15201
+7600	25	51	15201
+7500	9	51	15251
+5000	9	51	15301
+9600	26	51	15351
+8000	26	51	15401
+145000	9	51	15451
+21200	26	51	15501
+10300	26	51	15551
+9000	26	51	15601
+8000	1	51	15651
+7900	22	51	15651
+23000	21	51	15701
+45000	21	51	15751
+60000	25	51	15801
+70000	25	51	15851
+62000	1	51	15901
+60000	2	51	15901
+195000	21	51	16001
+200000	1	51	16001
+200000	25	51	16001
+180000	9	51	16001
+270000	21	51	16051
+300000	1	51	16051
+270000	25	51	16051
+270000	9	51	16051
+9000	2	51	16101
+9000	9	51	16101
+24000	2	51	16151
+125000	9	51	16201
+15000	4	51	16251
+24000	9	51	16251
+25000	4	51	16301
+32000	9	51	16301
+200000	9	51	16351
+75000	27	51	16401
+73000	25	51	16401
+68000	9	51	16401
+32000	2	51	16451
+300000	9	51	16501
+13000	21	51	16551
+11000	26	51	16601
+11000	26	51	16651
+12500	26	51	16701
+35000	1	51	16751
+11500	1	51	16801
+11000	25	51	16801
+25000	4	51	16851
+30000	9	51	16851
+330000	4	51	16901
+240000	9	51	16901
+25000	1	51	16951
+26000	25	51	16951
+20000	1	51	17001
+21000	25	51	17001
+40000	4	51	17051
+250000	20	51	17101
+210000	20	51	17151
+25000	9	51	17201
+40000	4	51	17251
+11000	9	51	17301
+60000	2	51	17351
+15000	1	51	17401
+15000	2	51	17401
+13000	1	51	17451
+14000	2	51	17451
+18000	1	51	17501
+45000	1	51	17551
+45000	4	51	17551
+11500	1	51	17601
+100000	21	51	17651
+110000	27	51	17651
+105000	9	51	17651
+225000	4	51	17701
+200000	9	51	17701
+135000	2	51	17751
+16000	1	51	17851
+14000	1	51	17901
+51500	1	51	17951
+22000	2	51	18001
+48000	2	51	18051
+76000	4	51	18101
+50000	25	51	18201
+8000	4	51	18251
+100000	9	51	18301
+175000	21	51	18351
+175000	26	51	18351
+200000	9	51	18351
+12000	1	51	18451
+10500	22	51	18451
+127500	25	51	18501
+160000	1	51	18551
+180000	9	51	18551
+20000	1	51	18601
+25000	2	51	18651
+25000	1	51	18701
+9000	9	51	18751
+60000	21	51	18801
+56000	2	51	18801
+74000	21	51	18851
+67000	2	51	18851
+15000	1	51	18901
+15000	25	51	18901
+7500000	1	1	18951
+50000	9	51	18951
+50000	25	51	19001
+60000	1	51	19051
+60000	4	51	19051
+120000	9	51	19101
+10500	1	51	19151
+11000	25	51	19151
+50000	25	51	19201
+50000	4	51	19201
+145000	15	51	19251
+100000	9	51	19251
+110000	2	51	19301
+120000	27	51	19351
+110000	25	51	19351
+6500000	14	1	19401
+63000	4	51	19401
+75000	1	51	19451
+75000	9	51	19451
+38500	4	51	19501
+55000	9	51	19501
+77000	4	51	19551
+88000	9	51	19551
+46000	1	51	19601
+45000	9	51	19601
+93000	1	51	19651
+70500	9	51	19651
+31500	25	51	19701
+90000	2	51	19751
+90000	27	51	19751
+65000	21	51	19801
+65000	1	51	19801
+68000	9	51	19801
+15000	9	51	19851
+40000	4	51	19901
+17000	21	51	19951
+17500	23	51	19951
+1600000	9	1	19951
+55000	1	51	20001
+55000	25	51	20001
+50000	9	51	20001
+130000	21	51	20051
+130000	15	51	20051
+110000	9	51	20051
+100000	1	51	20101
+100000	4	51	20101
+65000	21	51	20151
+65000	9	51	20151
+310000	25	51	20201
+320000	9	51	20201
+50000	21	51	20251
+52000	1	51	20251
+101000	21	51	20301
+104000	1	51	20301
+85000	25	51	20351
+85000	4	51	20351
+80000	15	51	20401
+75000	9	51	20401
+160000	1	51	20451
+120000	9	51	20451
+159000	26	51	20501
+165000	22	51	20501
+35000	15	51	20551
+40000	9	51	20551
+9800	2	51	20601
+1480000	15	1	20601
+9000	22	51	20601
+11000	9	51	20601
+20000	9	51	20651
+9000	20	51	20701
+9000	9	51	20701
+11000	20	51	20751
+11000	9	51	20751
+95000	4	51	20801
+85000	9	51	20801
+70000	21	51	20851
+60000	27	51	20851
+70000	9	51	20851
+18000	9	51	20901
+9000	1	51	20951
+9500	26	51	20951
+9000	4	51	20951
+15500	20	51	21001
+19000	20	51	21051
+110000	9	51	21101
+17000	1	51	21151
+105000	1	51	21201
+105000	4	51	21201
+140000	1	51	21251
+140000	4	51	21251
+140000	9	51	21301
+24000	1	51	21351
+100000	2	51	21401
+165000	2	51	21451
+60000	1	51	21501
+58000	4	51	21501
+50000	9	51	21501
+11500	21	51	21551
+12500	9	51	21551
+26500	9	51	21601
+19000	22	51	21651
+22000	21	51	21701
+21500	1	51	21701
+3300000	16	1	21701
+9000	2	51	21751
+8000	9	51	21751
+32000	2	51	21801
+30000	9	51	21851
+200000	21	51	21901
+170000	9	51	21901
+135000	21	51	21951
+110000	20	51	21951
+130000	4	51	21951
+120000	9	51	21951
+14800	26	51	22001
+11000	9	51	22001
+65000	9	51	22051
+120000	1	51	22101
+115000	2	51	22101
+120000	20	51	22101
+13000	20	51	22151
+15000	9	51	22151
+12500	9	51	22201
+38000	9	51	22251
+30000	25	51	22301
+35000	9	51	22301
+16000	26	51	22351
+17000	1	51	22401
+17000	25	51	22401
+18000	25	51	22451
+40000	21	51	22501
+43000	1	51	22501
+44000	25	51	22501
+56000	21	51	22551
+72000	1	51	22551
+72000	25	51	22551
+29000	4	51	22601
+28000	9	51	22601
+18000	1	51	22651
+70000	21	51	22701
+70000	9	51	22701
+120000	9	51	22751
+15000	15	51	22801
+15000	9	51	22801
+6500	20	51	22851
+25000	1	51	22901
+26000	25	51	22901
+23000	9	51	22901
+5000	21	51	22951
+10000000	23	1	22951
+4000	9	51	22951
+6000	21	51	23001
+91200000	23	1	23001
+5000	9	51	23001
+45000	21	51	23051
+35000	1	51	23051
+35000	4	51	23051
+32000	22	51	23101
+7000	21	51	23151
+6000	9	51	23151
+15000	21	51	23201
+16000	1	51	23201
+170000	2	51	23251
+170000	25	51	23251
+200000	2	51	23301
+190000	25	51	23301
+345000	1	51	23351
+335000	9	51	23351
+380000	1	51	23401
+390000	9	51	23401
+24000	2	51	23451
+120000	1	51	23501
+85000	21	51	23551
+13000	20	51	23601
+14500	9	51	23601
+210000	9	51	23651
+16000	21	51	23701
+17000	27	51	23701
+17000	9	51	23701
+80000	1	51	23751
+80000	4	51	23751
+85000	9	51	23751
+165000	1	51	23801
+14500	25	51	23851
+3000	4	51	23901
+70000	1	51	23951
+70000	22	51	23951
+14000	4	51	24001
+54000000	14	1	24051
+6500	25	51	24051
+7000	4	51	24051
+70000	1	51	24101
+70000	2	51	24101
+30000	1	51	24151
+35000	4	51	24151
+13000	1	51	24201
+65000	20	51	24251
+70000	22	51	24251
+70000	9	51	24251
+140000	1	51	24301
+145000	25	51	24301
+13000	4	51	24351
+100000	1	51	24401
+120000	1	51	24451
+20000	22	51	24501
+18000	9	51	24501
+50000	4	51	24551
+45000	22	51	24601
+45000	4	51	24601
+40000	22	51	24651
+40000	4	51	24651
+50000	14	51	24701
+36500	9	51	24701
+20000	9	51	24751
+175000	25	51	24801
+220000	9	51	24801
+9000	9	51	24851
+40000	9	51	24901
+21700	2	51	24951
+23800	22	51	24951
+25500	2	51	25001
+28000	22	51	25001
+13000	2	51	25051
+13000	27	51	25051
+37000	2	51	25101
+37000	27	51	25101
+100000	21	51	25151
+95000	9	51	25151
+100000	9	51	25201
+37000	4	51	25251
+42000	9	51	25251
+8000	1	51	25301
+8000	4	51	25301
+14500	22	51	25351
+210000	9	51	25401
+210000	9	51	25451
+26000	9	51	25501
+90000	9	51	25551
+85000	4	51	25601
+80000	9	51	25601
+60000	21	51	25651
+60000	9	51	25651
+10000	26	51	25701
+54000000	14	1	25751
+150000	27	51	25751
+150000	4	51	25751
+120000	9	51	25751
+55000	15	51	25801
+60000	9	51	25801
+30000	1	51	25851
+40000	4	51	25901
+40000	9	51	25901
+54000	4	51	25951
+54000	9	51	25951
+130000	4	51	26001
+25000	4	51	26051
+29000	4	51	26101
+5300	25	51	26151
+6500	2	51	26201
+150000	25	51	26251
+120000	9	51	26251
+300000	21	51	26301
+300000	9	51	26301
+90000	9	51	26351
+13000	4	51	26401
+9000	4	51	26451
+13000	22	51	26501
+6400	26	51	26551
+8500	9	51	26551
+12000	27	51	26601
+12000	4	51	26601
+33000	1	51	26651
+6500000	16	1	26651
+29000	4	51	26651
+5500	4	51	26701
+20000	20	51	26751
+25000	20	51	26801
+30000	20	51	26851
+8000	2	51	26901
+1700000	16	1	26901
+16000	20	51	26951
+16500	9	51	26951
+150000	9	51	27001
+43000	2	51	27051
+40000	4	51	27051
+45000	9	51	27051
+140000	9	51	27101
+75000	4	51	27151
+11500	25	51	27201
+11000	4	51	27201
+11500	9	51	27201
+11500	1	51	27251
+58000	4	51	27301
+185000	4	51	27451
+350000	9	51	27451
+335000	4	51	27501
+650000	9	51	27501
+60000	21	51	27551
+55000	25	51	27551
+280000	9	51	27601
+85000	1	51	27651
+90000	25	51	27651
+35000	1	51	27701
+35000	25	51	27701
+10500	1	51	27751
+10500	25	51	27751
+11000	1	51	27801
+11000	25	51	27801
+100000	9	51	27851
+11000	4	51	27901
+360000	9	51	28051
+28000	9	51	28101
+180000	1	51	28151
+220000	9	51	28151
+10000	23	51	28201
+10500	1	51	28201
+15000	4	51	28201
+11000	9	51	28201
+280000	9	51	28251
+65000	2	51	28301
+14000	21	51	28351
+12000	4	51	28351
+70000	21	51	28401
+14000	26	51	28451
+6000	22	51	28501
+32000	2	51	28551
+35000	27	51	28551
+70000	1	51	28601
+60000	25	51	28651
+60000	4	51	28651
+65000	9	51	28651
+95000	2	51	28701
+85000	27	51	28701
+50000	4	51	28751
+100000	9	51	28801
+100000	2	51	28851
+340000	25	51	28901
+350000	9	51	28901
+17000	9	51	28951
+65000	9	51	29001
+100000	2	51	29051
+100000	27	51	29051
+115000	27	51	29101
+115000	25	51	29101
+400000	2	51	29151
+300000	9	51	29151
+3500	9	51	29201
+65000	1	51	29251
+65000	9	51	29251
+75000	1	51	29301
+80000	9	51	29301
+9000	9	51	29351
+6000	21	51	29401
+6300	4	51	29401
+6000	9	51	29401
+150000	1	51	29451
+19000	1	51	29501
+22000	1	51	29551
+70000	4	51	29601
+28000	4	51	29651
+5400000	21	1	29701
+37000	23	51	29701
+36000	1	51	29701
+5400000	21	1	29751
+42000	23	51	29751
+40000	1	51	29751
+250000	20	51	29801
+250000	4	51	29801
+220000	9	51	29801
+270000	9	51	29851
+80000	9	51	29901
+24000	4	51	29951
+125000	1	51	30001
+125000	2	51	30001
+75000	2	51	30051
+95000	1	51	30101
+90000	2	51	30101
+19500	1	51	30151
+20000	9	51	30151
+23000	9	51	30201
+16000	22	51	30251
+6000	4	51	30301
+50000	27	51	30351
+50000	4	51	30351
+125000	9	51	30401
+19500	22	51	30451
+24000	22	51	30501
+90000	2	51	30551
+70000	4	51	30551
+70000	9	51	30551
+7500	2	51	30601
+7500	27	51	30601
+180000	20	51	30651
+96000	1	51	30701
+96000	25	51	30701
+96000	4	51	30701
+100000	9	51	30701
+129000	1	51	30751
+129000	25	51	30751
+126000	4	51	30751
+135000	9	51	30751
+15000	2	51	30801
+15000	9	51	30801
+12500	2	51	30851
+12500	9	51	30851
+14500	2	51	30901
+14500	9	51	30901
+105000	2	51	30951
+75000	9	51	31001
+12000	2	51	31051
+12000	9	51	31051
+30000	9	51	31101
+14500	9	51	31151
+26000	9	51	31201
+35000	15	51	31251
+35000	9	51	31251
+200000	1	51	31301
+190000	4	51	31301
+240000	1	51	31351
+230000	4	51	31351
+110000	22	51	31401
+80000	9	51	31401
+35000	4	51	31451
+20500	22	51	31501
+21000	4	51	31501
+23000	22	51	31551
+24000	4	51	31551
+40000	9	51	31601
+46000	9	51	31651
+75000	9	51	31701
+52000	2	51	31751
+53000	27	51	31751
+23000	1	51	31801
+23000	25	51	31801
+270000	21	51	31851
+220000	26	51	31851
+280000	9	51	31851
+9000	2	51	31901
+9000	4	51	31901
+9500	9	51	31901
+35000	21	51	31951
+32000	27	51	31951
+220000	22	51	32001
+250000	9	51	32001
+20000	21	51	32051
+18000	1	51	32051
+19000	22	51	32051
+26000	21	51	32101
+24000	1	51	32101
+25000	22	51	32101
+75000	14	51	32151
+65000	1	51	32151
+70000	26	51	32151
+65000	9	51	32151
+25000	2	51	32201
+23000	2	51	32251
+38000	9	51	32251
+25000	2	51	32301
+38000	9	51	32301
+21800	2	51	32351
+27300	2	51	32401
+14500	25	51	32451
+75000	20	51	32501
+80000	9	51	32501
+50000	21	51	32551
+50000	9	51	32551
+6500	26	51	32601
+6000	15	51	32601
+125000	1	51	32651
+150000	27	51	32651
+80000	9	51	32651
+310000	1	51	32701
+310000	27	51	32701
+310000	9	51	32701
+160000	2	51	32751
+270000	2	51	32801
+42000	9	51	32851
+100000	1	51	32901
+100000	22	51	32901
+90000	26	51	32951
+100000	20	51	32951
+112000	26	51	33001
+138000	20	51	33001
+14000	1	51	33051
+18000	2	51	33101
+18000	22	51	33101
+28000	4	51	33151
+18000	9	51	33151
+41000	26	51	33201
+50000	9	51	33201
+48000	26	51	33251
+60000	9	51	33251
+15000	2	51	33301
+16500	2	51	33351
+19200	1	51	33401
+19000	22	51	33401
+90000	2	51	33451
+100000	4	51	33451
+85000	9	51	33451
+65000	1	51	33501
+9800	25	51	33551
+17000	2	51	33601
+17000	22	51	33601
+70000	27	51	33651
+70000	4	51	33651
+26000	21	51	33701
+25000	1	51	33701
+25000	27	51	33701
+13500	9	51	33751
+160000	9	51	33801
+11000	4	51	33851
+70000	2	51	33901
+72000	27	51	33901
+65000	1	51	33951
+65000	2	51	33951
+47000	15	51	34001
+28000	4	51	34051
+160000	1	51	34101
+105000	20	51	34151
+80000	9	51	34151
+90000	1	51	34301
+90000	4	51	34301
+150000	9	51	34351
+8000	9	51	34401
+16000	4	51	34451
+10000	9	51	34451
+70000	15	51	34501
+40000	4	51	34551
+140000	9	51	34601
+150000	27	51	34651
+150000	4	51	34651
+180000	27	51	34701
+180000	4	51	34701
+3000	26	51	34751
+4000	20	51	34751
+5000	26	51	34801
+5000	20	51	34801
+200000	21	51	34851
+280000	2	51	34851
+428000	21	51	34901
+463000	2	51	34901
+13500	1	51	34951
+18500	2	51	35001
+18000	25	51	35001
+16650	2	51	35051
+16000	25	51	35051
+30000	9	51	35101
+90000	9	51	35151
+230000	2	51	35201
+230000	9	51	35201
+190000	9	51	35251
+52000	27	51	35301
+51000	25	51	35301
+16000	21	51	35351
+16500	1	51	35351
+95000	21	51	35401
+90000	1	51	35401
+95000	26	51	35401
+100000	9	51	35401
+43400	26	51	35451
+41000	4	51	35451
+17000	21	51	35501
+17000	22	51	35501
+15000	21	51	35551
+15000	22	51	35551
+20000	21	51	35601
+24000	22	51	35601
+20000	9	51	35601
+38500	21	51	35651
+38500	9	51	35651
+375000	4	51	35701
+350000	9	51	35701
+744000	4	51	35751
+650000	9	51	35751
+80000	21	51	35801
+80000	4	51	35801
+85000	9	51	35901
+190000	9	51	35951
+35000	22	51	36001
+10000000	14	1	36051
+20000	4	51	36051
+160000	21	51	36101
+115000	4	51	36101
+160000	15	51	36101
+120000	9	51	36101
+70000	4	51	36151
+75000	4	51	36201
+14000	22	51	36251
+14000	9	51	36251
+18900	25	51	36301
+16000	4	51	36351
+7000	1	51	36451
+35000	4	51	36501
+37000	9	51	36501
+38000	9	51	36551
+100000	20	51	36601
+110000	15	51	36601
+110000	9	51	36601
+40000	9	51	36651
+70000	25	51	36701
+70000	4	51	36701
+85000	25	51	36751
+85000	4	51	36751
+68000	4	51	36801
+84000	4	51	36851
+95000	2	51	36901
+80000	25	51	36901
+27000	9	51	36951
+65000	1	51	35851
+18700	2	51	37001
+22000	2	51	37051
+26000	1	51	37101
+105000	1	51	37151
+120000	1	51	37201
+125000	4	51	37201
+23000	22	51	37251
+420000	23	51	37301
+450000	1	51	37301
+440000	26	51	37301
+400000	9	51	37301
+450000	9	51	37351
+30000	4	51	37401
+28000	9	51	37401
+21000	15	51	37451
+21000	9	51	37451
+9000	2	51	37501
+9000	27	51	37501
+17000	4	51	37551
+14000	1	51	37601
+16000	22	51	37601
+120000	4	51	37651
+110000	9	51	37651
+35000	4	51	37701
+40000	4	51	37751
+35000	1	51	37801
+35000	9	51	37801
+18000	2	51	37851
+18000	27	51	37851
+18000	9	51	37851
+30000	22	51	37901
+25000	1	51	37951
+34000	1	51	38001
+27000	14	51	38051
+25000	25	51	38051
+9000	1	51	38101
+10300	1	51	38151
+105000	2	51	38201
+110000	26	51	38201
+110000	9	51	38201
+34000	1	51	38251
+35000	22	51	38251
+75000	1	51	38301
+75000	26	51	38301
+14000	1	51	38351
+85000	20	51	38401
+70000	9	51	38401
+55000	1	51	38451
+56000	27	51	38451
+55000	1	51	38501
+55000	4	51	38501
+140000	4	51	38551
+75000	2	51	38601
+80000	27	51	38601
+23000000	4	1	38601
+190000	9	51	38651
+105000	9	51	38701
+95000	9	51	38751
+45000	9	51	38801
+55000	25	51	38851
+54000	4	51	38851
+55000	9	51	38851
+180000	9	51	38901
+180000	21	51	39001
+180000	2	51	39001
+220000	9	51	39001
+9000	21	51	39051
+9000	1	51	39051
+30000	4	51	39101
+20000	4	51	39151
+20000	9	51	39151
+86000	15	51	39201
+70000	9	51	39201
+5000	4	51	39251
+54000000	14	1	39301
+30000	21	51	39301
+32000	9	51	39301
+60000	21	51	39351
+70000	21	51	39401
+30000	21	51	39451
+90000	9	51	39501
+7500	4	51	39551
+8000	9	51	39601
+7000	9	51	39651
+12000	9	51	39701
+120000	9	51	39751
+80000	1	51	39801
+78000	25	51	39801
+60000	21	51	39851
+60000	27	51	39851
+65000	9	51	39851
+4000	2	51	39901
+60000	21	51	39951
+64000	1	51	39951
+7500	1	51	40001
+7500	4	51	40001
+50000	9	51	40051
+300000	26	51	40101
+300000	9	51	40101
+48000	22	51	40151
+49000	15	51	40151
+60000	9	51	40201
+18000	1	51	40251
+18000	4	51	40251
+120000	4	51	40301
+110000	9	51	40301
+11000	4	51	40351
+49000	4	51	40401
+200000	1	51	40451
+200000	2	51	40451
+200000	22	51	40451
+200000	4	51	40451
+220000	9	51	40451
+18000	21	51	40501
+18500	1	51	40501
+24500	21	51	40551
+24800	1	51	40551
+120000	4	51	40601
+160000	20	51	40651
+5350000	4	1	40651
+160000	9	51	40651
+45000	22	51	40701
+16000	23	51	40751
+14000	2	51	40751
+125000	9	51	40801
+160000	20	51	40851
+9500	1	51	40901
+9500	25	51	40901
+20000	4	51	40951
+370000	15	51	41001
+120000	1	51	41051
+120000	4	51	41051
+135000	9	51	41051
+120000	4	51	41101
+140000	9	51	41101
+160000	4	51	41151
+200000	9	51	41151
+7500	23	51	41201
+7000	20	51	41251
+8000	9	51	41251
+5500	1	51	41301
+6000	27	51	41301
+17000	1	51	41351
+65000	1	51	41401
+70000	2	51	41401
+19000	22	51	41451
+19000	15	51	41451
+9000	25	51	41501
+135000	21	51	41551
+135000	26	51	41551
+140000	9	51	41551
+20000	2	51	41601
+19000	26	51	41601
+23500	22	51	41601
+22000	1	51	41651
+60000	4	51	41701
+38000	25	51	41751
+15000	21	51	41801
+14000	22	51	41801
+13500	25	51	41801
+90000	21	51	41851
+80000	27	51	41851
+100000	9	51	41851
+120000	21	51	41901
+110000	27	51	41901
+130000	9	51	41901
+40000	21	51	41951
+50000	9	51	41951
+14000	21	51	42001
+17000	4	51	42051
+16000	9	51	42101
+200000	2	51	42151
+413000	2	51	42201
+12500	9	51	42251
+75000	2	51	42301
+95000	2	51	42351
+96000	25	51	42351
+114000	2	51	42401
+114000	25	51	42401
+6000	21	51	42451
+6000	22	51	42451
+7000	9	51	42451
+30000	4	51	42501
+70000	21	51	42551
+73000	1	51	42551
+5000000	20	1	42551
+64000	9	51	42551
+85000	21	51	42601
+86000	1	51	42601
+7300000	20	1	42601
+72000	9	51	42601
+260000	9	51	42651
+6500	1	51	42701
+21500	23	51	42751
+21500	9	51	42751
+65000	9	51	42801
+77000	1	51	42851
+76000	20	51	42851
+6700000	9	1	42851
+4200	21	51	42901
+6500	4	51	42901
+35000	9	51	43001
+36000	20	51	43051
+32000	4	51	43051
+36000	9	51	43051
+46000	20	51	43101
+44000	4	51	43101
+46000	9	51	43101
+42000	1	51	43151
+50000	9	51	43151
+150000	1	51	43201
+165000	26	51	43201
+180000	9	51	43201
+45000	21	51	43251
+70000	4	51	43301
+65000	9	51	43301
+18500	1	51	43351
+14000	4	51	43401
+17000	1	51	43451
+70000	4	51	43501
+70000	1	51	43551
+12500	9	51	43601
+20000	9	51	43651
+10000	21	51	43701
+20000	21	51	43751
+20000	2	51	43801
+25000	22	51	43801
+17500	4	51	43851
+70000	1	51	43901
+70000	4	51	43901
+5000	15	51	43951
+85000	9	51	44001
+30000	25	51	44051
+32500	4	51	44101
+76000	4	51	44151
+350000	4	51	44201
+300000	9	51	44201
+10000	22	51	44251
+12000	22	51	44301
+9000	1	51	44351
+75000	26	51	44401
+70000	9	51	44401
+65000	4	51	44451
+70000	9	51	44451
+60000	21	51	44501
+175000	9	51	44551
+40000	1	51	44601
+22000	1	51	44651
+21000	22	51	44651
+21000	9	51	44651
+14000	1	51	44701
+14000	22	51	44701
+14000	9	51	44701
+12000	1	51	44751
+12000	22	51	44751
+12000	9	51	44751
+65000	21	51	44801
+53000	22	51	44851
+45000	4	51	44901
+53000	4	51	44951
+22500	26	51	45001
+25000	27	51	45051
+25000	25	51	45051
+145000	9	51	45101
+178000	9	51	45151
+8000	2	51	45201
+8000	4	51	45201
+42000	2	51	45251
+40000	4	51	45251
+65000	21	51	45301
+75000	9	51	45301
+150000	21	51	45351
+12000	9	51	45401
+75000	9	51	45451
+92000	9	51	45501
+47000	26	51	45551
+47500	15	51	45551
+130000	21	51	45601
+180000	9	51	45601
+160000	21	51	45651
+275000	9	51	45651
+75000	1	51	45701
+145000	1	51	45751
+80000	9	51	45801
+15000	22	51	45851
+100000	21	51	45901
+65000	21	51	45951
+60000	21	51	46001
+135000	9	51	46051
+170000	9	51	46101
+19000	26	51	46151
+65000	4	51	46201
+18000	4	51	46251
+18000	9	51	46251
+8000	26	51	46301
+9400	26	51	46351
+105000	1	51	46401
+108000	4	51	46401
+115000	9	51	46401
+180000	9	51	46451
+220000	9	51	46501
+50000	4	51	46551
+50000	9	51	46551
+13500	23	51	46601
+18500	23	51	46801
+77000	2	51	46851
+75000	9	51	46851
+210000	14	51	46901
+145000	9	51	46901
+140000	9	51	46951
+80000	26	51	47001
+85000	9	51	47001
+6000	25	51	47051
+13000	1	51	47101
+42000	22	51	47151
+40000	4	51	47151
+35000	15	51	47201
+47000	4	51	47251
+7000	2	51	47301
+8000	27	51	47301
+55000	4	51	47351
+10500	4	51	47401
+95000	26	51	47451
+120000	4	51	47451
+100000	9	51	47451
+14000	20	51	47501
+8000	9	51	47501
+73000	27	51	47551
+73000	25	51	47551
+92000	27	51	47601
+92000	25	51	47601
+65000	9	51	47651
+74000	1	51	47701
+97000	22	51	47751
+90000	15	51	47751
+12500	2	51	47801
+12000	4	51	47801
+13500	9	51	47801
+60000	22	51	47851
+40000	26	51	47901
+170000	26	51	47951
+10200000	14	1	48001
+13000000	16	1	48001
+28000	4	51	48001
+11000	4	51	48051
+180000	9	51	48101
+90000	1	51	48151
+15000	2	51	48201
+136000	1	51	48251
+140000	4	51	48251
+147000	1	51	48301
+160000	4	51	48301
+20000	9	51	48351
+13000	22	51	48401
+125000	9	51	48451
+8000	22	51	48501
+30000	25	51	48551
+65000	1	51	48601
+65000	4	51	48601
+320000	21	51	48651
+310000	9	51	48651
+95000	4	51	48701
+80000	9	51	48701
+9000	1	51	48751
+9000	4	51	48751
+15000	1	51	48801
+15000	4	51	48801
+125000	4	51	48851
+38000	4	51	48901
+25000	21	51	48951
+23000	26	51	48951
+26000	20	51	48951
+40000	4	51	49001
+8300	4	51	49051
+7000	4	51	49101
+43000	26	51	49151
+40000	9	51	49151
+10500	2	51	49201
+110000	22	51	49251
+110000	9	51	49251
+16000	21	51	49301
+16000	26	51	49301
+23000	20	51	49351
+11000	2	51	49401
+32000	15	51	49451
+30000	9	51	49451
+28000	26	51	49501
+13000	4	51	49551
+13000	9	51	49551
+480000	26	51	49601
+550000	9	51	49601
+110000	9	51	49651
+9100	26	51	49701
+10000	26	51	49751
+11000	9	51	49751
+7700	26	51	49801
+14500	4	51	49851
+185000	26	51	49901
+220000	9	51	49901
+100000	1	51	49951
+168000	1	51	50001
+52000	4	51	50051
+125000	9	51	50101
+54000000	14	1	50151
+40000	2	51	50151
+38000	9	51	50151
+54000000	14	1	50201
+45000	1	51	50201
+40000	4	51	50201
+42000	2	51	50251
+43000	4	51	50251
+30000	2	51	50301
+32000	4	51	50301
+35000	1	51	50351
+37000	2	51	50351
+30000	2	51	50401
+18000	14	51	50451
+315000	2	51	50501
+250000	9	51	50501
+48000	1	51	50551
+45000	4	51	50551
+50000	9	51	50551
+150000	1	51	50601
+140000	4	51	50601
+35000	4	51	50651
+8200	26	51	50751
+8000	9	51	50751
+18000	1	51	50801
+20000	25	51	50801
+120000	22	51	50851
+40000	2	51	50901
+38000	9	51	50901
+63800	2	51	50951
+48000	9	51	50951
+14000	9	51	51001
+75000	1	51	51051
+75000	25	51	51051
+200000	21	51	51101
+180000	22	51	51101
+200000	9	51	51151
+92000	1	51	51201
+93000	26	51	51201
+12000	9	51	51251
+42000	9	51	51301
+62000	21	51	51351
+60000	26	51	51351
+60000	9	51	51351
+21000	9	51	51401
+19000	9	51	51451
+12000	21	51	51551
+11000	1	51	51551
+500000	9	51	51601
+1090000	2	51	51651
+900000	20	51	51651
+20000	27	51	51701
+20000	4	51	51701
+55000	27	51	51751
+55000	25	51	51751
+85000	21	51	51801
+80000	22	51	51801
+6000	25	51	51851
+6000	25	51	51901
+8500	25	51	51951
+5300	1	51	52001
+6500	1	51	52051
+230000	27	51	52101
+230000	4	51	52101
+320000	27	51	52151
+320000	4	51	52151
+14000	25	51	52201
+330000	22	51	52251
+300000	9	51	52251
+42000	9	51	52301
+62000	9	51	52351
+5000	21	51	52401
+5500	15	51	52401
+8000	21	51	52451
+8500	15	51	52451
+650000	21	51	52501
+700000	1	51	52501
+2000000	9	51	52501
+25000	9	51	52551
+42000	9	51	52601
+18500	9	51	52651
+35000	20	51	52701
+38000	15	51	52701
+65000	15	51	52751
+65000	9	51	52751
+6500	15	51	52801
+25000	2	51	52901
+27000	4	51	52901
+31000	2	51	52951
+32000	4	51	52951
+150000	9	51	53001
+180000	9	51	53051
+7000	1	51	53101
+6400	25	51	53101
+19000	2	51	53151
+14000	4	51	53151
+18000	15	51	53151
+44000	1	51	53201
+44000	25	51	53201
+17000	26	51	53251
+16000	9	51	53301
+18500	9	51	53351
+15000	1	51	53401
+100000	1	51	53451
+110000	25	51	53451
+85000	9	51	53501
+40000	20	51	53551
+45000	15	51	53551
+40000	9	51	53551
+400000	4	51	53601
+450000	9	51	53601
+54000000	14	1	53651
+42000	9	51	53651
+9000	2	51	53701
+9000	25	51	53701
+32000	25	51	53751
+28000	4	51	53751
+35000	9	51	53801
+35000	2	51	53851
+35000	15	51	53851
+110000	15	51	53901
+209000	15	51	53951
+15000	1	51	54001
+10000	21	51	54051
+10000	4	51	54051
+4000	15	51	54101
+40000	1	51	54151
+40000	25	51	54151
+110000	4	51	54201
+160000	15	51	54251
+140000	9	51	54251
+120000	21	51	54301
+115000	15	51	54301
+155000	21	51	54351
+145000	15	51	54351
+8000	15	51	54401
+85000	9	51	54451
+85000	4	51	54501
+80000	15	51	54501
+16000	9	51	54551
+20000	15	51	54601
+36000	9	51	54651
+44000	9	51	54701
+5500	15	51	54751
+130000	1	51	54801
+150000	22	51	54801
+130000	9	51	54801
+130000	21	51	54851
+120000	9	51	54851
+115000	21	51	54901
+120000	9	51	54901
+100000	1	51	54951
+95000	9	51	54951
+28000	9	51	55001
+140000	9	51	55051
+25000	21	51	55101
+23000	9	51	55101
+15000	1	51	55151
+15000	22	51	55151
+15000	9	51	55151
+17000	1	51	55201
+17000	22	51	55201
+17000	9	51	55201
+8500	1	51	55251
+7500	9	51	55251
+15000	1	51	55301
+13000	9	51	55301
+7500	1	51	55351
+7000	1	51	55401
+7200	4	51	55401
+18000	9	51	55451
+8000	9	51	55501
+32000	1	51	55551
+31500	4	51	55551
+33000	9	51	55551
+46000	1	51	55601
+45000	4	51	55601
+50000	9	51	55601
+29000	9	51	55651
+18000	9	51	55701
+15000	1	51	55751
+15000	4	51	55751
+35000	25	51	55801
+35000	9	51	55801
+280000	9	51	55851
+7000	2	51	55901
+7000	4	51	55901
+27000	2	51	55951
+25000	22	51	55951
+32000	2	51	56001
+28000	22	51	56001
+25000	27	51	56051
+25000	25	51	56051
+28000	9	51	56051
+15000	2	51	56101
+15000	27	51	56101
+18000	9	51	56101
+23000	4	51	56151
+4000	1	51	56201
+4000	4	51	56201
+8500	1	51	56251
+8500	4	51	56251
+20000	9	51	56301
+95000	9	51	56351
+48000	25	51	56401
+65000	9	51	56401
+60000	1	51	56451
+60000	4	51	56451
+280000	9	51	56501
+17000	21	51	56551
+11000	21	51	56601
+12000	4	51	56601
+40000	9	51	56651
+40000	1	51	56701
+40000	2	51	56701
+40000	4	51	56701
+61500	1	51	56751
+61000	2	51	56751
+62000	4	51	56751
+20000	9	51	56801
+130000	25	51	56851
+130000	4	51	56851
+65000	4	51	56901
+50000	9	51	56901
+72000	4	51	56951
+72000	9	51	56951
+80000	9	51	57001
+16000	25	51	57051
+15000	2	51	57101
+15000	27	51	57101
+18000	1	51	57151
+17000	27	51	57151
+110000	9	51	57201
+15000	1	51	57251
+14000	27	51	57251
+13000	1	51	57301
+13000	27	51	57301
+20000	9	51	57351
+14500	27	51	57401
+14500	25	51	57401
+13000	27	51	57451
+13000	25	51	57451
+8500	1	51	57501
+8000	27	51	57501
+8000	1	51	57551
+8000	4	51	57551
+93000	27	51	57601
+95000	25	51	57601
+85000	9	51	57601
+130000	9	51	57651
+13000	1	51	57701
+13000	4	51	57701
+45000	9	51	57751
+8000	9	51	57801
+5000	9	51	57851
+20000	9	51	57901
+38000	27	51	57951
+38000	25	51	57951
+5000	1	51	58001
+5000	4	51	58001
+20000	9	51	58051
+38000	1	51	58101
+37000	22	51	58101
+65000	22	51	58151
+65000	4	51	58151
+13000	1	51	58201
+14000	27	51	58201
+14000	4	51	58201
+13000	1	51	58251
+14000	27	51	58251
+14000	4	51	58251
+45000	9	51	58301
+35000	1	51	58351
+35000	4	51	58351
+5000	1	51	58401
+5000	2	51	58401
+5000	27	51	58401
+15000	1	51	58451
+14000	27	51	58451
+24000	9	51	58501
+12500	27	51	58551
+12000	4	51	58551
+15000	27	51	58601
+15000	4	51	58601
+30000	9	51	58651
+36000	9	51	58701
+11000	9	51	58751
+16000	9	51	58801
+9000	1	51	58851
+9000	4	51	58851
+8500	9	51	58851
+18000	1	51	58901
+18000	4	51	58901
+65000	1	51	58951
+65000	4	51	58951
+60000	9	51	58951
+120000	1	51	59001
+120000	4	51	59001
+100000	9	51	59001
+4000	27	51	59051
+3500	25	51	59051
+13000	1	51	59101
+13000	4	51	59101
+100000	1	51	59151
+100000	4	51	59151
+80000	9	51	59151
+108000	1	51	59201
+108000	4	51	59201
+108000	9	51	59201
+125000	27	51	59251
+130000	25	51	59251
+140000	9	51	59251
+9000	1	51	59301
+9000	4	51	59301
+17000	9	51	59351
+17000	1	51	59401
+17000	27	51	59401
+22000	9	51	59451
+28000	2	51	59501
+28000	4	51	59501
+28000	9	51	59501
+11000	2	51	59551
+12000	4	51	59551
+70000	1	51	59601
+70000	4	51	59601
+50000	9	51	59651
+20000	9	51	59701
+25000	9	51	59751
+8000	2	51	59801
+8500	27	51	59801
+9000	2	51	59851
+9000	27	51	59851
+13500	27	51	59901
+13000	25	51	59901
+180000	9	51	59951
+20000	9	51	60001
+35000	9	51	60051
+50000	9	51	60101
+140000	9	51	60151
+12000	9	51	60201
+65000	9	51	60202
+50000	9	51	60203
+20000	9	51	60204
+8500	9	51	60205
+55000	9	51	60206
+14500	9	51	60207
+130000	9	51	60208
+150000	9	51	60209
+9000	9	51	60210
+25000	9	51	60211
+13500	9	51	60212
+42000	9	51	60213
+52000	9	51	60214
+25000	9	51	60215
+14500	9	51	60216
+15000	9	51	60217
+14000	9	51	60220
+15500	9	51	60218
+16000	9	51	60219
+7500	9	51	60221
+9000	9	51	60222
+50000	9	51	8151
+162000	9	51	8201
+120000	9	51	60223
+100000	9	51	60224
+3000000	9	51	60225
+25000	9	51	60226
+48000	9	51	60227
+8000	9	51	60228
+15000	9	51	60302
+26000	9	51	60303
+14000	9	51	18151
+13000	9	51	60304
+6500	9	51	60305
+30000	9	51	60306
+9800	9	51	6751
+12000	9	51	60307
+36000	9	51	60308
+28000	9	51	60309
+21000	9	51	60310
+8000	9	51	60311
+17000	9	51	42951
+8500	9	51	60312
+180000	9	51	60313
+360000	9	51	60314
+25000	9	51	60315
+45000	9	51	60316
+20000	9	51	60317
+70000	9	51	60318
+30000	9	51	60320
+28000	9	51	60321
+18000	9	51	15951
+16000	9	51	60322
+100000	9	51	60352
+600000	9	51	60353
+8000	9	51	60354
+20000	9	51	60355
+7000	35	51	60456
+20000	35	51	60457
+18000	35	51	60458
+10000	35	51	60459
+19000	9	51	60460
+13500	9	51	60461
+10000	9	51	60462
+180000	9	51	60463
+90000	9	51	60464
+110000	9	51	60465
+32000	9	51	60466
+21000	9	51	60467
+80000	9	51	60468
+28000	9	51	60469
+5500	9	51	60470
+5500	9	51	60471
+30000	35	51	60472
+16500	9	51	60473
+16500	9	51	60474
+28000	9	51	60475
+35000	9	51	60476
+24000	9	51	60477
+16500	9	51	60478
+19000	9	51	60479
+19000	9	51	60480
+22000	9	51	60481
+19000	9	51	60483
+26000	9	51	60484
+10000	35	51	37501
+18000	9	51	60485
+22000	9	51	60486
+42000	9	51	60487
+52500	9	51	60488
+35000	9	51	60489
+40000	9	51	60490
+30000	9	51	60402
+16000	9	51	60403
+7000	9	51	60404
+18500	9	51	60492
+130000	9	51	60493
+4000	9	51	60494
+100000	9	51	60495
+9000	9	51	60497
+12000	33	51	60499
+80000	9	51	60500
+180000	9	51	60501
+65000	9	51	34201
+80000	9	51	34251
+22000	9	51	10851
+45000	9	51	10901
+10000	35	51	60502
+250000	35	51	60503
+8500	33	51	60505
+10500	33	51	60506
+72000	33	51	60507
+12000	33	51	60508
+18000	33	51	60509
+75000	33	51	60510
+25000	21	51	9551
+30000	9	51	9551
+\.
+
+
+--
+-- Data for Name: classification; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.classification (id, name) FROM stdin;
+1	DATO COMPLETO
+51	IDENTIFICADOS
+101	AUTORIZACIÓN PARA PUBLICAR
+151	AUTORIZACIÓN DE VENTA SIN EXCLUSIVIDAD
+201	AUTORIZACIÓN DE VENTA CON EXCLUSIVIDAD
+251	STOCK TOTAL DE TERRENOS
+301	NO TRABAJABLE
+\.
+
+
+--
+-- Data for Name: contact; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.contact (id, phone) FROM stdin;
+1	4408500
+51	4420780
+101	4421438
+151	4422280
+201	4423954
+251	4431887
+301	4434000
+351	4438800
+401	4439998
+451	4460479
+501	37641381
+551	154247023
+601	154372676
+651	154399845
+701	154600506
+751	154659119
+801	154670135
+851	154681501
+901	154682614
+951	154871978
+1001	154883088
+1051	376438287
+1101	376481322
+1151	376603786
+1201	376622535
+1251	549111205
+1301	1122429607
+1351	1124693293
+1401	1125508204
+1451	1128251638
+1501	1131037424
+1551	1131203034
+1601	1138439822
+1651	1150469211
+1701	1158403505
+1751	1159271778
+1801	1159572616
+1851	1164410308
+1901	1168545825
+1951	2764677525
+2001	2975000856
+2051	3518044445
+2101	3624020131
+2151	3704857999
+2201	3743505053
+2251	3743560081
+2301	3743580899
+2351	3751449509
+2401	3754419403
+2451	3754479437
+2501	3755262685
+2551	3755301332
+2601	3756530702
+2651	3757328962
+2701	3757433195
+2751	3757466227
+2801	3757545300
+2851	3757678215
+2901	3758649232
+2951	3764103529
+3001	3764105601
+3051	3764109060
+3101	3764109680
+3151	3764112449
+3201	3764119044
+3251	3764122660
+3301	3764123083
+3351	3764127072
+3401	3764128566
+3451	3764129666
+3501	3764131955
+3551	3764132608
+3601	3764133115
+3651	3764135999
+3701	3764136830
+3751	3764138604
+3801	3764139183
+3851	3764142834
+3901	3764143268
+3951	3764146729
+4001	3764150099
+4051	3764152757
+4101	3764157795
+4151	3764161798
+4201	3764162914
+4251	3764163429
+4301	3764164481
+4351	3764164657
+4401	3764167016
+4451	3764170186
+4501	3764170200
+4551	3764174150
+4601	3764177771
+4651	3764178100
+4701	3764179948
+4751	3764184893
+4801	3764185030
+4851	3764194672
+4901	3764194735
+4951	3764194803
+5001	3764196190
+5051	3764200408
+5101	3764200574
+5151	3764202762
+5201	3764202764
+5251	3764203017
+5301	3764206648
+5351	3764207690
+5401	3764211597
+5451	3764213507
+5501	3764213527
+5551	3764214972
+5601	3764215600
+5651	3764216278
+5701	3764217242
+5751	3764218163
+5801	3764218596
+5851	3764218989
+5901	3764219960
+5951	3764220914
+6001	3764221888
+6051	3764223286
+6101	3764223888
+6151	3764223899
+6201	3764224643
+6251	3764226450
+6301	3764230745
+6351	3764232425
+6401	3764238563
+6451	3764241085
+6501	3764243031
+6551	3764243338
+6601	3764245716
+6651	3764245849
+6701	3764247023
+6751	3764247304
+6801	3764247688
+6851	3764248926
+6901	3764249852
+6951	3764251164
+7001	3764252701
+7051	3764254580
+7101	3764258073
+7151	3764258080
+7201	3764258491
+7251	3764260767
+7301	3764261958
+7351	3764266005
+7401	3764266593
+7451	3764271712
+7501	3764272290
+7551	3764273548
+7601	3764283535
+7651	3764287614
+7701	3764291239
+7751	3764294152
+7801	3764299029
+7851	3764299057
+7901	3764308599
+7951	3764309585
+8001	3764323622
+8051	3764328331
+8101	3764328532
+8151	3764328998
+8201	3764330872
+8251	3764331977
+8301	3764335693
+8351	3764345197
+8401	3764352669
+8451	3764355357
+8501	3764356196
+8551	3764357891
+8601	3764360690
+8651	3764360874
+8701	3764361130
+8751	3764363553
+8801	3764364607
+8851	3764365901
+8901	3764365950
+8951	3764369386
+9001	3764369524
+9051	3764371000
+9101	3764373040
+9151	3764374710
+9201	3764375134
+9251	3764376198
+9301	3764377118
+9351	3764381215
+9401	3764387041
+9451	3764387250
+9501	3764388477
+9551	3764391682
+9601	3764397196
+9651	3764398332
+9701	3764399300
+9751	3764404024
+9801	3764412117
+9851	3764418071
+9901	3764420780
+9951	3764421438
+10001	3764422891
+10051	3764424518
+10101	3764425822
+10151	3764425983
+10201	3764429025
+10251	3764433079
+10301	3764433419
+10351	3764433973
+10401	3764436657
+10451	3764439785
+10501	3764441433
+10551	3764500049
+10601	3764500415
+10651	3764500883
+10701	3764505097
+10751	3764507527
+10801	3764508852
+10851	3764509206
+10901	3764509452
+10951	3764512678
+11001	3764517273
+11051	3764518541
+11101	3764526322
+11151	3764527515
+11201	3764531229
+11251	3764531948
+11301	3764532752
+11351	3764533650
+11401	3764534003
+11451	3764539147
+11501	3764560982
+11551	3764562048
+11601	3764562131
+11651	3764562525
+11701	3764571440
+11751	3764572171
+11801	3764573347
+11851	3764577950
+11901	3764579555
+11951	3764579593
+12001	3764580888
+12051	3764583263
+12101	3764600205
+12151	3764601649
+12201	3764602847
+12251	3764604016
+12301	3764608795
+12351	3764609300
+12401	3764617834
+12451	3764619465
+12501	3764619858
+12551	3764620796
+12601	3764621514
+12651	3764622374
+12701	3764623896
+12751	3764625347
+12801	3764626237
+12851	3764626749
+12901	3764626991
+12951	3764627890
+13001	3764628391
+13051	3764629519
+13101	3764630022
+13151	3764630062
+13201	3764631199
+13251	3764632730
+13301	3764639476
+13351	3764639617
+13401	3764639667
+13451	3764640260
+13501	3764642577
+13551	3764643011
+13601	3764643177
+13651	3764643273
+13701	3764644014
+13751	3764648489
+13801	3764649222
+13851	3764650395
+13901	3764652182
+13951	3764655053
+14001	3764657919
+14051	3764658500
+14101	3764659070
+14151	3764661579
+14201	3764661663
+14251	3764663288
+14301	3764664738
+14351	3764665801
+14401	3764666782
+14451	3764671365
+14501	3764676867
+14551	3764678666
+14601	3764679579
+14651	3764680820
+14701	3764681014
+14751	3764682506
+14801	3764682537
+14851	3764682614
+14901	3764682957
+14951	3764685124
+15001	3764686308
+15051	3764686441
+15101	3764687110
+15151	3764689445
+15201	3764691253
+15251	3764691744
+15301	3764691763
+15351	3764692217
+15401	3764692928
+15451	3764693208
+15501	3764693711
+15551	3764694930
+15601	3764695431
+15651	3764696469
+15701	3764698008
+15751	3764700726
+15801	3764702230
+15851	3764706105
+15901	3764706961
+15951	3764712011
+16001	3764714714
+16051	3764714756
+16101	3764715558
+16151	3764716945
+16201	3764717150
+16251	3764718822
+16301	3764724379
+16351	3764725260
+16401	3764725630
+16451	3764725789
+16501	3764726333
+16551	3764726768
+16601	3764729687
+16651	3764730154
+16701	3764732960
+16751	3764736450
+16801	3764738792
+16851	3764740181
+16901	3764743609
+16951	3764755199
+17001	3764755213
+17051	3764755628
+17101	3764755777
+17151	3764756851
+17201	3764763386
+17251	3764765431
+17301	3764773383
+17351	3764794616
+17401	3764794619
+17451	3764799212
+17501	3764799415
+17551	3764801209
+17601	3764803057
+17651	3764806223
+17701	3764816262
+17751	3764816535
+17801	3764817698
+17851	3764817799
+17901	3764818259
+17951	3764821429
+18001	3764824255
+18051	3764827986
+18101	3764829337
+18151	3764831450
+18201	3764831739
+18251	3764833290
+18301	3764842450
+18351	3764844687
+18401	3764846041
+18451	3764849087
+18501	3764851603
+18551	3764852244
+18601	3764854097
+18651	3764854528
+18701	3764861843
+18751	3764862112
+18801	3764862215
+18851	3764863080
+18901	3764866218
+18951	3764869510
+19001	3764870551
+19051	3764875130
+19101	3764877139
+19151	3764877150
+19201	3764877234
+19251	3764880463
+19301	3764883088
+19351	3764899244
+19401	3764903647
+19451	3764917249
+19501	3764917373
+19551	3764917994
+19601	3764941636
+19651	3764945581
+19701	3764948696
+19751	3764950689
+19801	3764965324
+19851	3764989298
+19901	3764996511
+19951	3765005751
+20001	3765006005
+20051	3765006909
+20101	3765011517
+20151	3765011557
+20201	3765018891
+20251	3765022398
+20301	3765028215
+20351	3765038090
+20401	3765053949
+20451	3765058505
+20501	3765087160
+20551	3765095635
+20601	3765103430
+20651	3765107447
+20701	3765108480
+20751	3765112449
+20801	3765124340
+20851	3765127558
+20901	3765140001
+20951	3765150347
+21001	3765171894
+21051	3765220321
+21101	3765225071
+21151	3765229060
+21201	3765241800
+21251	3765256342
+21301	3765381939
+21351	3765505860
+21401	3765515986
+21451	3773409839
+21501	3794056683
+21551	3816263451
+21601	111532803332
+21651	  3764 433419  
+21701	 376 436-2025
+21751	 376 450-9452
+21801	 376 457-7950
+21851	 3764 398141
+21901	 3764 724357
+21951	 3764-201338
+22001	(0376) 4430090-(0376) 154512678 
+22051	(0376) 4433079
+22101	(376) 483-3290     
+22151	011-1536387684
+22201	011-41676741
+22251	011-56543032
+22301	011-65981500
+22351	0376 4234188
+22401	0376 437-4710
+22451	0376 4422941
+22501	11 2455-0551
+22551	11 4023-8651
+22601	11 6417-1783
+22651	11 6947-4175
+22701	1111568476838 / 3764373351
+22751	11-3003-9685 (dueño)/ 3764210350 (cuñado)
+22801	1164814933 
+22851	154-512678
+22901	154-699503
+22951	154-855861
+23001	3435 02-2949
+23051	345 4191963
+23101	3741-401508
+23151	3751 40-7087
+23201	3751 540979
+23251	3751-573376
+23301	3751604219 (joaquin)
+23351	3754-416962
+23401	3755 597862/3755 699205/3764  383287
+23451	3756 585437
+23501	3756 612426
+23551	3757 46-5985
+23601	3757 46-6227
+23651	3758-433666
+23701	3758-488637
+23751	376 4112449
+23801	376 411-2449
+23851	376 4129799
+23901	376 413-2608
+23951	376 416-2914
+24001	376 417-8100
+24051	376 418-7239
+24101	376 422-9697
+24151	376 423-1891
+24201	376 425-1164
+24251	376 433-4168
+24301	376 435-0191
+24351	376 437-3313
+24401	376 4374710
+24451	376 441-2117
+24501	376 441-2117 
+24551	376 443-0090
+24601	376 450-9206
+24651	376 450-9452
+24701	376 457-1820
+24751	376 457-9555
+24801	376 460-0796
+24851	376 462-6775 
+24901	376 4648562
+24951	376 465-3973
+25001	376 4661497
+25051	376 466-1663
+25101	376 471-0686
+25151	376 473-1175
+25201	376 481-6262
+25251	376 482-4255
+25301	376 486-1255
+25351	376 486-6068
+25401	376 486-9923 
+25451	376 4880463
+25501	376 488-3088
+25551	376 491-7249 
+25601	376 500-9289
+25651	376 513-6578
+25701	376 5229060
+25751	376 522-9060
+25801	3764 10-3529
+25851	3764 10-4847
+25901	3764 10-5601
+25951	3764 107225 
+26001	3764 11-1206
+26051	3764 112449
+26101	3764 119044
+26151	3764 130049
+26201	3764 14-6140
+26251	3764 15-0099
+26301	3764 17-0186
+26351	3764 175386 
+26401	3764 17-8100
+26451	3764 18-0004
+26501	3764 183934 
+26551	3764 18-7595
+26601	3764 200082
+26651	3764 203721 
+26701	3764 20-4273
+26751	3764 21-1684
+26801	3764 21-8925
+26851	3764 218989
+26901	3764 22-0209
+26951	3764 223868 
+27001	3764 223888
+27051	3764 22-6450
+27101	3764 228886
+27151	3764 22-8886
+27201	3764 229697 
+27251	3764 234431
+27301	3764 247023
+27351	3764 24-7023
+27401	3764 24-7304
+27451	3764 247688 
+27501	3764 25-0996
+27551	3764 252701
+27601	3764 25-8801
+27651	3764 260767
+27701	3764 261295 
+27751	3764 27-0783
+27801	3764 28-7287
+27851	3764 324572
+27901	3764 32-6793
+27951	3764 33-0046
+28001	3764 338283
+28051	3764 343576
+28101	3764 35-1563
+28151	3764 35-5357
+28201	3764 357742
+28251	3764 35-7891
+28301	3764 36 93 86
+28351	3764 36-0874
+28401	3764 362025
+28451	3764 367301
+28501	3764 36-8395
+28551	3764 37-0700
+28601	3764 374710
+28651	3764 37-4710
+28701	3764 374716
+28751	3764 37-7952
+28801	3764 379207
+28851	3764 38-1215
+28901	3764 38-2511
+28951	3764 384299
+29001	3764 38-6944
+29051	3764 386944/381071
+29101	3764 388477
+29151	3764 404024
+29201	3764 418071
+29251	3764 420354
+29301	3764 421891
+29351	3764 422483
+29401	3764 42-6502
+29451	3764 440172
+29501	3764 500415
+29551	3764 50-0995
+29601	3764 506096
+29651	3764 50-6321
+29701	3764 508560/3764327392
+29751	3764 511185
+29801	3764 521235
+29851	3764 52-1562
+29901	3764 53-2156
+29951	3764 538320/572181
+30001	3764 54-3253
+30051	3764 55-6630
+30101	3764 562925/4436426
+30151	3764 56-3716
+30201	3764 57-5820
+30251	3764 579555
+30301	3764 581368
+30351	3764 588713
+30401	3764 603925 
+30451	3764 604016
+30501	3764 605980
+30551	3764 62-3536
+30601	3764 62-6749
+30651	3764 62-6775
+30701	3764 62-6991
+30751	3764 633366
+30801	3764 6369617/579595
+30851	3764 63-7768
+30901	3764 647805
+30951	3764 648489  3764 132210
+31001	3764 649070 
+31051	3764 65-3973
+31101	3764 656436
+31151	3764 657626
+31201	3764 68-1975
+31251	3764 68-2789 (Propietario) - 
+31301	3764 685124  
+31351	3764 690189
+31401	3764 692586
+31451	3764 692928
+31501	3764 695753
+31551	3764 704763
+31601	3764 71-6705
+31651	3764 718484
+31701	3764 72-3132
+31751	3764 72-4748
+31801	3764 727786
+31851	3764 735742
+31901	3764 73-6691
+31951	3764 755777
+32001	3764 75-5777
+32051	3764 760830 
+32101	3764 762347
+32151	3764 79-5161
+32201	3764 812067
+32251	3764 816262
+32301	3764 816262 (Orígenes) - 376 4112449 (Fénix)
+32351	3764 816262/038090
+32401	3764 81-8804
+32451	3764 81-8994
+32501	3764 824255
+32551	3764 828089
+32601	3764 84-5491
+32651	3764 84-5703
+32701	3764 851690
+32751	3764 85-5567
+32801	3764 869923
+32851	3764 87-7923
+32901	3764 880463
+32951	3764 883088 
+33001	3764 88-9638
+33051	3764 90-1675
+33101	3764 917249
+33151	3764 917373
+33201	3764 950292
+33251	3764 99 7260
+33301	3764_226480
+33351	376-4112449
+33401	376-4124832
+33451	376-4129799
+33501	376-4132608
+33551	3764-150099
+33601	376-4150944
+33651	3764-167016
+33701	376-4174150
+33751	376-4183594
+33801	376-4187239
+33851	376-4203017
+33901	3764203375 (Propietario)- 3764689410 (Mimi Acosta)
+33951	3764-213325
+34001	376-4220209
+34051	376-4228886
+34101	3764-229697
+34151	376-4250581
+34201	3764-252628
+34251	376-4254580
+34301	376-4274033
+34351	376-4281039
+34401	376-4299057
+34451	3764-329685
+34501	376-4353382
+34551	376-4360874
+34601	376-4361130
+34651	376-4362025
+34701	376-4363553
+34751	3764-374710
+34801	376-4381215 y 376-4706105
+34851	3764-384989
+34901	3764-398332
+34951	376-4418071
+35001	376-4424518
+35051	3764-431887
+35101	3764433073  -   3764500415
+35151	3764433073  -  3764500415
+35201	376-4436200
+35251	3764-438906
+35301	3764-491112
+35351	376-4502770
+35401	3764-509452
+35451	3764526933.
+35501	3764539941 (Propietario)-3764379233 (Abogado)
+35551	3764-561742
+35601	3764-579555
+35651	376-4579555
+35701	376-4580514
+35751	3764-585565
+35801	376-4600506
+35851	3764-604016
+35901	3764-618227
+35951	3764648562
+36001	376-4648663
+36051	3764651789  3764869339
+36101	3764-657626
+36151	376-4659119
+36201	376-4675025
+36251	3764-678756 / 154729557
+36301	376-4686868
+36351	3764-693207
+36401	3764-703727
+36451	3764-710237
+36501	3764-714795
+36551	376-4724379
+36601	3764-724695
+36651	3764732157/3764730245
+36701	3764739752(Propietario)
+36751	3764747751 (hijo)
+36801	376-4755777
+36851	376-4759900
+36901	3764-763386
+36951	376-4799212
+37001	376-4816272
+37051	376-4818496
+37101	376-4824255
+37151	376483-3290
+37201	376-4833290 (whatsapp)/4439998
+37251	3764-861570
+37301	3764-877234
+37351	3764-889941
+37401	376-4917249
+37451	376-4917373
+37501	376-4939046
+37551	3765 01-1517
+37601	3765 035622
+37651	3765 12-2176
+37701	3765 140001
+37751	3765 14-0001
+37801	3765 144911
+37851	3765 15-0347
+37901	3765 167459
+37951	3765 22-9060
+38001	3765 387837
+38051	3765 40-7900
+38101	376-5005751
+38151	3765-011517
+38201	376-5065456
+38251	376-5140001
+38301	3765-144941
+38351	376-5150347
+38401	3765-222277
+38451	3765-400840
+38501	3794 68-8803
+38551	4421438 / 4424400 / 4436845
+38601	4425983/154334168
+38651	4428512-376417778 (Particular) (3764695788 Carrafa Flores)
+38701	443-0090
+38751	4433-079-- 3764716705- 3764607164
+38801	443-9998
+38851	4439998 / 4833290 
+38901	4441114 / 154644014
+38951	54 9 11 2498-6151
+39001	54 9 376 421-2128 (Mariana Pérez)---+54 9 376 486-3845 (Sandra Pérez)---- +54 9 376 415-3837 (Carlos Duarte-abogado1)--- +54 9 376 472-8673 (Dr. Barreyro- abogado2) 
+39051	LLAMADAS: 376-4431739 y WHATSAPP: 376-4755777
+39101	LLAMADAS: 376-5028215 y WHATSAPP: 376-4710677
+39151	pablo: 3764-103529   juan: 3764-399845
+39201	propietario: 3764 262607, Nexos: 3764 692928
+39251	Propietario: 3764526452. Arce Inmobiliaria: 3764883088
+39451	3764129799
+39501	376-4255679
+39551	376-4398141
+39601	376-4218989
+39651	376-4226469
+39701	376 437-4710
+39751	3764-560982
+39801	3624787366
+39851	3764-755078
+39852	3764 58-9945
+39853	3765232545
+39854	3764 10-9919
+39855	376200286
+39856	3764 96-6812
+39857	3764657863
+39858	376-4374710
+39859	11 6874-6984
+39860	3764 109060 / 3764 719092
+39861	3764 884118
+39862	3764 64-0224
+39863	3765047516
+39902	3765 14-4308
+39903	376-4668014
+39904	376-5296711
+39905	3764 761673
+39906	3764-334510
+39907	3764 89-5661
+39908	376-4577950
+39909	376-4417681
+39910	376-4794619
+39911	1140902944
+39912	376-4150099
+39913	376-4580888
+39914	3764-858499
+39915	3764738535
+39952	376-4491112
+40002	3764862605
+40052	3764816796
+40053	3764899911
+40054	3764273889
+40055	1127714215
+40056	3765149991
+40057	3757612364
+40058	376-4762005
+40059	3758454507
+40060	376-4130187
+40061	376-4223888
+40062	3764422483
+40063	3764820039
+40064	3764705254
+40065	3764889638
+40066	3764490400
+40067	3764349369
+40068	3764245200
+40069	3764511106
+40070	3764714187-3764327817
+40071	3764524922
+40072	3764679102
+40073	376-4359526
+40074	543764742185 fijo: +543765439740
+40075	3764502471
+40076	3765374073
+40077	3764220209
+40078	3755262629
+40079	3764708311
+40080	3764429828
+40081	3764725772
+40082	+54 9 3755 58-2575
+40083	3764354696
+40084	3764658500 (hermano)-376473399 (Vendedora)
+40085	3764676534
+40086	54 9 3764 22-0209
+\.
+
+
+--
+-- Data for Name: currency; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.currency (id, code, exchange_reference) FROM stdin;
+1	ARS	1
+51	USD	1295
+\.
+
+
+--
+-- Data for Name: file_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.file_type (id, name) FROM stdin;
+1	DIGITAL
+51	FÍSICO
+\.
+
+
+--
+-- Data for Name: folder; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.folder (id, code) FROM stdin;
+1	V1
+51	V2
+101	V3
+151	V4
+201	V5
+251	V6
+301	V7
+351	V8
+401	V9
+451	V10
+501	V11
+551	V12
+601	V13
+651	V14
+701	V15
+751	V16
+801	V17
+851	V18
+901	V19
+951	V20
+1001	V21
+1051	V22
+1101	V23
+1151	V24
+1201	V25
+1251	V26
+1301	V27
+1351	V28
+1401	V29
+1451	V30
+1501	V31
+1551	V32
+1601	V33
+1651	V34
+1701	V35
+1751	V36
+1801	V37
+1851	V38
+1901	V39
+1951	V40
+2001	V41
+2051	V42
+2101	V43
+2151	V44
+2201	V45
+2251	V46
+2301	V47
+2351	V48
+2401	V49
+2451	V50
+2501	V51
+2551	V52
+2601	V53
+2651	V54
+2701	V55
+2751	V56
+2801	V57
+2851	V58
+2901	V59
+2951	V60
+3001	V61
+3051	V62
+3101	V63
+3151	V64
+3201	V65
+3251	V66
+3301	V67
+3351	V68
+3401	V69
+3451	V70
+3501	V71
+3551	V72
+3601	V73
+3651	V74
+3701	V75
+3751	V76
+3801	V77
+3851	V78
+3901	V79
+3951	V80
+4001	V81
+4051	V82
+4101	V83
+4151	V84
+4201	V85
+4251	V86
+4301	V87
+4351	V88
+4401	V89
+4451	V90
+4501	V91
+4551	V92
+4601	V93
+4651	V94
+4701	V95
+4751	V96
+4801	V97
+4851	V98
+4901	V99
+4951	V100
+5001	V101
+5051	V102
+5101	V103
+5151	V104
+5201	V105
+5251	V106
+5301	V107
+5351	V108
+5401	V109
+5451	V110
+5501	V111
+5551	V112
+5601	V113
+5651	V114
+5701	V115
+5751	V116
+5801	V117
+5851	V118
+5901	V119
+5951	V120
+6001	V121
+6051	V122
+6101	V123
+6151	V124
+6201	V125
+6251	V126
+6301	V127
+6351	V128
+6401	V129
+6451	V130
+6501	V131
+6551	V132
+6601	V133
+6651	V134
+6701	V135
+6751	V136
+6801	V137
+6851	V138
+6901	V139
+6951	V140
+7001	V141
+7051	V142
+7101	V143
+7151	V144
+7201	V145
+7251	V146
+7301	V147
+7351	V148
+7401	V149
+7451	V150
+7501	V151
+7551	V152
+7601	V153
+7651	V154
+7701	V155
+7751	V156
+7801	V157
+7851	V158
+7901	V159
+7951	V160
+8001	V161
+8051	V162
+8101	V163
+8151	V164
+8201	V165
+8251	V166
+8301	V167
+8351	V168
+8401	V169
+8451	V170
+8501	V171
+8551	V172
+8601	V173
+8651	V174
+8701	V175
+8751	V176
+8801	V177
+8851	V178
+8901	V179
+8951	V180
+9001	V181
+9051	V182
+9101	V183
+9151	V184
+9201	V185
+9251	V186
+9301	V187
+9351	V188
+9401	V189
+9451	V190
+9501	V191
+9551	V192
+9601	V193
+9651	V194
+9701	V195
+9751	V196
+9801	V197
+9851	V198
+9901	V199
+9951	V200
+10001	V201
+10051	V202
+10101	V203
+10151	V204
+10201	V205
+10251	V206
+10301	V207
+10351	V208
+10401	V209
+10451	V210
+10501	V211
+10551	V212
+10601	V213
+10651	V214
+10701	V215
+10751	V216
+10801	V217
+10851	V218
+10901	V219
+10951	V220
+11001	V221
+11051	V222
+11101	V223
+11151	V224
+11201	V225
+11251	V226
+11301	V227
+11351	V228
+11401	V229
+11451	V230
+11501	V231
+11551	V232
+11601	V233
+11651	V234
+11701	V235
+11751	V236
+11801	V237
+11851	V238
+11901	V239
+11951	V240
+12001	V241
+12051	V242
+12101	V243
+12151	V244
+12201	V245
+12251	V246
+12301	V247
+12351	V248
+12401	V249
+12451	V250
+12501	V251
+12551	V252
+12601	V253
+12651	V254
+12701	V255
+12751	V256
+12801	V257
+12851	V258
+12901	V259
+12951	V260
+13001	V261
+13051	V262
+13101	V263
+13151	V264
+13201	V265
+13251	V266
+13301	V267
+13351	V268
+13401	V269
+13451	V270
+13501	V271
+13551	V272
+13601	V273
+13651	V274
+13701	V275
+13751	V276
+13801	V277
+13851	V278
+13901	V279
+13951	V280
+14001	V281
+14051	V282
+14101	V283
+14151	V284
+14201	V286
+14251	V287
+14301	V288
+14351	V289
+14401	V290
+14451	V291
+14501	V292
+14551	V293
+14601	V294
+14651	V295
+14701	V296
+14751	V297
+14801	V298
+14851	V299
+14901	V300
+14951	V301
+15001	V302
+15051	V303
+15101	V304
+15151	V305
+15201	V306
+15251	V307
+15301	V308
+15351	V310
+15401	V311
+15451	V312
+15501	V313
+15551	V314
+15601	V315
+15651	V316
+15701	V317
+15751	V318
+15801	V319
+15851	V320
+15901	V321
+15951	V322
+16001	V323
+16051	V324
+16101	V325
+16151	V326
+16201	V327
+16251	V328
+16301	V329
+16351	V330
+16401	V331
+16451	V332
+16501	V333
+16551	V334
+16601	V335
+16651	V336
+16701	V337
+16751	V338
+16801	V339
+16851	V340
+16901	V341
+16951	V342
+17001	V343
+17051	V344
+17101	V345
+17151	V346
+17201	V347
+17251	V348
+17301	V349
+17351	V350
+17401	V351
+17451	V352
+17501	V353
+17551	V354
+17601	V355
+17651	V356
+17701	V357
+17751	V358
+17801	V359
+17851	V360
+17901	V361
+17951	V362
+18001	V363
+18051	V364
+18101	V365
+18151	V366
+18201	V367
+18251	V368
+18301	V369
+18351	V370
+18401	V371
+18451	V372
+18501	V373
+18551	V374
+18601	V375
+18651	V376
+18701	V377
+18751	V378
+18801	V379
+18851	V380
+18901	V381
+18951	V382
+19001	V383
+19051	V384
+19101	V385
+19151	V386
+19201	V387
+19251	V388
+19301	V389
+19351	V390
+19401	V391
+19451	V392
+19501	V393
+19551	V394
+19601	V395
+19651	V396
+19701	V397
+19751	V398
+19801	V399
+19851	V400
+19901	V401
+19951	V402
+20001	V403
+20051	V404
+20101	V405
+20151	V406
+20201	V407
+20251	V408
+20301	V409
+20351	V410
+20401	V411
+20451	V412
+20501	V413
+20551	V414
+20601	V415
+20651	V416
+20701	V417
+20751	V418
+20801	V419
+20851	V420
+20901	V421
+20951	V422
+21001	V423
+21051	V424
+21101	V425
+21151	V426
+21201	V427
+21251	V428
+21301	V429
+21351	V430
+21401	V431
+21451	V432
+21501	V433
+21551	V434
+21601	V435
+21651	V436
+21701	V437
+21751	V438
+21801	V439
+21851	V440
+21901	V441
+21951	V442
+22001	V443
+22051	V444
+22101	V445
+22151	V446
+22201	V447
+22251	V448
+22301	V449
+22351	V450
+22401	V451
+22451	V452
+22501	V453
+22551	V454
+22601	V455
+22651	V456
+22701	V457
+22751	V458
+22801	V459
+22851	V460
+22901	V461
+22951	V462
+23001	V463
+23051	V464
+23101	V465
+23151	V466
+23201	V467
+23251	V468
+23301	V469
+23351	V470
+23401	V471
+23451	V472
+23501	V473
+23551	V474
+23601	V475
+23651	V476
+23701	V477
+23751	V478
+23801	V479
+23851	V480
+23901	V481
+23951	V482
+24001	V483
+24051	V484
+24101	V485
+24151	V486
+24201	V487
+24251	V488
+24301	V489
+24351	V490
+24401	V491
+24451	V492
+24501	V493
+24551	V494
+24601	V495
+24651	V496
+24701	V497
+24751	V498
+24801	V499
+24851	V500
+24901	V501
+24951	V502
+25001	V503
+25051	V504
+25101	V505
+25151	V506
+25201	V507
+25251	V508
+25301	V509
+25351	V510
+25401	V511
+25451	V512
+25501	V513
+25551	V514
+25601	V515
+25651	V516
+25701	V517
+25751	V518
+25801	V519
+25851	V520
+25901	V521
+25951	V522
+26001	V523
+26051	V524
+26101	V525
+26151	V526
+26201	V527
+26251	V528
+26301	V529
+26351	V530
+26401	V531
+26451	V532
+26501	V533
+26551	V534
+26601	V535
+26651	V536
+26701	V537
+26751	V538
+26801	V539
+26851	V540
+26901	V541
+26951	V542
+27001	V543
+27051	V544
+27101	V545
+27151	V546
+27201	V547
+27251	V548
+27301	V549
+27351	V550
+27401	V551
+27451	V552
+27501	V554
+27551	V555
+27601	V556
+27651	V557
+27701	V558
+27751	V559
+27801	V560
+27851	V561
+27901	V562
+27951	V563
+28001	V564
+28051	V565
+28101	V566
+28151	V567
+28201	V568
+28251	V569
+28301	V570
+28351	V571
+28401	V572
+28451	V573
+28501	V574
+28551	V575
+28601	V576
+28651	V577
+28701	V580
+28751	V581
+28801	V582
+28851	V583
+28901	V584
+28951	V585
+29001	V586
+29051	V587
+29101	V588
+29151	V589
+29201	V590
+29251	V591
+29301	V592
+29351	V593
+29401	V594
+29451	V595
+29501	V596
+29551	V597
+29601	V598
+29651	V599
+29701	V600
+29751	V601
+29801	V602
+29851	V603
+29901	V604
+29951	V605
+30001	V606
+30051	V607
+30101	V608
+30151	V609
+30201	V610
+30251	V611
+30301	V612
+30351	V613
+30401	V614
+30451	V615
+30501	V616
+30551	V617
+30601	V618
+30651	V619
+30701	V620
+30751	V621
+30801	V622
+30851	V623
+30901	V624
+30951	V625
+31001	V626
+31051	V627
+31101	V628
+31151	V629
+31201	V630
+31251	V631
+31301	V632
+31351	V633
+31401	V634
+31451	V635
+31501	V636
+31551	V637
+31601	V638
+31651	V639
+31701	V640
+31751	V641
+31801	V642
+31851	V643
+31901	V644
+31951	V645
+32001	V646
+32051	V647
+32101	V648
+32151	V649
+32201	V650
+32251	V651
+32301	V652
+32351	V653
+32401	V654
+32451	V655
+32501	V656
+32551	V657
+32601	V658
+32651	V659
+32701	V660
+32751	V661
+32801	V663
+32851	V664
+32901	V665
+32951	V666
+33001	V667
+33051	V668
+33101	V669
+33151	V670
+33201	V671
+33251	V672
+33301	V673
+33351	V674
+33401	V675
+33451	V676
+33501	V677
+33551	V678
+33601	V679
+33651	V680
+33701	V681
+33751	V682
+33801	V683
+33851	V684
+33901	V685
+33951	V686
+34001	V687
+34051	V688
+34101	V689
+34151	V690
+34201	V691
+34251	V692
+34301	V693
+34351	V694
+34401	V695
+34451	V696
+34501	V697
+34551	V698
+34601	V699
+34651	V700
+34701	V701
+34751	V702
+34801	V703
+34851	V704
+34901	V705
+34951	V706
+35001	V707
+35051	V708
+35101	V709
+35151	V710
+35201	V711
+35251	V712
+35301	V713
+35351	V714
+35401	V715
+35451	V716
+35501	V717
+35551	V718
+35601	V719
+35651	V720
+35701	V721
+35751	V722
+35801	V723
+35851	V724
+35901	V725
+35951	V726
+36001	V727
+36051	V728
+36101	V729
+36151	V730
+36201	V731
+36251	V732
+36301	V733
+36351	V734
+36401	V735
+36451	V736
+36501	V737
+36551	V738
+36601	V739
+36651	V740
+36701	V741
+36751	V742
+36801	V743
+36851	V744
+36901	V745
+36951	V746
+37001	V747
+37051	V748
+37101	V749
+37151	V750
+37201	V751
+37251	V752
+37301	V753
+37351	V754
+37401	V755
+37451	V756
+37501	V757
+37551	V758
+37601	V759
+37651	V760
+37701	V761
+37751	V762
+37801	V763
+37851	V764
+37901	V765
+37951	V767
+38001	V768
+38051	V769
+38101	V770
+38151	V771
+38201	V772
+38251	V773
+38301	V774
+38351	V775
+38401	V776
+38451	V777
+38501	V778
+38551	V779
+38601	V780
+38651	V781
+38701	V782
+38751	V783
+38801	V785
+38851	V786
+38901	V787
+38951	V788
+39001	V789
+39051	V790
+39101	V791
+39151	V792
+39201	V793
+39251	V794
+39301	V795
+39351	V796
+39401	V797
+39451	V798
+39501	V799
+39551	V800
+39601	V801
+39651	V803
+39701	V804
+39751	V806
+39801	V807
+39851	V808
+39901	V809
+39951	V810
+40001	V811
+40051	V812
+40101	V813
+40151	V814
+40201	V815
+40251	V816
+40301	V817
+40351	V818
+40401	V819
+40451	V820
+40501	V821
+40551	V822
+40601	V823
+40651	V824
+40701	V825
+40751	V826
+40801	V827
+40851	V828
+40901	V829
+40951	V830
+41001	V831
+41051	V832
+41101	V833
+41151	V834
+41201	V835
+41251	V836
+41301	V837
+41351	V838
+41401	V839
+41451	V840
+41501	V841
+41551	V842
+41601	V843
+41651	V844
+41701	V845
+41751	V846
+41801	V847
+41851	V848
+41901	V849
+41951	V850
+42001	V851
+42051	V852
+42101	V853
+42151	V854
+42201	V855
+42251	V856
+42301	V857
+42351	V858
+42401	V859
+42451	V860
+42501	V861
+42551	V862
+42601	V863
+42651	V864
+42701	V865
+42751	V866
+42801	V867
+42851	V868
+42901	V869
+42951	V870
+43001	V871
+43051	V872
+43101	V873
+43151	V874
+43201	V875
+43251	V876
+43301	V877
+43351	V878
+43401	V879
+43451	V880
+43501	V881
+43551	V882
+43601	V883
+43651	V884
+43701	V885
+43751	V886
+43801	V887
+43851	V888
+43901	V889
+43951	V890
+44001	V891
+44051	V892
+44101	V893
+44151	V894
+44201	V895
+44251	V896
+44301	V897
+44351	V898
+44401	V899
+44451	V900
+44501	V901
+44551	V902
+44601	V903
+44651	V904
+44701	V905
+44751	V906
+44801	V907
+44851	V908
+44901	V909
+44951	V910
+45001	V911
+45051	V912
+45101	V913
+45151	V914
+45201	V915
+45251	V916
+45301	V917
+45351	V918
+45401	V919
+45451	V920
+45501	V921
+45551	V922
+45601	V923
+45651	V924
+45701	V925
+45751	V926
+45801	V927
+45851	V928
+45901	V929
+45951	V930
+46001	V931
+46051	V932
+46101	V933
+46151	V934
+46201	V935
+46251	V936
+46301	V937
+46351	V938
+46401	V939
+46451	V940
+46501	V941
+46551	V942
+46601	V943
+46651	V944
+46701	V945
+46751	V946
+46801	V947
+46851	V948
+46901	V949
+46951	V950
+47001	V951
+47051	V952
+47101	V953
+47151	V954
+47201	V955
+47251	V957
+47301	V958
+47351	V959
+47401	V960
+47451	V961
+47501	V962
+47551	V963
+47601	V964
+47651	V965
+47701	V966
+47751	V967
+47801	V968
+47851	V969
+47901	V970
+47951	V971
+48001	V972
+48051	V973
+48101	V974
+48151	V975
+48201	V976
+48251	V977
+48301	V978
+48351	V979
+48401	V980
+48451	V981
+48501	V982
+48551	V983
+48601	V984
+48651	V985
+48701	V986
+48751	V987
+48801	V988
+48851	V989
+48901	V990
+48951	V991
+49001	V992
+49051	V993
+49101	V994
+49151	V995
+49201	V996
+49251	V997
+49301	V998
+49351	V999
+49401	V1000
+49451	V1001
+49501	V1002
+49551	V1003
+49601	V1004
+49651	V1005
+49701	V956
+49702	V1006
+49703	V1008
+49704	V1009
+49705	V1007
+49706	V1010
+49707	V1011
+49708	V1012
+49709	V1013
+49710	V1015
+49711	V1014
+49712	V1016
+49713	V1017
+49714	V1018
+49715	V1019
+49716	V1020
+49717	V1021
+49718	V1022
+49719	V1023
+49752	V1025
+49753	V1026
+49754	V1027
+49755	V1028
+49756	V1029
+49757	V1030
+49758	V1031
+49759	V1032
+49760	V1033
+49761	V1035
+49762	V1038
+49763	V1039
+49764	V1040
+49765	V1036
+49766	V1037
+49802	V1041
+49803	V1042
+49852	V1067
+49853	V1068
+49854	V1069
+49902	V1500
+49903	V1043
+49904	V1044
+49905	V1046
+49906	V1047
+49907	V1045
+49908	V1048
+49909	V1049
+49910	V1050
+49911	V1051
+49912	V1052
+49913	V1053
+49914	V1054
+49915	V1055
+49916	V1056
+49917	V1057
+49918	V1058
+49919	V1059
+49920	V1060
+49921	V1061
+49922	V1062
+49923	V1063
+49924	V1064
+49925	V1065
+49926	V1066
+49927	V1070
+49928	V1072
+49929	V1073
+49930	V1074
+49931	v1085
+49932	V1075
+49933	V1086
+49934	V1077
+49935	V1078
+49936	V1088
+49937	V1089
+49938	V1071
+49939	1097
+49940	1096
+\.
+
+
+--
+-- Data for Name: land_survey; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.land_survey (id, address, corner, creation_date, is_archived, is_rescinded, measurements, observation, price, price_verification_date, reassessment_date, surface, unworkable, agency_id, classification, contact_id, currency_id, file_type, folder_id, locality_id, manager_id, particular_id, road_type, section_id, source, surveyor_id, zone_id, title_id) FROM stdin;
+60302	Esquina Martín Miguel de Guemes y Calle 61	t	2025-06-09 09:16:19.254306	f	f	14,44 x 30		15000	2025-06-09 09:16:19.293305	2025-06-09 09:16:19.293305	433.00	f	2251	1	39902	51	1	49752	151	9	24752	51	501	301	34	401	2301
+60303	C. 158las carmelias entre 213 y de ayohuma	f	2025-06-09 09:22:16.290457	f	f	FRENTE: 22.71M LADO DERECHO:30M LADO IZQUIERDO 31.76M FONDO 12.28M		26000	2025-06-09 09:22:16.29746	2025-06-09 09:22:16.29746	540.00	f	6051	1	9501	51	1	49753	151	9	24752	51	551	301	36	451	2301
+43551	Calle Perito Moreno esquina Mendoza 	t	2024-04-18 00:00:00	f	f	10,66 x 28,88		85000	2024-08-30 00:00:00	2024-04-18 00:00:00	307.00	f	5351	1	33051	51	1	35501	151	9	\N	51	101	51	25	401	2301
+43651	Calle 162 entre calle 121 y Av 117	t	2025-05-06 00:00:00	f	f	15 x 35		25000	2025-05-06 00:00:00	2025-05-06 00:00:00	525.00	f	9101	1	12851	51	1	35601	151	\N	\N	51	801	301	33	751	2301
+43701	Avda 147 entre c. 194 y 196-Lts 14 y 15-Precios individuales	f	2023-12-06 00:00:00	f	f	10,25x30,75		12000	2024-10-03 00:00:00	2024-04-09 00:00:00	315.00	f	5301	1	12101	51	1	35651	151	15	\N	1	1001	301	24	451	2301
+43751	Avda 147 entre c. 194 y 196-Lts 9 y 10-Precios individuales	f	2023-12-06 00:00:00	f	f	10,25x44,20		15000	2024-10-03 00:00:00	2024-04-09 00:00:00	453.05	f	5301	1	12101	51	1	35651	151	15	\N	1	1001	301	24	451	2301
+43801	Colectora Ruta 12, Candelaria Calles Sin Nombre	f	2024-08-01 00:00:00	f	f	15 x 46		32000	2024-08-01 00:00:00	2024-08-01 00:00:00	691.00	f	1301	1	15251	51	1	35701	1	23	\N	151	1251	251	22	51	2301
+43851	SAN CAYETANO ENTRE AGUIRRE FLORIDA	f	2024-03-08 00:00:00	f	f	11,50 x 32		30000	2024-12-10 00:00:00	2024-03-08 00:00:00	368.00	f	4051	1	4801	51	1	35751	51	15	10501	51	1351	301	4	51	51
+43901	Avda Tomas Guido CASI Avda Leando N Alem	f	2024-04-12 00:00:00	f	f	19 x 14,66		90000	2025-03-11 00:00:00	2024-04-12 00:00:00	278.00	f	6701	1	12601	51	1	35801	151	23	24301	1	301	51	25	401	4151
+43951	El palmar, entre Ernesto che guevara y calle sin nombre	f	2023-06-21 00:00:00	f	f	10 x 30	Puede financiar. Ent. 30% saldo hasta 30 cuotas. 27/10/23	6500	2024-12-10 00:00:00	2024-03-04 00:00:00	300.00	f	3251	1	31401	51	1	35851	51	15	\N	51	1351	301	26	201	2301
+44001	Calle Miño Entre Mayor Krause y Avda. Tambor de Tacuarí	f	2025-01-13 00:00:00	f	f	11 x 32		90000	2025-01-13 00:00:00	2025-01-13 00:00:00	352.00	f	1051	101	7701	51	51	35901	151	9	21151	51	301	251	9	1051	2301
+44101	Calle 141 esquina calle 84	t	2024-04-23 00:00:00	f	f	14,28 x 24,54		42000	2025-03-28 00:00:00	2024-04-23 00:00:00	350.00	f	4501	1	28851	51	1	36001	151	15	\N	51	901	301	25	451	2301
+44151	Estado de Israel entre Maipu y Chubut	f	2023-06-15 00:00:00	f	f	14 x 20	Detuvo la venta por el momento. 27-2-24. Sigue con la venta parada 21-3-25	80000	2025-03-21 00:00:00	2024-02-27 00:00:00	280.00	t	6701	1	22501	51	1	36051	151	23	6851	51	101	51	22	401	2301
+44201	Belgrano entre Colón y San Lorenzo	f	2023-06-09 00:00:00	f	f	Frente 11,05x43,75, Fondo 10,85x43,75	No define precio por el momento. 18/10/23	350000	2023-10-18 00:00:00	2023-10-18 00:00:00	479.00	t	3451	1	31701	51	1	36101	151	23	\N	51	1	51	22	551	2301
+44451	Avda Santa Cruz e/ calle Ramirez y Avda Santa Catalina 	f	2023-03-09 00:00:00	f	f	10 x 40		80000	2025-01-27 00:00:00	2024-03-26 00:00:00	400.00	f	4051	1	18451	51	1	36301	151	2	19951	1	401	51	4	1051	2301
+44501	Calle m ramiez entre calle 81 y calle cte miño	f	2023-11-13 00:00:00	f	f	10,50 x 44		133000	2024-10-03 00:00:00	2024-01-17 00:00:00	462.00	f	6701	1	5501	51	1	36351	151	21	15401	51	301	51	24	1101	2301
+44551	Avda Trincheras de San Jose entre Avda Uruguay y Fco de Haro	f	2025-01-13 00:00:00	f	f	17,32 x 51,96		180000	2025-01-13 00:00:00	2025-01-13 00:00:00	899.95	f	1051	101	14651	51	51	36401	151	9	17101	1	51	251	9	451	2301
+44601	Barrio Santa Cecilia-Lt. 136	t	2022-07-04 00:00:00	f	f	10.75x4.53x49.91x41.67x16.12x21.85 		38300	2022-07-04 00:00:00	2022-07-04 00:00:00	1255.00	f	1051	1	15951	51	1	36451	1	1	13001	51	1251	301	13	1	2301
+44051	Barrio Santa Cecilia-Lt.152	f	2022-06-13 00:00:00	f	f	30 x 40		0	2024-08-30 00:00:00	2024-03-08 00:00:00	1200.00	f	951	1	6701	1	1	35951	1	23	\N	51	1251	301	13	1	2301
+44251	Calle SN Mz. 76 lotes 21 y 22 - La Esperanza-Precio conjunto	f	2024-04-18 00:00:00	f	f	2 x (20 x 32)	Boleto con titulares fallecidos. 27-6-24	0	2024-06-27 00:00:00	2024-04-18 00:00:00	1280.00	t	6701	1	21251	1	1	36151	51	23	15601	51	1351	251	22	351	251
+60304	CALLE 123, ENTRE CALLE 176 Y CALLE 178. POSADAS	f	2025-06-09 09:44:50.556041	f	f	10 x 30		15500	2025-06-09 09:44:50.556041	2025-06-09 09:44:50.556041	300.00	f	6701	1	39904	51	1	24151	151	9	24803	51	801	301	35	1051	2301
+18151	AV. ALBERTO ROTH, ESQUINA CALLE IRUPE	f	2021-09-13 00:00:00	f	f	12 x 37	Escucha ofertas de contado 23-10-24	220000	2025-06-09 09:41:05.09706	2021-09-13 03:00:00	444.00	f	4051	1	39903	51	1	13651	51	9	24802	51	1351	301	35	51	2301
+20951	B° Los Teros	f	2023-09-21 00:00:00	f	f	10,80 x 43,30		8200	2025-06-06 10:50:35.903188	2023-09-21 03:00:00	464.00	f	1051	151	17851	51	51	16151	1	15	5001	51	1251	251	26	51	2301
+44651	Calle Oro Verde esquina Las Rosas - Don Darío-2 Lotes-Precio bloque	t	2024-06-19 00:00:00	f	f	10 x 30		26000	2024-10-04 00:00:00	2024-06-19 00:00:00	300.00	f	2401	1	25701	51	1	36501	51	23	\N	51	1351	301	22	101	2301
+44701	Calle Oro Verde esquina Las Rosas - Don Darío-Precios individuales	t	2024-06-19 00:00:00	f	f	10 x 30		15000	2024-10-04 00:00:00	2024-06-19 00:00:00	300.00	f	2401	1	25701	51	1	36501	51	23	\N	51	1351	301	22	101	2301
+44751	Calle Oro Verde esquina Las Rosas - Don Darío-Precios individuales	f	2024-06-19 00:00:00	f	f	10 x 30		15000	2024-10-04 00:00:00	2024-06-19 00:00:00	300.00	f	2401	1	25701	51	1	36501	51	23	\N	51	1351	301	22	101	2301
+44801	Calle pedro correa entre Av. centenario y calle acevedo	f	2023-11-13 00:00:00	f	f	9,40 x 50		120000	2024-10-23 00:00:00	2024-03-28 00:00:00	470.00	f	4101	1	13351	51	1	36551	151	2	\N	51	301	51	24	1051	2301
+43601	Hipolito irigoyen esquina calle Sarmiento	t	2025-05-02 00:00:00	f	f	12,50 x 25		25000000	2025-07-04 14:02:56.78526	2025-05-02 03:00:00	312.00	f	6701	1	19201	1	1	35551	51	9	7701	51	1351	301	33	201	51
+44851	Calle Suecia entre calle Herrera y Perito Moreno	f	2024-04-19 00:00:00	f	f	15 x 25		150000	2024-12-19 00:00:00	2024-04-19 00:00:00	375.00	f	2601	1	30701	51	1	36601	151	23	\N	51	101	51	25	401	2301
+44901	Avda Las Heras Casi Avda Santa cruz	f	2024-04-23 00:00:00	f	f	12 x 30		70000	2024-08-28 00:00:00	2024-04-23 00:00:00	360.00	f	6451	1	12951	51	1	36651	151	15	\N	1	751	301	25	751	2301
+44951	Avda Las Heras esquina Avda Santa cruz	t	2024-04-23 00:00:00	f	f	12 x 30		73000	2024-08-28 00:00:00	2024-04-23 00:00:00	360.00	f	6451	1	12951	51	1	36651	151	15	\N	1	751	301	25	751	2301
+45001	lote detrás del yaguar, sin calles	f	2023-09-13 00:00:00	f	f	52 x 54 x 48 x 70		45000	2024-01-18 00:00:00	2024-01-18 00:00:00	3162.00	f	6701	1	13251	51	1	36701	151	9	10851	51	501	301	26	401	2301
+45101	Colectora acceso sur entre calle los paraisos y callle Gatti- 4 lotes de 10 x 30 c/u-Precio Bloque	f	2025-05-07 00:00:00	f	f	(10 x 30) x 4		220000	2025-05-07 00:00:00	2025-05-07 00:00:00	1200.00	f	6701	1	18801	51	1	36801	51	\N	23901	51	1351	51	36	51	2301
+45151	Colectora acceso sur entre calle los paraisos y callle Gatti- 4 lotes de 10 x 30 c/u-Precios individuales	f	2025-05-07 00:00:00	f	f	(10 x 30) x 4		220000	2025-05-07 00:00:00	2025-05-07 00:00:00	1200.00	f	6701	1	18801	51	1	36801	51	\N	23901	51	1351	51	36	51	2301
+45201	CALLE SIN NOMBRE CASI CALLE SARANDI	t	2024-12-27 00:00:00	f	f	10 x 30		8000	2024-12-27 00:00:00	2024-12-27 00:00:00	300.00	f	1051	101	22801	51	1	36851	1	23	9951	51	1251	301	4	51	2301
+45251	Calle Chile entre Posadas y Las Araucarias 	f	2024-11-21 00:00:00	f	f	10,69 x 24,76		55000	2024-11-21 00:00:00	2024-11-21 00:00:00	283.00	f	8451	1	4501	51	1	36901	151	14	\N	51	651	51	32	451	2301
+45301	Avda Sta Catalina y Calle Parodi casi Avda Chacabuco	t	2023-11-14 00:00:00	f	f	10,82 x 32,47	No define precio por el momento. 4/4/24	165000	2024-04-04 00:00:00	2024-04-04 00:00:00	351.00	t	2901	1	8101	51	1	36951	151	9	\N	1	351	51	24	751	2301
+45351	BENAVIDEZ ENTRE LANUSSE Y AV ROQUE SAENZ PEÑA	f	2022-10-21 00:00:00	f	f	8,66 x 27,42		150000	2024-11-12 00:00:00	2024-04-11 00:00:00	237.00	f	7251	1	33901	51	1	37001	151	2	4751	51	1	51	13	1251	4301
+45401	Calle Taruma entre Palo Rosa y Nogal	f	2025-05-07 00:00:00	f	f	10,60 x23,94		13000	2025-05-07 00:00:00	2025-05-07 00:00:00	254.00	f	6701	1	8751	51	1	37051	51	\N	23101	51	1351	301	33	151	2301
+45451	Calle 196 y calle 137A-Precio Bloque	t	2025-05-07 00:00:00	f	f	(10 x 30) x 5		170000	2025-05-07 00:00:00	2025-05-07 00:00:00	1500.00	f	4751	1	8201	51	1	37101	151	\N	\N	51	1001	301	33	451	2301
+45501	Calle 196 y calle 137A-Precios individuales	t	2025-05-07 00:00:00	f	f	(10 x 30) x 5		170000	2025-05-07 00:00:00	2025-05-07 00:00:00	1500.00	f	4751	1	8201	51	1	37101	151	\N	\N	51	1001	301	33	451	2301
+45551	AvdaSalvador Miqueri, entre Avda cocomarola y cmte. Medrano	f	2023-09-11 00:00:00	f	f	13 x 59	No acepta financiacion. El lote es de su marido.	70000	2025-05-09 00:00:00	2024-01-09 00:00:00	767.00	f	6701	1	14301	51	1	37151	151	9	10251	1	551	301	26	401	2301
+45601	Pasaje 119a esquina Pasaje 22 -Precio bloque	f	2022-07-21 00:00:00	f	f	38.46X55.53X27.37X54.40		360000	2024-08-06 00:00:00	2024-03-28 00:00:00	1790.00	f	6701	1	9101	51	1	37201	151	14	10401	51	651	51	13	401	2301
+45651	Pasaje 119a esquina Pasaje 22 -Precios individuales	f	2022-07-21 00:00:00	f	f	38.46X55.53X27.37X54.40		360000	2024-10-25 00:00:00	2024-03-28 00:00:00	1790.00	f	6701	1	9101	51	1	37201	151	14	10401	51	651	51	13	401	2301
+45701	Avda Juan Maza esquina calle 69-Precio conjunto	t	2024-05-02 00:00:00	f	f	37 x 76		180000	2024-05-02 00:00:00	2024-05-02 00:00:00	2732.00	f	401	1	19301	51	1	37251	151	9	\N	1	551	51	25	401	2301
+49801	Liniers entre Mariano Moreno y Manuel Belgrano	f	2023-03-15 00:00:00	f	f	11 x 50	No atiende los llamados. 12-7-23	0	2025-06-06 10:50:00.892674	2023-03-15 03:00:00	550.00	t	2551	1	34401	1	1	40701	1	2	24752	51	1251	301	5	51	2301
+60305	Godoy entre Coco Ripol y Hugo Chavez-Barrio Don Alejandro	f	2025-06-09 10:57:13.807048	f	f	10 x 25		0	2025-06-09 10:57:13.812047	2025-06-09 10:57:13.812047	250.00	f	6701	1	39905	1	1	49754	51	9	24804	51	1351	301	36	201	51
+45751	Avda Juan Maza esquina calle 69-Precios individuales	t	2024-05-02 00:00:00	f	f	37 x 76		180000	2024-05-02 00:00:00	2024-05-02 00:00:00	2732.00	f	401	1	19301	51	1	37251	151	9	\N	1	551	51	25	401	2301
+45801	Maipú, esquina Herrera	t	2023-06-27 00:00:00	f	f	14,4 x 16		73000	2025-01-17 00:00:00	2023-10-27 00:00:00	226.00	f	8901	1	33151	51	1	37301	151	2	\N	1	51	301	26	1101	2301
+45851	Calle 79 entre Godoy Cruz y calle 146	f	2024-05-02 00:00:00	f	f	12 x 52		30000	2024-10-04 00:00:00	2024-05-02 00:00:00	624.00	f	6701	1	1251	51	1	37351	151	23	5351	51	551	51	25	451	2301
+45951	Pasaje 119 A esquina Pasaje 22-Lote 15 C	t	2022-08-10 00:00:00	f	f	16x34x33.33x9.26		90000	2025-03-11 00:00:00	2024-05-23 00:00:00	420.00	f	6701	1	9301	51	1	37401	151	14	15851	51	651	51	13	401	2301
+46001	Pasaje 119 A esquina Pasaje 22-Lote 15 D	f	2022-08-10 00:00:00	f	f	12.65x33.33		86000	2025-03-11 00:00:00	2024-05-23 00:00:00	420.00	f	6701	1	9301	51	1	37401	151	14	15851	51	651	51	13	401	2301
+46051	AV. LUCAS BRAULIO ARECO (115) ALTURA 956, ENTRE CALLE 24 Y CALLE 20 A-PRECIO BLOQUE	t	2025-05-12 00:00:00	f	f	20 x 34		140000	2025-05-12 00:00:00	2025-05-12 00:00:00	680.00	f	5551	1	33451	51	1	37451	151	\N	\N	1	651	301	35	401	2301
+46101	AV. LUCAS BRAULIO ARECO (115) ALTURA 956, ENTRE CALLE 24 Y CALLE 20 A-PRECIOS INDIVIDUALES	t	2025-05-12 00:00:00	f	f	20 x 34		140000	2025-05-12 00:00:00	2025-05-12 00:00:00	680.00	f	5551	1	33451	51	1	37451	151	\N	\N	1	651	301	35	401	2301
+46151	calle el ceibo entre calle los reales  y calle perito moreno	f	2023-03-23 00:00:00	f	f	10 x 50		33000	2024-01-10 00:00:00	2024-01-10 00:00:00	500.00	f	6701	1	2051	51	1	37501	51	9	11601	51	1351	51	6	51	2301
+45051	Av. Los Horneros entre Las Lilas y Los Jazmines	f	2025-01-22 00:00:00	f	f	9,82 x 30,16		28000	2025-07-04 12:47:07.515875	2025-01-22 03:00:00	296.00	f	6701	1	3901	51	1	36751	151	15	151	1	1201	301	32	251	51
+46201	AV CENTENARIO ENTRE 115 Y 111	f	2024-05-06 00:00:00	f	f	17 x 50		150000	2024-11-11 00:00:00	2024-05-06 00:00:00	850.00	f	7101	1	8151	51	1	37551	151	15	12801	51	651	251	4	451	2301
+46251	CALLE 143 ENTRE 194 Y 196	f	2021-05-17 00:00:00	f	f	12.38X30.09		22500	2024-11-01 00:00:00	2023-12-14 00:00:00	372.51	f	1051	201	301	51	1	37601	151	2	3701	51	1001	51	4	451	2301
+46301	Juan Franco, esquina Pedro Isaza-Precio bloque	t	2023-07-31 00:00:00	f	f	15 x 40		15000	2024-02-06 00:00:00	2024-02-06 00:00:00	600.00	f	6701	1	26601	51	1	37651	51	9	22851	51	1351	301	26	351	2301
+46351	Juan Franco, esquina Pedro Isaza-Precios individuales	t	2023-07-31 00:00:00	f	f	15 x 40		15000	2024-02-06 00:00:00	2024-02-06 00:00:00	600.00	f	6701	1	26601	51	1	37651	51	9	22851	51	1351	301	26	351	2301
+46401	Libano, entre Av Trinchera de San Jose y Cnel Felix Bogado	f	2023-03-23 00:00:00	f	f	13,3 x 45,88		200000	2024-01-09 00:00:00	2024-01-09 00:00:00	610.00	f	6701	1	35701	51	1	37701	151	9	12301	51	51	301	1	451	2301
+46451	AV. TOMAS GUIDO ALTURA 5500, EN ESQUINA CON CALLE JORGE NEWBERY-PRECIO BLOQUE	t	2025-05-12 00:00:00	f	f	26,6 x 40		260000	2025-05-12 00:00:00	2025-05-12 00:00:00	1064.00	f	4301	1	35651	51	1	37751	151	\N	\N	1	401	301	35	1051	2301
+46501	AV. TOMAS GUIDO ALTURA 5500, EN ESQUINA CON CALLE JORGE NEWBERY-PRECIOS INDIVIDUALES	t	2025-05-12 00:00:00	f	f	26,6 x 40		260000	2025-05-12 00:00:00	2025-05-12 00:00:00	1064.00	f	4301	1	35651	51	1	37751	151	\N	\N	1	401	301	35	1051	2301
+46551	Avda Martin fierro, entre C. 97 y C. 93-Son 2 lotes iguales-precios unitarios	f	2023-06-27 00:00:00	f	f	10,39x26		45000	2024-08-14 00:00:00	2024-04-08 00:00:00	270.00	f	8901	1	33151	51	1	37801	151	15	\N	1	701	301	26	451	2301
+46601	Avda Las Misiones entre Calle 41 y Calle 39-Lt.1	f	2024-07-26 00:00:00	f	f	9.24 x 31		20000	2025-01-17 00:00:00	2024-07-26 00:00:00	286.00	f	5401	1	17401	51	1	37851	151	9	\N	1	251	301	1	451	2301
+46801	Avda Las Misiones entre Calle 41 y Calle 39-Lt.9	f	2024-07-26 00:00:00	f	f	10 x 31.15		20000	2025-01-17 00:00:00	2024-07-26 00:00:00	311.00	f	5401	1	17401	51	1	37851	151	9	\N	1	251	301	1	451	2301
+46851	Avda Brown entre Tripolo y Brasil	f	2022-08-10 00:00:00	f	f	9,24 x 34,64	Sucesion sin terminar. 25-10-24	70000	2024-10-25 00:00:00	2023-06-26 00:00:00	320.00	t	6701	1	7901	51	1	37901	151	14	2501	1	351	301	13	751	4101
+46901	Avda Santa Catalina casi Blas Parera	f	2020-01-30 00:00:00	f	f	17x50		200000	2022-11-29 00:00:00	2022-11-29 00:00:00	850.00	t	6701	1	1851	51	51	37951	151	21	6151	1	351	251	11	401	2051
+46951	Angel acuña entre coronel alvarez y moritan 	f	2025-04-15 00:00:00	f	f	17,30 x 17,30		145000	2025-04-15 00:00:00	2025-04-15 00:00:00	299.29	f	2401	1	20751	51	1	38001	151	\N	\N	51	1	51	36	1051	2301
+45901	Pasaje 119 A esquina Pasaje 22-2 Lotes: 15 C y 15 D-Bloque	t	2022-08-10 00:00:00	f	f	(12.65x33.33) X 2		0	2024-11-11 00:00:00	2024-03-20 00:00:00	840.00	f	6701	1	9301	1	1	37401	151	14	15851	51	651	51	13	401	2301
+47051	Calle Santo Pipo e. Fachinal y Ruiz de Montoya	f	2023-07-25 00:00:00	f	f	10 x 30	No responde el telefono. 26-2-24	0	2024-02-26 00:00:00	2024-02-26 00:00:00	300.00	t	8801	1	6101	1	1	38101	151	9	\N	51	751	51	22	751	2301
+47501	El Palmar - Candelaria. Calles sin nombre	f	2023-07-27 00:00:00	f	f	16,65 x 34		0	2024-09-24 00:00:00	2024-04-10 00:00:00	565.00	f	1201	1	8551	1	1	38551	1	23	\N	51	1251	51	22	101	2301
+60306	AV Constitucion entre Mocona y C. Los Manantiales	f	2025-06-09 11:03:25.373754	f	f	10.29 X 31.36		29000	2025-06-09 11:03:25.389328	2025-06-09 11:03:25.389328	323.00	f	6701	1	39906	51	1	49755	151	9	24805	1	451	301	36	401	51
+47001	Avda Lopez Torres entre Mendoza y Avda Monteagudo	f	2022-07-27 00:00:00	f	f	10,51 x 30	Escuchan ofertas. 27-2-24	110000	2025-03-28 00:00:00	2024-02-27 00:00:00	315.00	f	1351	1	10851	51	1	38051	151	2	\N	1	101	301	5	751	2301
+47101	Calle Sucre entre calle Argentina y Calle Saavedra	f	2024-05-06 00:00:00	f	f	10 x 30		15000	2024-05-06 00:00:00	2024-05-06 00:00:00	300.00	f	5051	1	3901	51	1	38151	151	21	\N	51	801	301	25	401	2301
+47151	Avda Zapiola esquina Japón	t	2023-09-21 00:00:00	f	f	9,20 x 36,80	Boleto. No Conoce al titular registral. El titulo esta en una inmobiliaria por Salta esta en trámite. 18-3-25	40000	2025-03-18 00:00:00	2023-12-07 00:00:00	339.00	f	6701	1	12201	51	1	38201	151	23	351	1	751	251	22	1051	801
+47201	Calle Zabala e. Lorenzini y Japon	f	2023-07-24 00:00:00	f	f	9,20 x 36,8		45000	2024-09-16 00:00:00	2024-05-09 00:00:00	337.00	f	2751	1	31751	51	1	38251	151	15	\N	51	751	301	22	751	2301
+47251	Calle Rocamora casi calle Peyret	f	2024-04-10 00:00:00	f	f	10,82x34.64		60000	2024-04-10 00:00:00	2024-04-10 00:00:00	375.00	f	7801	1	31501	51	1	38301	151	21	\N	51	351	51	25	451	2301
+47301	Calle 239 entre Calle 46 y Calle 48 (Nemesio Parma)	f	2024-09-25 00:00:00	f	f	17 x 27,34		27000	2025-01-27 00:00:00	2024-09-25 00:00:00	465.00	f	1901	1	27201	51	1	38351	151	2	\N	51	1151	301	27	1451	2301
+47351	AVILA ENTRE SAN JUAN Y MENDOZA	f	2024-02-07 00:00:00	f	f	10,82 x 33,45	No definen la venta los herederos. 29-8-24	60000	2024-08-29 00:00:00	2024-06-11 00:00:00	362.00	t	6701	1	2301	51	1	38401	151	23	1401	51	401	51	4	401	2901
+47401	Calle Las Flores entre Yerbal y Los Pinos	f	2019-08-19 00:00:00	f	f	10 x 30	Puede recibir 50% y el saldo financir a definir plazo y tasa	20000	2025-05-12 00:00:00	2024-03-19 00:00:00	300.00	f	6701	1	701	51	51	38451	51	14	7551	51	1351	\N	4	51	2301
+47451	Avda Lopez Torres, entre Monteagudo y Mendoza	f	2022-01-31 00:00:00	f	f	10,51 x 30		170000	2024-12-10 00:00:00	2024-03-26 00:00:00	315.00	f	2401	1	19251	51	1	38501	151	15	\N	1	101	51	5	751	2301
+47551	Parodi entre Gomez Portiño y Morcillo-2 lotes-precio bloque	f	2024-12-05 00:00:00	f	f	8,60 x 37		80000	2024-12-05 00:00:00	2024-12-05 00:00:00	320.00	f	1851	1	9051	51	1	38601	151	14	\N	51	351	51	32	751	2301
+47601	Parodi entre Gomez Portiño y Morcillo-2 lotes-precios individuales	f	2024-12-05 00:00:00	f	f	8,60 x 37		80000	2024-12-05 00:00:00	2024-12-05 00:00:00	320.00	f	1851	1	9051	51	1	38601	151	14	\N	51	351	51	32	751	2301
+47751	Avda Centenario esquina Avda San Martin	t	2023-09-20 00:00:00	f	f	11,66 x 28,76 x 10,20 x 32,30	No responde. 18-3-25	170000	2025-03-18 00:00:00	2024-02-02 00:00:00	317.00	f	6701	1	26801	51	1	38701	151	21	20101	1	301	51	22	1051	2301
+47801	CALLE MBURUCUYA ENTRE COLECTORA Y PERITO MORENO	f	2025-01-02 00:00:00	f	f	10 x 50		75000	2025-01-02 00:00:00	2025-01-02 00:00:00	500.00	f	6701	1	16851	51	1	38751	51	14	11501	51	1351	301	4	51	51
+47851	Calle Tripoli entre calle Paraje Brasil y calle Avila	f	2024-04-23 00:00:00	f	f	7 x 35		65000	2024-09-05 00:00:00	2024-04-23 00:00:00	241.00	f	4051	1	29651	51	1	38801	151	23	2051	51	351	301	25	451	2301
+47901	Hipolito Yrigoyen e. Av. Centenario y Av. Tomas Guido	f	2023-07-21 00:00:00	f	f	8,66 x 36,80		85000	2025-03-27 00:00:00	2024-04-04 00:00:00	319.00	f	1201	1	28251	51	1	38851	151	9	\N	51	301	301	22	1101	2301
+47951	Coronel Alvarez Esquina Roque Gonzalez	t	2023-07-21 00:00:00	f	f	10.60 x 18 ; 13.75 x 15.59  ; Esquina 6 m. 		200000	2025-03-27 00:00:00	2024-04-04 00:00:00	410.00	f	1201	1	28251	51	1	38901	151	9	\N	51	1	301	22	1051	2301
+48001	CALLE 178 ENTRE AV 117 Y AV 213	f	2022-10-06 00:00:00	f	f	17 x 92	No quiere que la llamen las inmobiliarias. 8-8-24. No quiere que la llamen las inmobiliarias. 8-10-24.	50000	2024-10-08 00:00:00	2024-02-21 00:00:00	1380.00	t	6701	1	7651	51	1	38951	151	14	4651	51	801	51	13	751	51
+48051	CALLE 176 A entre CALLE 89 Y CALLE 85	f	2022-10-11 00:00:00	f	f	10,60 x 30	No quiere que la llamen inmobiliarias. 4-6-24. No llamen inmobiliarias. 29-8-24	25000	2024-11-13 00:00:00	2024-06-04 00:00:00	318.00	t	6701	1	18401	51	1	39001	151	25	16651	51	801	51	13	751	2301
+48101	Angel acuña entre Pedernera e Ivanoski (Casi Al lado del Guarani)	f	2025-04-16 00:00:00	f	f	12,40 x 43,30		200000	2025-04-16 00:00:00	2025-04-16 00:00:00	537.00	f	6701	1	30301	51	1	39051	151	\N	\N	51	1	51	36	1051	2301
+48151	Calle Perito Moreno esquina Noruega 	t	2024-04-18 00:00:00	f	f	10,50 x 42		140000	2024-04-18 00:00:00	2024-04-18 00:00:00	441.00	f	4851	1	17201	51	1	39101	151	9	\N	51	101	51	25	401	2301
+47651	Calle 104 entre Av Aguado y Gotischalk (97)	f	2022-09-01 00:00:00	f	f	20 x 31,18		0	2024-12-10 00:00:00	2024-03-12 00:00:00	623.00	f	2701	1	10501	1	1	38651	151	15	\N	51	751	301	13	751	2301
+60311	CALLE NAPOLEON AYRAULT, ENTRE AV. COSTANERA Y CALLE 25 DE MAYO-Son 2 lotes-Precios unitarios	f	2025-06-09 11:22:21.9389	f	f	10 x 30		8500	2025-06-09 11:22:21.940902	2025-06-09 11:22:21.940902	300.00	f	9303	1	39910	51	1	49760	51	9	24752	51	1351	301	35	201	2301
+6751	San Mracos ENTRE San Ramon y La Plaza	f	2024-03-25 00:00:00	f	f	10 x 40		7500	2025-06-09 11:09:49.340097	2024-03-25 03:00:00	400.00	t	1051	201	3251	51	1	5251	51	21	6251	51	1351	51	1	251	151
+42951	ALMEIDA ENTRE OCEANO TLANTICO Y CUENCA	f	2023-12-04 00:00:00	f	f	15 x 20	Recibe vehículo pero el precio seria USD 28000	30000	2025-06-09 11:24:31.811687	2023-12-04 03:00:00	300.00	f	4051	1	6751	51	1	34951	151	15	18951	51	251	301	4	751	51
+48201	CALLE 195 ENTRE 112 Y 114	f	2022-10-12 00:00:00	f	f	10 x 43		20000	2024-03-20 00:00:00	2024-03-20 00:00:00	430.00	f	6701	1	21651	51	1	39151	151	9	20151	51	1151	51	13	\N	2301
+48251	22 DE DICIEMBRE ENTRE SARGENTO BRITEZ Y SANTA CATALINA-Precio bloque	t	2022-09-28 00:00:00	f	f	20 x 30		150000	2024-12-10 00:00:00	2024-03-26 00:00:00	600.00	f	1251	1	25251	51	1	39201	151	15	\N	51	301	301	4	751	2301
+48301	22 DE DICIEMBRE ESQUINA SARGENTO BRITEZ- Z/ SANTA CATALINA-Precios individuales	t	2022-09-28 00:00:00	f	f	20 x 30		150000	2024-12-10 00:00:00	2024-03-26 00:00:00	600.00	f	1251	1	25251	51	1	39201	151	15	\N	51	301	301	4	751	2301
+48351	calle 135 A  entre c144 y calle 142 	f	2025-05-14 00:00:00	f	f	15 x 30		18000	2025-05-14 00:00:00	2025-05-14 00:00:00	450.00	f	6701	1	17651	51	1	39251	151	\N	20251	51	1001	301	36	401	2301
+48401	Golfo San Matias entre Lago Nahuel Huapi y Sgto. Acosta	f	2024-04-12 00:00:00	f	f	12,75 x 30		20000	2024-12-03 00:00:00	2024-04-12 00:00:00	382.00	f	6701	1	1401	51	1	39301	151	21	10651	51	551	251	22	1051	2301
+48451	moritan entre arrechea y coronel reguera	f	2025-04-15 00:00:00	f	f	7,80 x 20		100000	2025-04-15 00:00:00	2025-04-15 00:00:00	157.00	f	5101	1	9151	51	1	39351	151	\N	\N	51	1	51	36	1051	2301
+48501	Calle Los Paraisos entre Juncal y Los Helechos	f	2024-04-18 00:00:00	f	f	10 x 30		15000	2025-03-19 00:00:00	2024-04-18 00:00:00	300.00	t	6701	1	2801	51	1	39401	51	23	17451	51	1351	251	22	51	3401
+48551	Calle 84 y esquina Cucchiaroni	t	2023-05-16 00:00:00	f	f	6.00x17.41x16.64x21.65x12.40		25000	2024-11-21 00:00:00	2024-02-09 00:00:00	180.00	f	5101	1	28601	51	1	39451	151	15	\N	51	351	51	26	1051	2301
+48601	COLECTORA RUTA 12 ENTRE  CALLE 246 Y 49 	f	2022-10-19 00:00:00	f	f	15 x 43		75000	2023-07-12 00:00:00	2023-07-12 00:00:00	731.00	t	6701	1	4301	51	1	39501	151	23	18251	151	501	301	4	751	2151
+48651	Avda Mitre entre Colón y San Lorenzo 	f	2024-11-25 00:00:00	f	f	14 x 33		350000	2025-03-11 00:00:00	2024-11-25 00:00:00	462.00	f	6701	1	11651	51	1	39551	151	9	13401	1	1	51	32	601	2301
+48701	CALLE 124 ENTRE COSTANERA Y LOPEZ TORRES	f	2022-11-02 00:00:00	f	f	10 x 30	Tiene una turbación. 13-6-24	70000	2024-06-13 00:00:00	2024-06-13 00:00:00	300.00	t	4051	1	5151	51	1	39601	151	9	7251	51	101	301	4	751	2301
+48751	Av. Alberto Roth entre Las Flores y Los Claveles (40)	f	2019-07-12 00:00:00	f	f	10,50 x 32,50	No da informacion. 20-10-23	13000	2023-10-20 00:00:00	2023-10-20 00:00:00	341.25	t	5551	1	101	51	51	39651	51	9	\N	51	1351	51	4	51	2301
+48801	Avda Alberto Roth entre Las Flores y Los ClAvdaeles (43-44-45)	f	2019-07-12 00:00:00	f	f	10,85 x 30	No da informacion. 20-10-23	15000	2023-10-20 00:00:00	2023-10-20 00:00:00	325.50	t	5551	1	101	51	51	39651	51	9	\N	1	1351	51	4	51	2301
+48851	Avda San Martin entre calle Pablo Allain y Avda Lopez y Planes 	f	2024-04-26 00:00:00	f	f	10,80 x 36,20		130000	2024-12-13 00:00:00	2024-04-26 00:00:00	390.00	f	6901	1	501	51	1	39701	151	23	9401	1	651	\N	25	1051	\N
+48901	COLECTORA ACCESO SUR ENTRE JAZMINES E IRUPE-Son 4 lotes-Precios individuales	f	2023-01-02 00:00:00	f	f	12 x 50		100000	2024-11-11 00:00:00	2024-04-15 00:00:00	600.00	f	6701	1	13051	51	1	39751	51	14	3901	151	1351	51	4	51	2301
+48951	Soldado Argentino, entre Gran Malvina y Puerto Argentino	f	2022-04-29 00:00:00	f	f	9,20 x 40	Atiende muy mal. Mal trato.	23000	2024-11-13 00:00:00	2024-01-23 00:00:00	365.00	f	1051	51	33801	51	1	39801	151	2	15901	51	251	51	5	751	2301
+49001	CALLE 104 ENTRE POSADAS Y ARAUCARIAS	f	2024-04-05 00:00:00	f	f	10 x 31,18		45000	2024-10-16 00:00:00	2024-04-05 00:00:00	312.00	f	4551	1	10951	51	1	39851	151	2	\N	51	751	301	4	751	2301
+49051	NICOLAS GONZALES Y DALMACIO GIMENEZ	t	2024-04-05 00:00:00	f	f	15 x 40		15000	2025-01-23 00:00:00	2024-04-05 00:00:00	600.00	f	2551	1	7851	51	1	39901	51	2	\N	51	1351	51	4	351	2301
+49101	CALLE SIN NOMBRE ENTRE SALOMON AMIEL Y RUTA 204	f	2024-05-06 00:00:00	f	f	12,50 x 37,50		11000	2024-08-29 00:00:00	2024-05-06 00:00:00	469.00	f	6701	1	18101	51	1	39951	1	14	901	51	1251	301	4	51	2301
+49151	Avda Bustamante, entre Calle 95 y Araucarias	f	2022-05-17 00:00:00	f	f	10 x 31,18		44000	2022-05-17 00:00:00	2022-05-17 00:00:00	312.00	f	1051	101	9601	51	1	40001	151	23	7651	1	751	301	5	751	2301
+49201	Ruta 105 entre Triburcio y Tomas - 2 lotes - Precios individuales	f	2022-10-17 00:00:00	f	f	15 x 40		30000	2024-10-08 00:00:00	2024-04-11 00:00:00	600.00	f	6701	1	22751	51	1	40051	51	2	23801	151	1351	51	5	351	2301
+49251	Avda Tomas Guido esquina Paraguay	t	2023-05-30 00:00:00	f	f	12 x 37,60		170000	2025-03-18 00:00:00	2024-04-16 00:00:00	451.00	f	6701	1	7451	51	1	40101	151	21	22651	1	301	301	22	1101	3551
+60308	CALLE 106, ENTRE AV. AGUADO Y CALLE SEMILLA. POSADAS	f	2025-06-09 11:15:24.194469	f	f	10 x 36		40000	2025-06-09 11:15:24.19747	2025-06-09 11:15:24.19747	360.00	f	9302	1	39908	51	1	49757	151	9	24752	51	751	301	35	1051	2301
+49301	10 de Junio esq Isla San Pedro	t	2022-07-13 00:00:00	f	f	10 x 40	19-9-22 - Está en dudas del precio, quiere todo en limpio, no quiere pagar los impuestos y es medio mal hablado. 12-12-22 No tiene plano aprobado	30000	2024-12-20 00:00:00	2022-11-17 00:00:00	400.00	f	7201	1	15101	51	1	40151	151	2	\N	51	251	251	5	751	2301
+49351	Calle sin nombre entre calles Arroyo Curupaiti y Arroyo Cuñapiru-Precios individuales-Son 5 lotes	f	2023-04-14 00:00:00	f	f	12,50 x 50		22000	2024-09-24 00:00:00	2024-01-18 00:00:00	625.00	f	4851	1	36901	51	1	40201	1	23	\N	51	1251	51	20	101	2301
+49451	Barrio Privado Panambi	f	2023-05-31 00:00:00	f	f	15 x 20	Contesta mal y no muestra los papeles. Mala predispocion. 7-11-23	40000	2023-11-07 00:00:00	2023-11-07 00:00:00	300.00	t	4051	1	27551	51	1	40301	151	9	20401	51	801	51	26	451	2301
+49501	Calle 31B entre Tierra de Fuego y Calle 122	f	2022-05-23 00:00:00	f	f	8 X 23		45000	2025-03-27 00:00:00	2024-03-28 00:00:00	184.00	f	301	1	29451	51	1	40351	151	2	\N	51	101	301	5	1051	2301
+49551	Gorriti entre Calle 170 y Cabo de Hornos	f	2022-05-23 00:00:00	f	f	14 x 34,80		16000	2024-12-10 00:00:00	2024-03-26 00:00:00	487.00	f	8651	1	251	51	1	40401	151	15	\N	51	551	301	5	751	2301
+49601	San Martin entre Rivadavia y 3 de Febrero	f	2022-05-23 00:00:00	f	f	17,50 x 40		1000000	2024-12-10 00:00:00	2024-04-08 00:00:00	700.00	f	8651	1	251	51	1	40451	151	15	\N	51	1	301	5	501	2301
+49651	AV. JUAN DOMINGO PERON, ENTRE CALLE GOLFO SAN CARLOS Y CALLE AMERICA LATINA. 	f	2025-05-12 00:00:00	f	f	18 x 50		140000	2025-05-12 00:00:00	2025-05-12 00:00:00	900.00	f	4301	1	35651	51	1	40501	151	\N	\N	1	251	301	35	451	2301
+49751	Calle 174 entre Nicolas Avellaneda y Antonio Alvarez-Son 2 lotes-precios individuales	f	2022-09-27 00:00:00	f	f	10,63 x 31,25		15000	2024-08-15 00:00:00	2024-02-23 00:00:00	332.00	f	8201	1	22451	51	1	40651	151	2	18401	51	551	301	5	751	2301
+49851	Calle 79 Esquina Godoy Cruz	t	2023-07-03 00:00:00	f	f	12 x 36,5		45000	2024-08-06 00:00:00	2024-04-10 00:00:00	438.00	f	6701	1	3401	51	1	40801	151	14	7001	51	551	51	22	451	2301
+49901	Salta entre Felix de Azara y Buenos Aires	f	2022-06-30 00:00:00	f	f	11,40 x 28,70		280000	2024-08-16 00:00:00	2024-02-27 00:00:00	327.00	f	4501	1	32401	51	1	40851	151	2	\N	51	1	301	5	601	2301
+49951	Avda Tomas Guido entre Andresito y Francia-Precio bloque	t	2024-05-13 00:00:00	f	f	25x45x35		180000	2024-05-13 00:00:00	2024-05-13 00:00:00	1440.00	f	3901	1	35451	51	1	40901	151	9	21851	1	401	301	25	1051	2301
+50001	Avda Tomas Guido entre Andresito y Francia-Precios individuales	t	2024-05-13 00:00:00	f	f	25x45x35		180000	2024-05-13 00:00:00	2024-05-13 00:00:00	1440.00	f	3901	1	35451	51	1	40901	151	9	21851	1	401	301	25	1051	2301
+50101	calle 20A, entre calle 127 y jaureche.	f	2025-04-28 00:00:00	f	f	17 x 36.80		140000	2025-04-28 00:00:00	2025-04-28 00:00:00	626.00	f	6701	1	17451	51	1	41001	151	\N	\N	51	851	51	34	401	2301
+50151	Av Los Lirios esquina Av. Los Jilgueros	t	2025-01-23 00:00:00	f	f	9,40 x 37,95		120000	2025-01-23 00:00:00	2025-01-23 00:00:00	356.00	f	6701	1	31801	51	1	41051	151	15	21051	1	1201	51	32	\N	2301
+50251	Horacio Quiroga esquina Saltos de Moconá -Precio bloque	t	2024-11-12 00:00:00	f	f	25,15 x 50x27,96x47,17   		40000	2024-11-12 00:00:00	2024-11-12 00:00:00	1394.00	f	9051	1	8701	51	1	41151	51	14	\N	51	1351	51	32	51	2301
+50301	Horacio Quiroga esquina Saltos de Moconá -Precios individuales	t	2024-11-12 00:00:00	f	f	25,15 x 50x27,96x47,17   		40000	2024-11-12 00:00:00	2024-11-12 00:00:00	1394.00	f	9051	1	8701	51	1	41151	51	14	\N	51	1351	51	32	51	2301
+50351	Avila entre Av. Santa Cruz y Japón 	f	2024-11-29 00:00:00	f	f	9,20 x 36,80		35000	2024-11-29 00:00:00	2024-11-29 00:00:00	338.00	f	751	1	6801	51	1	41201	151	14	\N	51	401	51	32	751	2301
+50401	Avda Costanera Oeste e/ Pasaje 80 A y Pasaje 78 A	f	2024-05-30 00:00:00	f	f	15,46 x 24,22 x 7,12 x 33,82		25000	2024-11-28 00:00:00	2024-05-30 00:00:00	330.00	f	4051	1	14351	51	1	41251	151	2	7901	1	901	301	2	\N	2301
+50451	Calle Irupe casi Oro Verde	f	2024-05-21 00:00:00	f	f	12,50 x 50		16500	2024-05-21 00:00:00	2024-05-21 00:00:00	625.00	f	1051	201	15651	51	51	41301	51	14	1551	51	1351	251	14	51	2301
+50501	Avda Mitre entre Hungria y San  Marcos 	f	2024-07-11 00:00:00	f	f	12,45 x 43,30		300000	2024-11-25 00:00:00	2024-07-11 00:00:00	540.00	f	5951	1	31451	51	1	41351	151	2	\N	1	51	51	27	401	2301
+60307	18 de agosto entre constitucion y palermo-Loteo Don Claudio	t	2025-06-09 11:13:16.471359	f	f	10 x 33,90		0	2025-06-09 11:13:16.478474	2025-06-09 11:13:16.478474	339.00	f	6701	1	39907	1	1	49756	51	9	2001	51	1351	301	33	251	2301
+60312	Pingles entre uruguay y balbin	f	2025-06-09 11:26:51.006239	f	f	10 x 37,05		0	2025-06-09 11:26:51.00924	2025-06-09 11:26:51.00924	370.00	f	6701	1	39911	1	1	49761	1	9	24807	51	1251	301	36	51	2301
+49701	Calle Sgto, Cabral esquina Avda Manuel Belgrano	t	2023-07-31 00:00:00	f	f	10 x 33		0	2024-09-16 00:00:00	2024-05-14 00:00:00	330.00	f	951	1	38351	1	1	40601	1	23	\N	1	1251	51	22	51	2301
+60309	CALLE RIO GALLEGOS ALTURA 2185, ENTRE COLECTORA AV, TULO LLAMOSAS Y CALLE GEORGIAS DEL SUR.	f	2025-06-09 11:17:36.901533	f	f	14 x 25		26000	2025-06-09 11:17:36.904533	2025-06-09 11:17:36.904533	350.00	f	6701	1	39909	51	1	49758	151	9	24806	51	251	301	35	401	2301
+60310	Entre calle 176 sobre Nicolas avellaneda  y calle sin nombre (tambien con salida)	f	2025-06-09 11:20:24.76834	f	f	12 x 42,64		24000	2025-06-09 11:20:24.773336	2025-06-09 11:20:24.773336	511.68	f	8901	1	19501	51	1	49759	151	9	24752	51	551	301	33	751	2301
+7951	calle 164 entre calle brasilia y calle potosi - 2 Lts	f	2023-04-24 00:00:00	f	f	12.64 x 25.84		15000	2024-12-10 00:00:00	2024-05-09 00:00:00	327.00	f	7551	1	1201	51	1	6051	151	9	\N	51	801	301	1	401	2301
+8001	Avda Iguazu casi Calle Cuñapiru  (son 2 lotes-precios unitarios)	f	2024-06-04 00:00:00	f	f	13,36 x 33,40		25000	2025-05-09 00:00:00	2024-06-04 00:00:00	446.00	f	5651	1	5851	51	1	6101	1	14	\N	1	1251	301	25	101	2301
+50551	Amalia Vera entre Luchessi y F. Ameghino 	f	2024-12-04 00:00:00	f	f	11,55 x 37		70000	2024-12-04 00:00:00	2024-12-04 00:00:00	425.00	f	8551	1	12801	51	1	41401	151	14	\N	51	351	51	32	751	2301
+50601	Zona ByPass atrás de Mercedez Benz	f	2024-05-08 00:00:00	f	f	27 hectareas		180000	2024-10-25 00:00:00	2024-05-08 00:00:00	27000.00	f	1751	1	27151	51	1	41451	151	15	\N	51	501	301	25	751	2301
+50651	LOS ENPINILLOS Y SAN IGNACIO	t	2024-05-22 00:00:00	f	f	9,20 x 36,80	Pide 36.000 en mano, y el 3% aparte de la comisión para nosotros quiere que un asesor se comunique con ella. 11/3/25	36000	2025-05-29 08:15:50.275754	2024-05-22 03:00:00	338.00	f	6701	1	5351	51	1	41501	151	14	1601	51	751	251	4	451	2301
+50801	Calle 10 de Junio entre Oceano Atlantico y Cuenca Cabo Primero	f	2024-08-01 00:00:00	f	f	10 x 35		23000	2024-12-04 00:00:00	2024-08-01 00:00:00	350.00	f	1051	201	23351	51	1	41651	151	14	16851	51	251	301	25	451	2301
+50851	Calle Hungría entre Av. San Marcos y Ojo de Agua	f	2024-05-20 00:00:00	f	f	18 x 26,50	No quiere trabajar con inmobiliarias. 11-12-24	170000	2024-12-11 00:00:00	2024-05-20 00:00:00	477.00	t	6701	1	20401	51	1	41701	151	14	20851	51	51	251	22	451	3551
+50901	Calle 136 esquina calle 175 Bº Tacuaritas-Precio bloque	t	2024-05-10 00:00:00	f	f	50 x 50		50000	2024-09-16 00:00:00	2024-05-10 00:00:00	2491.00	f	8101	1	18901	51	1	41751	151	15	\N	51	1151	301	25	\N	2301
+50951	Calle 136 esquina calle 175 Bº Tacuaritas-Precios individuales	t	2024-05-10 00:00:00	f	f	50 x 50		50000	2024-09-16 00:00:00	2024-05-10 00:00:00	2491.00	f	8101	1	18901	51	1	41751	151	15	\N	51	1151	301	25	\N	2301
+51001	CALLE ESTEBAN BRUERA, ENTRE CALLE CASIMIRO MARTINEZ Y CALLE JOSUE WEBER	f	2025-05-12 00:00:00	f	f	10,44 xx 45,67		20000	2025-05-12 00:00:00	2025-05-12 00:00:00	477.00	f	3101	1	38251	51	1	41801	51	\N	\N	51	1351	301	35	201	2301
+51051	Avda Santa Cruz esquina Comandante Miño	t	2024-05-29 00:00:00	f	f	10 x 40		70000	2024-09-04 00:00:00	2024-05-29 00:00:00	400.00	f	7001	1	36701	51	1	41851	151	23	18501	1	401	301	25	1051	2301
+51101	Cnel. Lopez entre Guido Spano y Benavidez	f	2024-05-21 00:00:00	f	f	8,66 x 19,48		194000	2024-05-21 00:00:00	2024-05-21 00:00:00	169.00	f	1051	151	5951	51	1	41901	151	9	3651	51	1	251	22	1251	2301
+51151	CALLE HERNANDEZ, ENTRE CALLE EUGENIO RAMIREZ Y CALLE RAMON GARCIA	f	2025-05-12 00:00:00	f	f	12,80 x 42,68		250000	2025-05-12 00:00:00	2025-05-12 00:00:00	546.00	f	3601	1	34551	51	1	41951	151	\N	\N	51	1	301	35	1051	2301
+51201	Gomez Portiño, entre Av. Urquiza y Brasil	f	2023-08-29 00:00:00	f	f	13 x 43,30		150000	2024-09-13 00:00:00	2024-05-06 00:00:00	562.00	f	1751	1	27101	51	1	42001	151	15	4251	51	301	301	26	451	2301
+51251	CALLE CARLOS PELLEGRINI, ENTRE CALLE ALMIRANTE BROWN Y CALLE CORRIENTES	f	2025-05-12 00:00:00	f	f	12 x 33		13000	2025-05-12 00:00:00	2025-05-12 00:00:00	396.00	f	6701	1	34351	51	1	42051	1	\N	17401	51	1251	301	35	51	51
+50751	Irupe entre Los Teales y Perito Moreno	f	2022-06-01 00:00:00	f	f	11,25 x 20	Problemas de papeles que no quiere solucionar	0	2022-06-01 00:00:00	2022-06-01 00:00:00	225.00	t	6701	1	37501	1	1	41601	51	15	\N	51	1351	251	5	51	51
+51301	ARTIGAS ENTRE NEUMAN Y ACEVEDO 	f	2025-05-14 00:00:00	f	f	9,20 x 36		35000	2025-05-14 00:00:00	2025-05-14 00:00:00	331.00	f	1951	1	34101	51	1	42101	151	\N	\N	51	651	51	36	1051	2301
+51351	Avda Santa Cruz esq Amalia Vera	t	2022-06-02 00:00:00	f	f	9,20 x 34,30	Venden con nosotros si tenemos candidatos.	75000	2024-08-22 00:00:00	2024-06-19 00:00:00	315.56	f	6701	1	\N	51	1	42151	151	2	13351	1	401	51	5	751	2301
+51401	Calle 143A y calle 194	t	2025-05-07 00:00:00	f	f	(10 x 30)		15500	2025-05-07 00:00:00	2025-05-07 00:00:00	300.00	f	2401	1	37951	51	1	42201	151	\N	\N	51	1001	301	33	451	2301
+51451	Calle 194 Casi Calle 143A	t	2025-05-07 00:00:00	f	f	(10 x 30)		14200	2025-05-07 00:00:00	2025-05-07 00:00:00	300.00	f	2401	1	37951	51	1	42201	151	\N	\N	51	1001	301	33	451	2301
+51551	Calle 180 entre calle 129 y calle 123	f	2024-05-17 00:00:00	f	f	8,95 x 30		18000	2025-04-13 00:00:00	2024-05-17 00:00:00	268.00	f	6701	1	33001	51	1	42301	151	23	13051	51	801	51	25	751	901
+60313	AV. MONSEÑOR DE ANDREA, ENTRE AV. COMANDANTE ANDRESITO Y CALLE 104. Lote 11E-Precio bloque	f	2025-06-10 08:24:58.401237	f	f	52.38 x 66.22 x 2.38 x 16.07 x 47.51 x 19.79		230000	2025-06-10 08:24:58.408237	2025-06-10 08:24:58.408237	4223.00	f	4001	1	39912	51	1	49762	151	9	24752	1	951	301	35	401	2301
+60314	AV. MONSEÑOR DE ANDREA, ENTRE AV. COMANDANTE ANDRESITO Y CALLE 104. Lote 11E-Precios unitarios	f	2025-06-10 08:26:22.781247	f	f	52.38 x 66.22 x 2.38 x 16.07 x 47.51 x 19.79		230000	2025-06-10 08:26:22.783246	2025-06-10 08:26:22.783246	4223.00	f	4001	1	39912	51	1	49762	151	9	24752	1	951	301	35	401	2301
+60317	CALLE CAPITAN KRAUSE, ENTRE CALLE PUERTO ARGENTINO Y CALLE ISLA SOLEDAD. 	f	2025-06-10 08:40:50.918688	f	f	10 x 30		25000	2025-06-10 08:40:50.925691	2025-06-10 08:40:50.925691	300.00	f	9304	1	39913	51	1	49764	151	9	24752	51	251	301	35	751	2301
+58201	Calle 146 (Laprida) entre calle 73A y Av Juan Jose Paso -Lt12	f	2024-09-17 00:00:00	f	f	12 x 36.50		19000	2025-01-27 00:00:00	2024-09-17 00:00:00	438.00	f	6701	1	28451	51	1	48001	151	21	9701	51	551	1	27	451	2301
+51601	Av Chacabuco entre Calle Eva Peron y Calle Catalano -Precio conjunto	f	2023-04-10 00:00:00	f	f	46.50M X 161.38M X  87.22M X 172.50M X 222M X 77.93M		1800000	2024-12-10 00:00:00	2024-04-11 00:00:00	21671.00	f	2851	1	4051	51	1	42351	151	23	\N	51	951	\N	6	401	\N
+51651	Av Chacabuco entre Calle Eva Peron y Calle Catalano -Precios individuales	f	2023-04-10 00:00:00	f	f	46.50M X 161.38M X  87.22M X 172.50M X 222M X 77.93M		1800000	2024-12-10 00:00:00	2024-04-11 00:00:00	21671.00	f	2851	1	4051	51	1	42351	151	23	\N	51	951	\N	6	401	\N
+51701	Pablo Allain entre Zabala y Soria	f	2024-12-18 00:00:00	f	f	10,82x17,32		60000	2024-12-18 00:00:00	2024-12-18 00:00:00	187.00	f	7651	1	20101	51	1	42401	151	14	\N	51	651	51	32	1051	2301
+51751	Calle 20 de Junio esquina Soria	t	2024-12-18 00:00:00	f	f	10,82x43,30		90000	2024-12-18 00:00:00	2024-12-18 00:00:00	468.00	f	4401	1	15801	51	1	42451	151	14	\N	51	651	51	32	1051	2301
+51801	Calle 22 de Diciembre entre Calle Bermudez y Calle Beethoven	f	2024-06-13 00:00:00	f	f	10,83 x 43,13		100000	2024-10-04 00:00:00	2024-06-13 00:00:00	467.00	f	2401	1	21151	51	1	42501	151	23	\N	51	301	301	22	751	2301
+51851	RUTA 12 FRENTE A LAGOS DE CANDELARIA-Lotes internos	f	2023-04-14 00:00:00	f	f	34 x 17		50000	2024-10-10 00:00:00	2023-12-06 00:00:00	600.00	f	2151	1	19551	51	1	42551	1	2	\N	151	1251	301	6	101	2301
+51901	RUTA 12 FRENTE A LAGOS DE CANDELARIA-Lotes sobre la laguna	f	2023-04-14 00:00:00	f	f	34 x 17		75000	2024-10-10 00:00:00	2023-12-06 00:00:00	600.00	f	2151	1	19551	51	1	42551	1	2	\N	151	1251	301	6	101	2301
+52101	Junin entre Belgrano y Alvear-Bloque	f	2024-12-18 00:00:00	f	f	18,30 X 28,3		310000	2024-12-18 00:00:00	2024-12-18 00:00:00	518.00	f	8351	1	20601	51	1	42701	151	14	\N	51	1	51	32	551	2301
+52151	Junin entre Belgrano y Alvear-Precios individuales	f	2024-12-18 00:00:00	f	f	18,30 X 28,3		310000	2024-12-18 00:00:00	2024-12-18 00:00:00	518.00	f	8351	1	20601	51	1	42701	151	14	\N	51	1	51	32	551	2301
+52201	Av Independencia esquina Trincheras de San Jose	t	2024-12-17 00:00:00	f	f	12,50 x 50		35000	2025-03-12 00:00:00	2024-12-17 00:00:00	625.00	f	6701	1	1551	51	1	42751	51	23	19551	1	1351	301	25	201	2301
+52251	Avda Mitre entre San Marcos y Avda Lopez Torres	f	2023-10-18 00:00:00	f	f	11,20x fondo izq 43,30 contra frente x18,31 fondo der x18,26x7,49x24,93	Sucesion sin iniciar. 12-12-23. Sucesion sin iniciar. 8-10-24	280000	2024-10-08 00:00:00	2023-12-12 00:00:00	617.00	t	6701	1	31201	51	1	42801	151	2	5701	1	51	251	22	401	4051
+52301	CALLE 9 DE JULIO, ENTRE CALLE LOS ANDES Y CALLE LARREA. Son 2 Lotes-Precio bloque	f	2025-05-12 00:00:00	f	f	18 x 40 + 19 x 40		65000	2025-05-12 00:00:00	2025-05-12 00:00:00	1480.00	f	8151	1	36551	51	1	42851	151	\N	\N	51	551	301	35	451	2301
+52351	CALLE 9 DE JULIO, ENTRE CALLE LOS ANDES Y CALLE LARREA. Son 2 Lotes-Precios individuales	f	2025-05-12 00:00:00	f	f	18 x 40 + 19 x 40		65000	2025-05-12 00:00:00	2025-05-12 00:00:00	1480.00	f	8151	1	36551	51	1	42851	151	\N	\N	51	551	301	35	451	2301
+52401	CALLE AVIADOR CANDELARIA ENTRE  MARIANO MORENO Y CALLE MANUEL BELGRANO-2Lotes precio bloque	f	2023-04-25 00:00:00	f	f	(10 x 50) x 2		12000	2023-09-28 00:00:00	2023-09-28 00:00:00	1000.00	f	6701	1	22301	51	1	42901	1	9	4251	51	1251	301	6	51	2301
+52501	Av. Costanera esquina Gral. Frias 	t	2024-11-14 00:00:00	f	f	 53,30 x 43,30 x 43,30 x 15,30 x 10 x 28  		3500000	2024-11-14 00:00:00	2024-11-14 00:00:00	2155.00	f	2251	1	7051	51	1	42951	151	14	17751	1	1	301	32	1051	1451
+52551	calle 85 entre c.87 y 213 (Son 2 lotes)-Precios individuales 	f	2025-05-07 00:00:00	f	f	17 x 23,30		25000	2025-05-07 00:00:00	2025-05-07 00:00:00	395.00	f	6701	1	19651	51	1	43001	151	\N	11951	51	801	301	36	1051	2301
+52451	CALLE AVIADOR CANDELARIA ENTRE  MARIANO MORENO Y CALLE MANUEL BELGRANO-2Lotes precios individuales	f	2023-04-25 00:00:00	f	f	(10 x 50) x 2		0	2023-09-28 00:00:00	2023-09-28 00:00:00	1000.00	f	6701	1	22301	1	1	42901	1	9	4251	51	1251	301	6	51	2301
+60315	Z/ AV. MONSEÑOR DE ANDREA, ENTRE AV. COMANDANTE ANDRESITO Y CALLE 104. Lotes 11 F y 11 G-Precios individuales	f	2025-06-10 08:27:49.682735	f	f	12,78 x 33,11		35000	2025-06-10 08:27:49.690735	2025-06-10 08:27:49.690735	423.00	f	4001	1	39912	51	1	49762	151	9	24752	51	951	301	35	401	2301
+52601	calle 85 entre c.87 y 213 (Son 2 lotes)-Precio conjunto	f	2025-05-07 00:00:00	f	f	(17 x 23,30) x 2		50000	2025-05-07 00:00:00	2025-05-07 00:00:00	790.00	f	6701	1	19651	51	1	43001	151	\N	11951	51	801	301	36	1051	2301
+52651	CALLE SIN NOMBRE, ENTRE CALLE LAS CAMELIAS Y CALLE LOS CRESPONES. Bº ALTOS DE BELLA	f	2025-05-07 00:00:00	f	f	10 x 41,25		28000	2025-05-07 00:00:00	2025-05-07 00:00:00	412.00	f	8151	1	36551	51	1	43051	151	\N	\N	51	551	301	35	451	2301
+52701	LOTE CALLE 121 ENTRE CALLE 42 Y CALLE 44	f	2023-04-28 00:00:00	f	f	14.5 x 43.30	No quiere trabajar con inmobiliarias 1-8-23	93000	2024-09-17 00:00:00	2023-08-01 00:00:00	627.00	t	4051	1	32451	51	1	43101	151	14	14751	51	651	301	6	751	2301
+52751	Calle Tripoli entre calle Luchessi y Calle 74a	f	2023-05-02 00:00:00	f	f	11,55 x 36,80	Acepta oferta de USD 60.000 de contado. 23/11/23-No quiere trabajar con inmobiliarias. No quiere que le llamemos mas. 5-12-24	65000	2024-12-05 00:00:00	2024-02-27 00:00:00	424.00	t	6701	1	38501	51	1	43151	151	14	22951	51	351	51	6	751	2301
+52801	MARCELO T DE ALVEAR ENTRE CASTELLI Y CALLE VALENTIN SOTELO 	f	2023-05-02 00:00:00	f	f	12 x 25		15000	2024-09-20 00:00:00	2024-05-13 00:00:00	300.00	f	3101	1	30001	51	1	43201	51	15	13851	51	1351	301	6	251	2301
+52001	Calle Cordoba entre Calle Corrientes y Calle Almrante Brown-Lotes 1 al 3 y 13 al 18 	f	2023-04-17 00:00:00	f	f	12 x 25	Sucesion sin finalizar. Haciendo subdivision. 6-9-23	10000	2025-07-04 14:30:37.315235	2023-04-17 03:00:00	300.00	f	6701	1	26751	51	1	42651	1	21	15201	51	1251	251	6	51	2301
+52051	Calle Cordoba entre Calle Corrientes y Calle Almrante Brown-Lotes 20 al 24	f	2023-04-17 00:00:00	f	f	11 x 50	Sucesion sin finalizar. Haciendo subdivision. 6-9-23	15000	2025-07-04 14:30:47.794548	2023-04-17 03:00:00	550.00	f	6701	1	26751	51	1	42651	1	21	15201	51	1251	251	6	51	2301
+53001	COLECTORA RUTA NACIONAL 12, ENTRE CALLE MANUEL DE ROSAS Y CALLE 204. Son 3 lotes - Precio bloque	f	2025-05-12 00:00:00	f	f	Lote 08: 19.72 x 24.77 mtrs; Lote 09: 14.01 x 39.44 x 12.38 mtrs; Lote 10: 12.17 x 39.43 x 12.38 mtrs.		160000	2025-05-12 00:00:00	2025-05-12 00:00:00	1450.00	f	8151	1	36551	51	1	43351	151	\N	\N	151	501	301	35	401	2301
+53051	COLECTORA RUTA NACIONAL 12, ENTRE CALLE MANUEL DE ROSAS Y CALLE 204. Para unificar y dividir en 2 lotes-Precios individuales	f	2025-05-12 00:00:00	f	f	Lote 08: 19.72 x 24.77 mtrs; Lote 09: 14.01 x 39.44 x 12.38 mtrs; Lote 10: 12.17 x 39.43 x 12.38 mtrs.		160000	2025-05-12 00:00:00	2025-05-12 00:00:00	1450.00	f	8151	1	36551	51	1	43351	151	\N	\N	151	501	301	35	401	2301
+53151	Avda Las Americas entre  Calle Jorge Newbery y Calle florentino Ameghino loteo lomas del sol	f	2023-05-08 00:00:00	f	f	13,07 X 22,43		36000	2024-11-21 00:00:00	2024-07-12 00:00:00	300.00	f	3101	1	30001	51	1	43451	51	15	\N	1	1351	301	6	201	2301
+53201	Avda Bustamante entre calle 95 y Las Araucarias	f	2024-05-24 00:00:00	f	f	10,33 x 33,26	La propietaria dice que va a venir y nunca viene. 22-10-24. Dice que no tiene tiempo para venir. 19-12-24	55000	2024-12-19 00:00:00	2024-05-24 00:00:00	343.00	f	6701	1	12451	51	1	43501	151	23	23301	1	751	301	25	401	51
+53251	10 de junio, entre America latina y isla san pedro	f	2023-10-19 00:00:00	f	f	11 x 50		24000	2025-04-07 00:00:00	2024-03-19 00:00:00	550.00	f	6801	1	14701	51	1	43551	151	14	4851	51	251	51	26	751	2301
+53401	Las Hortensias entre Las Azaleas y Los Naranjos	f	2024-05-16 00:00:00	f	f	16 x 18,50		20000	2024-05-16 00:00:00	2024-05-16 00:00:00	296.00	f	3251	1	3001	51	1	43651	151	9	\N	51	801	301	25	401	2401
+53451	Avda Tambor de Tacuari entre calle 81 y calle Comandante Miño	f	2024-06-05 00:00:00	f	f	9,76 x 37		120000	2024-09-04 00:00:00	2024-06-05 00:00:00	361.00	f	4051	1	25851	51	1	43701	151	23	11001	1	301	301	25	1051	2301
+53501	Kolping entre Av centenario y calle malinche	f	2024-06-05 00:00:00	f	f	13,36 x 38		90000	2024-06-05 00:00:00	2024-06-05 00:00:00	506.00	f	2401	1	25451	51	1	43751	151	\N	\N	1	851	301	33	401	2301
+53551	Calle Felipe Tamareu entre Tripoli y Av Lavalle	f	2023-06-06 00:00:00	f	f	8,22 x 24,60	Contesta mal y no muestra los papeles. Mala predispocion. 7-11-23	70000	2023-11-07 00:00:00	2023-11-07 00:00:00	202.00	t	4051	1	7001	51	1	43801	151	9	20401	51	351	251	6	751	2301
+53601	Junin, entre La Rioja y Entre Rios	f	2023-09-12 00:00:00	f	f	13,45 x 43,30		450000	2024-10-24 00:00:00	2024-06-13 00:00:00	591.00	f	4051	1	5151	51	1	43851	151	15	7251	51	1	301	26	401	2301
+53651	Avda cocomarola entre calle 170 y 168	f	2025-05-02 00:00:00	f	f	15 x 35,36		50000	2025-05-02 00:00:00	2025-05-02 00:00:00	530.00	f	5001	1	9651	51	1	43901	151	\N	\N	1	551	301	36	751	2301
+53701	Calle Sarmiento esquina Alem	t	2024-10-28 00:00:00	f	f	12.24x3x26.06x12.50x18.35	Pidió que se le llame dentro de 2 meses  ya que esta pensando en construir en el terreno o vender asi como esta. 13-3-25	20000	2025-03-13 00:00:00	2024-10-28 00:00:00	289.00	f	6701	1	20801	51	1	43951	51	23	5951	51	1351	301	25	201	2301
+53751	Calle San Javier Esquina Calle 111	t	2024-05-29 00:00:00	f	f	9,21 x 36,80		34200	2024-11-06 00:00:00	2024-05-29 00:00:00	339.00	f	1051	201	16251	51	1	44001	151	23	2951	51	751	301	4	451	2301
+53101	Calle Rolon esquina calle Balbin (barrio 30 viviendas)	t	2024-05-31 00:00:00	f	f	11 x 20		0	2025-01-23 00:00:00	2024-05-31 00:00:00	275.00	f	3101	1	4801	1	1	43401	51	23	10451	51	1351	301	25	251	2301
+60316	CALLE CORDOBA, ENTRE CALLE FLORENTIN AMEGHINO Y CALLE AVIADOR CANDELARIA	f	2025-06-10 08:35:33.934979	f	f	10 x 66.7 x 20 x 36.7 x 10 x 30 		55000	2025-06-10 08:35:33.93998	2025-06-10 08:35:33.93998	1033.00	f	2251	1	34251	51	1	49763	1	9	24752	51	1251	301	35	51	2301
+60318	Av 131 entre calle 144 y calle 142-3 lotes-Precio bloque	f	2025-06-10 08:44:03.134048	f	f	(15 x 22)  x 3		99000	2025-06-10 08:44:03.138049	2025-06-10 08:44:03.139052	990.00	f	6701	1	39914	51	1	49765	151	9	24808	51	1001	301	33	401	2301
+53801	AV ZAPIOLA ALTURA 5655, ENTRE CALLE JAPON Y CALLE LORENZINI.	f	2025-05-13 00:00:00	f	f	9,21 x 36,80		32500	2025-05-13 00:00:00	2025-05-13 00:00:00	339.00	f	8151	1	36551	51	1	44051	151	\N	\N	1	751	301	35	1051	2301
+53901	Avda Peron entre calle 76 y calle 74-precio bloque-6lotes	f	2023-07-05 00:00:00	f	f	12 x 36	Esta intrusado. 14-9-23. Sigue intrusado 4-10-24	170000	2024-10-04 00:00:00	2023-09-14 00:00:00	2592.00	t	6701	1	27751	51	1	44151	151	2	9551	1	901	301	6	451	2301
+53951	Avda Peron entre calle 76 y calle 74-precios individuales-6lotes	f	2023-07-05 00:00:00	f	f	12 x 36	Esta intrusado. 14-9-23. Sigue intrusado 4-10-24	170000	2024-10-04 00:00:00	2023-09-14 00:00:00	2592.00	t	6701	1	27751	51	1	44151	151	2	9551	1	901	301	6	451	2301
+54001	Avda Roque Gonzalez entre Jorge Newbery y Almirante Brown 	f	2024-05-22 00:00:00	f	f	10 x 50		25000	2024-05-22 00:00:00	2024-05-22 00:00:00	500.00	f	951	1	4401	51	1	44201	1	9	10551	1	1251	301	25	51	2301
+54051	CALLE SANTA ANA ENTRE ALBA POSE Y CAMPO GRANDE	f	2024-06-14 00:00:00	f	f	10 x 36,1		10000	2024-06-14 00:00:00	2024-06-14 00:00:00	361.00	f	1051	101	1451	51	1	44251	51	2	13251	51	1351	251	4	101	51
+54151	Calle Palo Rosa esquina Urutau	t	2024-06-04 00:00:00	f	f	25 x 50	No quiere bajar el precio. 22-10-24	70000	2024-10-22 00:00:00	2024-06-04 00:00:00	1250.00	f	6701	1	4601	51	1	44351	51	23	16801	51	1351	1	25	351	2301
+54201	Avda TAMBOR DE TACUARI ENTRE TOMAS GUIDO Y RUIZ DE MONTOYA	f	2023-10-23 00:00:00	f	f	12,65 x 36		130000	2024-11-21 00:00:00	2024-02-26 00:00:00	455.00	f	4301	1	7301	51	1	44401	151	15	\N	1	301	301	4	1051	2301
+53301	Santa rita esquina San Marcos-B° Santa Cruz-Precio bloque	t	2024-06-05 00:00:00	f	f	20 x 40		20000	2025-07-04 14:15:23.284061	2024-06-05 03:00:00	800.00	f	6701	1	15201	51	1	43601	51	9	8901	51	1351	301	33	251	2301
+53351	Santa rita esquina San Marcos-B° Santa Cruz-Precios individuales	t	2024-06-05 00:00:00	f	f	20 x 40		20000	2025-07-04 14:15:32.177305	2024-06-05 03:00:00	800.00	f	6701	1	15201	51	1	43601	51	9	8901	51	1351	301	33	251	2301
+52951	Calle 154 entre Figueredo y Av. 117-Precios individuales	f	2025-01-09 00:00:00	f	f	20,44 x 55		35000	2025-07-04 14:39:56.250562	2025-01-09 03:00:00	1124.00	f	6701	1	30851	51	1	43301	151	15	19901	51	801	51	32	751	2301
+54301	Colectora Ruta 12 entre Calle 170 y  Calle 12 de octubre-Precio bloque	f	2023-08-09 00:00:00	f	f	LOTE 3: 11 X 37.90 X 9 X 44,35 LOTE 4:11 X 31,55 X 9 X 44.35 LOTE 5 10.10 X  24.90  X 11 X  31.55		150000	2024-04-10 00:00:00	2024-04-10 00:00:00	1054.00	t	4051	1	27051	51	1	44501	151	9	22251	51	201	51	6	1051	2701
+54351	Colectora Ruta 12 entre Calle 170 y  Calle 12 de octubre-Precios individuales	f	2023-08-09 00:00:00	f	f	LOTE 3: 11 X 37.90 X 9 X 44,35 LOTE 4:11 X 31,55 X 9 X 44.35 LOTE 5 10.10 X  24.90  X 11 X  31.55		150000	2024-04-10 00:00:00	2024-04-10 00:00:00	1054.00	t	4051	1	27051	51	1	44501	151	9	22251	51	201	51	6	1051	2701
+54401	Calle 85 entre calle 244 y calle 246	f	2023-08-30 00:00:00	f	f	12 x 36	Atiende mal. 23-4-24. No atiende el teléfono. 18-10-24	25000	2024-10-18 00:00:00	2024-04-23 00:00:00	432.00	t	4051	1	8951	51	1	44551	151	15	5501	51	1051	301	6	\N	51
+54451	AV. TIERRA DEL FUEGO, ENTRE CALLE 31 A Y CALLE 33. 	f	2025-05-13 00:00:00	f	f	9,62 x 32		95000	2025-05-13 00:00:00	2025-05-13 00:00:00	308.00	f	7701	1	36951	51	1	44651	151	\N	\N	1	201	301	35	401	2301
+54501	AvdaENIDA SAN MARTIN ENTRE CHACABUCO Y CALLE 84	f	2023-09-11 00:00:00	f	f	10 x 36,80	No contesta el telefono- 9-2-24	100000	2024-02-09 00:00:00	2024-02-09 00:00:00	368.00	t	4051	1	3951	51	1	44701	151	9	3551	1	701	301	6	451	3751
+54551	CALLE SIMON, ENTRE AV. ROQUE SAENZ PEÑA Y CALLE MITRE-son 2 lotes C-4 y C-5-Precios individuales	f	2025-05-20 00:00:00	f	f	10 x 33		28000	2025-05-20 00:00:00	2025-05-20 00:00:00	333.00	f	9201	1	39651	51	1	44751	1	\N	\N	51	1251	301	35	51	2301
+54601	Calle Gatti entre Colectora Acceso sur y calle Itati	f	2023-09-18 00:00:00	f	f	10 x 50	No quiere mostrar los papeles. Ni autorizar. 27-11-23	20000	2024-10-07 00:00:00	2023-11-27 00:00:00	500.00	t	6701	1	15351	51	1	44801	51	2	8251	51	1351	301	6	51	2301
+54651	L. perez entre C.134 Y C.136-precio conjunto	f	2025-05-22 00:00:00	f	f	20 X 40		40000	2025-05-22 00:00:00	2025-05-22 00:00:00	800.00	f	2401	1	23751	51	1	44851	151	\N	\N	51	801	51	36	401	2301
+54701	L. perez entre C.134 Y C.136-precios individuales	f	2025-05-22 00:00:00	f	f	20 X 40		40000	2025-05-22 00:00:00	2025-05-22 00:00:00	800.00	f	2401	1	23751	51	1	44851	151	\N	\N	51	801	51	36	401	2301
+54751	Calle Roque diaz entre calle Jose Ramallo y  Calle Rosario Lopez - 3 lotes-precios unitarios	f	2023-09-21 00:00:00	f	f	10 x 31,6	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23	5500	2025-04-10 00:00:00	2023-09-25 00:00:00	316.00	f	3101	1	4801	51	1	44901	51	21	\N	51	1351	301	6	\N	2301
+54851	Avda Roque Saenz Peña y Santiago del Estero	t	2024-07-22 00:00:00	f	f	14 x 14		165000	2024-11-25 00:00:00	2024-07-22 00:00:00	196.00	f	6301	1	32301	51	1	45001	151	2	\N	1	1	51	27	1301	2301
+53851	Calle Amalia Vera entre calle Cabildo y av A Dominguez	f	2023-07-05 00:00:00	f	f	17,31 x 37,801	No quieren trabajar con inmobiliarias. 14-9-23. No quieren trabajar con inmobiliarias. 4-10-24	0	2024-10-04 00:00:00	2023-09-14 00:00:00	655.00	t	6701	1	11751	1	1	44101	151	2	16451	51	551	51	6	451	2301
+54101	Calle Luis Pasteur entre calle pugliese y calle juan manuel fangio-LTS. 20,19,18,17,16,14-Precios Individuales	f	2023-07-26 00:00:00	f	f	15,40 x 39,50	Atienden mal y no quieren pasar precios. 28-11-23	0	2024-04-08 00:00:00	2024-04-08 00:00:00	610.00	t	6651	1	38201	1	1	44301	51	9	\N	51	1351	301	6	351	2301
+55501	CALLE 79, ENTRE AV 210 Y CALLE 218. POSADAS	f	2025-05-14 00:00:00	f	f	10 x 25		0	2025-05-14 00:00:00	2025-05-14 00:00:00	250.00	f	8151	1	36551	1	1	45601	151	\N	\N	51	601	301	35	\N	2301
+60320	Av 131 entre calle 144 y calle 142-3 lotes-Precios unitarios	f	2025-06-10 08:46:56.812507	f	f	(15 x 22) 	Financia hasta 120 meses	35000	2025-06-10 08:46:56.825226	2025-06-10 08:46:56.826225	330.00	f	9305	1	39914	51	1	49765	151	9	24808	51	1001	301	33	401	2301
+54901	Avda Roca entre Ivanowski y Gral Frias	f	2024-07-22 00:00:00	f	f	8,66 x 30		180000	2024-12-06 00:00:00	2024-07-22 00:00:00	260.00	f	8801	1	27001	51	1	45051	151	2	\N	1	1	51	27	1051	2301
+54951	Calle 24 entre Lavalle y Roca	f	2024-07-22 00:00:00	f	f	9 x 27,30		130000	2024-10-04 00:00:00	2024-07-22 00:00:00	246.00	f	4051	1	30951	51	1	45101	151	2	4601	51	301	51	27	401	2301
+55001	Barrio del Lago	f	2024-07-23 00:00:00	f	f	24 x 12 x 14 x 24  		42000	2024-11-22 00:00:00	2024-07-23 00:00:00	320.00	f	8251	1	38801	51	1	45151	1	2	\N	51	1251	301	27	101	2301
+55051	Avda Alem esquina Derqui	t	2025-05-13 00:00:00	f	f	15,20 x 27		180000	2025-05-13 00:00:00	2025-05-13 00:00:00	410.00	f	8651	1	5251	51	1	45201	151	\N	\N	1	301	301	33	451	2301
+55101	Avda Venezuela entre calle 89 y Avda 213 	f	2024-07-24 00:00:00	f	f	17 x 23		30000	2024-11-22 00:00:00	2024-07-24 00:00:00	396.00	f	2001	1	10151	51	1	45251	151	2	\N	1	801	301	27	1051	2301
+55151	San Martin y Godoy-Precio conjunto	t	2024-07-26 00:00:00	f	f	(9,17 x 45,67) x 2		20000	2024-07-26 00:00:00	2024-07-26 00:00:00	837.59	f	2401	1	23751	51	1	45301	51	2	\N	51	1351	301	27	201	2301
+55201	San Martin y Godoy-Precios individuales	t	2024-07-26 00:00:00	f	f	(9,17 x 45,67) x 2		20000	2024-11-25 00:00:00	2024-07-26 00:00:00	837.59	f	2401	1	23751	51	1	45301	51	2	\N	51	1351	301	27	201	2301
+55301	Colectora Candelaria, zona reserva el Puma	f	2024-07-26 00:00:00	f	f	11,25 x 30		10000	2024-11-25 00:00:00	2024-07-26 00:00:00	338.00	f	2401	1	23751	51	1	45401	1	2	\N	151	1251	301	27	101	2301
+55351	Leonardo Soza entre Pedro Isaza y Romero	f	2024-07-26 00:00:00	f	f	15 x 40		19000	2024-11-25 00:00:00	2024-07-26 00:00:00	600.00	f	4051	1	32051	51	1	45451	51	2	851	51	1351	301	27	351	2301
+55401	Eliana Krawczyk entre Sarandi y Ruta 12	f	2024-07-29 00:00:00	f	f	10 x 35		10000	2024-11-28 00:00:00	2024-07-29 00:00:00	350.00	f	3051	1	20301	51	1	45501	1	2	20751	51	1251	301	27	51	2301
+55251	San Hector entre Sao Borja y 30 de Noviembre 	f	2024-07-26 00:00:00	f	f	12,50 x 23		12000	2025-07-04 14:41:15.975919	2024-07-26 03:00:00	288.00	f	6701	1	28201	51	1	45351	51	2	6501	51	1351	301	27	201	2301
+54251	Calle Guido Spanno esquina Lanusse	t	2023-08-23 00:00:00	f	f	16,80 x 20		450000	2025-07-10 14:43:01.677272	2023-08-23 03:00:00	360.00	f	6701	1	4851	51	1	44451	151	14	19351	51	1	51	6	1251	2301
+55451	Estrecho de magallanes(79b) y Av J.M Fangio	f	2025-05-14 00:00:00	f	f	10 x 36		23000	2025-05-14 00:00:00	2025-05-14 00:00:00	360.00	f	6701	1	20451	51	1	45551	151	\N	19451	51	551	301	33	751	2301
+55551	Avda CORRIENTES ENTRE BELGRANO Y RIVADAvdaIA-Precio bloque	f	2024-08-01 00:00:00	f	f	25 x 50		30000	2024-12-10 00:00:00	2024-08-01 00:00:00	1250.00	f	3101	1	4801	51	1	45651	51	15	10501	1	1351	301	4	201	2301
+55601	Avda CORRIENTES ENTRE BELGRANO Y RIVADAvdaIA-Precio bloque	f	2024-08-01 00:00:00	f	f	25 x 50		30000	2024-12-10 00:00:00	2024-08-01 00:00:00	1250.00	f	3101	1	4801	51	1	45651	51	15	10501	1	1351	301	4	201	2301
+55651	Calle Tamareu entre calle 129 y 129-Lt K-interno	f	2024-07-31 00:00:00	f	f	(10,50 x 36,81)		29200	2023-07-31 00:00:00	2023-07-31 00:00:00	386.51	f	1051	201	13451	51	51	45701	151	9	12701	1	901	301	22	451	2301
+55701	CALLE 164, ENTRE AV. FIGUEREDO Y AV 117. POSADAS	f	2025-05-14 00:00:00	f	f	14,70 x 35		30000	2025-05-14 00:00:00	2025-05-14 00:00:00	515.00	f	7451	1	37101	51	1	45751	151	\N	\N	51	801	301	35	751	2301
+55751	LAS ROSAS ENTRE ITATI Y COLECTORA RUTA 12 	t	2024-08-02 00:00:00	f	f	10 x 30		25000	2024-12-10 00:00:00	2024-08-02 00:00:00	300.00	f	3101	1	4801	51	1	45801	51	15	\N	51	1351	301	4	51	2301
+55801	Calle 165 entre calle 50 (sin abrir) y Av Tambor de Tacuari 	f	2024-08-05 00:00:00	f	f	18 x 17		48000	2024-12-04 00:00:00	2024-08-05 00:00:00	306.00	f	8251	1	18251	51	1	45851	151	2	\N	51	851	301	27	401	2301
+55851	Cordoba entre Av corrientes y jujuy	f	2025-05-14 00:00:00	f	f	15 x 25		250000	2025-05-14 00:00:00	2025-05-14 00:00:00	375.00	f	8701	1	17101	51	1	45901	151	\N	\N	51	1	301	33	651	2301
+55901	ALBARRACIN ENTRE SAN LUCAS Y SAN JOSE	f	2024-08-06 00:00:00	f	f	10 x 40	No responde. 10-12-24	7200	2024-12-10 00:00:00	2024-08-06 00:00:00	400.00	t	4051	1	11101	51	1	45951	51	9	5851	51	1351	301	4	251	2301
+55951	Calle Araucarias entre Calle Canela y Av. Santa Helena-Precio bloque	f	2024-08-07 00:00:00	f	f	22 x 50		45000	2024-10-07 00:00:00	2024-08-07 00:00:00	1100.00	f	3101	1	4801	51	1	46001	51	2	10451	51	1351	301	22	151	2301
+56001	Calle Araucarias entre Calle Canela y Av. Santa Helena-Precios individuales	f	2024-08-07 00:00:00	f	f	22 x 50		45000	2024-10-07 00:00:00	2024-08-07 00:00:00	1100.00	f	3101	1	4801	51	1	46001	51	2	10451	51	1351	301	22	151	2301
+56151	Rio San Antonio y Arroyo Garupa	t	2024-08-07 00:00:00	f	f	12,5 x 37,5		23500	2024-12-05 00:00:00	2024-08-07 00:00:00	468.00	f	4051	1	11701	51	1	46151	1	2	4951	51	1251	301	27	101	2301
+60321	Magaldi entre vasconcellos y malinche	f	2025-06-10 08:56:46.33261	f	f	9,20 x 36,80		35000	2025-06-10 08:56:46.339146	2025-06-10 08:56:46.339146	339.00	f	6701	1	39915	51	1	49766	151	9	24809	51	851	301	33	401	2301
+60322	calle 46 casi calle 239-Nemesio Parma	f	2025-06-10 09:06:11.516082	f	f	13,67 x 44		28000	2025-06-10 09:06:11.532083	2025-06-10 09:06:11.532083	601.00	f	8501	1	24101	51	1	5851	151	2	24752	51	1151	301	2	1451	1751
+15951	Calle 197 entre Calle 116 y Calle 114	f	2023-09-13 00:00:00	f	f	12 x 40		19000	2025-06-10 09:01:24.555488	2023-09-13 03:00:00	480.00	f	3501	1	10251	51	1	11901	151	2	24752	51	1151	301	22	1	2301
+56301	Calle 119 entre calle 182 y calle 180b	f	2025-05-19 00:00:00	f	f	10 X 50		17000	2025-05-19 00:00:00	2025-05-19 00:00:00	500.00	f	5101	1	39701	51	1	46301	151	\N	\N	51	801	301	33	1051	51
+56351	Luis pasteur entre Av lopez torres y urutacua	f	2025-05-14 00:00:00	f	f	11 x 39,42		110000	2025-05-14 00:00:00	2025-05-14 00:00:00	429.00	f	8701	1	17101	51	1	46351	151	\N	\N	51	51	301	33	1051	2301
+56401	Meza entre Av Aguado y Gottschalk 	f	2024-08-12 00:00:00	f	f	10,5 x 32	Sacaron momentaneamente de la venta. 10-12-24	70000	2024-12-10 00:00:00	2024-08-12 00:00:00	336.00	t	4201	1	29501	51	1	46401	151	14	\N	51	651	51	27	401	2301
+56451	CALLE 100 ENTRE SAN MARCOS Y AV LOPEZ TORRES	f	2024-08-12 00:00:00	f	f	15 x 25	Pueden bajar hasta 82000- 18-3-25	85000	2025-03-18 00:00:00	2024-08-12 00:00:00	375.00	f	6701	1	36051	51	1	46451	151	14	4151	51	101	301	4	401	2301
+56501	av. 17 de agosto entre C.47 y C.59 	f	2025-05-19 00:00:00	f	f	55 x 100		550000	2025-01-17 00:00:00	2025-05-19 00:00:00	5500.00	f	7701	1	39751	51	1	46501	151	\N	\N	1	451	301	36	401	2301
+56551	Avda Figueredo entre calle 160 y Las Tacuaras	f	2024-08-13 00:00:00	f	f	15 x 30		20000	2025-04-28 00:00:00	2024-08-13 00:00:00	450.00	f	6851	1	30401	51	1	46551	151	14	951	1	801	51	27	751	2301
+56601	Calle 134 entre 185 y 181 	f	2024-08-13 00:00:00	f	f	12 x 30		11500	2024-12-11 00:00:00	2024-08-13 00:00:00	360.00	f	1101	1	31301	51	1	46601	151	2	\N	51	1151	301	27	\N	2301
+56651	Barrio privado Santa Cecilia-Lt.71	f	2025-05-14 00:00:00	f	f	20 x 60		45000	2025-05-14 00:00:00	2025-05-14 00:00:00	1200.00	f	8701	1	17101	51	1	46651	1	\N	\N	51	1251	301	33	1651	2301
+56701	calle bichos esquina leyenda barrio el puma-Precio bloque	t	2024-08-16 00:00:00	f	f	31 x 67		40000	2024-08-16 00:00:00	2024-08-16 00:00:00	2077.00	f	8301	1	4101	51	1	46701	1	15	3051	51	1251	301	4	51	2301
+56751	calle bichos esquina leyenda barrio el puma-Precios individuales	t	2024-08-16 00:00:00	f	f	31 x 67		40000	2024-08-16 00:00:00	2024-08-16 00:00:00	2077.00	f	8301	1	4101	51	1	46701	1	15	3051	51	1251	301	4	51	2301
+56801	Avda Bosseti entre Córdoba y Fray Ruiz de Montoya	f	2025-05-21 00:00:00	f	f	15 x 20		28800	2025-05-21 00:00:00	2025-05-21 00:00:00	300.00	f	1051	101	39801	51	1	46801	1	9	24751	1	1251	301	9	51	2301
+56851	Avda Almafuerte entre Cte Miño y Avda Tomas Guido	f	2024-08-26 00:00:00	f	f	9,20 x 36,80		250000	2025-04-09 00:00:00	2024-08-26 00:00:00	338.00	f	9051	1	12251	51	1	46851	151	2	\N	1	301	51	27	401	2301
+56101	Oro verde entre Apostoles y Las Rosas-Don Darío	f	2025-01-24 00:00:00	f	f	10 x 30		25000	2025-07-04 14:23:03.278946	2025-01-24 03:00:00	300.00	f	6701	1	11401	51	1	46101	51	15	6401	51	1351	301	32	101	2301
+56251	Avda INDEPENDENCIA ENTRE COSTANERA Y 25 DE MAYO	f	2024-08-08 00:00:00	f	f	10 x 32,80		8800	2025-07-04 14:26:05.781074	2024-08-08 03:00:00	328.00	f	6701	1	24901	51	1	46251	51	14	101	1	1351	301	4	201	2301
+56901	Calle los Bichos y Calle Leyendas Barrio el Puma-Precio bloque	t	2024-08-26 00:00:00	f	f	30 x 70		65000	2025-01-17 00:00:00	2024-08-26 00:00:00	2100.00	f	301	1	21851	51	1	46901	1	2	22451	51	1251	301	27	101	2301
+56951	Calle los Bichos y Calle Leyendas Barrio el Puma-Precios individuales	t	2024-08-26 00:00:00	f	f	30 x 70		65000	2025-01-17 00:00:00	2024-08-26 00:00:00	2100.00	f	301	1	21851	51	1	46901	1	2	22451	51	1251	301	27	101	2301
+57051	San Antonio entre Curupayti y Cuñapiru 	t	2024-08-29 00:00:00	f	f	10 x 50	No contesta el telefono. 14-11-24	25000	2024-11-14 00:00:00	2024-08-29 00:00:00	500.00	t	6701	1	26951	51	1	47001	1	14	3601	51	1251	51	27	101	2301
+57101	Avda Bosetti entre Avda Manuel Belgrano y Mariano Moreno	t	2024-08-29 00:00:00	f	f	15 x 45		37000	2025-01-02 00:00:00	2024-08-29 00:00:00	675.00	f	2401	1	23801	51	1	47051	1	2	\N	1	1251	51	27	51	2301
+57151	San Antonio entre Arroyo San Juan y Curupity 	t	2024-08-29 00:00:00	f	f	12 x 40		25000	2024-10-29 00:00:00	2024-08-29 00:00:00	480.00	f	4051	1	31001	51	1	47101	1	2	15551	51	1251	51	27	101	2301
+57201	nicomendes castro entre moritan y pedernera	f	2025-04-21 00:00:00	f	f	8,66 x 30,31		150000	2025-04-21 00:00:00	2025-04-21 00:00:00	262.48	f	5001	1	34901	51	1	47151	151	\N	\N	51	1	51	36	1051	2301
+57251	Calle 178 entre 123 y 121	t	2024-08-30 00:00:00	f	f	10 x 30		20000	2025-01-02 00:00:00	2024-08-30 00:00:00	300.00	f	4051	1	32101	51	1	47201	151	2	801	51	801	301	27	1051	2301
+57301	Calle 178 entre 123 y 121-son 3 lotes-precios unitarios	f	2024-08-30 00:00:00	f	f	10 x 30		20000	2025-01-02 00:00:00	2024-08-30 00:00:00	300.00	f	4051	1	32101	51	1	47201	151	2	801	51	801	301	27	1051	2301
+57351	OCEANO ATLANTICO E/ AV LAS PLAMAS Y GRAN MALVINA-LOTEO DE 21 LOTES-DIF MEDIDAS PERO PARECIDAS	f	2025-05-19 00:00:00	f	f	10,50 X 36		26000	2025-01-17 00:00:00	2025-05-19 00:00:00	378.00	f	8401	1	39851	51	1	49701	151	\N	\N	51	251	301	36	1051	2301
+56201	ALFONCINA ESTORNI ENTRE CHARLES THAYS Y PUGLIESE	f	2024-08-08 00:00:00	f	f	15 x 40		0	2024-08-08 00:00:00	2024-08-08 00:00:00	600.00	f	4051	1	16151	1	1	46201	51	15	3151	51	1351	301	4	351	51
+60352	RUTA NACIONAL 105 ENTRE CALLE ANTONIO BALCARCE Y CALLE JOSE MONTES-PRECIO BLOQUE	f	2025-06-10 10:02:59.82843	f	f	50 x 200		85000	2025-06-10 10:02:59.844429	2025-06-10 10:02:59.844429	10000.00	f	1701	1	34051	51	1	49802	51	9	24752	51	1351	301	35	351	2301
+60353	RUTA NACIONAL 105 ENTRE CALLE ANTONIO BALCARCE Y CALLE JOSE MONTES-PRECIOS INDIVIDUALES	f	2025-06-10 10:03:41.597175	f	f	50 x 200		85000	2025-06-10 10:03:41.612024	2025-06-10 10:03:41.612024	10000.00	f	1701	1	34051	51	1	49802	51	9	24752	51	1351	301	35	351	2301
+60355	CALLE LAUREANO MARADONA, ENTRE CALLE LEOPOLDO RAMOS Y CALLE ARROYO DEL MONTE-SON 2 LOTES-SALEN 4-SUMATORIA PRECIOS INDIVIDUALES	f	2025-06-10 10:09:12.768199	f	f	(25 X 50) X 2		16000	2025-06-10 10:09:12.775198	2025-06-10 10:09:12.775198	2500.00	f	3101	1	39952	51	1	49803	51	9	24752	51	1351	301	35	201	2301
+57401	Oro Verde entre el Ceibo y Carlos Lineo	t	2024-09-04 00:00:00	f	f	10 x 30		15000	2025-01-02 00:00:00	2024-09-04 00:00:00	300.00	f	3101	1	37701	51	1	47251	51	2	\N	51	1351	301	27	101	2301
+57451	Oro Verde entre el Ceibo y Carlos Lineo	f	2024-09-04 00:00:00	f	f	10 x 30		15000	2025-01-02 00:00:00	2024-09-04 00:00:00	300.00	f	3101	1	37701	51	1	47251	51	2	\N	51	1351	301	27	101	2301
+57501	Santa Rosa entre Jesus Misericordioso y Albarracin 	f	2024-09-04 00:00:00	f	f	10 x 30		10000	2025-01-02 00:00:00	2024-09-04 00:00:00	300.00	f	3101	1	37701	51	1	47301	51	21	\N	51	1351	301	27	251	2301
+57601	Meza y Comandante Miño 	t	2024-09-06 00:00:00	f	f	0		110000	2025-01-13 00:00:00	2024-09-06 00:00:00	232.00	f	2801	1	23951	51	1	47401	151	21	\N	51	301	\N	27	401	3201
+57651	hernadez entre av roca y nicomendes castro 	f	2025-04-21 00:00:00	f	f	12,99 x 43,30		120000	2025-04-21 00:00:00	2025-04-21 00:00:00	562.00	f	5001	1	34901	51	1	47451	151	\N	\N	51	1	51	36	1051	2301
+57701	RAMON DIAS ENTRE ROLON Y TALAVERA	f	2024-09-09 00:00:00	f	f	10 x 30		15000	2024-09-09 00:00:00	2024-09-09 00:00:00	300.00	f	3101	1	37701	51	1	47501	51	15	\N	51	1351	301	4	251	2301
+57751	calle serrano, entre calle 124 y calle 120	f	2025-04-09 00:00:00	f	f	10 x 50		40000	2025-04-09 00:00:00	2025-04-09 00:00:00	500.00	f	6201	1	17701	51	1	47551	151	\N	\N	51	401	301	36	1051	2301
+57801	CALLE CARLOS PAZ, ENTRE CALLE RAMON AYALA Y CALLE GUALEGUAYCHU-5 lotes precios individuales	f	2025-05-14 00:00:00	f	f	12,50 x 50		7000	2025-05-14 00:00:00	2025-05-14 00:00:00	625.00	f	8151	1	36551	51	1	47601	51	\N	\N	51	1351	301	35	201	2301
+57851	Calle 144 entre Semilla y Humberto Perez	f	2024-09-10 00:00:00	f	f	12 x 43	Reserva fiscal	15000	2024-09-10 00:00:00	2024-09-10 00:00:00	516.00	t	4051	1	31351	51	1	47651	151	14	2601	51	801	301	27	1051	2201
+57901	CALLE 195 EN ESQUINA CALLE 114. POSADAS	t	2025-05-14 00:00:00	f	f	11 x 43		22000	2025-05-14 00:00:00	2025-05-14 00:00:00	473.00	f	2001	1	34001	51	1	47701	151	\N	\N	51	1151	301	35	1501	2301
+57951	Av Blas Parera entre Av Zapiola y Calle 103	f	2024-11-14 00:00:00	f	f	9 x 40		38000	2024-11-14 00:00:00	2024-11-14 00:00:00	360.00	f	701	1	25551	51	1	47751	151	21	\N	1	751	301	27	751	2301
+58001	Avda Hipolito Irigoyen, entre LAvdaalle y Chacabuco	f	2024-09-16 00:00:00	f	f	10 x 32,50		6700	2024-09-16 00:00:00	2024-09-16 00:00:00	325.00	f	301	1	3551	51	1	47801	1	15	\N	1	1251	301	4	51	2301
+58051	AV. FIGUEREDO, ENTRE CALLE LAS TACUARAS Y CALLE 160. SON 2 LOTES PRECIOS INDIVIDUALES	f	2025-05-14 00:00:00	f	f	15 X 30		20000	2025-05-14 00:00:00	2025-05-14 00:00:00	450.00	f	2001	1	34001	51	1	47851	151	\N	\N	1	801	301	35	751	2301
+58101	Avda Cdte. Andresito entre Calle 11 y Avda Zapiola	f	2024-09-17 00:00:00	f	f	9,10 x 36,81		55000	2024-11-25 00:00:00	2024-09-17 00:00:00	334.00	f	6701	1	19751	51	1	47901	151	21	8801	1	751	251	22	1051	3551
+58151	LUIS PASTEUR ENTRE AV URUGUAY Y LIBANO	f	2024-09-17 00:00:00	f	f	7 x 30		55000	2024-09-17 00:00:00	2024-09-17 00:00:00	210.00	f	4551	1	24551	51	1	47951	151	15	\N	51	51	301	4	1101	2301
+57001	Maliche entre av centernario y calle 38 	f	2025-04-28 00:00:00	f	f	13.36x38.05		60000	2025-07-04 14:43:40.034387	2025-04-28 03:00:00	508.00	f	6701	1	16501	51	1	46951	151	9	15301	51	851	51	36	401	2301
+58301	pedro correa entre av centenario y acevedo	f	2025-05-14 00:00:00	f	f	8,66 x 25,67		50000	2025-05-14 00:00:00	2025-05-14 00:00:00	222.00	f	651	1	39151	51	1	48051	151	\N	\N	51	301	301	36	1051	2301
+58351	COLECTORA RUTA 12 ENTRE BARRIO DEL LAGO Y LAS PERDICES	f	2024-09-23 00:00:00	f	f	24,88 x 87		32000	2025-03-19 00:00:00	2024-09-23 00:00:00	2168.00	f	1051	101	3101	51	1	48101	1	2	9351	151	1251	301	4	101	2301
+58401	Calle Sin nombre casi Ruta 204	f	2024-09-20 00:00:00	f	f	21 x 34		15000	2024-11-25 00:00:00	2024-09-20 00:00:00	714.00	f	6701	1	31551	51	1	48151	51	21	21651	51	1351	251	27	51	2301
+58501	Calle arroyo santa ana en barrio las perdices 	f	2025-05-14 00:00:00	f	f	24 x 88		53000	2025-05-14 00:00:00	2025-05-14 00:00:00	2112.00	f	6701	1	23701	51	1	48251	1	\N	12901	51	1251	51	36	101	2301
+57551	ROSARIO LOPEZ ENTRE NICOLAS GONZALEZ Y ROQUE DIAZ-Precio indidivual	f	2024-09-05 00:00:00	f	f	15 x 40	Tiene que iniciar usucapión. 16-9-24. 7-4-25	0	2025-04-03 00:00:00	2024-09-05 00:00:00	600.00	t	6701	1	14251	1	1	47351	51	9	2301	51	1351	301	4	351	4701
+58451	Calle 43 entre 160 y 162 A	f	2024-10-07 00:00:00	f	f	16 x 36		0	2025-04-07 00:00:00	2024-10-07 00:00:00	576.00	f	5851	1	26351	1	1	48201	151	21	12051	51	201	301	27	1051	2301
+60354	CALLE LAUREANO MARADONA, ENTRE CALLE LEOPOLDO RAMOS Y CALLE ARROYO DEL MONTE-SON 2 LOTES PRECIOS UNITARIOS	f	2025-06-10 10:08:09.056945	f	f	25 X 50		8000	2025-06-10 10:08:09.060959	2025-06-10 10:08:09.060959	1250.00	f	3101	1	39952	51	1	49803	51	9	24752	51	1351	301	35	201	2301
+58751	Los pinos y jazmines (garupa)	f	2025-05-14 00:00:00	f	f	10 x 30		13000	2025-05-14 00:00:00	2025-05-14 00:00:00	300.00	f	6701	1	23001	51	1	48401	51	\N	1051	51	1351	51	34	51	2301
+58801	Los pinos y jazmines (garupa)	f	2025-05-14 00:00:00	f	f	10 x 50		22000	2025-05-14 00:00:00	2025-05-14 00:00:00	500.00	f	6701	1	23001	51	1	48401	51	\N	1051	51	1351	51	34	51	2301
+58851	CALLE GUEMES Y 59	t	2024-10-09 00:00:00	f	f	11,44 x30		11000	2024-10-09 00:00:00	2024-10-09 00:00:00	433.00	f	2251	1	7051	51	1	48451	151	15	\N	51	501	301	4	401	2301
+58901	Calle 127 casi Calle 148a	t	2024-10-14 00:00:00	f	f	10 x 42	Nos compro a nosotros el terreno y ahora lo quiere vender, pide 25.000 dólares, esta todo cerrado con muro, esta nivelado, tiene un piso y reboque como para un quincho, no quiere financiamiento, pero esta abierto a escuchar ofertas, de su terreno por otro terreno con diferencia de plata, quiere un asesor comercial. 11/3/25	25000	2025-03-11 00:00:00	2024-10-14 00:00:00	420.00	f	6701	1	38451	51	1	48501	151	14	2351	51	801	301	4	1051	2301
+58951	San Marcos, entre calle Japón  y 144A	f	2024-10-24 00:00:00	f	f	12 x 50		70000	2024-10-24 00:00:00	2024-10-24 00:00:00	600.00	f	2701	1	25001	51	1	48601	151	15	\N	51	101	301	4	451	2301
+59001	SARGENTO CABRAL ENTRE ROCA NICOMEDES CASTRO	f	2024-10-24 00:00:00	f	f	10 x 24		120000	2024-10-24 00:00:00	2024-10-24 00:00:00	240.00	f	8601	1	16751	51	1	48651	151	15	\N	51	1	301	4	1151	2301
+59051	Tito Cuchiaroni entre Carlos Lamas Saavedra y Charles Thays (La Colina)	f	2025-01-22 00:00:00	f	f	16 x 40		5500	2025-01-22 00:00:00	2025-01-22 00:00:00	540.00	f	6701	1	23451	51	1	48701	51	21	18551	51	1351	301	27	351	51
+59101	EL CEIBO ENTRE PRIMAVERA Y JUNCAL	f	2024-11-04 00:00:00	f	f	10 x 50		17000	2024-11-04 00:00:00	2024-11-04 00:00:00	500.00	f	1251	1	14201	51	1	48751	51	15	\N	51	1351	301	4	51	2301
+59151	COLECTORA RUYA 12 E/ URUGUAY Y VENEZUELA-Precio Bloque-  SALEN 4 LOTES DE 360 M2 APROXIMADAMENTE 	t	2024-11-04 00:00:00	f	f	20.98 X 20 X 67.40 X 70.76		220000	2024-11-04 00:00:00	2024-11-04 00:00:00	1447.00	f	4051	1	6451	51	1	48801	51	15	12401	151	1351	301	4	51	2301
+59201	COLECTORA RUYA 12 E/ URUGUAY Y VENEZUELA-Precios individuales-4 lotes	t	2024-11-04 00:00:00	f	f	20.98 X 20 X 67.40 X 70.76		220000	2024-11-04 00:00:00	2024-11-04 00:00:00	1447.00	f	4051	1	6451	51	1	48801	51	15	12401	151	1351	301	4	51	2301
+59251	3 de Febrero entre Catamarca y Entre Rios	f	2024-11-04 00:00:00	f	f	8,65 x 34,65		125000	2024-11-04 00:00:00	2024-11-04 00:00:00	300.00	f	8401	1	29351	51	1	48851	151	21	\N	51	1	51	27	851	2301
+59301	JARDIN AMERICA ENTRE FACHINAL Y RUIZ DE MONTOYA	f	2024-11-06 00:00:00	f	f	11 x 33		18000	2024-11-06 00:00:00	2024-11-06 00:00:00	363.00	f	6701	1	1501	51	1	48951	51	14	6801	51	1351	301	4	101	2301
+59351	10 dejunio entre capitan krause y soldado argentino	f	2025-05-14 00:00:00	f	f	10,68 x 24,50		25000	2025-05-14 00:00:00	2025-05-14 00:00:00	262.00	f	3201	1	2001	51	1	49001	151	\N	\N	51	251	51	34	751	2301
+59401	Calle 244 entre calle 49 y Colectora Ruta 12-Villa Bonita-Precios individuales-son 2 lotes	f	2024-11-08 00:00:00	f	f	20 X 28.33 		25000	2025-05-09 00:00:00	2024-11-08 00:00:00	566.50	f	6701	1	27851	51	1	49051	151	21	2801	51	501	151	27	401	2301
+59451	ANTARTIDA ARGENTINA ENTRE AV GUACURARI Y RIO  PARANA-Precio bloque	f	2024-11-12 00:00:00	f	f	 30 x 48		90000	2024-11-12 00:00:00	2024-11-12 00:00:00	1440.00	f	4051	1	11601	51	1	49101	51	15	6101	51	1351	301	4	1	2301
+59501	ANTARTIDA ARGENTINA ENTRE AV GUACURARI Y RIO  PARANA-Precios individuales-Salen 3 lotes de 10 x 48	f	2024-11-12 00:00:00	f	f	 30 x 48		90000	2024-11-12 00:00:00	2024-11-12 00:00:00	1440.00	f	4051	1	11601	51	1	49101	51	15	6101	51	1351	301	4	1	2301
+59551	Calle Marcelo T. de Alvear esq. calle Constitución-B°Don Santiago	t	2024-11-13 00:00:00	f	f	10 x 40		15000	2024-11-13 00:00:00	2024-11-13 00:00:00	400.00	f	6701	1	16001	51	1	49151	51	14	24501	51	1351	51	4	251	2301
+59601	FRANCISCO DE HARO ENTRE BARREYRO Y LLAMAS	f	2024-11-12 00:00:00	f	f	8 x 21		76000	2024-11-12 00:00:00	2024-11-12 00:00:00	168.00	f	4051	1	12751	51	1	49201	151	15	19751	1	351	301	4	401	4151
+59651	calle sin nombre barrio el puma (candelaria) son 3 lotes. Precio conjunto	f	2025-05-14 00:00:00	f	f	2 x (10x70) + 1 x (13.75x70)		90000	2025-05-14 00:00:00	2025-05-14 00:00:00	2362.00	f	3951	1	38401	51	1	49251	1	\N	\N	51	1251	301	36	101	2301
+59701	calle sin nombre barrio el puma (candelaria) Precio individual	f	2025-05-14 00:00:00	f	f	(10x70) 		35000	2025-05-14 00:00:00	2025-05-14 00:00:00	700.00	f	3951	1	38401	51	1	49251	1	\N	\N	51	1251	301	36	101	2301
+59751	calle sin nombre barrio el puma (candelaria) Precio individual	f	2025-05-14 00:00:00	f	f	(13,75x70) 		40000	2025-05-14 00:00:00	2025-05-14 00:00:00	962.50	f	3951	1	38401	51	1	49251	1	\N	\N	51	1251	301	36	101	2301
+58551	Florentin Ameghino y Mariano Moreno-Precio bloque	t	2024-09-27 00:00:00	f	f	22 x 33		0	2024-09-27 00:00:00	2024-09-27 00:00:00	726.00	t	6701	1	38001	1	1	48301	1	14	2001	51	1251	301	27	51	3451
+401	AV SAN MARTIN ESQUINA AV LEANDRO N ALEM-Precio Bloque	t	2025-04-03 00:00:00	f	f	25 x 50		65000	2025-04-03 00:00:00	2025-04-03 00:00:00	1250.00	f	2501	1	33701	51	1	301	51	\N	\N	1	1351	301	35	201	2301
+451	AV SAN MARTIN ESQUINA AV LEANDRO N ALEM-Precios individuales	t	2025-04-03 00:00:00	f	f	25 x 50		65000	2025-04-03 00:00:00	2025-04-03 00:00:00	1250.00	f	2501	1	33701	51	1	301	51	\N	\N	1	1351	301	35	201	2301
+501	Alicia moreau de Justo y Avda 170 Lt. 7C	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		23137	2024-12-10 00:00:00	2024-04-16 00:00:00	515.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+551	Alicia moreau de Justo y Avda 170 Lt. 7D	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		25020	2024-12-10 00:00:00	2024-04-16 00:00:00	556.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+601	Alicia moreau de Justo y Avda 170 Lt. 7E	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		27621	2024-12-10 00:00:00	2024-04-16 00:00:00	552.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+651	Alicia moreau de Justo y Avda 170 Lt. 7F	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		27143	2024-12-10 00:00:00	2024-04-16 00:00:00	542.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+701	Alicia moreau de Justo y Avda 170 Lt. 7G	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		27248	2024-12-10 00:00:00	2024-04-16 00:00:00	545.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+751	Alicia moreau de Justo y Avda 170 Lt. 7H	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		26971	2024-12-10 00:00:00	2024-04-16 00:00:00	539.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+801	Alicia moreau de Justo y Avda 170 Lt. 7I	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		29349	2024-12-10 00:00:00	2024-04-16 00:00:00	534.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+851	Alicia moreau de Justo y Avda 170 Lt. 7J	t	2021-07-12 00:00:00	f	f	10,70 x 52,13		31670	2024-12-10 00:00:00	2024-04-16 00:00:00	527.00	f	2851	1	9751	51	1	351	151	14	\N	51	801	51	1	1051	2301
+901	Catamarca entre Junin y San Luis	f	2022-01-04 00:00:00	f	f	14 x 43,30		380000	2024-09-04 00:00:00	2024-04-16 00:00:00	606.00	f	\N	1	26901	51	1	401	151	14	\N	51	1	251	21	901	2301
+951	Avda Los Horneros e/ calle Los Girasoles y Las Magnolias	f	2024-03-26 00:00:00	f	f	9,88 x 34,64		25000	2024-08-06 00:00:00	2024-03-26 00:00:00	342.00	f	7401	1	25051	51	1	451	151	14	\N	1	1201	301	2	1351	51
+1001	Avda Marconi esquina Avda Cabred	t	2023-05-22 00:00:00	f	f	15 x 40		165000	2024-11-12 00:00:00	2024-02-01 00:00:00	600.00	f	4401	1	1101	51	1	501	151	14	\N	1	51	301	1	1051	2301
+1051	Calle Maximo paz entre Avda Trinchera de San José y calle Vicente Casares	t	2023-09-06 00:00:00	f	f	17 x 40	Problema de turbación en la propiedad inicia juicio de desalojo. Llego a un acuerdo de desalojo con los usurpadores pagandoles una parte de la venta y desalojan. 10/6/24. dice no estar en la ciudad de Posadas, acepta ayuda en la venta pero tenemos que comunicarnos con su abogado, me brindo el número de contacto: 3764379233 (verificar datos del título, ya que se encontraba en declaratoria, son 4 herederos). 7/3/25	100000	2025-03-07 00:00:00	2024-06-10 00:00:00	680.00	f	6701	1	35501	51	1	551	151	15	14301	1	51	301	1	751	1601
+1101	Loteo la Mision-Precio Bloque	f	2022-06-16 00:00:00	f	f	21 x 57	No atiende el telefono. 1-8-24	20000	2024-08-01 00:00:00	2024-03-08 00:00:00	1157.00	t	4051	1	17901	51	1	601	1	15	14151	51	1251	301	1	1	2301
+1151	Loteo la Mision-Precios individuales	f	2022-06-16 00:00:00	f	f	21 x 57	No atiende el telefono. 1-8-24	20000	2024-08-01 00:00:00	2024-03-08 00:00:00	1157.00	t	4051	1	17901	51	1	601	1	15	14151	51	1251	301	1	1	2301
+1201	CALLE 80 E/ 93 Y 97	f	2023-10-19 00:00:00	f	f	10,40 x 26	No contesta llamadas ni Whatsapp. 3-4-25	45000	2025-04-03 00:00:00	2024-02-16 00:00:00	270.00	t	1801	1	19601	51	1	651	151	14	\N	51	701	301	1	451	2301
+1251	Rademacher esquina tierra del Fuego	t	2023-11-22 00:00:00	f	f	(34,62 x 31,35) - (13,42 x 9,83)		280000	2024-10-31 00:00:00	2023-11-22 00:00:00	953.42	f	1051	101	13801	51	1	701	151	9	21751	1	101	251	9	1051	2301
+1301	Calle Hernández e/ calle N. Castri y Av. Gobernador Roca	f	2023-01-19 00:00:00	f	f	12,99 x 25,89		120000	2024-12-13 00:00:00	2024-02-28 00:00:00	336.00	f	4551	1	22001	51	1	751	151	14	\N	51	1	301	2	1051	2301
+1351	Humberto Perez esquina las Azaleas (bloque)	t	2019-10-23 00:00:00	f	f	30 x 31x 1,19 x 31,06 x6 x 7,55 		30000	2024-11-26 00:00:00	2024-01-18 00:00:00	622.46	f	1001	1	2601	51	1	801	151	14	\N	51	801	51	14	401	2301
+1401	Humberto Perez esquina las Azaleas (precio unitario x 2)	t	2019-10-23 00:00:00	f	f	31 x 31x 1,19 x 31,06 x6 x 7,55 		30000	2024-11-26 00:00:00	2024-01-18 00:00:00	622.46	f	1001	1	2601	51	1	801	151	14	\N	51	801	51	14	401	2301
+1501	Calle 150 esquina calle 67	t	2024-01-11 00:00:00	f	f	15 x 30	Sigue en venta pero no quiere informar precio. 29-10-24. No quieren trabajar con nosotros ya fueron clientes y estan disconformes. 14-1-25	16000	2025-01-14 00:00:00	2024-03-27 00:00:00	450.00	t	6701	1	17551	51	1	901	151	15	15951	51	551	301	1	451	2301
+1551	Rio Gallegos entre Isla San Pedro y America Latina	f	2024-12-04 00:00:00	f	f	12 x 40		33000	2025-03-12 00:00:00	2024-12-04 00:00:00	480.00	f	6701	1	19151	51	1	951	151	2	13201	51	251	301	27	401	\N
+1651	BERON DE ASTRADA CASI SANTA CATALINA-conjunto	f	2020-10-08 00:00:00	f	f	34.64X80.26	No contesta el telefono. 13-12-24	250000	2024-12-13 00:00:00	2024-04-09 00:00:00	2780.21	t	7501	1	9801	51	1	1051	151	15	13901	51	301	301	4	1101	2301
+59801	Av 210 entre Calle 79 y Calle 77 (atrás del autodromo)	t	2024-11-25 00:00:00	f	f	9,33 x 33,28		15000	2024-11-25 00:00:00	2024-11-25 00:00:00	315.00	f	6701	1	23501	51	1	49301	151	21	3801	1	601	251	27	\N	151
+1701	BERON DE ASTRADA CASI SANTA CATALINA-Individuales 2 lotes	f	2020-10-08 00:00:00	f	f	34.64X80.26	No contesta el telefono. 13-12-24	250000	2024-12-13 00:00:00	2024-04-09 00:00:00	2780.21	t	7501	1	9801	51	1	1051	151	15	13901	51	301	301	4	1101	2301
+1751	Avda Fco. de Haro esq. calle 53	t	2024-04-24 00:00:00	f	f	12,21 x 36,36		70000	2024-07-15 00:00:00	2024-04-24 00:00:00	440.00	f	1051	51	24251	51	1	1101	151	2	5801	1	401	301	2	751	2301
+1801	Calle Chacabuco, entre calle Cordoba y Calle Fray Ruiz de Montoya -Son 4 lotes	f	2022-12-05 00:00:00	f	f	12,50 x 50		6950	2022-12-05 00:00:00	2022-12-05 00:00:00	625.00	f	1051	201	10301	51	1	1151	1	15	4051	51	1251	301	16	51	2301
+1851	Calle Rocamora entre 20 de junio y Avda Lopez y Planes	f	2020-10-09 00:00:00	f	f	9 x 38,90 - (de la mitad para atrás el lote se ensancha en 12,70 metros de ancho)		100000	2024-12-13 00:00:00	2024-03-26 00:00:00	400.00	f	4051	1	951	51	1	1201	151	14	10101	51	301	51	9	1051	2301
+1901	CALLE 80 ENTRE AV AGUADO  Y 97	f	2023-08-23 00:00:00	f	f	10 x 26		50000	2025-01-17 00:00:00	2024-05-07 00:00:00	260.00	f	8251	1	22101	51	1	1251	151	14	\N	51	701	301	1	451	2301
+1951	Barrio Privado Panambi- Unidad Funcional 79	f	2024-09-24 00:00:00	f	f	15 x 23		40000	2024-09-24 00:00:00	2024-09-24 00:00:00	345.00	f	1051	151	11801	51	1	1301	151	15	8951	51	801	1	25	451	51
+2001	Avda 147 entre calle 170 y calle 176	f	2022-03-08 00:00:00	f	f	14,42 x 48,13		100000	2024-12-13 00:00:00	2024-01-23 00:00:00	694.00	f	8951	1	12701	51	1	1351	151	14	17251	1	1001	301	1	451	2301
+2051	Almafuerte entre Iguazu y Roca 	f	2024-07-10 00:00:00	f	f	8,63 x 38,60		120000	2024-11-12 00:00:00	2024-07-10 00:00:00	333.00	f	1051	1	15301	51	1	1401	151	14	11801	1	301	251	25	401	2301
+2101	Avda Maipu entre Humbolt y Misiones	f	2022-01-21 00:00:00	f	f	10 x 30		100000	2024-10-31 00:00:00	2024-06-26 00:00:00	300.00	f	6551	1	2751	51	1	1451	151	14	\N	1	51	301	1	1051	2301
+2201	Avda San Martin entre Avda Bls Parera y calle Gdor Barreiro 	f	2023-04-21 00:00:00	f	f	17,32 x 36,65		115000	2024-09-24 00:00:00	2024-05-09 00:00:00	635.00	f	5051	1	4251	51	1	1551	151	14	\N	1	351	301	1	451	2301
+2251	Astor Piazzola entre Carlos Gardel y Polaco Goyeneche	f	2024-10-08 00:00:00	f	f	10 x 35		17500	2024-10-08 00:00:00	2024-10-08 00:00:00	350.00	f	6701	1	2401	51	1	1601	51	2	22351	51	1351	301	27	201	2301
+2351	Calle sin nombre, entre Calle 128 y Calle 130 (Barrio Pellegrini)	f	2024-10-16 00:00:00	f	f	15 x 37,50		25000	2024-10-16 00:00:00	2024-10-16 00:00:00	562.00	f	4051	1	12951	51	1	1701	151	2	12751	51	1151	301	27	701	2301
+2451	Avda Las Heras entre Calle 20 de junio y pablo Allain	f	2023-11-23 00:00:00	f	f	9,20 x 32,46	Se escuchan ofertas de financiación. 25-3-25	55000	2025-03-25 00:00:00	2024-04-15 00:00:00	298.00	f	1401	1	3051	51	1	1801	151	14	\N	1	651	301	24	1051	1501
+2501	calle bolivia entre Av Rademacher y calle san marcos	f	2025-02-03 00:00:00	f	f	14 x 25		69000	2025-02-03 00:00:00	2025-02-03 00:00:00	350.00	f	1051	101	21351	51	1	1851	151	21	3351	51	101	251	21	401	2301
+2551	Av Juan Jose Paso y Godoy Cruz	f	2024-12-06 00:00:00	f	f	12,57 x 26 x 33		30000	2024-12-06 00:00:00	2024-12-06 00:00:00	327.00	f	6701	1	16201	51	1	1901	151	2	24101	51	551	251	27	451	2301
+2601	Avda Vivanco e/ Avda Andresito y Avda Bustamante-Precios unitarios	f	2024-03-15 00:00:00	f	f	13 x 21,37		26000	2025-01-27 00:00:00	2024-03-15 00:00:00	288.00	f	6251	1	25201	51	1	1951	151	2	\N	1	951	301	2	\N	2301
+2651	Avda Vivanco e/ Avda Andresito y Avda Bustamante-Precios unitarios	t	2024-03-15 00:00:00	f	f	13 x 21,37		28000	2024-09-19 00:00:00	2024-03-15 00:00:00	288.00	f	6251	1	25201	51	1	1951	151	2	\N	1	951	301	2	\N	2301
+2701	Ituzaingo.Corrientes-Z/Zoologíco-Ch92-Entre Calle s/N y Calle Bolivia y Entre Calle San Juan y el Río Paraná	t	2025-03-07 00:00:00	f	f	110,99 + 82,57 (de Frente al río) Una parte en un peñón y la otra parte debajo x 187,62 de fondo por calle San Juan x 85,16 por calle S/N x 54,40 por calle Bolivia	Posesión veinteañal entrámite judicial con antigüedad comprobable. Honorarios por parte del vendedor.	400000	2025-03-07 00:00:00	2025-03-07 00:00:00	10479.90	f	1051	101	7951	51	1	2001	101	9	8451	51	1401	251	9	\N	2001
+2751	Avda Centenario entre Gral Ramirez y Pedro Correa	f	2024-07-17 00:00:00	f	f	17.32 x 41.15 		68000	2024-07-17 00:00:00	2024-07-17 00:00:00	712.00	f	2551	1	7851	51	1	2051	151	9	\N	1	301	301	27	1101	2301
+2801	Avda Urquiza entre Avda aguado y calle 95	f	2021-09-28 00:00:00	f	f	12 x 50		160000	2024-10-03 00:00:00	2024-02-22 00:00:00	600.00	f	6701	1	451	51	1	2101	151	2	6351	1	651	251	21	451	4901
+2851	La Calandria e. Calle Barbacua y Cale sn - Lote 215A	f	2023-10-23 00:00:00	f	f	100 x 200		70000	2024-10-03 00:00:00	2024-03-21 00:00:00	20000.00	f	6701	1	38051	51	1	2151	51	2	10751	51	1351	301	22	351	2301
+2901	Ayacucho entre Alvear y Belgrano	f	2023-10-02 00:00:00	f	f	8,66 x 30,31	Recibe casa hasta usd 60.000. 24-1-24	150000	2024-12-13 00:00:00	2024-02-26 00:00:00	262.00	f	6501	1	6301	51	1	2201	151	14	\N	51	1	301	4	551	2301
+2951	Avda Trinchera de San Jose entre Calle Maximo POaz y Calle 25	f	2024-01-12 00:00:00	f	f	10,82 x 30,30		400000	2024-11-12 00:00:00	2024-01-12 00:00:00	327.00	f	351	1	9851	51	1	2251	151	14	\N	1	51	301	1	751	2301
+3001	Las Begonias esquina Ibirá Pytá-Barrio Jardín	t	2025-03-26 00:00:00	f	f	20 x 24		20900	2025-03-26 00:00:00	2025-03-26 00:00:00	275.00	f	1051	201	5401	51	51	2301	151	2	23151	51	801	251	2	401	2301
+59851	Av 210 entre Calle 79 y Calle 77 (atrás del autodromo)	f	2024-11-25 00:00:00	f	f	9,33 x 33,28		15000	2024-11-25 00:00:00	2024-11-25 00:00:00	315.00	f	6701	1	23501	51	1	49301	151	21	3801	1	601	251	27	\N	151
+3051	Santa Fé entre Colón y Félix de Azara	f	2020-11-12 00:00:00	f	f	10,26 x 43,30 (desde de 8 metros se angosta a 9,52 metros de contrafrente)		300000	2024-10-24 00:00:00	2024-02-23 00:00:00	405.00	f	5951	1	351	51	1	2351	151	2	10801	51	1	51	9	551	2301
+3101	Avda Ituzaingo entre calle 129 y calle 127 ( Avda Ituzaingo)	f	2019-08-16 00:00:00	f	f	10 x30	Plano en trámite	28000	2024-09-02 00:00:00	2024-04-11 00:00:00	300.00	f	8201	1	27651	51	1	2401	151	14	\N	1	951	51	4	\N	2301
+3151	Avda Chacabuco, entre Avda Gral las Heras  y Calle Apostoles 	f	2023-11-28 00:00:00	f	f	9,25 x 36,81		50000	2024-10-23 00:00:00	2024-04-16 00:00:00	340.00	f	701	1	19451	51	1	2451	151	2	\N	1	751	\N	16	401	2301
+3251	calle 112 e/ calle 197 y calle 195-Pueblo chico	f	2024-03-15 00:00:00	f	f	15 x 33,29 x 15,27 x 36,18		18200	2024-06-03 00:00:00	2024-06-03 00:00:00	521.00	f	1051	101	24301	51	1	2551	151	2	17601	51	1151	51	2	\N	2301
+3301	Avda Tacuarí esquina calle Luis Pérez (129)	t	2023-02-28 00:00:00	f	f	21 x 25		65000	2024-08-06 00:00:00	2024-04-23 00:00:00	525.00	f	1051	51	23901	51	1	2601	151	1	1001	1	851	301	2	451	2301
+3401	Calle Santo Pipo casi calle Campo Grande	f	2022-06-29 00:00:00	f	f	10 x 36,16		9000	2022-06-29 00:00:00	2022-06-29 00:00:00	362.00	f	1051	151	22901	51	1	2701	51	15	24651	51	1351	251	20	101	401
+3451	Av. Corrientes e/ calle Marcelo T. de Alvear y 22 de Diciembre	f	2024-10-24 00:00:00	f	f	8,75 x 61,60 x 16,75 x 34,70 x 5 x 8,36 x 3 x 18,54		200000	2025-03-28 00:00:00	2024-10-24 00:00:00	841.00	f	1351	1	24601	51	1	2751	151	23	\N	1	301	301	2	751	3601
+3551	Calle 80 entre calle 119 y calle 121-Precio bloque	f	2023-11-07 00:00:00	f	f	18,80 x 36,80		50000	2025-03-10 00:00:00	2024-03-19 00:00:00	692.00	f	4051	1	6651	51	1	2851	151	14	24451	51	701	301	1	1051	\N
+3601	Calle 80 entre calle 119 y calle 121-Precios individuales	f	2023-11-07 00:00:00	f	f	18,80 x 36,80		50000	2025-03-10 00:00:00	2024-03-19 00:00:00	692.00	f	4051	1	6651	51	1	2851	151	14	24451	51	701	301	1	1051	\N
+3651	Calle Soria e/ calle Newbery y calle Lorenzini	f	2023-12-19 00:00:00	f	f	9,09 x 36,80		38000	2024-11-29 00:00:00	2023-12-19 00:00:00	333.00	f	2401	1	25751	51	1	2901	151	2	20551	51	751	301	2	751	2301
+3701	Avda Rio Iguazu esquina Calle Arroyo Santa Ana-Precio Bloque	t	2024-03-18 00:00:00	f	f	29,82 x 59.64	No acepta financiación, solo al contado porque son varios Herederos y tienen que pagarle al abogado y la comisión a la inmobiliaria. Puede aceptar una oferta por el terreno pero no me dijo cuánto. Dijo que podemos pasar el link de la publicación pero no publicar. 2-8-24	55000	2024-12-13 00:00:00	2024-03-18 00:00:00	1778.00	f	7401	1	18001	51	1	3001	1	14	\N	1	1251	301	1	101	2301
+3751	Avda Rio Iguazu esquina Calle Arroyo Santa Ana-Precios individuales	t	2024-03-18 00:00:00	f	f	29,82 x 59.64	No acepta financiación, solo al contado porque son varios Herederos y tienen que pagarle al abogado y la comisión a la inmobiliaria. Puede aceptar una oferta por el terreno pero no me dijo cuánto. Dijo que podemos pasar el link de la publicación pero no publicar. 2-8-24	55000	2024-12-13 00:00:00	2024-03-18 00:00:00	1778.00	f	7401	1	18001	51	1	3001	1	14	\N	1	1251	301	1	101	2301
+3801	Angel Acuña entre Hernandez y Sargento Cabral 	f	2024-07-12 00:00:00	f	f	13 x 43,30	El dueño esta fuera del pais. Cuando regrese le interesa hablar con algun asesor. 18-3-25	200000	2025-03-18 00:00:00	2024-07-12 00:00:00	503.00	f	6701	1	30901	51	1	3051	151	14	\N	51	1	51	27	1051	3851
+3851	Avda Tomas Guido entre Avda alma fuerte y calle 18	f	2023-12-06 00:00:00	f	f	9,50 x 29,30	No atiende el telefono. 1-8-24	450000	2024-08-01 00:00:00	2023-12-06 00:00:00	278.00	t	3651	1	8651	51	1	3101	151	2	\N	1	301	51	24	401	2301
+3901	calle España (entre Av. Cabred y Florentino Ameghino	f	2024-11-01 00:00:00	f	f	9 x 21,65		100000	2025-03-07 00:00:00	2024-11-01 00:00:00	195.00	f	6701	1	8051	51	1	3151	151	14	21451	51	51	51	32	1101	2301
+3951	CALLE 124 ENTRE LOPEZ TORRES Y COSTANERA-2 lotes-Precioconjunto	f	2024-10-21 00:00:00	f	f	(10 x 30) x 2		220000	2024-11-20 00:00:00	2024-10-21 00:00:00	600.00	f	1051	201	18751	51	51	3201	151	14	9051	51	101	301	27	751	2301
+4001	Avda 117 esquina 180-Precio bloque	t	2023-06-21 00:00:00	f	f	66.68 x 350	Se hablo p/ lotear, ellos son 4 herederos y no quieren, analizaron la idea pero la descartaron. Tuvieron otra propuesta también para lotear pero dijieron que no. Tampoco quieren autorizar pero están dispuestos a trabajar con candidatos-23-2-24	150000	2025-04-21 00:00:00	2024-06-10 00:00:00	23338.00	f	1051	201	14451	51	1	3251	151	9	24551	1	801	251	1	1051	3151
+4051	Avda 117 esquina 180-Precios individuales	t	2023-06-21 00:00:00	f	f	66.68 x 350	Se hablo p/ lotear, ellos son 4 herederos y no quieren, analizaron la idea pero la descartaron. Tuvieron otra propuesta también para lotear pero dijieron que no. Tampoco quieren autorizar pero están dispuestos a trabajar con candidatos-23-2-24	150000	2025-04-21 00:00:00	2024-06-10 00:00:00	23338.00	f	1051	201	14451	51	1	3251	151	9	24551	1	801	251	1	1051	3151
+4201	CALLE OCEANO ATLANTICO ENTRE CALLES 10 DE JUNIO Y CAPITAN GIACHINO	f	2025-04-07 00:00:00	f	f	10 x 32		26000	2025-04-07 00:00:00	2025-04-07 00:00:00	320.00	f	151	1	38101	51	1	3351	151	\N	\N	51	251	301	35	751	2301
+4251	Calle Paraguay entre Calle Mitre y Av. Roque Saenz Peña	f	2022-11-30 00:00:00	f	f	17 x 30	No acepta financiamiento. El dueño es de buenos aires y cree que vale eso xq los terrenos allá valen eso [dijo el amigo]. Pero dijo que se está dando cuenta que no vende y capaz va a aflojar. 13-3-25	30000	2025-03-13 00:00:00	2024-04-10 00:00:00	510.00	f	6701	1	901	51	1	3401	1	2	24401	51	1251	51	20	51	2301
+4301	Calle Paraguay entre Calle Mitre y Av. Roque Saenz Peña	f	2022-11-30 00:00:00	f	f	10 x 30	No acepta financiamiento. El dueño es de buenos aires y cree que vale eso xq los terrenos allá valen eso [dijo el amigo]. Pero dijo que se está dando cuenta que no vende y capaz va a aflojar. 13-3-25	20000	2025-03-13 00:00:00	2024-04-10 00:00:00	300.00	f	6701	1	901	51	1	3401	1	2	24401	51	1251	51	20	51	2301
+4351	Calle Ambrosetti entre Av Francisco de Haro y calle Perito Moreno	f	2024-03-18 00:00:00	f	f	8,66 x 43,30		60000	2024-12-13 00:00:00	2024-03-18 00:00:00	375.00	f	4401	1	17751	51	1	3451	151	14	\N	51	51	301	1	1101	2301
+4401	Calle Hipolito Yrigoyen , entre Avenida Gral. Lavalle y Calle Beethoven	f	2023-11-24 00:00:00	f	f	14 x 30		150000	2024-10-17 00:00:00	2024-04-16 00:00:00	420.00	f	9051	1	12251	51	1	3501	151	2	\N	51	301	51	16	451	2301
+4451	Calle Estado de Israel entre Mariano Moreno y Ambrosetti	f	2024-04-24 00:00:00	f	f	13 x 36	Terreno intrusado. 27-12-24	180000	2024-12-27 00:00:00	2024-04-24 00:00:00	468.00	t	6701	1	23401	51	1	3551	151	15	12251	51	51	51	25	1101	2301
+4501	Bº Costa Mango-Lote 38	f	2024-08-28 00:00:00	f	f	36.17 x 23.63 x 22.68 x 17.20 x 28.29 x 67.29		35000	2024-08-28 00:00:00	2024-08-28 00:00:00	1581.00	f	1051	101	1651	51	1	3601	151	15	16401	51	1151	251	1	1001	2301
+4601	Avda Centenario e/ Avda Jaureche y calle S/N-Precio bloque	f	2024-07-16 00:00:00	f	f	132,51 x 79,10 x 101,80 x 7,14 x 133,20 x 113,20		980000	2025-03-12 00:00:00	2024-07-16 00:00:00	8876.00	f	6701	1	24951	51	1	3701	151	2	11651	1	851	51	2	451	2301
+4651	Avda Centenario e/ Avda Jaureche y calle S/N-Precios individuales	f	2024-07-16 00:00:00	f	f	132,51 x 79,10 x 101,80 x 7,14 x 133,20 x 113,20		980000	2025-03-12 00:00:00	2024-07-16 00:00:00	8876.00	f	6701	1	24951	51	1	3701	151	2	11651	1	851	51	2	451	2301
+4701	Avda López y Planes esquina calle 117	t	2023-09-08 00:00:00	f	f	10,1 x 36,80		75000	2024-10-14 00:00:00	2024-01-18 00:00:00	371.00	f	3501	1	38751	51	1	3751	151	2	\N	1	701	301	2	751	2301
+4751	Avda Almirante Brown e/ calle 127 y calle 129-4Lts Individuales	f	2022-10-11 00:00:00	f	f	(10,50 x 36,81)		35000	2024-11-01 00:00:00	2024-05-03 00:00:00	386.51	f	1051	201	\N	51	1	3801	151	2	3701	1	901	301	2	451	2301
+4801	Avda Almirante Brown e/ calle 127 y calle 129-Lt E	f	2022-10-11 00:00:00	f	f	(10,50 x 36,81)		38000	2024-11-01 00:00:00	2024-05-03 00:00:00	386.51	f	1051	201	\N	51	1	3801	151	2	11151	1	901	301	2	451	2301
+4851	Avda Almirante Brown esquina calle 129 y esquina 127-2 Lotes	t	2022-10-11 00:00:00	f	f	(10,50 x 36,81)		38000	2024-11-01 00:00:00	2024-05-03 00:00:00	386.51	f	1051	201	\N	51	1	3801	151	2	3701	1	901	301	2	451	2301
+4901	Calle Tamareu Entre Calle 127 y calle 129-Lt. J-Interno	f	2022-10-11 00:00:00	f	f	(10,50 x 36,81)		27300	2024-11-01 00:00:00	2024-05-03 00:00:00	386.51	f	1051	201	\N	51	1	3801	151	2	11201	1	901	301	2	451	2301
+4951	Calle Tamareu Esquina Calle 129	t	2022-10-11 00:00:00	f	f	(10,50 x 36,81)		35000	2024-11-01 00:00:00	2024-05-03 00:00:00	386.51	f	1051	201	\N	51	1	3801	151	2	17951	1	901	301	2	451	2301
+5001	La Rioja entre 25 de Mayo y 3 de febrero	f	2020-11-17 00:00:00	f	f	11,15 x 43,38	Escuchan ofertas. Según el de torres hasta 220.000 sabe que aceptarían de contado. Financiación podrían escuchar algo corto y en dólares. No aceptarían propiedades xq son varios herederos7/2/23	240000	2024-10-31 00:00:00	2024-01-25 00:00:00	483.69	f	8651	1	251	51	1	3851	151	14	8601	51	1	51	9	501	2301
+5051	Calle Payret e/ Catalano y calle 141	f	2024-10-21 00:00:00	f	f	9,20 x 36,80		22000	2024-10-21 00:00:00	2024-10-21 00:00:00	337.00	f	1051	51	23901	51	1	3901	151	2	1001	51	901	301	2	401	2301
+5101	Calle Catalano entre Av. Alte. Brown y Calle Tamareu	f	2023-11-23 00:00:00	f	f	9,81 x 36,81		28800	2024-10-10 00:00:00	2023-12-07 00:00:00	361.00	f	1051	201	29851	51	1	3951	151	23	17701	51	901	251	22	451	2301
+5151	Hipolito Irigoyen (casi Av Jauretche ) entre Av Centenario y Av Alem 	f	2025-01-24 00:00:00	f	f	20 x 41,34		80000	2025-01-24 00:00:00	2025-01-24 00:00:00	827.00	f	4501	1	9351	51	1	4001	151	2	\N	51	851	301	27	451	2301
+5201	25 DE Mayo entre Sarmiento y San Martín	f	2023-04-21 00:00:00	f	f	10,70 x 43,30 x 10,70 x 8,50 x 4,45 x 34,50		170000	2023-04-21 00:00:00	2023-04-21 00:00:00	318.00	f	1051	101	14801	51	1	4051	151	9	4501	51	1	251	9	501	2301
+5251	Calle 81 y calle 230	t	2024-03-25 00:00:00	f	f	55.90 x 354.46 x 101.33x 171.88 x 60.34 x 663.21		150000	2024-10-28 00:00:00	2024-04-12 00:00:00	17242.00	f	6701	1	7151	51	1	4101	151	2	6751	51	1101	251	1	\N	2251
+5301	Jujuy entre Bolívar y Córdoba	f	2023-12-04 00:00:00	f	f	9 x 33,60	Estan redefiniendo precio 22-2-24.	300000	2024-10-28 00:00:00	2024-02-22 00:00:00	302.00	f	6701	1	4901	51	1	4151	151	2	23851	51	1	51	24	651	2301
+5401	Calle Los espinillos entre calle 96 y Av Ituzaingo	f	2019-12-12 00:00:00	f	f	9,20 x36,80		30000	2024-11-25 00:00:00	2024-04-08 00:00:00	338.56	f	301	1	29451	51	1	4251	151	2	\N	51	751	51	17	451	2301
+5451	Avda Trincheras de San Jose entre Avda Uruguay y Fco de Haro	f	2024-01-27 00:00:00	f	f	17,32 x 34,64 		120000	2024-01-27 00:00:00	2024-01-27 00:00:00	600.00	f	1051	101	11001	51	51	4301	151	9	7601	1	51	251	9	451	2301
+5501	Av Ituzaingo entre Calle 113 y los espinillos	f	2024-10-22 00:00:00	f	f	11,60 x 25		58000	2024-12-24 00:00:00	2024-10-22 00:00:00	290.00	f	6701	1	33301	51	1	4351	151	9	14601	1	751	301	1	451	2301
+5551	CALLE 167, ENTRE AV. TAMBOR DE TACUARI Y AV. COSTANERA OESTE. POSADAS. ZONA CLUB ROWING	f	2025-05-16 00:00:00	f	f	17,6 x 18,6		50000	2025-05-16 00:00:00	2025-05-16 00:00:00	328.00	f	2001	1	34001	51	1	4401	151	\N	\N	51	851	301	35	401	2301
+5851	calle pasaje brasil entre dutra y peyrte	f	2023-05-18 00:00:00	f	f	9,20 x 36,81		63000	2024-11-12 00:00:00	2024-02-01 00:00:00	339.00	f	4551	1	5201	51	1	4601	151	9	\N	51	351	301	1	751	2301
+29351	CALLE FACUNDO QUIROGA, ENTRE CALLE ROLON Y CALLE RICARDO BALBIN	f	2025-04-24 00:00:00	f	f	11,11 x 25,55		0	2025-04-24 00:00:00	2025-04-24 00:00:00	284.00	f	2551	1	34401	1	1	23651	51	\N	\N	51	1351	301	35	251	2301
+4551	Avda ex Ruta 213 esquina Avda 254	t	2024-09-03 00:00:00	f	f	38,67 x 36		35000	2025-07-07 12:05:08.09147	2024-09-03 03:00:00	1392.00	f	6701	1	2201	51	1	3651	151	23	21401	1	1051	251	2	1551	2301
+5801	Monte Caceros esquina 25 de Mayo-Precios individuales	t	2024-12-17 00:00:00	f	f	20 x 30		14001	2025-07-04 11:27:52.463112	2024-12-17 03:00:00	600.00	f	6701	1	13001	51	1	4551	51	2	24754	51	1351	301	27	201	2301
+5951	Calle Ramon Lista entre Av Almafuerte y calle Mborore	f	2024-08-15 00:00:00	f	f	13,57 x 50		380000	2024-12-19 00:00:00	2024-08-15 00:00:00	678.00	f	2201	1	1301	51	1	4701	151	14	\N	51	301	301	25	401	2301
+6001	Avda Aguado entre Andresito y Lorenzini 	f	2024-10-21 00:00:00	f	f	17 x 36,80		100000	2024-12-27 00:00:00	2024-10-21 00:00:00	625.00	f	6701	1	27701	51	1	4751	151	2	17301	1	751	301	27	751	2301
+6051	Calle Gatti esquina calle Itati-Lote 13 y 14	t	2023-09-01 00:00:00	f	f	10 x 50		25000	2025-04-10 00:00:00	2024-01-09 00:00:00	500.00	f	3101	1	4801	51	1	4801	51	9	\N	51	1351	301	1	51	2301
+6101	Calle Gatti esquina calle Itati-Lotes 15 al 19-Precios individuales	t	2023-09-01 00:00:00	f	f	10 x 35		21000	2025-04-10 00:00:00	2024-01-09 00:00:00	350.00	f	3101	1	4801	51	1	4801	51	9	\N	51	1351	301	1	51	2301
+6251	Calle 197 entre calle 116 y 118 Pueblo Chico-Precio bloque	f	2024-10-10 00:00:00	f	f	24 x 43,40		35000	2024-10-10 00:00:00	2024-10-10 00:00:00	1039.20	f	3401	1	4651	51	1	4901	151	14	\N	51	1151	301	25	1501	2301
+6301	Calle 197 entre calle 116 y 118 Pueblo Chico-Precios individuales	f	2024-10-10 00:00:00	f	f	24 x 43,40		35000	2024-10-10 00:00:00	2024-10-10 00:00:00	1039.20	f	3401	1	4651	51	1	4901	151	14	\N	51	1151	301	25	1501	2301
+6351	Av Montoya, calle Lavalle y calle Cordoba	f	2023-04-11 00:00:00	f	f	12.50 x 30		6500	2024-11-01 00:00:00	2023-12-14 00:00:00	375.00	f	1051	201	\N	51	1	4951	1	1	3701	51	1251	301	1	51	2301
+6401	Avda Montoya, calle LAvdaalle y calle Cordoba	f	2023-04-11 00:00:00	f	f	12.50 x 30		7000	2024-11-01 00:00:00	2023-12-14 00:00:00	375.00	f	1051	201	\N	51	1	4951	1	1	3701	1	1251	301	1	51	2301
+6451	Avda Montoya, calle LAvdaalle y calle Cordoba	t	2023-04-11 00:00:00	f	f	12.50 x 50		8000	2024-11-01 00:00:00	2023-12-14 00:00:00	625.00	f	1051	201	\N	51	1	4951	1	1	3701	1	1251	301	1	51	2301
+6501	Avda Tambor de tacuari entre calle 111 y calle 109	f	2023-11-15 00:00:00	f	f	9,20 x 36,81		73000	2024-11-12 00:00:00	2024-03-19 00:00:00	339.00	f	4501	1	15851	51	1	5001	151	9	\N	1	651	301	24	751	2301
+6551	Calle Antonio Llamosas entre Av. Areco y Navajo Centeno	f	2024-09-12 00:00:00	f	f	11 x 36	Sucesion no se sabe la etapa. 12-9-24	65000	2024-09-12 00:00:00	2024-09-12 00:00:00	396.00	t	6701	1	29551	51	1	5051	151	9	16751	51	701	301	25	751	2701
+6601	Calle 49 entre Sgto cabral y Mutinelli	f	2023-05-05 00:00:00	f	f	13.94x28.29x11.41X18.56		270000	2024-09-19 00:00:00	2024-05-13 00:00:00	246.00	f	3001	1	13651	51	1	5101	151	14	\N	51	1	51	26	1151	2301
+6651	Avda Roque Saenz Peña entre Salta y Tucuman	f	2024-07-24 00:00:00	f	f	10 x 26,35		185000	2025-03-27 00:00:00	2024-07-24 00:00:00	264.00	f	601	1	2951	51	1	5151	151	9	\N	1	1	51	27	1301	2301
+6701	Av. Cabred, entre av. Marconi y calle sin nombre	f	2023-07-27 00:00:00	f	f	11,87 x 40		160000	2024-10-16 00:00:00	2024-05-06 00:00:00	475.00	f	7651	1	38151	51	1	5201	151	2	\N	51	51	301	26	1051	2301
+6801	Mutinelli  entre Gobernador Roca y Nicomedes	f	2024-11-28 00:00:00	f	f	8,55 x 9,75 x 23,18 x 22,48 		200000	2024-11-28 00:00:00	2024-11-28 00:00:00	208.00	f	2401	1	19251	51	1	5301	151	2	\N	51	1	301	27	1151	2301
+6901	Calle Newbery entre calle 103 y calle 105	f	2024-04-09 00:00:00	f	f	10 x 30		35000	2024-08-14 00:00:00	2024-04-09 00:00:00	300.00	f	6251	1	32351	51	1	5401	151	9	\N	51	751	51	25	1051	2001
+6951	Av Santa Catalina entre Beron deAstrada y Av Centenario 	f	2025-01-20 00:00:00	f	f	9 x 34,64		90000	2025-03-10 00:00:00	2025-01-20 00:00:00	311.76	f	6701	1	19101	51	1	5451	151	2	21701	1	301	251	27	1101	2301
+7101	Avda 147 entre 176 y 180 lote 18 - Mz C	t	2021-05-03 00:00:00	f	f	10,00 x 30		30000	2024-11-01 00:00:00	2023-12-14 00:00:00	300.00	f	1051	201	\N	51	1	5501	151	2	17801	1	1001	\N	12	451	2301
+7151	Avda 147 entre 176 y 180 lote 19 - Mz C	t	2021-05-03 00:00:00	f	f	10,00 x 30		30000	2024-11-01 00:00:00	2023-12-14 00:00:00	300.00	f	1051	201	\N	51	1	5501	151	2	13601	1	1001	\N	12	451	2301
+7201	Avda 147 entre 176 y 180 lote 20 - Mz C	t	2018-09-25 00:00:00	f	f	10,50 x 33		30000	2024-11-01 00:00:00	2023-12-14 00:00:00	346.50	f	1051	201	301	51	1	5501	151	2	3701	1	1001	\N	12	451	2301
+7251	Nicolas Avellaneda y calle 156-Detrás de Don Casimiro-Precio conjunto	t	2022-04-14 00:00:00	f	f	150,89 x 220,79	escuchan oferta por las 3 HA, ellos quisieran ver que % de m2 construidos ofrecemos o que de todo les interesaría aceptar, los propietarios son una Sociedad Anonima, que necesitaría escriturar el 100% de lo declarado	200000	2024-09-04 00:00:00	2024-04-23 00:00:00	33378.00	f	7751	1	17251	51	1	5551	151	14	20351	51	551	301	1	751	2301
+7301	Nicolas Avellaneda y calle 156-Detrás de Don Casimiro-Precios individuales	t	2022-04-14 00:00:00	f	f	150,89 x 220,79	escuchan oferta por las 3 HA, ellos quisieran ver que % de m2 construidos ofrecemos o que de todo les interesaría aceptar, los propietarios son una Sociedad Anonima, que necesitaría escriturar el 100% de lo declarado	200000	2024-09-04 00:00:00	2024-04-23 00:00:00	33378.00	f	7751	1	17251	51	1	5551	151	14	20351	51	551	301	1	751	2301
+7351	Avda Jauretche esquina Avda Bustamante-Lote 1	f	2022-10-18 00:00:00	f	f	11 x 15,76 x 6 x 1,76 x 36,13 x 17 x 56,13-		69000	2024-10-16 00:00:00	2024-05-06 00:00:00	855.00	f	2001	1	26901	51	1	5601	151	2	7751	1	951	301	2	401	2301
+7401	Avda Jauretche esquina Avda Bustamante-Lote 4	t	2022-10-18 00:00:00	f	f	12 x 44,13		53000	2024-10-16 00:00:00	2024-05-06 00:00:00	530.00	f	2001	1	26901	51	1	5601	151	2	7751	1	951	301	2	401	2301
+29401	EVA PERON CASI PEDRO FERNANDEZ	f	2024-06-14 00:00:00	f	f	10,50 x 33,90		10000000	2025-07-07 13:12:22.373404	2024-06-14 03:00:00	356.00	f	6701	1	12301	1	1	23701	51	14	11301	51	1351	301	4	251	2301
+6851	Ruta 105 - Santa Ines - Z/Club de Empleados de Comercio - Bloque	f	2014-08-29 00:00:00	f	f	51x256x50x270		60000	2025-07-04 14:48:47.134756	2014-08-29 03:00:00	13189.00	f	6701	1	801	51	1	5351	51	2	5651	151	1351	301	12	301	2301
+7451	Avda Jauretche esquina Avda Bustamante-Lotes 2 y 3 (Precios individuales)	f	2022-10-18 00:00:00	f	f	12 x 44,13		47000	2024-10-16 00:00:00	2024-05-06 00:00:00	530.00	f	2001	1	26901	51	1	5601	151	2	7751	1	951	301	2	401	2301
+7501	calle sucre (cortada) entre brasilia y nicaragua	f	2025-02-05 00:00:00	f	f	10 x 30		19200	2025-02-05 00:00:00	2025-02-05 00:00:00	300.00	f	1051	101	1951	51	51	5651	151	21	17651	51	801	201	21	401	2301
+7651	Calle Texo esquina Calle 25	f	2021-12-13 00:00:00	f	f	10 x 26,26 x 31 x 11	Son 8 hermanos que no se ponen de acuerdo con el precio. El terreno esta usurpado, hay personas que no quieren salir. 15-8-24. Llegaron a un acuerdo para pagarles con la venta a los usurpadores. Quiere asesoría de precio. 18-3-25	110000	2025-03-18 00:00:00	2024-05-06 00:00:00	298.00	t	6701	1	6851	51	1	5801	151	15	14251	51	51	1	1	1051	2301
+7751	Avda Francisco de Haro entre Calle Alemania y Avda Buchardo	f	2024-05-07 00:00:00	f	f	17,32 x 31,64		100000	2024-05-07 00:00:00	2024-05-07 00:00:00	548.00	f	1051	201	20651	51	1	5901	151	15	1151	1	101	51	1	451	4201
+7801	calle 162 entre calles Brasilia y Potosi	f	2023-06-08 00:00:00	f	f	12 x 26		23000	2024-11-28 00:00:00	2024-02-08 00:00:00	326.00	f	8901	1	19501	51	1	5951	151	14	\N	51	801	51	20	401	2301
+7851	Avda Las Heras entre calle 106 y calle 108	f	2023-08-30 00:00:00	f	f	10,33 x 33		50000	2024-09-23 00:00:00	2024-05-07 00:00:00	343.00	f	9001	1	9401	51	1	6001	151	14	\N	1	751	301	1	401	2301
+7901	calle 106 entre AV Las Heras y calle 108	f	2023-08-30 00:00:00	f	f	10,33 x 33		42000	2024-09-23 00:00:00	2024-05-07 00:00:00	343.00	f	9001	1	9401	51	1	6001	151	14	\N	51	751	301	1	401	2301
+8051	Avda Iguazu esquina Calle Cuñapiru	t	2024-06-04 00:00:00	f	f	13,36 x 33,40		27000	2025-05-09 00:00:00	2024-06-04 00:00:00	446.00	f	5651	1	5851	51	1	6101	1	14	\N	1	1251	301	25	101	2301
+8101	Calle Juana azurduy casi Sarandi -Lote 41	f	2023-10-09 00:00:00	f	f	10 x 30	Por ahora pausa la venta. Pablo va a hacer seguimiento. 11-12-23	8000	2023-12-11 00:00:00	2023-12-11 00:00:00	300.00	t	6701	1	5601	51	1	6151	1	2	17001	51	1251	301	22	51	2301
+8151	calle 178 entre calle 123 y calle 125-Precio bloque	f	2024-02-01 00:00:00	f	f	53,04 x 64.81	Esta tratando de cerrar la venta por su cuenta. En un mes se le vuelve a contactar. 6-1-25. esta en una negociación con una persona que da vueltas, tiene piso en el lugar, 3 canchas de fútbol 5  y las bases para un tinglado, tiene titulo que salio hace pocos días, tiene informe de terreno, y que se comuniquen con el para más menos el día 30 de este mes, que si no cierra el negocio quiere nuestros servicios, acepta financiación. 7-3-25	123000	2025-05-29 10:56:35.072168	2024-02-01 03:00:00	3404.00	f	6701	1	3301	51	1	6201	151	9	5601	51	801	301	1	751	2301
+8201	calle 178 entre calle 123 y calle 125-Precios individuales	f	2024-02-01 00:00:00	f	f	53,04 x 64.81	Esta tratando de cerrar la venta por su cuenta. En un mes se le vuelve a contactar. 6-1-25. esta en una negociación con una persona que da vueltas, tiene piso en el lugar, 3 canchas de fútbol 5  y las bases para un tinglado, tiene titulo que salio hace pocos días, tiene informe de terreno, y que se comuniquen con el para más menos el día 30 de este mes, que si no cierra el negocio quiere nuestros servicios, acepta financiación. 7-3-25	123000	2025-05-29 10:58:20.482789	2024-02-01 03:00:00	3404.00	f	6701	1	3301	51	1	6201	151	9	5601	51	801	301	1	751	2301
+8251	Calle Jazmines esquina Nuestra Señora del Rosario	t	2022-01-27 00:00:00	f	f	10 x 33,70		25000	2024-09-13 00:00:00	2024-05-13 00:00:00	337.00	f	5651	1	5851	51	1	6251	51	9	\N	51	1351	301	1	51	2301
+8301	Calle Luis Pasteur entre calle 31A y calle 35	f	2024-02-01 00:00:00	f	f	10,82 x 21,65		90000	2024-10-23 00:00:00	2024-06-11 00:00:00	234.00	f	6701	1	17151	51	1	6301	151	9	6051	51	51	301	1	451	2301
+8351	Avda las americas esquina Jose Silvero (Bloque)	t	2020-10-01 00:00:00	f	f	124 x 126	No contesta el telefono. 23-10-24	185000	2024-10-23 00:00:00	2024-04-05 00:00:00	16850.00	t	1451	1	13701	51	1	6351	51	2	\N	1	1351	301	11	201	\N
+8401	Avda las americas esquina Jose Silvero (Individuales)	t	2020-10-01 00:00:00	f	f	124 x 126	No contesta el telefono. 23-10-24	185000	2024-10-23 00:00:00	2024-04-05 00:00:00	16850.00	t	1451	1	13701	51	1	6351	51	2	\N	1	1351	301	11	201	\N
+8451	Altos de Urquiza Barrio Privado	f	2025-04-04 00:00:00	f	f	14 x 38		150000	2025-04-04 00:00:00	2025-04-04 00:00:00	551.00	f	2401	1	33351	51	1	6401	151	\N	\N	1	651	301	35	451	2301
+8501	Calle Guavira esquina Yguajay-Ante Esquina	f	2024-07-16 00:00:00	f	f	10,60 x 23,90		8000	2024-12-10 00:00:00	2024-07-16 00:00:00	254.00	f	1051	201	19051	51	1	6451	51	21	2651	51	1351	301	25	151	51
+8551	Calle 180 B entre calle 129 y 123	f	2025-04-03 00:00:00	f	f	8,95 x 30		16000	2025-05-02 00:00:00	2025-04-03 00:00:00	268.00	f	6701	1	4951	51	1	6501	151	21	501	51	801	301	33	1051	101
+8651	Calle 242 esquina calle 55-3 lotes grandes-Precio conjunto	f	2024-06-25 00:00:00	f	f	Lt1 (22.85X89.91)-Lt2 (15X89.91)-Lt4 (22.82X36.61)	No acepta financiación. 18-3-25	85000	2025-03-18 00:00:00	2024-06-25 00:00:00	4082.00	f	6701	1	31051	51	1	6601	151	9	\N	51	501	51	25	751	2301
+8701	Calle 242 esquina calle 55-3 lotes grandes-Precios individuales-Salen 11 lotes	f	2024-06-25 00:00:00	f	f	Lt1 (22.85X89.91)-Lt2 (15X89.91)-Lt4 (22.82X36.61)	No acepta financiación. 18-3-25	85000	2025-03-18 00:00:00	2024-06-25 00:00:00	4082.00	f	6701	1	31051	51	1	6601	151	9	\N	51	501	51	25	751	2301
+8751	Avda Kolping entre calles M.Magaldi y 44-Son 2 lotes-Precio individual	f	2024-03-12 00:00:00	f	f	9,22 x 37		59000	2024-06-27 00:00:00	2024-03-12 00:00:00	338.50	f	1051	151	5251	51	1	6651	151	2	2251	1	851	301	1	401	2301
+8801	Calle 140 entre calle 139 y calle 137	t	2019-08-14 00:00:00	f	f	10x25 (x 5)	Subdividieron el inmueble piden en 3 lotes de 16,66 x25 piden U$S 18000 la esquina U$S 17000 los demás/plano en trámite/ dólares a $ 77/ escucha propuesta de contado solo efectivo no bienes 	87500	2024-10-10 00:00:00	2024-05-09 00:00:00	1250.00	f	9151	1	10701	51	1	6701	151	2	\N	51	1001	51	4	401	2301
+8851	Calle 140 entre calle 139 y calle 137	t	2019-08-14 00:00:00	f	f	50x25	Subdividieron el inmueble piden en 3 lotes de 16,66 x25 piden U$S 18000 la esquina U$S 17000 los demás/plano en trámite/ dólares a $ 77/ escucha propuesta de contado solo efectivo no bienes 	87500	2024-10-10 00:00:00	2024-05-09 00:00:00	1250.00	f	9151	1	10701	51	1	6701	151	2	\N	51	1001	51	4	401	2301
+8901	Calle 135 entre calle 134 y 136 (bloque)	f	2020-02-04 00:00:00	f	f	25x50	En sucesion. Avanza el expte pero no tiene precio de venta. Pidio que la llamemos mas adelante. 27/12/22. Esta por salir la sucesion. Piensan que el lote vale USD 35000. 17-3-25. La sucesión del padre ya está terminada pero falta la sucesión de la madre. 18-3-25	35000	2025-03-18 00:00:00	2022-12-27 00:00:00	1250.00	t	6701	1	27251	51	1	6751	151	2	6551	51	1001	301	11	401	2851
+8951	Calle 135 entre calle 134 y 136 (suma de precios unitarios)	f	2020-02-04 00:00:00	f	f	25x50	En sucesion. Avanza el expte pero no tiene precio de venta. Pidio que la llamemos mas adelante. 27/12/22. Esta por salir la sucesion. Piensan que el lote vale USD 35000. 17-3-25. La sucesión del padre ya está terminada pero falta la sucesión de la madre. 18-3-25	35000	2025-03-18 00:00:00	2022-12-27 00:00:00	1250.00	t	6701	1	27251	51	1	6751	151	2	6551	51	1001	301	11	401	2851
+9001	Calle Humboldt entre AV. Maipù y calle Texo-Precio bloque	f	2024-04-11 00:00:00	f	f	20 x 40		180000	2024-12-19 00:00:00	2024-04-11 00:00:00	800.00	f	4051	1	7001	51	1	6801	151	14	15501	51	51	51	25	1051	2301
+9051	Calle Humboldt entre AV. Maipù y calle Texo-Precios individuales	f	2024-04-11 00:00:00	f	f	20 x 40		180000	2024-12-19 00:00:00	2024-04-11 00:00:00	800.00	f	4051	1	7001	51	1	6801	151	14	15501	51	51	51	25	1051	2301
+9101	Calle Soberania entre Isla Soledad y Av. J. D.Peron (Precio Bloque)	f	2022-01-26 00:00:00	f	f	20 x 50	No quiere trabajar con inmobiliarias. 4/8/22. Los hermanos no se ponen de acuerdo uno quiere vender y el otro no. 19-12-22. No quiere que la llamemos. 18-3-25	40000	2025-03-18 00:00:00	2022-12-19 00:00:00	1000.00	t	6701	1	21201	51	1	6851	151	2	20051	51	251	301	16	751	2301
+9151	Calle Soberania entre Isla Soledad y Av. J. D.Peron (Precio conjunto)	f	2022-01-26 00:00:00	f	f	20 x 50	No quiere trabajar con inmobiliarias. 4/8/22. Los hermanos no se ponen de acuerdo uno quiere vender y el otro no. 19-12-22. No quiere que la llamemos. 18-3-25	40000	2025-03-18 00:00:00	2022-12-19 00:00:00	1000.00	t	6701	1	21201	51	1	6851	151	2	20051	51	251	301	16	751	2301
+9201	Avda Zapiola casi Avda Bustamante	f	2023-09-06 00:00:00	f	f	10 x 31,80		85000	2024-09-23 00:00:00	2024-03-19 00:00:00	318.00	f	6701	1	26201	51	1	6901	151	2	9301	1	751	301	22	1051	2301
+9251	Av 178 casi ex 213	f	2021-07-15 00:00:00	f	f	13,81 x 30		24820	2024-10-23 00:00:00	2024-05-06 00:00:00	414.30	f	2851	1	9751	51	1	6951	151	23	\N	51	801	51	1	1051	2301
+9301	Calle Arroyo Santa Ana esquina calle S/N B° las perdices-Bloque	f	2021-10-26 00:00:00	f	f	21 x 44	No quiere mostrar los papeles. 10-10-23	25000	2025-03-20 00:00:00	2023-10-10 00:00:00	924.00	f	6701	1	22951	51	1	7001	1	2	9001	51	1251	301	20	101	2301
+9351	Calle Arroyo Santa Ana esquina calle S/N B° las perdices-Individuales	f	2021-10-26 00:00:00	f	f	21 x 44	No quiere mostrar los papeles. 10-10-23	25000	2025-03-20 00:00:00	2023-10-10 00:00:00	924.00	f	6701	1	22951	51	1	7001	1	2	9001	51	1251	301	20	101	2301
+9401	Calle Puerto Argentino esquina Crucero gral belgrano-Precio Bloque	t	2023-02-09 00:00:00	f	f	50 x 50	Escuchan oferta. 19-10-23	110000	2024-06-27 00:00:00	2024-02-26 00:00:00	2500.00	f	5351	1	16051	51	1	7051	151	9	\N	51	251	301	1	751	2301
+9451	Calle Puerto Argentino esquina Crucero gral belgrano-Precios individuales	t	2023-02-09 00:00:00	f	f	50 x 50	Escuchan oferta. 19-10-23	110000	2024-06-27 00:00:00	2024-02-26 00:00:00	2500.00	f	5351	1	16051	51	1	7051	151	9	\N	51	251	301	1	751	2301
+9501	Calle Formosa e/ calle Estado de Israel y calle España	f	2023-09-20 00:00:00	f	f	12 x 34		70000	2024-08-09 00:00:00	2024-01-23 00:00:00	408.00	f	8751	1	24651	51	1	7101	151	23	\N	51	51	301	2	1101	2301
+9601	Calle Isolina Gallardo entre Av Alem y Calle Riera (Garupá)	f	2025-04-07 00:00:00	f	f	12 x 50		12000	2025-04-07 00:00:00	2025-04-07 00:00:00	600.00	f	1051	201	\N	51	51	7201	51	15	18351	51	1351	301	15	1	2301
+9651	CALLE 137 ENTRE CALLE 196A Y CALLE 194	f	2023-02-08 00:00:00	f	f	10 x 30		15000	2024-09-02 00:00:00	2024-04-11 00:00:00	300.00	f	4001	1	4001	51	1	7251	151	14	\N	51	1001	51	6	401	2301
+9701	Calle 71 esquina Las Americas San Onofre-Precio bloque	t	2024-12-16 00:00:00	f	f	15,50 x 40		35000	2024-12-16 00:00:00	2024-12-16 00:00:00	620.00	f	6701	1	5551	51	1	7301	151	15	23451	51	551	301	25	451	2301
+9751	Calle 71 esquina Las Americas San Onofre-Precios individuales	t	2024-12-16 00:00:00	f	f	15,50 x 40		35000	2024-12-16 00:00:00	2024-12-16 00:00:00	620.00	f	6701	1	5551	51	1	7301	151	15	23451	51	551	301	25	451	2301
+9801	Calle Rio Gallegos, entre Calle Mar Argentino y Calle Golfo San Carlos	f	2023-09-01 00:00:00	f	f	10 x 30		28000	2024-11-13 00:00:00	2024-01-16 00:00:00	300.00	f	5101	1	22401	51	1	7351	151	23	\N	51	251	51	16	751	2301
+9851	Calle Capitan Krause, entre Calle Puerto Argentino y Calle Isla Soledad	f	2022-06-27 00:00:00	f	f	10 x 30	Pide USD 25.000-libre de gastos-6/5/24. No quiere mostrar papeles. 8/10/24	25000	2025-04-11 00:00:00	2024-05-06 00:00:00	300.00	f	6701	1	7351	51	1	7401	151	23	19051	51	251	301	16	751	651
+9901	Calle Rivadavia E/Bolivar y Cordoba	f	2019-01-02 00:00:00	f	f	10 x 30	Solo acepta contado. Se le ofrecio canje x local de Entre Rios. Oferta rechazada 5-4-23	330000	2025-03-27 00:00:00	2024-05-08 00:00:00	300.00	f	601	1	51	51	1	7451	151	23	\N	51	1	51	12	401	2301
+9951	Barrio Privado Panambi- Unidad Funcional 69	f	2024-10-24 00:00:00	f	f	15 x 20		35000	2024-10-24 00:00:00	2024-10-24 00:00:00	300.00	f	1051	201	21901	51	1	7501	151	21	14851	51	801	251	27	451	51
+10001	Luis Pasteur entre Hungria y Av Lopez Torres 	f	2024-12-06 00:00:00	f	f	8,66 x 21,65		70000	2024-12-06 00:00:00	2024-12-06 00:00:00	187.00	f	6701	1	33201	51	1	7551	151	2	15351	51	51	301	27	451	3851
+10051	CALLE MENDEZ 1021 (54-A) ENTRE MAXIMO PAZ Y CALLE 25 (GRISMADO)	t	2025-04-07 00:00:00	f	f	9 x 30,31		110000	2025-04-07 00:00:00	2025-04-07 00:00:00	273.00	f	601	1	2951	51	1	7601	151	\N	\N	51	51	301	33	401	2301
+10151	Calle Las Violetas e/ calle Las Nutrias y Yacaré	f	2024-03-26 00:00:00	f	f	9,20 x 28		50000	2024-09-03 00:00:00	2024-03-26 00:00:00	258.00	f	7401	1	25051	51	1	7701	151	23	\N	51	1201	301	2	1351	51
+10401	Jujuy al 300 entre Cordoba y La Rioja	f	2024-07-17 00:00:00	f	f	8,10 x 21		125000	2024-11-25 00:00:00	2024-07-17 00:00:00	170.00	f	2551	1	7851	51	1	7801	151	2	\N	51	1	301	27	451	2301
+10451	Santiago del Estero eentre Jujuy y Avda Corrientes	f	2025-04-07 00:00:00	f	f	10,82 x 32,47		200000	2025-04-07 00:00:00	2025-04-07 00:00:00	351.00	f	701	1	37401	51	1	7851	151	\N	\N	51	1	301	35	901	2301
+10501	Avda Juan Manuel Fangio entre calle 79 calle 89B y Calle 180A-Precio x hectarea	t	2025-04-07 00:00:00	f	f	73.32 X  77.56 X 126.2 X 130.34		350000	2025-04-07 00:00:00	2025-04-07 00:00:00	10000.00	f	251	1	34951	51	1	7951	151	\N	\N	1	551	301	35	751	2301
+10601	Calle los Crespones, entre 9 de Julio y Matheu	f	2023-05-17 00:00:00	f	f	10 x 45	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23	10000	2023-09-25 00:00:00	2023-09-25 00:00:00	450.00	t	9051	1	29301	51	1	8001	151	21	\N	51	551	51	26	451	2301
+10651	Calle Herrera y 122 (zona Rotonda) 	f	2024-11-01 00:00:00	f	f	12,25 x 36,95		70000	2024-11-01 00:00:00	2024-11-01 00:00:00	453.00	f	2801	1	4201	51	1	8051	151	2	\N	51	101	51	27	1051	2301
+10951	calle Beron de Astrada entre Bethoveen y Av Lavalle	f	2023-09-05 00:00:00	f	f	10 x 43,30		120000	2024-07-15 00:00:00	2024-05-09 00:00:00	433.00	f	3651	1	8651	51	1	8251	151	9	\N	51	301	301	1	451	2301
+11001	CALLE 178d ENTRE CALLE180 Y CALLE 194	f	2023-02-15 00:00:00	f	f	12 x 25	Maneco se enoja cuando lo llamamos. Hemos decidido no trabajar con el por un tiempo. 14-4-23	14000	2025-04-03 00:00:00	2024-06-26 00:00:00	300.00	t	4951	1	9651	51	1	8301	151	15	\N	51	801	51	6	1051	2301
+11101	Calle 80 esquina calle 125-Precio Bloque	t	2024-07-30 00:00:00	f	f	18,40 x 36,80		45000	2024-07-30 00:00:00	2024-07-30 00:00:00	677.00	f	4051	1	28301	51	1	8401	151	9	5551	51	901	301	1	451	2301
+11151	Calle 80 esquina calle 125-Precios individuales	t	2024-07-30 00:00:00	f	f	18,40 x 36,80		45000	2024-07-30 00:00:00	2024-07-30 00:00:00	677.00	f	4051	1	28301	51	1	8401	151	9	5551	51	901	301	1	451	2301
+11301	Calle s/nombre-Lt3c-Lt3-Detrás YPF Candelaria	f	2025-02-13 00:00:00	f	f	12,50 x 37,50		9000	2025-02-13 00:00:00	2025-02-13 00:00:00	468.00	f	1051	101	18101	51	51	8501	1	9	18051	51	1251	1	9	51	2301
+11351	Avda 147 entre calle 194 y 196-2 lotes precio en bloque	f	2024-01-17 00:00:00	f	f	10 x 34 x 2		25000	2024-01-30 00:00:00	2024-01-30 00:00:00	680.00	f	1051	51	3551	51	1	8551	151	1	1001	1	1001	301	1	451	3551
+11401	Avda 147 entre calle 194 y 196-2 lotes precios individuales	f	2024-01-17 00:00:00	f	f	10 x 34 x 2		25000	2024-01-30 00:00:00	2024-01-30 00:00:00	680.00	f	1051	51	3551	51	1	8551	151	1	1001	1	1001	301	1	451	3551
+11451	Barrio privado Santa Cecilia-Lt99	f	2025-04-09 00:00:00	f	f	23,81 x 18,83 x 50 x 42		45000	2025-04-09 00:00:00	2025-04-09 00:00:00	1259.00	f	7601	\N	20101	51	1	8601	1	\N	\N	51	1251	301	33	\N	2301
+11501	Avda Francisco de Haro casi Trincheras de San Jose	f	2024-07-11 00:00:00	f	f	10 x 42,96		130000	2024-11-25 00:00:00	2024-07-11 00:00:00	420.00	f	4001	1	33551	51	1	8651	151	2	\N	1	51	51	27	451	2301
+11551	Calle Montecarlo esquina Humberto Perez-Precio bloque	t	2024-05-13 00:00:00	f	f	23X43.70		100000	2024-10-08 00:00:00	2024-05-13 00:00:00	1005.00	f	6701	1	23201	51	1	8651	151	15	8001	51	801	51	25	1051	2301
+11601	Calle Montecarlo esquina Humberto Perez-Precios individuales	t	2024-05-13 00:00:00	f	f	23X43.70		100000	2024-10-08 00:00:00	2024-05-13 00:00:00	1005.00	f	6701	1	23201	51	1	8651	151	15	8001	51	801	51	25	1051	2301
+11651	Soldado Argentino entre Gran Malvina y Puerto Argentino	f	2025-04-09 00:00:00	f	f	9,70 x 46		25000	2025-04-09 00:00:00	2025-04-09 00:00:00	446.00	f	3101	1	38251	51	1	8701	151	\N	\N	1	251	301	35	751	2301
+11801	Colectora Ruta 12 a 800 mts de entra a B° del Lago-B°Las Perdices (Son 2 lotes precios individuales)	f	2025-04-09 00:00:00	f	f	22,40 x 89,86		35000	2025-04-09 00:00:00	2025-04-09 00:00:00	2012.86	f	601	1	9901	51	1	8851	1	\N	\N	1	1251	301	33	101	2301
+11901	Soldado argentino entre Puerto Argentino y Gran Malvinas	f	2021-07-15 00:00:00	f	f	20 x 35		60000	2024-09-23 00:00:00	2024-03-19 00:00:00	700.00	f	6701	1	1701	51	1	8901	151	2	6601	51	251	51	1	751	2301
+11951	Soldado argentino entre Puerto Argentino y Gran Malvinas	f	2021-07-15 00:00:00	f	f	20 x 35		60000	2024-09-23 00:00:00	2024-03-19 00:00:00	700.00	f	6701	1	1701	51	1	8901	151	2	6601	51	251	51	1	751	2301
+12001	Calle S/n "Loteo Bosques de San Isidro" Calle de tierra tiene cordon cuneta-Plano aprobado-Sin servicios pero con el compromiso de instalar	f	2024-11-07 00:00:00	f	f	12,22 x 25	Financiacion Entrega $ 5.500.000 + 6 x $ 350.000 + 6 x $ 460.000 + 6 x $ 590.000 = $ 13.900.000 + 3% honorarios. 7/11/24	11600	2024-11-07 00:00:00	2024-11-07 00:00:00	305.00	f	6351	1	21801	51	1	8951	151	23	9151	51	1101	301	2	\N	2301
+12051	Ntra. Sra. Del Rosario, entre Calle Guembe y Calle Las Rosas 	f	2022-04-07 00:00:00	f	f	10 x 36,82		38600	2024-07-11 00:00:00	2022-12-05 00:00:00	368.00	f	1051	51	7551	51	1	9001	51	21	22501	51	1351	301	16	51	2301
+12101	CALLE 127 (ALTURA 5900), ENTRE CALLE 122 Y CALLE 120. POSADAS	f	2025-04-12 00:00:00	f	f	9,23 x 36,70		55000	2025-04-12 00:00:00	2025-04-12 00:00:00	339.00	f	8251	1	37201	51	1	9051	151	\N	\N	51	951	301	35	451	2301
+10901	Avda 131 e/ calle 164 y calle 162-Lotes s-Avdaenida-Precios individuales	f	2024-02-27 00:00:00	f	f	10 x 50		69000	2025-07-02 22:01:49.169593	2024-02-27 03:00:00	500.00	f	3351	1	23151	51	1	8201	151	23	1101	1	1001	301	2	401	2501
+11751	Calle Cerro Cora entre calle Apostoles y Av Las Heras	f	2024-08-29 00:00:00	f	f	10 x 36	No quiere trabajar con inmobiliaria. 31-10-24. El marido es martillero quieren vender ellos. 14-1-25	37000	2025-07-04 11:21:03.427405	2024-08-29 03:00:00	360.00	f	6701	1	30051	51	1	8801	151	15	5301	51	751	301	25	401	2301
+11701	Carlos Pellegrini entre Maipu y Pringles 	f	2025-01-22 00:00:00	f	f	12,50 x 33,34		17000	2025-07-07 11:34:15.108226	2025-01-22 03:00:00	416.00	f	6701	1	19701	51	1	8751	1	2	21101	51	1251	1	27	51	2301
+12151	Avda Almafuerte esq. calle Comandante Miño	t	2023-10-18 00:00:00	f	f	9,20 x 36,81	Acepta 2 dptos terminados. Buscan una desarrolladora que les canjeen x m2	500000	2024-09-03 00:00:00	2024-04-05 00:00:00	338.00	f	4301	1	24751	51	1	9101	151	23	\N	1	301	301	2	401	2301
+12201	COLECTORA RUTA 12 ENTRE RUTA 204 Y AMIEL-Son 2 lotes-Precio bloque	f	2024-12-06 00:00:00	f	f	(20 x 33) x 2		60000	2024-12-06 00:00:00	2024-12-06 00:00:00	1320.00	f	4051	1	21951	51	1	9151	1	9	9801	151	1251	301	4	51	2301
+12251	COLECTORA RUTA 12 ENTRE RUTA 204 Y AMIEL-Son 2 lotes-Precios individuales-Salen 4 lotes	f	2024-12-06 00:00:00	f	f	(20 x 33) x 2		60000	2024-12-06 00:00:00	2024-12-06 00:00:00	1320.00	f	4051	1	21951	51	1	9151	1	9	9801	151	1251	301	4	51	2301
+12301	calle Barbacua entre luis pasteur y victor laplace	f	2024-03-14 00:00:00	f	f	100 x 200		18000	2024-03-14 00:00:00	2024-03-14 00:00:00	20000.00	f	1051	201	1601	51	1	9201	51	15	5201	51	1351	101	1	301	2301
+12351	calle luchessi entre avda Lavalle y calle 61 	f	2022-02-21 00:00:00	f	f	10,81 x 24,54		62000	2022-11-30 00:00:00	2022-11-30 00:00:00	265.00	f	8251	1	38851	51	1	9251	151	9	14501	51	351	301	14	751	2301
+12451	Calle 60 esquina 111	t	2024-10-30 00:00:00	f	f	18,40 x 18,40		45000	2025-04-23 00:00:00	2024-10-30 00:00:00	338.00	f	6701	1	16551	51	1	9351	151	15	5151	51	701	301	25	751	2301
+12501	Calle Guavyra esquina calle sin nombre Santa Helena 	t	2024-06-07 00:00:00	f	f	10,6 x 23,94		9500	2024-10-04 00:00:00	2024-06-07 00:00:00	254.00	f	1051	201	2251	51	1	9401	51	23	17201	51	1351	301	25	251	651
+12551	Avda Zapiola e/ calle Montecarlo y 134 A y calle 103-mz155-Precios individuales	f	2023-09-15 00:00:00	f	f	9,50 X 35		35000	2024-08-27 00:00:00	2024-01-23 00:00:00	332.50	f	201	1	19951	51	1	9451	151	23	\N	1	801	301	2	401	2301
+12651	SANTA ELENA-CALLE TARUMA, ENTRE CALLE PALO ROSA Y CALLE NOGAL-SOBRE ADOQUINADO	f	2025-04-10 00:00:00	f	f	10.60 X 23.94 		13000	2025-04-10 00:00:00	2025-04-10 00:00:00	254.00	f	6701	1	34701	51	1	9551	51	\N	20901	51	1351	301	35	151	1001
+12701	CALLE MAHATMA GANDHI, ESQUINA CALLE C. DISCEPOLO. POSADAS	t	2025-04-10 00:00:00	f	f	10 x 38		40000	2025-04-10 00:00:00	2025-04-10 00:00:00	380.00	f	2251	1	34251	51	1	9601	151	\N	\N	51	551	301	35	401	2301
+12751	Calle Sarandi zona las Colinas 	f	2024-03-27 00:00:00	f	f	115 x 112		34000	2024-03-27 00:00:00	2024-03-27 00:00:00	10310.00	f	1051	101	1151	51	1	9651	1	15	10601	51	1251	301	1	51	2301
+12801	Colectora José Vicente Cidade e/ calle Alberto Bonin y calle Lucas B. Areco-Precio bloque	t	2024-05-14 00:00:00	f	f	119 x 27,4		78500	2024-10-08 00:00:00	2024-05-14 00:00:00	3270.00	f	1051	51	24251	51	1	9701	51	2	5801	1	1351	301	2	251	2301
+12851	Colectora José Vicente Cidade e/ calle Alberto Bonin y calle Lucas B. Areco-Precios individuales	t	2024-05-14 00:00:00	f	f	119 x 27,4		78500	2024-10-08 00:00:00	2024-05-14 00:00:00	3270.00	f	1051	51	24251	51	1	9701	51	2	5801	1	1351	301	2	251	2301
+12901	Colectora José Vicente Cidade e/ calle Alberto Bonin y calle Lucas B. Areco-Precios individuales	t	2024-05-14 00:00:00	f	f	9,9 x 27,4		13000	2024-10-08 00:00:00	2024-05-14 00:00:00	271.70	f	1051	51	24251	51	1	9701	51	2	5801	1	1351	301	2	251	2301
+12951	Colectora José Vicente Cidade e/ calle Alberto Bonin y calle Lucas B. Areco-Precios individuales	f	2024-05-14 00:00:00	f	f	9,9 x 27,4		11000	2024-10-08 00:00:00	2024-05-14 00:00:00	271.70	f	1051	51	24251	51	1	9701	51	2	5801	1	1351	301	2	251	2301
+13001	Avda jauretche entre Lopez y Planes y calle 52	f	2025-04-10 00:00:00	f	f	11,50 x 40,60		40000	2025-04-22 00:00:00	2025-04-10 00:00:00	466.00	f	4451	1	5451	51	1	9751	151	\N	\N	1	851	301	33	401	2301
+13051	CALLE FORES PERPETUO (detrás y lindero al aeropuerto)	f	2023-02-15 00:00:00	f	f	65 x400 (medidas irregulares)		160000	2025-05-22 00:00:00	2024-06-19 00:00:00	26000.00	f	6701	1	2501	51	1	9801	151	23	22701	51	1151	51	6	401	2301
+13101	calle Los Lapachos, entre calle Humberto Perez y Calle Nicaragua 	f	2023-03-08 00:00:00	f	f	10 x 30		25000	2024-08-01 00:00:00	2024-01-02 00:00:00	300.00	f	2401	1	3151	51	1	9851	151	23	\N	51	801	301	16	451	2301
+13151	Avda Rademacher, entre Felix Aguirre y Luis Pasteur	f	2023-09-21 00:00:00	f	f	8,6 x 24,30	Tiene un galpón. 19-3-25	120000	2025-03-19 00:00:00	2023-09-21 00:00:00	240.00	f	6701	1	31901	51	1	9901	151	2	2851	1	51	51	16	451	3901
+13251	Avda Almirante Brown esquina Calle 153-Precio conjunto	t	2022-11-07 00:00:00	f	f	36.80 x 36.80	Imposible comunicarse. 22-2-24	85000	2024-02-22 00:00:00	2024-02-22 00:00:00	1354.00	t	6701	1	35901	51	1	10001	151	15	6451	1	901	301	16	451	2301
+13301	Avda Almirante Brown esquina Calle 153-Precios individuales	t	2022-11-07 00:00:00	f	f	36.80 x 36.80	Imposible comunicarse. 22-2-24	85000	2024-02-22 00:00:00	2024-02-22 00:00:00	1354.00	t	6701	1	35901	51	1	10001	151	15	6451	1	901	301	16	451	2301
+13501	Urutacua, entre luis pasteur y Av. Mariano Moreno-Precio Bloque	f	2023-07-13 00:00:00	f	f	19,80 x 42		220000	2024-09-03 00:00:00	2024-04-15 00:00:00	831.00	f	8251	1	32701	51	1	10151	151	23	\N	51	51	301	26	751	2301
+13551	Urutacua, entre luis pasteur y Av. Mariano Moreno-Precios individuales	f	2023-07-13 00:00:00	f	f	19,80 x 42		220000	2024-09-03 00:00:00	2024-04-15 00:00:00	831.00	f	8251	1	32701	51	1	10151	151	23	\N	51	51	301	26	751	2301
+13601	Avda Monseñor de Andrea entre calle 74 y calle 76	f	2025-02-10 00:00:00	f	f	9,20 x 27,60		37000	2025-02-10 00:00:00	2025-02-10 00:00:00	253.92	f	1051	201	30351	51	51	10201	151	14	14801	1	901	301	14	451	2301
+13201	Avda Chacabuco e/  calle Morcillo y Bermudez	f	2024-04-23 00:00:00	f	f	10,82 x 33	No se ponen de acuerdo los herederos para culminar con los trámites de la sucesión. Se deben muchos impuestos y no quieren ponerse de acuerdo en dichas deudas. Tampoco se ponen de acuerdo en el precio. 15-7-24	100000	2025-07-07 11:39:09.439707	2024-04-23 03:00:00	357.00	t	6701	1	39001	51	1	9951	151	2	8501	1	351	251	2	751	4401
+13651	Calle s/n esquina J.J. Urquiza- Zona Costanera-Precio bloque	t	2024-01-18 00:00:00	f	f	54 x 117		330000	2024-08-05 00:00:00	2024-01-18 00:00:00	6295.00	f	7501	1	24501	51	1	10251	1	23	13901	51	1251	301	2	51	5101
+13701	Calle s/n esquina J.J. Urquiza- Zona Costanera-Precios individuales	t	2024-01-18 00:00:00	f	f	54 x 117		330000	2024-08-05 00:00:00	2024-01-18 00:00:00	6295.00	f	7501	1	24501	51	1	10251	1	23	13901	51	1251	301	2	51	5101
+13751	Calle Itati, entre Calle Paraisos y Calle Gatti	f	2023-07-26 00:00:00	f	f	10 x 30		14000	2023-07-26 00:00:00	2023-07-26 00:00:00	300.00	f	1051	201	37651	51	1	10301	51	21	5901	51	1351	301	16	51	2301
+13801	Avda Tomas Guido y Luchessi-Precio conjunto	t	2022-02-23 00:00:00	f	f	20 x 35	No contesta llamadas ni Whatsapp. 3-4-25	90000	2025-04-03 00:00:00	2022-12-05 00:00:00	700.00	t	1801	1	26501	51	1	10351	151	9	\N	1	351	301	14	1051	2301
+13851	Avda Tomas Guido y Luchessi-Precios individuales	t	2022-02-23 00:00:00	f	f	20 x 35	No contesta llamadas ni Whatsapp. 3-4-25	90000	2025-04-03 00:00:00	2022-12-05 00:00:00	700.00	t	1801	1	26501	51	1	10351	151	9	\N	1	351	301	14	1051	2301
+13901	Tripoli, entre San Ignacio y Av. Ituzaingo	f	2023-07-03 00:00:00	f	f	10 x 43,30		65000	2024-08-28 00:00:00	2024-02-28 00:00:00	433.00	f	5801	1	29101	51	1	10401	151	23	\N	51	401	301	26	401	2301
+13951	Calle Florencio Sanchez e. Gdor. Bermudez y Francisco de Haro	f	2023-09-07 00:00:00	f	f	12,37 x 32,50	Tiene pileta y quincho. 20-3-25	80000	2025-03-20 00:00:00	2024-04-16 00:00:00	402.00	f	6701	1	32751	51	1	10451	151	15	17251	51	351	301	22	751	2301
+14051	B° Cerrado Santa Cecilia-Lt.141	f	2022-02-17 00:00:00	f	f	20 x 60		35000	2024-12-10 00:00:00	2024-03-14 00:00:00	1200.00	f	5651	1	5851	51	1	10551	1	23	\N	51	1251	301	16	1	2301
+14101	Avda Chacabuco, entre Calle 103 y Calle 105 	f	2023-11-24 00:00:00	f	f	14.81 x 24.50 	le dan valor a la casa	120000	2024-12-18 00:00:00	2024-04-10 00:00:00	363.00	t	6701	1	36451	51	1	10601	151	15	4801	1	751	51	16	451	3951
+14151	Avda Las Palmeras entre Calle Estevez y Calle Soberania	f	2024-09-17 00:00:00	f	f	12,50 x 50		25000	2025-03-27 00:00:00	2024-09-17 00:00:00	625.00	f	601	1	2951	51	1	10651	151	9	\N	1	251	301	1	751	2301
+14201	Florentino ameghino ante-equina tripepi-Precio individual	f	2024-06-03 00:00:00	f	f	9,20 x 36,81	Piden el bloque USD 37000. 3-6-24	30000	2024-06-03 00:00:00	2024-06-03 00:00:00	338.50	f	1051	51	17001	51	1	10701	151	1	15751	51	901	301	1	451	2301
+14251	Florentino ameghino equina tripepi-Precio bloque	t	2024-06-03 00:00:00	f	f	18,40 x 36,81	Piden el bloque USD 37000. 3-6-24	50000	2024-06-03 00:00:00	2024-06-03 00:00:00	677.00	f	1051	51	17001	51	1	10701	151	1	15751	51	901	301	1	451	2301
+14301	Florentino ameghino equina tripepi-Precio individual	t	2024-06-03 00:00:00	f	f	9,20 x 36,81	Piden el bloque USD 37000. 3-6-24	30000	2024-06-03 00:00:00	2024-06-03 00:00:00	338.50	f	1051	51	17001	51	1	10701	151	1	15751	51	901	301	1	451	2301
+14351	Calle 154 entre Figueredo y Calle 123	f	2023-09-13 00:00:00	f	f	10,22 x 55		21000	2024-10-07 00:00:00	2024-06-26 00:00:00	1125.00	f	6551	1	23601	51	1	10751	151	23	\N	51	801	301	22	1051	2301
+14401	Avda Tomás Guido e/ Avda Martín Fierro y calle Luchessi	f	2024-02-27 00:00:00	f	f	15,55 x 32	Cesion de derechos posesorios. Hay que hacer posecion veinteñal. 27-2-24. Sigue la misma situacion. 14-10-24	75000	2024-10-10 00:00:00	2024-02-27 00:00:00	497.00	t	5801	1	21701	51	1	10801	151	2	23501	1	351	301	2	1051	1251
+14451	Cap. Krause entre 10 de Junio y Malvinas Argentinas	f	2024-09-25 00:00:00	f	f	12,50 x 50		9000	2024-09-25 00:00:00	2024-09-25 00:00:00	725.00	f	1051	201	11251	51	51	10851	151	14	4451	51	251	251	25	751	2301
+14501	CALLE IRUPE E/ TEALES Y PERITO MORENO-Lt.4	f	2022-02-17 00:00:00	f	f	10 x 40	No define precios	15000	2024-09-19 00:00:00	2022-02-17 00:00:00	400.00	t	8201	1	27651	51	1	10901	51	14	\N	51	1351	301	4	51	2301
+14551	CALLE IRUPE E/ TEALES Y PERITO MORENO-Lt.5	f	2022-02-17 00:00:00	f	f	10 x 30	No define precios	15000	2024-09-19 00:00:00	2022-02-17 00:00:00	300.00	t	8201	1	27651	51	1	10901	51	14	\N	51	1351	301	4	51	2301
+14601	JOSE RAMALLO Y BURAK 	t	2022-09-08 00:00:00	f	f	115 x 200		55000	2024-10-25 00:00:00	2024-02-29 00:00:00	23000.00	f	6001	1	14201	51	1	10951	51	9	\N	51	1351	301	4	301	2301
+14651	Juan Ambroseti, entre Calle San Marcos y Calle 31 A	f	2022-02-22 00:00:00	f	f	8.50 x 17.32	Maneco se enoja cuando lo llamamos. Hemos decidido no trabajar con el por un tiempo. 14-4-23	40000	2024-06-27 00:00:00	2023-11-13 00:00:00	147.00	t	4951	1	22351	51	1	11001	151	15	\N	51	51	301	16	1101	3551
+14701	Calle Franklin entre Calle Japon y Av. Santa Cruz	f	2023-03-06 00:00:00	f	f	26,66 x 12,5	Quiere que le digamos cuanto vale la propiedad. 12-3-25	40000	2024-11-21 00:00:00	2024-02-22 00:00:00	333.00	f	6701	1	35551	51	1	11051	151	23	11451	51	401	301	16	1051	2301
+14751	Calle Taruma entre Nogal y calle 237	f	2024-11-25 00:00:00	f	f	10,60 x 23,90		8500	2025-01-23 00:00:00	2024-11-25 00:00:00	254.00	f	6701	1	30551	51	1	11101	51	15	15451	51	1351	1	25	151	2301
+14851	Colectora Ruta 12 Candelaria, pasando Barrio del Lago-Precio Conjunto	f	2023-09-12 00:00:00	f	f	24,88x87,14		35000	2024-10-07 00:00:00	2024-01-18 00:00:00	2168.00	f	6551	1	23601	51	1	11201	1	23	\N	151	1251	301	22	101	2301
+14901	Colectora Ruta 12 Candelaria, pasando Barrio del Lago-Precios individuales	f	2023-09-12 00:00:00	f	f	24,88x87,14		35000	2024-10-07 00:00:00	2024-01-18 00:00:00	2168.00	f	6551	1	23601	51	1	11201	1	23	\N	151	1251	301	22	101	2301
+14951	Calle Formosa casi Neuquén	f	2023-04-11 00:00:00	f	f	10 x 43,90	Por el momento no lo está ofreciendo más hasta que no arregle la deuda con su amigo. El lote es del amigo y vive en buenos aires. 10-4-24	9500	2024-04-10 00:00:00	2024-04-10 00:00:00	439.00	t	6701	1	17951	51	1	11251	51	15	21501	51	1351	301	2	51	2301
+15001	Calle s/n entre Ruta 12 y Acceso al Puma-Precio Bloque	f	2024-10-22 00:00:00	f	f	30 x 60		45000	2024-10-22 00:00:00	2024-10-22 00:00:00	1800.00	f	8751	1	24651	51	1	11301	1	23	\N	51	1251	301	2	101	2301
+15051	Calle s/n entre Ruta 12 y Acceso al Puma-Precios individuales	f	2024-10-22 00:00:00	f	f	30 x 60		45000	2024-10-22 00:00:00	2024-10-22 00:00:00	1800.00	f	8751	1	24651	51	1	11301	1	23	\N	51	1251	301	2	101	2301
+15101	Calle San Marcos esquina calle Florentino Ameghino-Parc11	t	2023-09-14 00:00:00	f	f	11,10 x 17,32--	Tiene 2 lotes en venta,  parcelas 11 ( esquina, 11.10x17.32)y 12 (17.32x34.64), ambas siguen en venta, tienen una sucesión de 3 hermanas que ya fue finalizada, están a favor de la venta, es decir, sale el título a nombre del comprador. La Parcela 11 se encuentra alquilada, pero la dueña dijo que tienen un contrato firmado de que si se llega a vender deben desocupar el inmueble. También afirmó que están abiertos a negociar los precios y a aceptar ofertas de compra menores. 12-3-25	90000	2025-03-12 00:00:00	2024-04-11 00:00:00	192.00	f	6701	1	25351	51	1	11351	151	23	21951	51	51	301	2	1101	3001
+15151	Calle San Marcos esquina calle Florentino Ameghino-Parc12	f	2023-09-14 00:00:00	f	f	17,32 x 34,64 	Tiene 2 lotes en venta,  parcelas 11 ( esquina, 11.10x17.32)y 12 (17.32x34.64), ambas siguen en venta, tienen una sucesión de 3 hermanas que ya fue finalizada, están a favor de la venta, es decir, sale el título a nombre del comprador. La Parcela 11 se encuentra alquilada, pero la dueña dijo que tienen un contrato firmado de que si se llega a vender deben desocupar el inmueble. También afirmó que están abiertos a negociar los precios y a aceptar ofertas de compra menores. 12-3-25	260000	2025-03-12 00:00:00	2024-04-11 00:00:00	600.00	f	6701	1	25351	51	1	11351	151	23	21951	51	51	301	2	1101	3001
+15201	Roque Perez entre Don Claudio y Eva Perón-B°Don Claudio	f	2025-01-20 00:00:00	f	f	11,30 x 30		9000	2025-01-20 00:00:00	2025-01-20 00:00:00	339.00	f	6701	1	2701	51	1	11401	51	14	16901	51	1351	301	32	251	2301
+15251	Hugo chavez entre Lia cabral(135) y Godoy	f	2025-04-11 00:00:00	f	f	10 x 30		7000	2025-04-11 00:00:00	2025-04-11 00:00:00	300.00	f	1051	101	18951	51	1	11451	51	21	51	51	1351	301	33	201	2301
+15451	Coronel Juan Lanusse entre Tucuman y Salta 	f	2025-04-03 00:00:00	f	f	10 x 20		160000	2025-04-03 00:00:00	2025-04-03 00:00:00	200.00	f	6401	1	38651	51	1	11601	151	21	\N	51	1	301	33	1251	2301
+15551	Candelaria, entre Alba Pose y  irupé-3 lotes-Precio individual	t	2023-07-05 00:00:00	f	f	10 x 30	Por ahora sacaron de la venta. 19-12-24	16000	2024-12-19 00:00:00	2024-04-16 00:00:00	300.00	t	4051	1	32801	51	1	11651	51	14	21301	51	1351	301	26	101	2301
+15601	Candelaria, entre Alba Pose y  irupé-3 lotes-Precio individual	f	2023-07-05 00:00:00	f	f	10 x 30	Por ahora sacaron de la venta. 19-12-24	16000	2024-12-19 00:00:00	2024-04-16 00:00:00	300.00	t	4051	1	32801	51	1	11651	51	14	21301	51	1351	301	26	101	2301
+15651	Calle Juana Azurduy Casi Calle Sarandí - La Colina	f	2024-01-10 00:00:00	f	f	10 x 30		9000	2025-01-17 00:00:00	2024-05-14 00:00:00	300.00	f	951	1	27301	51	1	11701	1	2	\N	51	1251	301	22	51	51
+15701	Jauretche esquina calle 124 - Lt. (Otro lote)	f	2021-08-20 00:00:00	f	f	16.20 X 18.41		38000	2024-11-25 00:00:00	2024-06-18 00:00:00	298.24	f	7701	1	17451	51	1	11751	151	2	\N	51	951	51	1	451	2301
+15751	Jauretche esquina calle 124 - Lt. 1	t	2021-08-20 00:00:00	f	f	9.20 x 36.81		95000	2024-11-25 00:00:00	2024-06-18 00:00:00	338.65	f	7701	1	17451	51	1	11751	151	2	\N	1	951	51	1	451	2301
+15801	Calle Franklin, entre Av. Ituzaingo y Calle San Ignacio-Precio bloque	f	2023-05-02 00:00:00	f	f	20 x 30	Acepta Vehículo	65000	2024-08-01 00:00:00	2024-01-16 00:00:00	600.00	f	5801	1	9501	51	1	11801	151	23	\N	51	401	301	16	451	2301
+15851	Calle Franklin, entre Av. Ituzaingo y Calle San Ignacio-Precios individuales	f	2023-05-02 00:00:00	f	f	20 x 30	Acepta Vehículo	65000	2024-08-01 00:00:00	2024-01-16 00:00:00	600.00	f	5801	1	9501	51	1	11801	151	23	\N	51	401	301	16	451	2301
+15901	Calle Herrera esquina Calle San Juan	t	2024-06-28 00:00:00	f	f	10,60 x 35		60000	2024-06-28 00:00:00	2024-06-28 00:00:00	371.00	f	2801	1	28251	51	1	11851	151	9	\N	51	101	301	1	401	2301
+16001	Calle San Marcos entre Av Cabred y calle Neuquen-Bloque	f	2024-09-17 00:00:00	f	f	33.30X77.94X30	No quiere trabajar con nosotros y tampoco me dice el precio que pide por la propiedad. Vino a la inmobiliaria para ver a cuánto se podía vender pero no le gustó el precio y dijo que la tasación es muy baja.esta de viaje por Brasil, no sabe cuándo vuelve. 25-11-24	1000000	2025-03-12 00:00:00	2024-09-17 00:00:00	2437.00	f	6701	1	14101	51	1	11951	151	15	19401	51	51	251	25	1101	2301
+16051	Calle San Marcos entre Av Cabred y calle Neuquen-Precios indiviiduales	f	2024-09-17 00:00:00	f	f	33.30X77.94X30	No quiere trabajar con nosotros y tampoco me dice el precio que pide por la propiedad. Vino a la inmobiliaria para ver a cuánto se podía vender pero no le gustó el precio y dijo que la tasación es muy baja.esta de viaje por Brasil, no sabe cuándo vuelve. 25-11-24	1000000	2025-03-12 00:00:00	2024-09-17 00:00:00	2437.00	f	6701	1	14101	51	1	11951	151	15	19401	51	51	251	25	1101	2301
+16201	Derqui 1335 entre Av justo jose de urquiza y calle brasil 	f	2025-04-11 00:00:00	f	f	9 x 52		135000	2025-04-11 00:00:00	2025-04-11 00:00:00	468.00	f	1601	1	12001	51	1	12101	151	\N	\N	51	301	301	33	451	2301
+16251	Calle 49 entre 160 y 162A-Precio Bloque	f	2024-05-10 00:00:00	f	f	21,54 x 33,3		45000	2024-09-16 00:00:00	2024-05-10 00:00:00	721.00	f	3151	1	29401	51	1	12151	151	9	\N	51	451	301	25	451	2301
+16301	Calle 49 entre 160 y 162A-Precio Bloque	f	2024-05-10 00:00:00	f	f	21,54 x 33,3		45000	2024-09-16 00:00:00	2024-05-10 00:00:00	721.00	f	3151	1	29401	51	1	12151	151	9	\N	51	451	301	25	451	2301
+16351	CALLE 18, ENTRE CALLE RUIZ DE MONTOYA Y CALLE COMANDANTE MIÑO. POSADAS	f	2025-04-11 00:00:00	f	f	9,20 x 36,80		300000	2025-04-11 00:00:00	2025-04-11 00:00:00	339.00	f	9051	1	34601	51	1	12201	151	\N	\N	51	301	301	35	401	2301
+16401	Comandante Miño entre Meza y Av Justo Urquiza	f	2024-10-24 00:00:00	f	f	9,30 x 25,98		120000	2024-10-24 00:00:00	2024-10-24 00:00:00	242.00	f	6351	1	11851	51	1	12251	151	2	\N	51	301	301	27	401	2301
+16451	Calle Semilla esquina calle 104	t	2024-11-12 00:00:00	f	f	7,56 x 6 (ochava) x 27,56 x 11,80 x 31,80		35000	2024-11-12 00:00:00	2024-11-12 00:00:00	366.00	f	1051	51	24201	51	1	12301	151	2	8701	51	751	301	2	751	601
+60473	178A y Calle sin nombre	f	2025-06-27 11:40:53.746546	f	f	9 x 30		18000	2025-06-27 11:40:53.771438	2025-06-27 11:40:53.771449	270.00	f	9356	1	12001	51	1	49914	151	9	24752	51	801	51	36	401	2301
+16151	Rio San Antonio y Avda Iguazu	t	2024-08-28 00:00:00	f	f	12,5 x 50		40000	2025-07-07 12:20:00.715379	2024-08-28 03:00:00	625.00	f	6701	1	26651	51	1	12051	1	2	19851	1	1251	51	27	101	2301
+16501	Calle Clotilde Fernández Esquina Moritán 	f	2025-04-25 00:00:00	f	f	40 x 15 x 10 x29, 35 		480000	2025-04-25 00:00:00	2025-04-25 00:00:00	360.00	f	451	1	26701	51	1	12351	151	\N	\N	1	301	51	34	401	2301
+16551	Calle 220 entre 81C y 81B 	f	2024-12-06 00:00:00	f	f	25 x 100		13500	2024-12-06 00:00:00	2024-12-06 00:00:00	2500.00	f	4151	1	6401	51	1	12401	151	15	\N	51	601	301	32	\N	2301
+16601	calle 150 casi calle 135  	t	2023-08-31 00:00:00	f	f	9,50 X 27		11000	2023-08-31 00:00:00	2023-08-31 00:00:00	256.00	f	1051	51	39251	51	1	12451	151	1	8851	51	1001	301	26	401	51
+16651	calle 150 casi calle 135  	t	2023-08-31 00:00:00	f	f	9,50 X 27		10000	2023-08-31 00:00:00	2023-08-31 00:00:00	256.00	f	1051	51	39251	51	1	12451	151	1	8851	51	1001	301	26	401	51
+16701	calle 150 esquina calle 135  	t	2023-08-31 00:00:00	f	f	10,95X27		12500	2023-08-31 00:00:00	2023-08-31 00:00:00	297.00	f	1051	51	39251	51	1	12451	151	1	8851	51	1001	301	26	401	51
+16751	Avda ex 213 esquina Avda Salvador Miqueri	t	2023-05-23 00:00:00	f	f	10,07 x 26.10 x 9.60 x 29.44		49500	2024-07-18 00:00:00	2024-01-19 00:00:00	267.00	f	8251	1	37151	51	1	12501	151	9	\N	1	551	301	1	401	2301
+16851	Avda 147 ENTRE Avda 200 Y CALLES 198 	f	2024-07-01 00:00:00	f	f	14 x 48	No responde el telefono. 25-10-24	25000	2024-10-25 00:00:00	2024-07-01 00:00:00	672.00	t	4051	1	19851	51	1	12601	151	21	18301	1	1001	301	4	451	2301
+16951	Soldado argentino entre isal soledad y juan dimingo perdon 	f	2024-10-18 00:00:00	f	f	12,5 x 36		30000	2024-12-19 00:00:00	2024-10-18 00:00:00	450.00	f	6701	1	29901	51	1	12701	151	15	16601	51	251	301	25	751	2301
+17001	Soldado argentino entre isal soledad y juan dimingo perdon 	f	2024-10-18 00:00:00	f	f	14 x 25		20000	2024-12-19 00:00:00	2024-10-18 00:00:00	350.00	f	6701	1	29901	51	1	12701	151	15	16601	51	251	301	25	751	2301
+17051	Avda Aguado, entre calle 104 y Avda Bustamante	f	2022-02-24 00:00:00	f	f	10 x 36,18		55000	2025-01-17 00:00:00	2024-04-08 00:00:00	362.00	f	5101	1	28651	51	1	12751	151	2	\N	1	751	301	16	751	2301
+17101	Avda Uruguay esquina Avda Maipu	t	2023-05-09 00:00:00	f	f	0		260000	2024-10-24 00:00:00	2024-06-18 00:00:00	341.00	f	6251	1	17701	51	1	12801	151	2	\N	1	51	301	20	1101	2301
+17151	Avda Uruguay esquina Avda Maipu-5 lotes	f	2023-05-09 00:00:00	f	f	0		260000	2024-10-24 00:00:00	2024-06-18 00:00:00	341.00	f	6251	1	17701	51	1	12801	151	2	\N	1	51	301	20	1101	2301
+17201	CALLE NTRA. SRA. DEL ROSARIO, ENTRE CALLE JAZMINES Y CALLE C. CARLOS E. LINIERS. 	f	2025-04-11 00:00:00	f	f	10 x 36		25000	2025-04-11 00:00:00	2025-04-11 00:00:00	360.00	f	6701	1	37051	51	1	12851	51	\N	7051	51	1351	301	35	51	2301
+17301	 A METROS DE COLECTORA RUTA 105 Y CALLE S/N KM 2. CALLE EMPEDRADA	t	2025-04-10 00:00:00	f	f	10 x 30		9980	2025-04-10 00:00:00	2025-04-10 00:00:00	300.00	f	4051	1	23651	51	1	12951	51	\N	24001	151	1351	301	35	151	2301
+17351	Colectora Ruta 12 esquina Acceso al Parque El Puma	t	2024-05-29 00:00:00	f	f	34,77 x 85,70 x 12,18 x 91,30		90000	2024-11-13 00:00:00	2024-05-29 00:00:00	2080.00	f	5601	1	24051	51	1	13001	1	23	\N	151	1251	51	2	101	2301
+17401	Calle 130 e/ calle 165 y calle 163	f	2024-11-13 00:00:00	f	f	15 x 36		15000	2024-11-13 00:00:00	2024-11-13 00:00:00	540.00	f	1051	51	24751	51	1	13051	151	2	12851	51	1151	301	2	1601	2301
+17451	Calle 130 e/ calle 165 y calle 163	f	2024-11-13 00:00:00	f	f	15 x 36		15000	2024-11-13 00:00:00	2024-11-13 00:00:00	540.00	f	1051	51	24751	51	1	13051	151	2	12851	51	1151	301	2	1601	2301
+17551	Av Centenario esquina Gotischalk	t	2024-11-14 00:00:00	f	f	10,82 x 15	Acepta financiacion. Ya está con otras inmobiliarias, y el numero que está anexado a este codigo es del primo que se está encargando de vender, en tanto; no desea que un asesor se comunique con el. 12-3-25. Quiere vender rápido. 23-4-25	45000	2025-04-22 00:00:00	2024-11-14 00:00:00	162.00	f	7301	1	25101	51	1	13151	151	9	22001	1	651	301	1	1051	2301
+17651	Calle Felix Aguirre entre calle 31A y  Av. Lopez Torres	f	2024-11-04 00:00:00	f	f	13,30 x 43,30		220000	2024-11-04 00:00:00	2024-11-04 00:00:00	579.00	f	3301	1	20851	51	1	13251	151	15	\N	51	51	51	32	451	2301
+17701	Moritan, entre Av. Gdor. Roca y Nicomedes Castro	f	2023-05-08 00:00:00	f	f	12.99x43.30x12.99x43.30		202000	2024-08-05 00:00:00	2024-01-16 00:00:00	562.00	f	1051	51	10901	51	1	13301	151	2	23001	51	1	51	26	1051	2301
+17751	Avda T. de Tacuarí e/ Avda Corrientes y calle Beethoven-2Lotes-Precios unitarios	f	2024-06-11 00:00:00	f	f	11,54 x 25,45	Por ahora no quiere trabajar con inmobiliarias. 7-3-25	170000	2025-03-07 00:00:00	2024-06-11 00:00:00	294.00	f	6701	1	24151	51	1	13351	151	23	8201	1	301	51	2	751	2601
+17851	Calle 140 esquina Calle 149-Precio invidual-Lt 5	t	2024-04-30 00:00:00	f	f	20 x 50		40000	2025-01-21 00:00:00	2024-04-30 00:00:00	1000.00	f	3701	1	4751	51	1	13451	151	9	\N	51	1001	301	1	401	2301
+17901	Calle 140 esquina Calle 149-Precio invidual-Lt 6	f	2024-04-30 00:00:00	f	f	20 x 50		35000	2025-01-21 00:00:00	2024-04-30 00:00:00	1000.00	f	3701	1	4751	51	1	13451	151	9	\N	51	1001	301	1	401	2301
+17951	Calle 140 esquina Calle 149-Precios conjuntos-Lt 5 y 6	t	2024-04-30 00:00:00	f	f	20 x 50		75000	2025-01-21 00:00:00	2024-04-30 00:00:00	1000.00	f	3701	1	4751	51	1	13451	151	9	\N	51	1001	301	1	401	2301
+18001	Calle s/n casi Av. Andresito-Loteo Las Calandrias	f	2023-09-18 00:00:00	f	f	13,80 x 18,50		23500	2024-08-16 00:00:00	2024-04-10 00:00:00	255.00	f	1051	51	25751	51	1	13501	151	2	7801	51	951	301	2	1401	501
+18051	Calle Bosetti esquina Av. Las Heras	t	2024-11-14 00:00:00	f	f	9,20 x 36,80		80000	2024-11-14 00:00:00	2024-11-14 00:00:00	338.00	f	401	1	25501	51	1	13551	151	23	\N	51	701	301	2	401	2301
+18101	Avda Rademacher entre Calle Pedro Mendex y comandante Rebollo	f	2023-12-01 00:00:00	f	f	10.30x17.26x15.90x9.16x5.60x8.10		98000	2024-11-14 00:00:00	2024-05-07 00:00:00	229.00	f	3251	1	3001	51	1	13601	151	23	\N	1	51	51	24	401	2301
+18201	Florentino Ameghino, entre Pedro Morcillo y Av. Francisco de Haro	f	2023-06-29 00:00:00	f	f	10 x 31,80		90000	2024-08-01 00:00:00	2024-01-02 00:00:00	318.00	f	2401	1	26051	51	1	13701	151	23	\N	51	351	301	26	751	2301
+18251	Calle Paraguay entre Bolivia y Calle Brazil	f	2023-11-30 00:00:00	f	f	10 x 43,30	No responde. 6-8-24	25000	2024-08-06 00:00:00	2024-04-08 00:00:00	433.00	t	3851	1	20151	51	1	13751	51	21	\N	51	1351	301	24	201	2301
+18401	Carlos Lineo entre Primavera y Juncal	f	2025-04-10 00:00:00	f	f	0		13000	2025-04-10 00:00:00	2025-04-10 00:00:00	0.00	f	\N	1	10801	51	1	13851	51	\N	\N	51	1351	301	34	51	2301
+18451	B. de Simón esquina Mitre	t	2024-01-10 00:00:00	f	f	10 x 30		30000	2024-10-03 00:00:00	2024-01-10 00:00:00	300.00	f	6701	1	3851	51	1	13901	1	2	12951	51	1251	251	22	51	2301
+18501	Calle San Marcos, entre Calle Ojo de Agua y Calle Cmte Rebollo, 	f	2023-09-18 00:00:00	f	f	12.55X 21.75 X 3.50 X 21.65 X 9.05 X 43.40	Acepta oferta hasta USD 95000. Aceptan vehículos	130000	2024-07-11 00:00:00	2024-04-08 00:00:00	469.00	f	1051	201	12651	51	1	13951	151	2	3001	51	51	\N	2	401	\N
+18551	Calle San Martín esquina Lanusse	t	2019-11-25 00:00:00	f	f	16,89 x 16,77 x 20,21 x 19,67	Recibe ofertas. 13-3-25	350000	2025-03-13 00:00:00	2024-02-06 00:00:00	334.00	f	6701	1	4851	51	51	14001	151	2	19351	51	1	51	17	1251	2301
+18601	Avda 117 esquina calle 180	t	2024-02-05 00:00:00	f	f	12,50 x 25,45		20000	2024-06-27 00:00:00	2024-02-05 00:00:00	318.00	f	4051	1	28051	51	1	14051	151	9	8051	1	801	51	1	401	2301
+18651	Calle l Perez entre  calle San ignacio y calle Sta ana-Precio conjunto-2Ltes	f	2023-03-07 00:00:00	f	f	9,20 x 36		27000	2024-10-14 00:00:00	2024-01-16 00:00:00	331.00	f	1201	1	28251	51	1	14101	151	2	\N	51	751	51	6	451	2301
+18701	Avda Venezuela casi Ruta 213	f	2024-05-17 00:00:00	f	f	23 x 17	Teniamos en venta y retiraron pero siguen vendiendo por su cuenta al mismo precio-30-5-23. Tienen candidato 14-11-23	55000	2024-07-25 00:00:00	2024-05-17 00:00:00	395.00	f	4051	1	32601	51	1	14151	151	9	20301	1	801	51	25	1051	2301
+18801	Tripeti esquina G. Barreyro -Precio bloque	t	2024-11-07 00:00:00	f	f	18,72+6(ochava)x34,73x22,96 		130000	2025-03-12 00:00:00	2024-11-07 00:00:00	886.00	f	6701	1	18551	51	1	14201	151	14	12201	51	901	51	32	401	2301
+18851	Tripeti esquina G. Barreyro -Precios individules	t	2024-11-07 00:00:00	f	f	18,72+6(ochava)x34,73x22,96 		130000	2025-03-12 00:00:00	2024-11-07 00:00:00	886.00	f	6701	1	18551	51	1	14201	151	14	12201	51	901	51	32	401	2301
+18901	Calle 162 entre Peerez y avenida 171	f	2024-12-13 00:00:00	f	f	15 x 35		25000	2024-12-13 00:00:00	2024-12-13 00:00:00	525.00	f	8001	1	30601	51	1	14251	151	23	\N	51	801	301	25	751	2301
+18951	Avda Centenario entre vasconcellos y malinche	f	2021-09-28 00:00:00	f	f	9,20 x 36,80		70000	2024-06-27 00:00:00	2024-06-27 00:00:00	337.00	f	2051	1	7501	51	1	14301	151	9	\N	1	851	51	1	401	2301
+19001	Calle San Ignacio, entre Av. tomas Guido y Calle Cte .Miño	f	2023-10-30 00:00:00	f	f	13,82 x 36,80	Está dispuesto a ver ofertas y financiamiento. En estos momentos no quiere hablar con un asesor pero ante cualquier cambio de opinión se comunicará. 12-3-25	100000	2025-03-12 00:00:00	2024-04-11 00:00:00	501.00	f	6701	1	17801	51	1	14351	151	23	8051	51	401	301	16	451	2301
+19051	Chubut entre Perito Moreno y Herrera 	f	2024-12-02 00:00:00	f	f	10,20 x 43,30		65000	2024-12-02 00:00:00	2024-12-02 00:00:00	442.00	f	5101	1	9151	51	1	14401	151	14	\N	51	101	301	32	401	2301
+19101	AV. Kolping y AV. Centenario 	t	2025-04-29 00:00:00	f	f	13,36 x 38		120000	2025-04-29 00:00:00	2025-04-29 00:00:00	507.68	f	3651	1	8651	51	1	14451	151	\N	\N	1	851	301	34	401	2301
+19151	Cataratas del Iguazu esquina los claveles 	t	2024-11-25 00:00:00	f	f	10 x 30	No contesta llamadas ni Whatsapp. 3-4-25	20000	2025-04-03 00:00:00	2024-11-25 00:00:00	300.00	t	1801	1	6201	51	1	14501	51	23	\N	51	1351	301	25	51	2301
+19201	Colectora Ruta 12 entre Capitan Giachino y 10 d Junio (Miguel Lanus)	f	2024-06-10 00:00:00	f	f	12,50 x 35	No contestan el telefono. 22-10-24	150000	2024-10-22 00:00:00	2024-06-10 00:00:00	437.00	f	6701	1	2551	51	1	14551	151	15	21601	151	251	301	25	451	2301
+19251	Gral. Frias, Esquina Ramon Garcia	t	2023-05-05 00:00:00	f	f	8.66x25.98x8.66x25.98	No contestan el telefono. 23-2-24	150000	2024-02-23 00:00:00	2024-02-23 00:00:00	216.00	t	6601	1	13501	51	1	14601	151	15	\N	51	1	51	26	1051	2301
+19301	Avda Urquiza e/ Avda Zapiola y Avda 115	f	2023-09-19 00:00:00	f	f	17,80 x 37,60		120000	2024-08-09 00:00:00	2024-01-23 00:00:00	699.00	f	8751	1	21751	51	1	14651	151	23	\N	1	651	301	2	401	3551
+19351	Av. G. Roca entre Av. Sgto Cabral y Hernandez 	f	2024-12-10 00:00:00	f	f	8.66 x 30.31		120000	2024-12-10 00:00:00	2024-12-10 00:00:00	262.00	f	401	1	19301	51	1	14701	151	14	\N	1	1	51	32	1051	2301
+19401	REBOLLO CASI HERRERA	f	2023-09-19 00:00:00	f	f	9,4 X 20		60000	2024-10-03 00:00:00	2024-05-27 00:00:00	189.00	f	5101	1	9151	51	51	14751	151	9	\N	51	51	301	4	401	2301
+19451	Avda Martin Fierro entre Santa Catalina y Amalia vera	f	2021-10-06 00:00:00	f	f	8.66x43.30	Pide 6.000.000 marini/ haene Pide 7.000.000	65000	2024-11-01 00:00:00	2023-12-14 00:00:00	375.00	f	1051	201	301	51	1	14801	151	14	3701	1	351	51	1	751	2301
+19501	COLECTORA RUTA 12 - LAS PERDICES-2 Lotes - Precio conjunto	t	2023-03-10 00:00:00	f	f	 2 LOTES 21X43 C/U ( SALEN 4 LOTES DE 10,5X43) C/U	OfertaUSD18000+6*USD2500-Rechazo 10/3/23va a ver autorizacion. No responde 22/8/23	41000	2024-01-19 00:00:00	2024-01-19 00:00:00	1800.00	f	6701	1	9551	51	1	14851	1	14	24151	151	1251	301	4	101	2301
+18351	Calle Cordoba y Costanera - Candelaria - Conjunto (10 lotes)	t	2019-02-14 00:00:00	f	f	60 x 54	Contado / Financia entrega 70% saldo a 6 meses/ofrece solo el bloque/quiere que le quede limpio ese monto	130000	2025-07-07 11:44:45.509936	2019-02-14 03:00:00	3240.00	f	7051	1	22701	51	51	13801	1	2	15651	51	1251	251	21	51	2301
+19601	Colectora de barrio el lago R12-Precio bloque	f	2023-03-23 00:00:00	f	f	25,44 x 73,73 x 25 x 69,01	Oferta 25/3/23-usd10.000 + Citroen + 10 x usd1.300+Com-Gtos.Contraofertaron cuotas de USD2400-Contraofertamos USD1600Maximo30/3/23	43000	2024-09-16 00:00:00	2024-05-09 00:00:00	1750.00	f	4851	1	17201	51	1	14901	1	9	\N	51	1251	301	1	101	2301
+19651	Colectora de barrio el lago R12-Precios individuales	f	2023-03-23 00:00:00	f	f	25,44 x 73,73 x 25 x 69,01	Oferta 25/3/23-usd10.000 + Citroen + 10 x usd1.300+Com-Gtos.Contraofertaron cuotas de USD2400-Contraofertamos USD1600Maximo30/3/23	43000	2024-09-16 00:00:00	2024-05-09 00:00:00	1750.00	f	4851	1	17201	51	1	14901	1	9	\N	51	1251	301	1	101	2301
+19701	Barrio Cerrado Santa Cecilia-Lt.100	f	2022-02-24 00:00:00	f	f	20 x 60		48000	2024-10-16 00:00:00	2024-04-16 00:00:00	1200.00	f	8201	1	27651	51	1	14951	1	23	\N	51	1251	301	16	1	2301
+19751	Mborore esquina Pasaje 53A 	t	2024-12-12 00:00:00	f	f	7,81 X 20 X 12 X 15,76		130000	2024-12-12 00:00:00	2024-12-12 00:00:00	220.00	f	8751	1	24651	51	1	15001	151	14	\N	51	301	51	32	401	2301
+19801	Calle Bondpland (entre San Marcos y calle 31a)	f	2024-11-04 00:00:00	f	f	10,34 x 35,65		75000	2024-11-04 00:00:00	2024-11-04 00:00:00	359.00	f	3251	1	3001	51	1	15051	151	14	\N	51	51	51	32	1101	2301
+19851	Isolina Gallardo entre Av Leandro N. Alem y Riera	f	2025-04-14 00:00:00	f	f	12,5 x 50		22000	2025-04-14 00:00:00	2025-04-14 00:00:00	625.00	f	6701	1	14751	51	1	15101	51	\N	7501	51	1351	301	33	1	2301
+19901	Noruega Esquina 33	t	2023-09-19 00:00:00	f	f	10,82 x 18		45000	2024-08-09 00:00:00	2024-01-23 00:00:00	195.00	f	8751	1	24651	51	1	15151	151	23	\N	51	101	301	2	451	3551
+19951	Río Iguazú entre Arroyo Santa Ana y Arroyo Garupá	f	2022-06-08 00:00:00	f	f	11,92 x 29,82		19500	2022-06-08 00:00:00	2022-06-08 00:00:00	298.00	f	1051	101	3351	51	51	15201	1	21	13651	51	1251	251	21	1	2301
+20001	Calle Neuquen ntre calle 93 y 95-2 Lotes	f	2024-06-05 00:00:00	f	f	10,40 x 26		60000	2024-11-21 00:00:00	2024-06-05 00:00:00	270.00	f	1051	101	27951	51	1	15251	151	21	2701	51	701	301	25	401	2301
+20051	Junín entre Avda Mitre y Santiago del Estero-Unidad funcional N° 1	f	2025-02-12 00:00:00	f	f	3,85x6,46x3x5,78x2,95x2,16x1,08x2,31x1,65x2,15x18,59x13,54x43,37		130000	2025-02-12 00:00:00	2025-02-12 00:00:00	451.00	f	1051	101	22151	51	51	15301	151	21	14901	51	1	251	21	601	2301
+20101	CALLE IGUAZU ENTRE AV URQUIZA Y CORONEL ALVEREZ	t	2024-07-15 00:00:00	f	f	10 x 48,58		95000	2024-07-15 00:00:00	2024-07-15 00:00:00	485.00	f	1051	51	20701	51	1	15351	151	4	21901	51	301	301	4	401	2301
+20201	Calle Entre Rios, entre calle Colon y Calle Feliz de Azara	f	2023-04-24 00:00:00	f	f	10 x 43,30	Sucesion no iniciada. Firman cesion de derechos los herederos para que otro haga el juicio de sucesion. 6-5-24	300000	2024-05-06 00:00:00	2024-05-06 00:00:00	433.00	t	4051	1	14501	51	1	15451	151	15	24251	51	1	301	16	601	3801
+20251	Calle soberania esquina Puerto argentino-Precio Bloque	f	2023-07-27 00:00:00	f	f	25 x 100		80000	2024-06-27 00:00:00	2024-04-23 00:00:00	2500.00	f	4051	1	11201	51	1	15501	151	9	20651	51	251	301	1	751	2301
+20301	Calle soberania esquina Puerto argentino-Precios individuales	f	2023-07-27 00:00:00	f	f	25 x 100		80000	2024-06-27 00:00:00	2024-04-23 00:00:00	2500.00	f	4051	1	11201	51	1	15501	151	9	20651	51	251	301	1	751	2301
+20401	22 de Diciembre, entre Av. Lavalle y Britez	f	2023-05-18 00:00:00	f	f	9,50 x 29,50		120000	2024-08-14 00:00:00	2024-01-23 00:00:00	280.00	f	4051	1	28001	51	1	15601	151	23	5451	51	301	301	26	751	2301
+20451	calle 25 de mayo entre catamarca y salta	f	2023-05-22 00:00:00	f	f	7,50 x 28,86		120000	2024-06-27 00:00:00	2024-01-19 00:00:00	216.00	f	4401	1	9451	51	1	15651	151	9	\N	51	1	301	1	851	2301
+20501	Avda Monteagudo e. Fco. de Haro y Perito Moreno	f	2023-09-25 00:00:00	f	f	18 x 43		180000	2024-11-25 00:00:00	2024-02-29 00:00:00	774.00	f	3151	1	28151	51	1	15701	151	2	\N	1	101	51	22	401	2301
+20551	Ceballos, entre Mar del Plata y Beetovhen	f	2023-05-29 00:00:00	f	f	7.72x24.70x5.85x24.77	Escucha ofertas de contado 12-7-23	51000	2024-07-12 00:00:00	2024-04-10 00:00:00	167.00	f	1051	201	21601	51	1	15751	151	2	451	51	301	51	26	751	2301
+20601	Calle 177 casi 138 (Lotes 4C)	f	2019-12-15 00:00:00	f	f	12,49x33		11900	2025-03-27 00:00:00	2024-03-21 00:00:00	412.00	f	1051	201	651	51	51	15801	151	23	15001	51	1151	101	20	\N	2301
+20651	El ceibo y los teales 	t	2025-05-07 00:00:00	f	f	10 x 50		50000	2025-05-07 00:00:00	2025-05-07 00:00:00	500.00	f	4051	1	2051	51	1	15851	51	\N	19101	51	1351	51	34	51	51
+20701	Calle Los andes ( 162 ) y calle 79 b 	f	2021-08-31 00:00:00	f	f	10 x 36		16000	2025-04-03 00:00:00	2024-04-16 00:00:00	360.00	f	401	1	1001	51	1	15901	151	23	\N	51	551	\N	16	451	2301
+20751	Calle Los andes ( 162 ) y calle 79 b 	t	2021-08-31 00:00:00	f	f	10 x 36		18000	2025-04-03 00:00:00	2024-04-16 00:00:00	360.00	f	401	1	1001	51	1	15901	151	23	\N	51	551	\N	16	451	2301
+20801	Avda Radamacher, entre Luis Pasteur y Cnel. Felix Aguirre	f	2023-05-11 00:00:00	f	f	8,66 x 24,30		90000	2024-09-20 00:00:00	2024-05-13 00:00:00	210.00	f	5201	1	29251	51	1	15951	151	15	\N	1	51	51	26	451	2301
+20851	Av. L. San Martin entre Av. Almirante Brown y Peyret 	f	2024-12-03 00:00:00	f	f	9,20 x 36,81		75000	2024-12-03 00:00:00	2024-12-03 00:00:00	337.00	f	3401	1	4651	51	1	16051	151	14	\N	1	351	51	32	401	2301
+20901	Esquina Lucas Braulio Areco y Thay Morgenstern 	t	2025-04-14 00:00:00	f	f	10,80 x 57	Tiene muro perimetral	15000	2025-04-14 00:00:00	2025-04-14 00:00:00	618.00	f	4601	1	12151	51	1	16101	51	\N	\N	51	1351	301	33	251	2301
+21001	Calle 152 esquina calle Castelli	t	2021-09-03 00:00:00	f	f	27.50x18.89 		21000	2025-04-07 00:00:00	2024-05-13 00:00:00	519.48	f	8651	1	35051	51	1	16201	151	23	\N	51	551	51	16	451	2301
+21051	Riu Iguazu entre Arroyo Santa Ana y Arroyo Garupa	f	2023-04-28 00:00:00	f	f	11.92x29.82		22300	2023-12-21 00:00:00	2023-12-21 00:00:00	298.00	f	1051	151	16801	51	1	16251	1	2	22551	51	1251	251	20	101	2301
+21101	AV. RADEMACHER, ESQUINA CALLE FLORENTINO AMEGUINO. POSADAS	t	2025-04-15 00:00:00	f	f	6 X 7.46 X 29.47 X 11 X 25.93 		110000	2025-04-15 00:00:00	2025-04-15 00:00:00	300.00	f	8751	1	36801	51	1	16301	151	\N	\N	1	51	301	35	1101	2301
+21151	C 168 ENTRE 45b Y AV. FERNANDO ELIAS TULO LLAMOSAS 	f	2022-12-26 00:00:00	f	f	22,30 x 21,65		23000	2025-04-03 00:00:00	2024-01-23 00:00:00	483.00	f	5801	1	9501	51	1	16351	151	15	\N	51	451	301	13	451	2301
+21201	ISLA SOLEDAD Y CABO CUENCA-Precio bloque	t	2023-10-02 00:00:00	f	f	25 x 50		180000	2024-10-10 00:00:00	2024-06-19 00:00:00	1250.00	f	8651	1	35051	51	1	16401	151	15	\N	51	251	51	4	1051	2301
+21251	ISLA SOLEDAD Y CABO CUENCA-Precios individuales	t	2023-10-02 00:00:00	f	f	25 x 50		180000	2024-10-10 00:00:00	2024-06-19 00:00:00	1250.00	f	8651	1	35051	51	1	16401	151	15	\N	51	251	51	4	1051	2301
+21301	AV. RADEMACHER, ENTRE CALLES 124 Y CALLE 122	f	2025-04-15 00:00:00	f	f	17 x 39		220000	2025-04-15 00:00:00	2025-04-15 00:00:00	663.00	f	1701	1	34051	51	1	16451	151	\N	\N	1	101	301	35	1051	2301
+21401	Avda L. B. Areco (115) esquina calle Eldorado-Precio bloque	t	2023-07-21 00:00:00	f	f	43,30 x 43,30		150000	2025-03-27 00:00:00	2024-05-13 00:00:00	1875.00	f	8651	1	33851	51	1	16551	151	23	\N	1	751	301	2	451	2301
+21451	Avda L. B. Areco (115) esquina calle Eldorado-Precios individuales	t	2023-07-21 00:00:00	f	f	43,30 x 43,30		150000	2025-03-27 00:00:00	2024-05-13 00:00:00	1875.00	f	8651	1	33851	51	1	16551	151	23	\N	1	751	301	2	451	2301
+21501	Calle Semila entre Calla Santa Ana y Calle San Ignacio	f	2024-06-27 00:00:00	f	f	10 x 31,80	Tiene mejoras. Quincho y pileta. Aceesos. Muro perimetral y porton	60000	2024-06-27 00:00:00	2024-06-27 00:00:00	318.00	f	1051	201	7201	51	1	16601	151	14	9901	51	751	251	1	451	2301
+21551	Acceso principal Al Puma y Calle el Cuento 	t	2021-09-21 00:00:00	f	f	11 x 30		12000	2024-11-22 00:00:00	2024-01-31 00:00:00	330.00	f	4301	1	35601	51	1	16651	1	2	\N	51	1251	51	16	101	2301
+21601	COLECTORA RUTA 105 Y 18 DE AGOSTO	t	2021-09-10 00:00:00	f	f	11.30X35		26000	2021-12-30 00:00:00	2021-12-30 00:00:00	395.00	f	1051	151	9001	51	1	16701	51	9	8751	1	1351	301	4	201	2301
+21651	Avda Las Américas e. Gottschalk y Che Guevara-2 Lotes-Precios individuales 2 x 350m2	f	2024-02-08 00:00:00	f	f	10 x 35		25000	2024-08-28 00:00:00	2024-04-16 00:00:00	350.00	f	4051	1	11451	51	1	16751	51	23	2101	1	1351	301	22	251	2301
+21751	C. Miguel de Güemes, entre C.57 Y C.61	f	2021-09-13 00:00:00	f	f	14.40X30		11900	2024-06-03 00:00:00	2024-06-03 00:00:00	432.00	f	1051	101	37351	51	1	16851	151	2	19701	51	501	51	16	401	2301
+21801	Calle 143 e/ calle 140 y Ruta 12	f	2024-05-29 00:00:00	f	f	15 x 60	El lote esta a nombre de la abuela de la hija de Jaque	60000	2024-08-28 00:00:00	2024-05-29 00:00:00	900.00	f	6701	1	19901	51	1	16901	151	15	11251	51	1001	301	2	401	2301
+21851	calle J. Gomez entre Av Laprida y Av. Jose Cabrera	f	2025-04-15 00:00:00	f	f	12 x 40		45000	2025-04-15 00:00:00	2025-04-15 00:00:00	480.00	f	6051	1	9501	51	1	16951	151	\N	\N	51	551	301	33	451	2301
+21901	Santa Fe y General Paz 	t	2024-07-04 00:00:00	f	f	4.68 x 21.65 x 16.50 x 25		250000	2024-11-28 00:00:00	2024-07-04 00:00:00	240.00	f	6151	1	32251	51	1	17001	151	2	\N	51	1	51	27	801	2301
+21951	SANTA CATALINA ENTRE CENTENARIO Y ALEM	f	2022-03-14 00:00:00	f	f	10,20 x 34,64		95000	2024-11-01 00:00:00	2023-12-14 00:00:00	353.00	f	1051	201	301	51	1	17051	151	9	3701	1	301	251	4	1101	2301
+22001	Calle 252 entre Calle 55 y Calle 57	f	2023-03-02 00:00:00	f	f	15 x 35		12000	2023-03-02 00:00:00	2023-03-02 00:00:00	525.00	f	1051	51	26901	51	1	17101	151	1	5801	51	501	301	5	751	2301
+22051	Esquina calle 97 y Av. Martin Fierro	t	2025-04-15 00:00:00	f	f	9 x 26		55000	2025-04-15 00:00:00	2025-04-15 00:00:00	234.00	f	6051	1	9501	51	1	17151	151	\N	\N	1	701	301	33	451	2301
+22101	Avda Santa Catalima entre Avda Tacuari y Avda Lopez y planes	f	2023-03-13 00:00:00	f	f	9,20 x 35		110000	2024-03-26 00:00:00	2024-03-26 00:00:00	327.00	f	1051	101	34501	51	1	17201	151	1	551	1	301	251	5	751	1401
+22151	Calle Curupí entre Calle Los Lapachos y calle 160-3Lts-Valores unitarios	f	2023-04-03 00:00:00	f	f	10 x 30		25000	2024-12-12 00:00:00	2024-05-13 00:00:00	300.00	f	8901	1	19501	51	1	17251	151	23	\N	51	801	301	20	401	2301
+22201	CALLE JUNCAL, ENTRE CALLE HORACIO QUIROGA Y CALLE GUEMBE 	f	2025-04-15 00:00:00	f	f	15 x 25		28000	2025-04-15 00:00:00	2025-04-15 00:00:00	375.00	f	4051	1	37051	51	1	17301	51	\N	7051	51	1351	301	35	51	2301
+22251	CALLE PASAJE 44A, ENTRE AV. LAVALLE Y CALLE BEETHOVEN	f	2025-04-16 00:00:00	f	f	7.25 X 20.77		35000	2025-04-16 00:00:00	2025-04-16 00:00:00	151.00	f	301	1	33501	51	1	17351	151	\N	\N	51	301	301	35	751	2301
+22301	Calle Tamareu esquina calle 125	t	2024-06-24 00:00:00	f	f	9,56 x 36		42000	2025-01-27 00:00:00	2024-06-24 00:00:00	344.00	f	7701	1	11501	51	1	17401	151	23	\N	51	901	51	25	451	2301
+22351	Calle 176, entre calle 121 y 123	f	2023-09-20 00:00:00	f	f	10,59 x 32,50		20000	2025-05-09 00:00:00	2024-06-18 00:00:00	0.00	f	4051	1	16701	51	1	17451	151	23	4101	51	801	301	26	1051	2301
+22401	Avdaenida Soldado Argentino casi Islas Malvinas 	f	2024-06-11 00:00:00	f	f	12 x 36		24000	2025-03-21 00:00:00	2024-06-11 00:00:00	432.00	f	6701	1	8851	51	1	17501	151	9	12551	1	251	301	25	401	2301
+22451	Crucero, Gral Belgrano, entre  Calle Cap. Giachino y Calle 10 de Junio	f	2022-09-12 00:00:00	f	f	11 x 31,82		27000	2024-09-03 00:00:00	2024-04-05 00:00:00	350.00	f	6001	1	34201	51	1	17551	151	23	\N	51	251	301	16	751	2301
+22501	Colectora Ruta 12 entre Cerro Cora y Almafuerte-Precio bloque	f	2024-07-19 00:00:00	f	f	20 x 105		65000	2024-11-28 00:00:00	2024-07-19 00:00:00	2100.00	f	4001	1	26251	51	1	17601	51	23	\N	151	1351	301	25	101	2301
+22551	Colectora Ruta 12 entre Cerro Cora y Almafuerte-Precios individuales	f	2024-07-19 00:00:00	f	f	20 x 105		65000	2024-11-28 00:00:00	2024-07-19 00:00:00	2100.00	f	4001	1	26251	51	1	17601	51	23	\N	151	1351	301	25	101	2301
+22601	QUEIREL ENTRE MONSEÑOR DE ANDREA Y 127	f	2023-05-02 00:00:00	f	f	12 x 37,62	Se oferto 4MM + 8 x 475000+com-Gtos-rechazo 3/5/23-Solo contado $8,7MM	20000	2023-11-09 00:00:00	2023-11-09 00:00:00	451.00	f	5051	1	4251	51	1	17651	151	15	\N	51	901	301	4	401	2301
+22651	Calle stgo Acosta entre av Alicia Moreau Y Rio Colorado	f	2023-03-07 00:00:00	f	f	12 x 36,50	Acepta financiacion. Pero no quiere hablar con un asesor. 18-3-25	17000	2025-03-18 00:00:00	2024-03-19 00:00:00	432.00	f	4051	1	29001	51	1	17701	151	9	10301	51	551	51	6	751	2301
+22701	Ruta 105 y San Marcos	t	2021-09-20 00:00:00	f	f	50 x 200		125000	2024-08-05 00:00:00	2024-01-16 00:00:00	10000.00	f	3101	1	35301	51	1	17751	51	23	\N	151	1351	51	16	201	2301
+22751	Ruta 105 y San Marcos	t	2021-09-20 00:00:00	f	f	50 x 200		125000	2024-08-05 00:00:00	2024-01-16 00:00:00	10000.00	f	3101	1	35301	51	1	17751	51	23	\N	151	1351	51	16	201	2301
+22801	Los andes y Calle 69	t	2023-05-19 00:00:00	f	f	9,5 x 40		15300	2025-02-21 00:00:00	2025-02-21 00:00:00	380.00	f	1051	201	22251	51	1	17801	151	2	14051	51	551	51	26	451	2301
+22901	Calle Luzuriaga esquina calle 138	t	2024-09-18 00:00:00	f	f	12 x 36	Acepta oferta razonable. 14-3-25	41000	2025-03-14 00:00:00	2024-09-18 00:00:00	432.00	f	6701	1	6151	51	1	17901	151	23	10151	51	801	\N	25	401	2301
+23051	Calle 122 entre Av. Santa Catalina y Amalia Vera 	f	2024-11-29 00:00:00	f	f	9,20 x 32,5	Aceptaría una oferta hasta USD 65000-29-11-24	72000	2025-03-19 00:00:00	2024-11-29 00:00:00	299.00	f	6701	1	11351	51	1	18001	151	15	16101	51	401	51	32	751	2301
+23151	Calle 12 de Octubre, enre Calle Maipu y Calle Pringles	f	2021-09-23 00:00:00	f	f	17,20 x 33		20000	2024-10-22 00:00:00	2024-03-28 00:00:00	567.60	f	6701	1	34451	51	1	18101	1	21	12101	51	1301	51	16	51	2301
+23251	Moritan entre Alberdi y Roque Gonzalez - 2 lotes-Precio bloque	f	2024-12-18 00:00:00	f	f	17,32x34,64		310000	2024-12-18 00:00:00	2024-12-18 00:00:00	600.00	f	4301	1	11901	51	1	18201	151	14	\N	51	1	51	32	1051	2301
+23301	Moritan entre Alberdi y Roque Gonzalez - 2 lotes-Precios individuales	f	2024-12-18 00:00:00	f	f	17,32x34,64		310000	2024-12-18 00:00:00	2024-12-18 00:00:00	600.00	f	4301	1	11901	51	1	18201	151	14	\N	51	1	51	32	1051	2301
+23351	Calle Bolivar entre General Paz y 25 de Mayo (bloque)	f	2020-05-18 00:00:00	f	f	15,10 x 30		450000	2024-12-12 00:00:00	2024-05-08 00:00:00	453.00	f	4801	1	30101	51	51	18251	151	23	\N	51	1	51	18	501	2301
+23401	Calle Bolivar entre General Paz y 25 de Mayo (suma unitario)	f	2020-05-18 00:00:00	f	f	2 * (7,55 x 30)		450000	2024-12-12 00:00:00	2024-05-08 00:00:00	453.00	f	4801	1	30101	51	51	18251	151	23	\N	51	1	51	18	501	2301
+23451	Esquiú, esquina Calle Los Andes	t	2023-05-23 00:00:00	f	f	40.76x16.00x45.00x11.76		43000	2024-08-05 00:00:00	2024-01-23 00:00:00	711.00	f	2851	1	29151	51	1	18301	151	23	\N	51	551	51	26	451	1551
+23501	Moritán Esquina  Clotilde G. de Fernández	f	2023-12-07 00:00:00	f	f	20 x 25 x 33		150000	2024-08-23 00:00:00	2024-04-23 00:00:00	300.00	f	4051	1	8301	51	1	18351	151	9	1901	51	301	51	1	401	\N
+23551	Nicomedes castro y esquina Cnel. Alvarez 	t	2023-05-08 00:00:00	f	f	5.38x11.80x2.45x5.55x7.17x13.21x8.00	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23	100000	2023-09-25 00:00:00	2023-09-25 00:00:00	145.00	t	9051	1	10001	51	1	18401	151	15	\N	51	1	51	26	1051	2301
+23601	Bº del Lago- Calle Rio Iguazu, entre calle Arroyo Curupaiti Y Arroyo Cuñapiru	f	2021-09-27 00:00:00	f	f	42,41x12,50x31,33x16,70		22000	2024-12-20 00:00:00	2024-01-31 00:00:00	460.00	f	7901	1	36601	51	1	18451	1	23	\N	51	1251	301	16	101	2301
+23651	Calle 230 - Barrio Nestor Kirchner - 14 Has	t	2018-02-21 00:00:00	f	f	195 x 727,84		190000	2024-11-01 00:00:00	2023-12-14 00:00:00	141765.00	f	1051	201	301	51	51	18501	151	21	3701	51	601	\N	20	\N	2301
+23701	Calle Brasilia entre C.164 y Saavedra	f	2024-11-07 00:00:00	f	f	12,16 x 36		25000	2024-11-07 00:00:00	2024-11-07 00:00:00	437.00	f	51	1	19951	51	1	18551	151	14	\N	51	801	51	32	401	2301
+23751	Coronel Alvarez, entre Ramon Garcia y Angel Acuña 	f	2021-10-15 00:00:00	f	f	7,90 x 25,98	Abiertos a ofertas. 13-3-25	120000	2025-03-13 00:00:00	2024-04-05 00:00:00	205.00	f	6701	1	23251	51	1	18601	151	9	16351	51	1	51	16	1051	4651
+23801	Avda Monteaguado esquina calle Libano	t	2023-06-05 00:00:00	f	f	23,30 x 23,30		250000	2024-07-15 00:00:00	2024-02-01 00:00:00	547.00	f	4051	1	14601	51	1	18651	151	9	16701	1	101	301	1	401	2301
+23851	Calle 154, entre calle 77c y calle 77b	f	2022-04-12 00:00:00	f	f	11 x 50		25000	2025-04-07 00:00:00	2024-07-04 00:00:00	550.00	f	5551	1	35751	51	1	18701	151	23	\N	51	551	301	16	451	2301
+23951	Avda Quaranta esquina calle 149	t	2024-08-02 00:00:00	f	f	20,20 x 48,46 x 45,63 x 20		90000	2024-08-02 00:00:00	2024-08-02 00:00:00	940.00	f	6251	1	25201	51	1	18801	151	23	\N	1	1001	51	2	401	2301
+24001	JACARANDA ENTRE SAUCE Y PETERIBY 	f	2023-05-22 00:00:00	f	f	10 x 30		15000	2023-05-22 00:00:00	2023-05-22 00:00:00	300.00	f	1051	201	9701	51	1	18851	151	14	18151	101	201	301	4	1051	2301
+24051	SANTA ANA ENTRE GATTI Y PARAISOS	f	2024-12-13 00:00:00	f	f	10 x 35		12000	2024-12-13 00:00:00	2024-12-13 00:00:00	350.00	f	3101	1	25651	51	1	18901	51	15	\N	101	1351	301	4	101	2301
+24101	Calle San marcos entre Francia y Buchardo	f	2024-11-25 00:00:00	f	f	10,50 x 43,30		90000	2025-03-28 00:00:00	2024-11-25 00:00:00	455.00	f	1151	1	14951	51	1	18951	151	14	\N	51	101	51	32	751	2301
+24151	COLECTORA RUTA 12 ENTRE GATTI Y PARAISOS 	f	2024-07-19 00:00:00	f	f	10 x 35		75000	2024-12-10 00:00:00	2024-07-19 00:00:00	350.00	f	4051	1	3801	51	1	19001	51	15	7201	151	1351	\N	4	51	51
+24201	Castro Barros entre Calle J. Serrano y Colombres	f	2023-10-26 00:00:00	f	f	10,60 x 30	Esta mal el numero de telefono- 5-4-24	30000	2024-04-05 00:00:00	2024-04-05 00:00:00	318.00	t	6101	1	151	51	1	19051	151	15	\N	101	551	51	24	751	2701
+24251	Avda Justo Jose Urquiza entre Avda Sta Catalina y Magri	f	2021-10-27 00:00:00	f	f	8,66x25,27	Tiene una Construccion de 2 plantas. No quieren bajar el precio xq tienen q repartirse entre muchos. Pueden evaluar permutas No quieren trabajar con inmobiliarias. 10-12-24	130000	2025-03-13 00:00:00	2024-05-14 00:00:00	218.00	f	6701	1	33951	51	1	19101	151	23	4701	1	301	51	16	451	2301
+24301	Avda Leandro N Alem y Carmelo Magri	t	2024-08-13 00:00:00	f	f	20 x 27		180000	2024-12-11 00:00:00	2024-08-13 00:00:00	540.00	f	5101	1	24401	51	1	19151	151	2	\N	1	301	301	27	451	2301
+24351	PERITO MORENO Y GUEMBE 	t	2024-01-22 00:00:00	f	f	10 x 50		20000	2024-10-03 00:00:00	2024-05-27 00:00:00	500.00	f	4051	1	2651	51	1	19201	51	15	14651	51	1351	301	4	51	2301
+24401	Avda 147 entre calle 166 y calle 168-2 Lotes-Precio bloque	f	2024-03-21 00:00:00	f	f	2 x (14,76 x 48,13)		300000	2024-07-18 00:00:00	2024-03-21 00:00:00	1384.00	f	7701	1	17451	51	1	19251	151	9	\N	1	1001	301	1	401	2301
+24451	Avda 147 entre calle 166 y calle 168-2 Lotes-Precios individuales	f	2024-03-21 00:00:00	f	f	2 x (14,76 x 48,13)		300000	2024-07-18 00:00:00	2024-03-21 00:00:00	1384.00	f	7701	1	17451	51	1	19251	151	9	\N	1	1001	301	1	401	2301
+24501	Calle Las Magnolias esquina Calle Tirica	t	2024-01-22 00:00:00	f	f	10 x 30	Tiene clausula de construccion para poder escriturar. 16-4-24. Hace 2 meses dejo de pagar la cuota 15-8-24	25000	2024-08-15 00:00:00	2024-04-16 00:00:00	300.00	t	6701	1	8401	51	1	19301	151	14	11751	51	1151	251	22	1351	2301
+24551	CALLE 80  Y 93 	t	2023-10-03 00:00:00	f	f	10,40 x 26		48000	2024-10-10 00:00:00	2024-06-13 00:00:00	270.00	f	5101	1	9151	51	1	19351	151	15	\N	51	701	301	4	451	2301
+24601	Colectora Acceso Sur esquina Los Paraisos-Precio bloque	t	2023-08-10 00:00:00	f	f	10 x 30	No quiere trabajar con inmobiliarias. 27-2-24	65000	2024-08-01 00:00:00	2024-04-24 00:00:00	300.00	t	1251	1	32651	51	1	19401	51	15	19301	151	1351	251	22	51	2301
+24651	Colectora Acceso Sur esquina Los Paraisos-Precio bloque	t	2023-08-10 00:00:00	f	f	10 x 30	No quiere trabajar con inmobiliarias. 27-2-24	65000	2024-08-01 00:00:00	2024-04-24 00:00:00	300.00	t	1251	1	32651	51	1	19401	51	15	19301	151	1351	251	22	51	2301
+24701	Calle 124, entre Amalia Vera y tripoli	f	2021-10-14 00:00:00	f	f	9.20X36.80	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23. No responde 10-4-25	47000	2025-04-10 00:00:00	2023-09-25 00:00:00	338.00	t	9051	1	35851	51	1	19451	151	2	\N	51	401	51	16	751	2301
+24801	Catamarca entre San Lorenzo y Colon	f	2024-07-04 00:00:00	f	f	8,65 x 31,1		200000	2024-11-25 00:00:00	2024-07-04 00:00:00	269.00	f	251	1	29201	51	1	19551	151	2	\N	51	1	51	27	601	2301
+24851	Calle Ambay entre Nogal y Palo Rosa - B° Santa Elena	f	2025-02-12 00:00:00	f	f	10,6 x 23,94		9800	2025-02-12 00:00:00	2025-02-12 00:00:00	254.00	f	1051	201	12551	51	51	19601	151	9	14701	51	151	251	9	1201	2301
+24901	Av Lopez Torres Esquina calle 122	t	2025-04-16 00:00:00	f	f	10 x 20		100000	2025-04-16 00:00:00	2025-04-16 00:00:00	200.00	f	4651	1	3451	51	1	19651	151	\N	14551	1	101	301	33	1051	2301
+24951	Calle Guembe esquina Itati-Precio bloque	t	2023-08-10 00:00:00	f	f	12 x 50	No quiere que lo llamen. 6-8-24. Están haciendo la escritura maso menos si se pueden comunicar con ellos dentro de 1 mes y medio, capaz ya tenga novedades del titulo, por el momento sigue el precio de 40 mil dólares. 21-3-25	40000	2025-03-21 00:00:00	2024-04-25 00:00:00	600.00	f	6701	1	27601	51	1	19701	51	9	23601	51	1351	301	22	51	2301
+25001	Calle Guembe esquina Itati-Precios individuales	t	2023-08-10 00:00:00	f	f	12 x 50	No quiere que lo llamen. 6-8-24. Están haciendo la escritura maso menos si se pueden comunicar con ellos dentro de 1 mes y medio, capaz ya tenga novedades del titulo, por el momento sigue el precio de 40 mil dólares. 21-3-25	40000	2025-03-21 00:00:00	2024-04-25 00:00:00	600.00	f	6701	1	27601	51	1	19701	51	9	23601	51	1351	301	22	51	2301
+25051	Calle Candelaria entre Carlos Lineo y El Ceibo -z/Acceso Sur	f	2024-11-07 00:00:00	f	f	10 x 30		13000	2024-11-07 00:00:00	2024-11-07 00:00:00	300.00	f	1551	1	12351	51	1	19751	51	2	11101	51	1351	301	27	101	2301
+25151	Avda Tomas Guido, entre Avda J. J Urquiza y calle Chile	f	2021-10-25 00:00:00	f	f	12 x 36,50	Acepta vehículo	128000	2024-07-22 00:00:00	2024-03-08 00:00:00	432.00	f	3251	1	35251	51	1	19851	151	23	\N	1	301	51	16	1101	2301
+25201	AV. CARLOS BOSETTI EN ESQUINA CON CALLE S/N. ZONA BARRANCA DE CANDELARIA.	t	2025-05-16 00:00:00	f	f	150 X 68.5 X 147.17 X 4 X 65.67		130000	2025-05-16 00:00:00	2025-05-16 00:00:00	10271.00	f	3051	1	39101	51	1	19901	1	\N	\N	1	1251	301	35	51	2301
+25251	Calle 104 entre Aguado y calle 97	f	2023-06-02 00:00:00	f	f	10 x 31,18		60000	2025-03-31 00:00:00	2024-02-09 00:00:00	312.00	f	2701	1	10501	51	1	19951	151	15	\N	51	751	301	4	751	2301
+25301	CALLE MUÑECA CORTI ENTRE BARCARCE Y JOSE MONTES	f	2024-01-11 00:00:00	f	f	15 x 45		10000	2025-03-19 00:00:00	2024-01-11 00:00:00	675.00	f	1051	1	6601	51	1	20001	51	15	14001	51	1351	301	4	351	2301
+25401	AVDA LAVALLE ESQUINA ANTONIO DE LLAMAS ESQUINA GOMEZ PORTIÑO-Son 2 lotes 5 y 6-Precio conjunto (SALIDA A 3 CALLES)	t	2025-04-16 00:00:00	f	f	11.03X18.60 (005) Y 16.04X19.54 (006)		350000	2025-04-16 00:00:00	2025-04-16 00:00:00	519.00	f	6701	1	35001	51	1	20101	151	\N	22201	1	351	51	35	401	2301
+25451	AVDA LAVALLE ESQUINA ANTONIO DE LLAMAS ESQUINA GOMEZ PORTIÑO-Son 2 lotes 5 y 6-Precio conjunto (SALIDA A 3 CALLES)	t	2025-04-16 00:00:00	f	f	11.03X18.60 (005) Y 16.04X19.54 (006)		350000	2025-04-16 00:00:00	2025-04-16 00:00:00	519.00	f	6701	1	35001	51	1	20101	151	\N	22201	1	351	51	35	401	2301
+25501	Calle Curupí entre Calle Los Lapachos y calle Los Laureles-Son varios lotes. Precios unitarios	f	2025-04-22 00:00:00	f	f	11 X 30 (LOTE 22) y 10.17 X 30 (LOTE 23) 		30000	2025-04-22 00:00:00	2025-04-22 00:00:00	325.00	f	4501	1	34801	51	1	20151	151	\N	\N	51	801	51	35	401	2301
+25551	Av Lopez Torres esquina calle Sanchez	t	2025-04-22 00:00:00	f	f	10,8 x 29		90000	2025-04-22 00:00:00	2025-04-22 00:00:00	313.00	f	9051	1	8701	51	1	20201	151	\N	\N	1	51	51	33	1101	2301
+25601	Av. Maipú Entre Misiones y Humboldt	f	2018-12-12 00:00:00	f	f	10,51 x 30	Contado	120000	2023-11-06 00:00:00	2023-11-06 00:00:00	315.30	t	2401	1	32901	51	51	20251	151	2	\N	51	101	51	19	751	4851
+25351	Avda Carlos Bosetti e. Cordoba y Avda F. Ruiz de Montoya	f	2023-01-15 00:00:00	f	f	15 x 20	Da el contestador. 4-10-24	26000	2025-07-04 13:42:16.804052	2023-01-15 03:00:00	300.00	t	9362	1	6351	51	1	20051	1	14	24752	1	1251	51	22	51	2301
+25651	Calle Ruiz de Montoya entre Avda Urquiza y calle Chile	f	2025-02-20 00:00:00	f	f	12x 37,61	Tiene derechos posesorios adquiridos. Hay que hacer juicio posesorio. Escucha ofertas 20-2-25	40000	2025-02-20 00:00:00	2025-02-20 00:00:00	451.32	f	1051	101	13101	51	51	20301	151	9	6951	51	301	251	9	1101	1751
+25751	Calle Iguazu entre Av. Andrade y Mbororé 	t	2024-12-12 00:00:00	f	f	9,80 x 49,90		160000	2025-03-13 00:00:00	2024-12-12 00:00:00	490.00	f	6701	1	23301	51	1	20401	151	15	11401	51	301	51	32	401	2301
+25801	Chile, entre Cte. Miño y Ruiz de Montoya	f	2023-05-29 00:00:00	f	f	12 x 36	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23	80000	2023-09-25 00:00:00	2023-09-25 00:00:00	432.00	t	9051	1	30451	51	1	20501	151	21	\N	51	301	51	26	1101	2301
+25851	Calle 135 esquina Gobernador Barreiro 	t	2024-04-23 00:00:00	f	f	10 x 30		45000	2024-12-19 00:00:00	2024-04-23 00:00:00	300.00	f	6701	1	26451	51	1	20551	151	21	6901	51	901	301	25	401	2301
+25901	Av Soldado Argentino entre Rio Gallegos y Gran Malvina-Precio Bloque	f	2024-07-18 00:00:00	f	f	25 x 50		65000	2025-04-10 00:00:00	2024-07-18 00:00:00	1250.00	f	2601	1	12901	51	1	20601	151	2	\N	51	251	51	27	751	2301
+25951	Av Soldado Argentino entre Rio Gallegos y Gran Malvina-Precios individuales	f	2024-07-18 00:00:00	f	f	25 x 50		65000	2025-04-10 00:00:00	2024-07-18 00:00:00	1250.00	f	2601	1	12901	51	1	20601	151	2	\N	51	251	51	27	751	2301
+26001	SARMIENTO ENTRE ROQUE SAENZ PEÑA Y GENERAL PAZ	f	2023-11-01 00:00:00	f	f	8,66 x 26		115000	2024-03-07 00:00:00	2024-03-07 00:00:00	225.00	f	1051	51	15801	51	1	20651	151	4	13151	51	1	301	4	801	2301
+26051	CALLE 252 Y 55-Precio bloque	t	2023-10-19 00:00:00	f	f	20 x 35		35000	2025-04-03 00:00:00	2024-05-23 00:00:00	700.00	f	6701	1	10651	51	1	20701	151	14	8351	51	501	301	4	751	2301
+26101	CALLE 252 Y 55-Precios individuales	t	2023-10-19 00:00:00	f	f	20 x 35		35000	2025-04-03 00:00:00	2024-05-23 00:00:00	700.00	f	6701	1	10651	51	1	20701	151	14	8351	51	501	301	4	751	2301
+26201	Avda 213  y Calle 242-Naranjos Country Club	t	2023-03-10 00:00:00	f	f	12 x 30		24000	2024-06-19 00:00:00	2024-06-19 00:00:00	360.00	f	4051	1	33251	51	1	20801	151	23	15051	1	1101	301	6	\N	2301
+26251	Tucuman esquina 3 de Febrero	t	2024-07-18 00:00:00	f	f	6x 13.08x 12.48 x 17.46 x 8.24 		210000	2024-11-25 00:00:00	2024-07-18 00:00:00	207.00	f	5951	1	15401	51	1	20851	151	2	\N	51	1	51	27	851	2701
+26301	Santiago del Estero esquina Junin 	t	2024-11-25 00:00:00	f	f	20 x 19		450000	2024-11-25 00:00:00	2024-11-25 00:00:00	380.00	f	5451	1	23851	51	1	20901	151	14	\N	51	1	351	32	901	2301
+26351	Av. Francisco de Haro, entre Pedro Méndez y Rebollo	f	2025-04-23 00:00:00	f	f	10 x 34		85000	2025-04-23 00:00:00	2025-04-23 00:00:00	340.00	f	2551	1	7851	51	1	20951	151	\N	\N	1	51	301	33	401	2301
+26401	LOS ANDES Y MOSCONI 	t	2024-03-06 00:00:00	f	f	10 x 30	No contesta el teléfono. 21-11-24	20000	2024-11-21 00:00:00	2024-03-06 00:00:00	300.00	t	4051	1	3751	51	1	21001	151	23	751	51	551	301	4	451	2301
+26451	GUALEGUAYCHU ENTRE CHACABUCO Y S/N	f	2024-04-05 00:00:00	f	f	12,50 x 50		8400	2024-08-13 00:00:00	2024-04-05 00:00:00	625.00	f	1051	51	13301	51	1	21051	51	4	15701	51	1351	301	4	201	51
+26501	Calle 150 esquina Calle 135	t	2024-01-18 00:00:00	f	f	12,25 x 39,92		20000	2024-12-03 00:00:00	2024-04-04 00:00:00	492.00	f	6701	1	12051	51	1	21101	151	21	4351	51	1001	\N	22	451	2301
+26551	18 de agosto, entre constitucion y calle sin nombre	f	2023-08-03 00:00:00	f	f	10 x 33,90	Dijo que ya le cotizaron 2 veces y eso es lo mínimo que puede pedir y aceptaría financiación. En caso de que nos sirva el negocio acepta que un asesor se contacte. 13-3-25	12000	2025-03-13 00:00:00	2024-03-19 00:00:00	339.00	f	6701	1	31151	51	1	21151	51	21	8101	51	1351	301	26	251	2301
+26651	Avda Cocomarola entre calle 168 y Las Americas 	f	2021-11-30 00:00:00	f	f	15 x 33	Esperan la sentencia del juicio posesorio para poner en venta. 12-7-23. Sigue en juicio 15-8-24. Sigue en juicio. No acepta financiación 19-3-25	50000	2025-03-19 00:00:00	2023-07-12 00:00:00	525.00	t	6701	1	38301	51	1	21251	151	21	1251	1	551	301	16	751	5051
+26701	CORDOBA Y CORRRIENTES	t	2023-06-07 00:00:00	f	f	10 x 30	No responde. 10/10/23. No responde. 30/8/24	8000	2024-08-30 00:00:00	2024-06-11 00:00:00	300.00	t	6701	1	8801	51	1	21301	1	9	3251	51	1251	301	4	51	51
+26751	Lagos de Candelaria sobre colectora Ruta 12-Loteo-Precio por lote	f	2023-06-22 00:00:00	f	f	12 x 30	12x30 120 cuotas de U$ 210 	25000	2024-07-22 00:00:00	2024-03-08 00:00:00	360.00	f	3151	1	8451	51	1	21351	1	23	\N	51	1251	301	20	101	2301
+26801	Lagos de Candelaria sobre colectora Ruta 12-Loteo-Precio por lote	f	2023-06-22 00:00:00	f	f	15 x 30	15x30 120 cuotas de U$295	35000	2024-07-22 00:00:00	2024-03-08 00:00:00	450.00	f	3151	1	8451	51	1	21351	1	23	\N	51	1251	301	20	101	2301
+26851	Lagos de Candelaria sobre colectora Ruta 12-Loteo-Sobre el lago y las piletas-Precio por lote	f	2023-06-22 00:00:00	f	f	15 x 30	Lotes frente lago entrega 30% y saldo cuotas a convenir	40000	2024-07-22 00:00:00	2024-03-08 00:00:00	450.00	f	3151	1	8451	51	1	21351	1	23	\N	51	1251	301	20	101	2301
+26901	Calle 154, entre Calle 67 y Calle 71	f	2021-12-15 00:00:00	f	f	15 x 30	Boleto. No tienen contacto con el firmante de la escritura. 21-7-23	11000	2024-08-26 00:00:00	2023-07-12 00:00:00	450.00	t	4051	1	11201	51	1	21401	151	14	20701	51	551	301	16	451	851
+26951	Calle Rio Uruguay entre Arroyo Santa Ana y Arroyo Garupa	f	2022-01-10 00:00:00	f	f	12.50x37.50		24000	2024-07-23 00:00:00	2024-02-28 00:00:00	468.00	f	4551	1	22851	51	1	21451	1	23	\N	51	1251	51	20	101	2301
+27001	AV. MARIANO MORENO, ENTRE AV. MARCONI Y CALLE CORONEL LOPEZ. POSADAS	f	2025-04-24 00:00:00	f	f	11.30 X 28.87 		250000	2025-04-24 00:00:00	2025-04-24 00:00:00	326.00	f	3051	1	39101	51	1	21501	151	\N	\N	1	51	301	35	751	2301
+27051	Av. Las Heras e/ calle Paraguay y Chile	t	2025-01-03 00:00:00	f	f	10,00 x 43,30		75000	2025-01-03 00:00:00	2025-01-03 00:00:00	433.00	f	3401	1	24001	51	1	21551	151	23	\N	1	651	201	2	451	3151
+27101	Avdaenida Roque Perez, esquina Ramon Garcia	t	2023-06-21 00:00:00	f	f	8,66 x 26		350000	2024-09-04 00:00:00	2024-02-26 00:00:00	225.00	f	7151	1	39201	51	1	21601	151	9	2551	1	1	51	26	1051	2301
+27151	COLECTORA RUTA 12 ENTRE 254 Y 53	f	2024-05-08 00:00:00	f	f	35X12.88X6.92X21.10X23.55		85000	2025-04-10 00:00:00	2024-05-08 00:00:00	736.00	f	3251	1	12401	51	1	21651	151	15	\N	151	501	301	4	751	2301
+27201	Calle Sarmiento entre calle Riera y Av Alem	f	2024-07-05 00:00:00	f	f	12,5 x 50	No quiere trabajar con nosotros. 10-12-24	12000	2025-04-15 00:00:00	2024-07-05 00:00:00	625.00	f	1051	201	20201	51	1	21701	51	23	23051	51	1351	301	25	201	2301
+27251	Calle Posadas entre calle Eldorado y calle 9 de Julio	f	2023-03-15 00:00:00	f	f	15 x 46,25		14500	2024-09-04 00:00:00	2024-05-07 00:00:00	694.00	f	5901	1	34151	51	1	21751	51	9	\N	51	1351	51	6	101	2301
+27301	CALLE 124 ENTRE RADEMACHER Y URUGUAY	f	2023-07-04 00:00:00	f	f	10,28 x 30,31	No estan seguros de vender. 11-6-24. No contestan los mensajes 17/1/25	60000	2025-01-17 00:00:00	2024-06-11 00:00:00	321.00	t	6701	1	15551	51	1	21801	151	9	4901	51	101	301	4	1051	2301
+27451	 Av Tulo LLamosas entre Juan Domingo Peron e Isla Soledad -Precio bloque	t	2024-07-19 00:00:00	f	f	50 x 100		500000	2024-11-22 00:00:00	2024-07-19 00:00:00	5000.00	f	5651	1	26851	51	1	21901	151	2	\N	151	251	301	27	401	2301
+27501	 Av Tulo LLamosas entre Juan Domingo Peron e Isla Soledad -Precios individuales	t	2024-07-19 00:00:00	f	f	50 x 100		500000	2024-11-22 00:00:00	2024-07-19 00:00:00	5000.00	f	5651	1	26851	51	1	21901	151	2	\N	151	251	301	27	401	2301
+27551	C.24 esquina Gotischalk 	t	2024-11-21 00:00:00	f	f	6,27 X 27,56 X 10,51 X 31,80		100000	2024-11-21 00:00:00	2024-11-21 00:00:00	325.00	f	4201	1	35151	51	1	21951	151	14	\N	51	651	51	32	401	2301
+27601	CALLE 74, ENTRE  AV. MARCONI Y AV. COSTANERA. POSADAS	f	2025-04-24 00:00:00	f	f	12.58 X 46.60 		350000	2025-04-24 00:00:00	2025-04-24 00:00:00	586.00	f	6701	1	35351	51	1	22001	151	\N	21251	51	51	301	35	1051	2301
+27701	Av Jauretche esquina calle 120	t	2024-11-26 00:00:00	f	f	9,60 x 36	Paolo: Lo conozco al vago. No quiere que se ponga cartel ni se publicite por que no quiere llamar la atención y tampoco tiene título, dice que el consigue la firma de la escritura. Pide usd42.000 y no se baja de eso, puede recibir un auto hasta más o menos $20MM. Es medio turbio el tema. 12/3/25	42000	2025-03-12 00:00:00	2024-11-26 00:00:00	345.00	f	6701	1	16101	51	1	22101	151	23	3101	1	951	51	25	451	2301
+27751	Calle Guavyra esquina Palo Rosa Bº Santa Helena	t	2024-07-25 00:00:00	f	f	10,60 x 23.94		16000	2024-09-19 00:00:00	2024-07-25 00:00:00	264.00	f	6701	1	1351	51	1	22151	51	23	23351	51	1351	301	25	151	51
+27801	Calle 180 casi 178A	f	2024-07-25 00:00:00	f	f	10.12x26.92x9x31.56	Boleto. Sin Plano aprobado.  4-10-24. Dice que tiene reservada la propiedad. La venderia en un mes y sino volver a llamar. 7-4-25	10000	2025-04-03 00:00:00	2024-07-25 00:00:00	243.00	t	6701	1	27501	51	1	22201	151	9	15801	51	801	301	25	751	1051
+27851	AV. MARCONI, ENTRE AV. CABRED Y CALLE SAN ROQUE. POSADAS	f	2025-04-23 00:00:00	f	f	10 x 35		95000	2025-04-23 00:00:00	2025-04-23 00:00:00	350.00	f	851	1	36151	51	1	22251	151	\N	\N	1	51	301	35	1051	2301
+27901	TALAVERA E/ RAMON DIAZ Y RUTA 105 	f	2022-09-13 00:00:00	f	f	10 x 40	Tiene cadena de boletos. 29-2-24	22000	2024-02-29 00:00:00	2024-02-29 00:00:00	400.00	t	4051	1	21451	51	1	22301	51	23	10051	51	1351	301	5	251	1201
+28051	Avda lopez y Lopez planes entre calle Gdor Bermudez y calle Morcillo-Precios individuales	f	2023-03-10 00:00:00	f	f	17,32X 43.3 X 25.88 X 20 		370000	2024-12-04 00:00:00	2024-03-19 00:00:00	930.00	f	6701	1	24351	51	1	22401	151	21	20501	1	351	301	6	401	2301
+28101	CALLE NUESTRA SRA. DEL ROSARIO, ENTRE CALLE LAS ROSAS Y CALLE ROQUE GONZALEZ	f	2025-05-19 00:00:00	f	f	10 x 36		35000	2025-05-19 00:00:00	2025-05-19 00:00:00	360.00	f	5651	1	39601	51	1	22451	51	\N	\N	51	1351	301	35	51	2301
+28151	Benavidez esquina Coronel Lopez	t	2021-10-14 00:00:00	f	f	10.67x27.71	No atiende el telefono. 10-4-24	450000	2023-12-27 00:00:00	2023-12-27 00:00:00	295.00	t	3501	1	10251	51	1	22501	151	21	\N	51	1	301	1	1251	2301
+28201	Horacio Quiroga esquina 17 de Agosto	t	2022-03-18 00:00:00	f	f	12,50 x 28,75		16600	2023-06-28 00:00:00	2023-06-28 00:00:00	359.00	f	1051	51	10351	51	1	22551	51	4	1301	51	1351	301	1	51	2301
+28251	AV. COSTANERA, ENTRE CALLE SAN ROQUE Y CALLE TEXO. POSADAS	f	2025-04-23 00:00:00	f	f	10 x 32		290000	2025-04-23 00:00:00	2025-04-23 00:00:00	320.00	f	8751	1	39051	51	1	22601	151	\N	\N	1	51	301	35	1051	2301
+28301	Calle Luis Pasteur casi Avenida Uruguay	f	2024-04-24 00:00:00	f	f	10 x 25	No atiende el telefono. 23-10-24	95000	2024-10-23 00:00:00	2024-04-24 00:00:00	250.00	t	4051	1	16901	51	1	22651	151	2	1201	51	51	301	25	451	2301
+28351	Calle Soldado Argentino esquina Malvinas Argentinas  	t	2024-11-07 00:00:00	f	f	12,5 x 36		24000	2024-11-07 00:00:00	2024-11-07 00:00:00	450.00	f	4051	1	8851	51	1	22701	151	14	12551	51	251	51	32	751	2301
+28401	Calle 122 esquina Av. Lopez Torres	t	2023-07-28 00:00:00	f	f	8,46 x 30		75000	2024-08-13 00:00:00	2024-04-16 00:00:00	244.00	f	3251	1	3001	51	1	22751	151	23	\N	51	101	301	22	751	2301
+28451	Calle Sargento Acosta entre Calle Calafate y calle 79	f	2023-03-15 00:00:00	f	f	10,80 x 25,74	No tiene titulo. A retirar de Iprodha. 10-4-25	30000	2025-04-10 00:00:00	2024-05-23 00:00:00	280.00	t	6701	1	2351	51	1	22801	151	23	3751	51	551	301	6	751	1801
+28551	Av. Zapiola esquina Calle 56	t	2024-12-20 00:00:00	f	f	10,83 x 30,31		60000	2024-12-20 00:00:00	2024-12-20 00:00:00	328.00	f	3801	1	8351	51	1	22901	151	14	\N	1	701	51	32	751	2301
+27651	Calle Herrera esquina Mariano Moreno	t	2024-12-23 00:00:00	f	f	10,60 x 30	 No acepta financiación. Que más adelante los vuelvan a llamar. 10-3-25	150000	2025-06-13 18:46:03.38463	2024-12-23 03:00:00	321.00	f	6701	1	8501	51	51	22051	151	23	6701	51	51	301	25	451	4551
+28601	Calle Perito Moreno entre Neuquen y Florencio Sanchez	f	2024-04-25 00:00:00	f	f	13 x 43		120000	2024-08-30 00:00:00	2024-04-25 00:00:00	559.00	f	3251	1	25901	51	1	22951	151	9	\N	51	51	51	25	451	2301
+28651	Comandante Miño entre Av. Centenario y Neuman	f	2024-12-12 00:00:00	f	f	12 x 30,31		95000	2024-12-12 00:00:00	2024-12-12 00:00:00	364.00	f	6451	1	12951	51	1	23001	151	14	\N	51	301	51	32	1101	4151
+28701	Av. Urquiza entre Amalia Vera y Montero	f	2024-12-12 00:00:00	f	f	8,18 x 36,80		90000	2024-12-12 00:00:00	2024-12-12 00:00:00	301.00	f	4401	1	15801	51	1	23051	151	14	\N	1	301	51	32	401	2301
+28751	Avda CONSTITUCION ENTRE 49 Y 45B 	f	2023-11-01 00:00:00	f	f	13,5 x 50	No definen precio. 10-4-24	22000	2024-04-10 00:00:00	2024-04-10 00:00:00	665.00	t	5801	1	9501	51	1	23101	151	15	\N	1	451	301	4	401	2301
+28801	Av Maipu entre Misiones y Humblodt	f	2025-04-24 00:00:00	f	f	10,50 x 30		100000	2025-04-24 00:00:00	2025-04-24 00:00:00	315.00	f	5801	1	28401	51	1	23151	151	\N	\N	1	101	301	33	401	2301
+28851	Avda Quaranta esquina Avda Las Heras 	t	2024-04-08 00:00:00	f	f	24,24 x 18,40		55000	2024-09-03 00:00:00	2024-04-08 00:00:00	446.00	f	5801	1	28401	51	1	23201	151	23	\N	1	751	51	25	751	2301
+28901	Colon entre Entre Rios y La Rioja	f	2023-06-12 00:00:00	f	f	10,60 x 30,30		320000	2024-08-15 00:00:00	2024-02-26 00:00:00	323.00	f	8751	1	32001	51	1	23251	151	9	\N	51	1	51	22	401	2301
+28951	Avda Roque Gonzalez entre LAvdaalle y Chacabuco	f	2023-03-27 00:00:00	f	f	10 x 30		20000	2024-09-04 00:00:00	2024-05-07 00:00:00	300.00	f	951	1	27351	51	1	23301	1	9	\N	1	1251	301	6	51	2301
+29001	Calle Tripoli entre calle San Ignacio y Av Ituzaingo	f	2025-04-23 00:00:00	f	f	10 x 43,3		65000	2025-04-23 00:00:00	2025-04-23 00:00:00	433.00	f	5801	1	9501	51	1	23351	151	\N	\N	1	401	301	33	401	2301
+29051	Gral. Paz entre Tucuman y Santiago del Estero (según oferente)	f	2024-11-14 00:00:00	f	f	8,65 x 21,65		130000	2024-11-14 00:00:00	2024-11-14 00:00:00	187.00	f	2401	1	19251	51	1	23401	151	14	\N	51	1	301	32	901	2301
+29101	Moritan entre Nicomedes Castro y Eugenio Ramirez	f	2024-12-20 00:00:00	f	f	13 x 26		155000	2024-12-20 00:00:00	2024-12-20 00:00:00	338.00	f	4301	1	30251	51	1	23451	151	2	\N	51	1	301	27	1051	2301
+29151	Avda TRINCHERA DE SAN JOSE ENTRE CALLE  HUNGRIA Y SAN MARCOS	f	2023-03-13 00:00:00	f	f	24 x 86		520000	2025-03-27 00:00:00	2024-02-23 00:00:00	2070.00	f	1201	1	28251	51	1	23501	151	2	\N	1	51	301	6	401	2301
+29251	Avda 115 esquina Gdor Barreyro-Bloque	t	2021-11-02 00:00:00	f	f	18.40x36.80	La sucesión la realizó el Dr. Oscar Alberto Espinola nº de tel: 3764649865. Solo contado 27-12-22. Contesta mal. 25-10-24	60000	2024-10-25 00:00:00	2024-06-04 00:00:00	677.00	t	6701	1	8001	51	1	23601	151	9	701	1	701	301	1	751	4451
+29301	Avda 115 esquina Gdor Barreyro-Precios individuales	t	2021-11-02 00:00:00	f	f	18.40x36.80	La sucesión la realizó el Dr. Oscar Alberto Espinola nº de tel: 3764649865. Solo contado 27-12-22. Contesta mal. 25-10-24	60000	2024-10-25 00:00:00	2024-06-04 00:00:00	677.00	t	6701	1	8001	51	1	23601	151	9	701	1	701	301	1	751	4451
+29451	Rivadavia, entre Salta y Catamarca	f	2023-06-08 00:00:00	f	f	9.50x24.30	Es un inmueble que tuvimos a la venta y lo tuvimos que retirar ya que la hermana que vive en EEUU no esta de acuerdo con venir	150000	2024-09-19 00:00:00	2023-06-08 00:00:00	231.00	t	2401	1	37601	51	1	23751	151	14	23951	51	1	301	26	601	2451
+29501	calle 168 y calle 75a	t	2021-11-05 00:00:00	f	f	16 x 52,70		40000	2024-12-10 00:00:00	2024-04-08 00:00:00	843.00	f	101	1	5101	51	1	23801	151	15	\N	51	551	301	1	751	2301
+29551	calle 168 y calle 75a	t	2021-11-05 00:00:00	f	f	16 x 52,70		40000	2024-12-10 00:00:00	2024-04-08 00:00:00	843.00	f	101	1	5101	51	1	23801	151	15	\N	51	551	301	1	751	2301
+29601	Avda BLAS PARERA ENTRE ZABALA Y SORIA 	f	2023-11-09 00:00:00	f	f	14,50 x 19	Acepta Financiación. 20/3/25	70000	2025-03-20 00:00:00	2024-03-20 00:00:00	275.00	f	4051	1	27551	51	1	23851	151	2	15501	1	701	301	4	401	2301
+29651	CALLE 64 ENTRE 91 Y BRASILIA 	f	2023-11-06 00:00:00	f	f	13,91 x 42,5		30000	2024-12-10 00:00:00	2024-03-20 00:00:00	591.00	f	4051	1	12751	51	1	23901	151	15	19751	51	801	301	4	401	2301
+29701	Calle Luchessi entre Calle 125 y 127 (bloque)	f	2022-03-23 00:00:00	f	f	18,40 x 36,80	No quiere trabajar con nosotros-12-7-24	45000	2024-07-12 00:00:00	2024-02-29 00:00:00	677.12	t	7901	1	6001	51	1	23951	151	23	\N	51	901	301	1	451	2301
+29751	Calle Luchessi entre Calle 125 y 127 (Precio conj 2 condo)	f	2022-03-23 00:00:00	f	f	9,20 x 36,80 (2)	No quiere trabajar con nosotros-12-7-24	45000	2024-07-12 00:00:00	2024-02-29 00:00:00	677.12	t	7901	1	6001	51	1	23951	151	23	\N	51	901	301	1	451	2301
+29801	AVENIDA URUGUAY Y CALLE CHUBUT-Precio bloque	t	2021-11-17 00:00:00	f	f	22,77 x 26,50		340000	2024-12-10 00:00:00	2024-04-08 00:00:00	603.00	f	2251	1	7051	51	1	24001	151	15	\N	1	101	301	4	401	2301
+29851	AVENIDA URUGUAY Y CALLE CHUBUT-Precios individuales	t	2021-11-17 00:00:00	f	f	22,77 x 26,50		340000	2024-12-10 00:00:00	2024-04-08 00:00:00	603.00	f	2251	1	7051	51	1	24001	151	15	\N	1	101	301	4	401	2301
+29901	Calle Alemania entre Uruguay y Herrera	f	2025-04-24 00:00:00	f	f	21.19 X 18.95 		85000	2025-04-24 00:00:00	2025-04-24 00:00:00	401.00	f	8551	1	35201	51	1	24051	151	\N	\N	51	101	301	35	451	2301
+30001	Calle 20 A entre Jauretche y Calle 127	f	2018-11-27 00:00:00	f	f	23,50x 36,80	Contado escucha oferta. Financiacion a Conversar con propietario	140000	2025-03-27 00:00:00	2024-05-07 00:00:00	864.00	f	5501	1	38551	51	51	24201	151	9	\N	51	851	51	19	401	2301
+30051	Calle 22 entre Jauretche y Calle 127 (Bloque)	f	2018-11-27 00:00:00	f	f	20,57 x 36,8	Es posible entrega 80 % y saldo en plazo corto	150000	2024-09-12 00:00:00	2024-05-07 00:00:00	755.87	f	1501	1	851	51	51	24251	151	9	\N	51	851	51	19	401	2301
+30101	Calle 22 entre Jauretche y Calle 127 (Conjunto 2 lotes)	f	2018-11-27 00:00:00	f	f	10,28 x 36,8 (x2)	Es posible entrega 80 % y saldo en plazo corto	150000	2024-09-12 00:00:00	2024-05-07 00:00:00	755.87	f	1501	1	851	51	51	24251	151	9	\N	51	851	51	19	401	2301
+30151	calle 150 esquina manuel alberti	t	2022-03-23 00:00:00	f	f	16,25 x 36,50	El propietario tiene muchas propiedades no esta interesado en otras opciones me dijo. Toque mala onda la colega, sin animos de transmitir la info. Perdio el contacto con el dueño pero todavia tiene el cartel. 17/5/23. No se puede actualizar porque con quien me comunique no quiere dar información. 27/8/24	18000	2024-08-27 00:00:00	2023-06-21 00:00:00	528.00	t	5651	1	6901	51	1	24301	151	14	\N	51	551	301	1	451	2301
+30201	calle 150 esquina manuel alberti-2condos	t	2022-03-23 00:00:00	f	f	16,25 x 36,50	El propietario tiene muchas propiedades no esta interesado en otras opciones me dijo. Toque mala onda la colega, sin animos de transmitir la info. Perdio el contacto con el dueño pero todavia tiene el cartel. 17/5/23. No se puede actualizar porque con quien me comunique no quiere dar información. 27/8/24	18000	2024-08-27 00:00:00	2023-06-21 00:00:00	528.00	t	5651	1	6901	51	1	24301	151	14	\N	51	551	301	1	451	2301
+30251	Calle 81F Casi Calle 220	f	2024-02-27 00:00:00	f	f	30 x 108	Condominio indiviso. 27-2-24	16500	2024-02-27 00:00:00	2024-02-27 00:00:00	3240.00	t	1651	1	3601	51	1	24351	151	2	16001	51	1101	301	22	\N	1351
+30301	Anastacio Cabrera entre Jorge Newbery y Aviador Candelaria	f	2024-08-28 00:00:00	f	f	11 x 30	No tienen sentencia de la posesion. 29-10-24	10000	2024-10-29 00:00:00	2024-08-28 00:00:00	340.00	t	6701	1	37901	51	1	24401	1	14	13701	51	1251	301	27	51	1951
+30351	Calle Neuquen entre Calle 93 y Calle 95	f	2024-12-16 00:00:00	f	f	11,6 x 26		55000	2024-12-16 00:00:00	2024-12-16 00:00:00	305.00	f	2551	1	7851	51	1	24451	151	14	\N	51	701	51	32	451	2301
+30401	CALLE GENERAL PAZ, ENTRE CALLE SARMIENTO Y CALLE SANTA FE	f	2025-04-25 00:00:00	f	f	8.66 X 28.86		150000	2025-04-25 00:00:00	2025-04-25 00:00:00	250.00	f	2551	1	7851	51	1	24501	151	\N	\N	51	1	51	35	801	2301
+30451	Calle Horacio Quiroga entre Tierra Roja y Cataratas de Iguazu-Precio bloque	f	2023-11-03 00:00:00	f	f	25 x 50		35000	2024-10-04 00:00:00	2024-03-28 00:00:00	1250.00	f	6701	1	16651	51	1	24551	51	21	11501	51	1351	301	22	51	2301
+30501	Calle Horacio Quiroga entre Tierra Roja y Cataratas de Iguazu-Precios individuales	f	2023-11-03 00:00:00	f	f	25 x 50		35000	2024-10-04 00:00:00	2024-03-28 00:00:00	1250.00	f	6701	1	16651	51	1	24551	51	21	11501	51	1351	301	22	51	2301
+30551	Av. Aguado esquina c.24 	t	2024-11-19 00:00:00	f	f	5 X 31,80 X 10 X 26,8		110000	2024-11-19 00:00:00	2024-11-19 00:00:00	313.00	f	4201	1	35101	51	1	24601	151	14	\N	1	651	51	32	401	2301
+30651	Salta, entre San lorenzo y Colon	f	2023-06-14 00:00:00	f	f	10 x 25,30	Contesta mal y no da informacion-21-12-23. 	400000	2024-03-21 00:00:00	2023-12-21 00:00:00	253.00	t	6701	1	30501	51	1	24701	151	15	21551	51	1	51	26	601	2301
+30701	Avda Zapiola entre calle 34 y calle Beron de Astrada-Precio Bloque	f	2024-08-09 00:00:00	f	f	32 x 43,3		110000	2024-09-12 00:00:00	2024-08-09 00:00:00	1385.00	f	1051	1	22651	51	1	24751	151	21	24601	1	651	51	25	451	2301
+30751	Avda Zapiola entre calle 34 y calle Beron de Astrada-Precios individuales	f	2024-08-09 00:00:00	f	f	32 x 43,3		110000	2024-09-12 00:00:00	2024-08-09 00:00:00	1385.00	f	1051	201	22651	51	1	24751	151	21	24601	1	651	51	25	451	2301
+30801	Calle 160 entre Calle Nicaragua y Calle 91-manzana 348-Precio individual	f	2018-11-27 00:00:00	f	f	10 x 42,5	entrega 50% financia hasta en 24 ctas	22800	2024-10-08 00:00:00	2024-05-06 00:00:00	425.00	f	6701	51	38601	51	51	24801	151	2	5801	51	801	51	19	401	2301
+30851	Calle 160 entre Calle Nicaragua y Calle 91-manzana 350-Precio individual	f	2018-11-27 00:00:00	f	f	10 x 35	entrega 50% financia hasta en 24 ctas	18700	2024-10-08 00:00:00	2024-05-06 00:00:00	350.00	f	6701	51	38601	51	51	24801	151	2	5801	51	801	51	19	401	2301
+30901	Calle 160 entre Calle Nicaragua y Calle 91-manzana 350-Precio individual	t	2018-11-27 00:00:00	f	f	10,99 x 35	entrega 50% financia hasta en 24 ctas	20700	2024-10-08 00:00:00	2024-05-06 00:00:00	385.00	f	6701	51	38601	51	51	24801	151	2	5801	51	801	51	19	401	2301
+30951	Colectora, esquina Wanda-Precio conjunto	t	2023-06-07 00:00:00	f	f	lote  7 y 8: 17x46.25. lote 9 y10: 18x46.25. Los 4 lotes total: 70x46.25 		200000	2024-10-22 00:00:00	2024-02-21 00:00:00	3237.00	f	6701	1	28951	51	1	24851	51	21	17151	1	1351	251	26	101	2301
+31001	CALLE MALINCHE, ENTRE AV. CENTENARIO Y CALLE 38. POSADAS	f	2025-04-28 00:00:00	f	f	13.36 X 38.05		65000	2025-04-28 00:00:00	2025-04-28 00:00:00	508.00	f	8751	1	39051	51	1	24851	151	\N	\N	51	851	301	35	401	2301
+31051	Calle 49 Entre calle 160 y calle 162 ( 4 Lotes / Separados)	t	2019-02-02 00:00:00	f	f	10,82 x 33,30	Tiene plano aprobado Agrim. Yamato - de Contado / Financia entrega 50% saldo en 2 ctas. Acepta materiales de construccion en parte de pago. / Acepta oferta de contado hasta $1.200.000 (16/6/2020)	13000	2024-09-05 00:00:00	2024-03-08 00:00:00	360.30	f	401	1	1001	51	51	24901	151	23	\N	51	451	51	19	451	2301
+59901	Calle Oro Verde entre Apostoles e Irupe-L° Don Dario	f	2024-11-21 00:00:00	f	f	10 x 30		16000	2024-11-21 00:00:00	2024-11-21 00:00:00	300.00	f	701	1	33101	51	1	49351	51	21	\N	51	1351	301	27	101	51
+31151	Calle Sarmiento esquina Hipolito Irigoyen 	t	2022-01-20 00:00:00	f	f	12,50 x 25	Ahora no saben bien cuanto pedir y están dispuestos a negociar el precio, también estan dispuestos a que nosotros le tasemos el precio del terreno por lo tanto quiere que un asesor se contacte. 12-3-25	25000	2025-03-12 00:00:00	2023-02-16 00:00:00	312.00	f	6701	1	37301	51	1	24951	51	9	1651	51	1351	301	16	201	2301
+31201	CALLE ISLA ALEJANDRO, ENTRE CALLE LAGO ARGENTINO Y CALLE ESTRECHO DE SAN CARLOS	f	2025-04-28 00:00:00	f	f	15 x 28,75		30000	2025-04-28 00:00:00	2025-04-28 00:00:00	431.00	f	8901	1	37451	51	1	25001	151	\N	\N	51	551	301	35	1051	2301
+31251	Avda Alicia moreau de justo, entre C. 172 y C.176	f	2023-05-30 00:00:00	f	f	23 x 18	Contesta mal y no muestra los papeles. Mala predispocion. Se desidentifica-7-11-23	38000	2023-11-07 00:00:00	2023-11-07 00:00:00	395.00	t	4051	1	27551	51	1	25051	151	2	20451	1	801	51	26	1051	2301
+31301	Av Lopez Torres esquina Alemania-Precio conjunto	t	2024-11-25 00:00:00	f	f	0		550000	2024-11-25 00:00:00	2024-11-25 00:00:00	0.00	f	1551	1	20251	51	1	25101	151	14	\N	1	101	51	32	751	2301
+31351	Av Lopez Torres esquina Alemania-Precios Individuales	t	2024-11-25 00:00:00	f	f	0		550000	2024-11-25 00:00:00	2024-11-25 00:00:00	0.00	f	1551	1	20251	51	1	25101	151	14	\N	1	101	51	32	751	2301
+31401	Avda Blas Parera entre Morcillo y Bermudez	f	2024-03-13 00:00:00	f	f	13 x 17,32		80000	2024-11-11 00:00:00	2024-03-27 00:00:00	225.00	f	1051	151	8901	51	1	25151	151	9	16051	1	351	251	22	401	2301
+31451	Avda ZAPIOLA E/ CALLE 120 Y 121 	f	2023-01-17 00:00:00	f	f	9,20 x 36,40		65000	2025-01-21 00:00:00	2024-06-07 00:00:00	335.00	f	6701	1	5301	51	1	25201	151	23	2201	1	751	301	4	451	4501
+31501	Calle 129 entre calle 148A y calle 131-Precio bloque	f	2023-11-03 00:00:00	f	f	20x 42,50		30000	2024-07-22 00:00:00	2024-03-08 00:00:00	850.00	f	2851	1	6951	51	1	25251	151	9	\N	51	801	51	24	1051	2301
+31551	Calle 129 entre calle 148A y calle 131-Precios individuales	f	2023-11-03 00:00:00	f	f	20x 42,50		30000	2024-07-22 00:00:00	2024-03-08 00:00:00	850.00	f	2851	1	6951	51	1	25251	151	9	\N	51	801	51	24	1051	2301
+31601	CALLE 154, ENTRE CALLE 135 A Y CALLE 135-PRECIO BLOQUE	f	2025-04-30 00:00:00	f	f	20 x 40		38000	2025-04-30 00:00:00	2025-04-30 00:00:00	800.00	f	5751	1	33601	51	1	25301	151	\N	\N	51	1001	301	35	401	2301
+31651	CALLE 154, ENTRE CALLE 135 A Y CALLE 135-PRECIOS INDIVIDUALES	f	2025-04-30 00:00:00	f	f	20 x 40		38000	2025-04-30 00:00:00	2025-04-30 00:00:00	800.00	f	5751	1	33601	51	1	25301	151	\N	\N	51	1001	301	35	401	2301
+31701	Gottschalk entre aguado y cenenario	f	2025-05-02 00:00:00	f	f	10,83 x 34,64		70000	2025-05-02 00:00:00	2025-05-02 00:00:00	375.00	f	8901	1	29751	51	1	25351	151	\N	\N	51	651	301	34	1051	2301
+31751	Calle 80 esquina Calle nº97 	t	2024-11-26 00:00:00	f	f	10,40 x 26		68000	2024-11-26 00:00:00	2024-11-26 00:00:00	269.00	f	8801	1	6101	51	1	25401	151	14	\N	51	701	301	32	451	2301
+31801	Las Azaleas entre Las Tacuaritas y Los Tucanes 	f	2024-11-26 00:00:00	f	f	10 x 30		31500	2024-11-26 00:00:00	2024-11-26 00:00:00	300.00	f	5651	1	5851	51	1	25451	151	14	\N	51	1201	301	32	\N	2301
+31851	San Lorenzo, entre Roque Perez y Alvear	f	2022-01-31 00:00:00	f	f	14.45X32.05		250000	2024-08-15 00:00:00	2024-02-27 00:00:00	463.00	f	4301	1	35651	51	1	25501	151	23	\N	51	1	301	5	551	2301
+31901	EVA PERON ENTRE PALERMO Y SOTELO 	f	2024-06-25 00:00:00	f	f	10 x 33		15000	2024-10-24 00:00:00	2024-06-25 00:00:00	330.00	f	301	1	3551	51	1	25551	51	15	\N	51	1351	301	4	251	2301
+31951	Gottschalk esquina San Ignacio 	t	2024-12-02 00:00:00	f	f	6,76X 32,57 X 11 X 36,81		40000	2024-12-02 00:00:00	2024-12-02 00:00:00	399.00	f	6701	1	17051	51	1	25601	151	15	19801	51	751	301	32	401	2301
+32001	Calle Rivadavia entre Cordoba y Bolivar	f	2024-02-29 00:00:00	f	f	12,34 x 17,41		330000	2024-07-22 00:00:00	2024-02-29 00:00:00	215.00	f	551	1	25801	51	1	25651	151	9	\N	51	1	301	22	401	2301
+32051	Calle Mutinelli esq. Calle Monte Caceros-Precio conjunto	t	2024-01-22 00:00:00	f	f	30 x 30		25000	2024-10-23 00:00:00	2024-06-12 00:00:00	900.00	f	2401	1	25701	51	1	25701	51	9	\N	51	1351	301	22	201	2301
+32101	Calle Mutinelli esq. Calle Monte Caceros-Precios individuales	t	2024-01-22 00:00:00	f	f	30 x 30		25000	2024-10-23 00:00:00	2024-06-12 00:00:00	900.00	f	2401	1	25701	51	1	25701	51	9	\N	51	1351	301	22	201	2301
+32151	Avda Santa Cruz, entre Tripoli y Avdaila	t	2022-01-19 00:00:00	f	f	9.20X36.80		65000	2025-03-20 00:00:00	2024-04-10 00:00:00	338.00	f	4051	1	36001	51	1	25751	151	23	20951	1	401	51	5	751	2301
+32201	Almeida, entre america latina y isla san pedro	f	2023-06-27 00:00:00	f	f	15 x 50	Atiende muy mal el telefono. Prepotente y maleducado. 25/9/23	42000	2023-09-25 00:00:00	2023-09-25 00:00:00	750.00	t	9051	1	32201	51	1	25801	151	2	\N	51	251	51	26	751	3551
+32251	Av. Martin Fierro Entre Las Heras y Las Araucarias - 2 lotes s/ matin fierro-Precios independientes	f	2018-11-29 00:00:00	f	f	10,40 x 26		52000	2024-08-15 00:00:00	2024-02-27 00:00:00	270.00	f	8251	1	401	51	51	25851	151	23	\N	51	701	\N	19	451	2301
+32301	Av. Martin Fierro Entre Las Heras y Las Araucarias - s/ calle 97	f	2018-11-29 00:00:00	f	f	10,40 x 26		55000	2024-08-15 00:00:00	2024-02-27 00:00:00	270.00	f	8251	1	401	51	51	25851	151	23	\N	51	701	\N	19	451	2301
+32351	Calle la tupy y  Avda corrientes-Precio Bloque	t	2023-03-22 00:00:00	f	f	34 x50		50000	2024-12-18 00:00:00	2024-06-19 00:00:00	1700.00	f	7651	1	37551	51	1	25901	51	23	\N	1	1351	301	6	201	2301
+32401	Calle la tupy y  Avda corrientes-Precios individuales	t	2023-03-22 00:00:00	f	f	34 x50		50000	2024-12-18 00:00:00	2024-06-19 00:00:00	1700.00	f	7651	1	37551	51	1	25901	51	23	\N	1	1351	301	6	201	2301
+32451	Calle 137 E. 144 y Calle 140	f	2023-06-02 00:00:00	f	f	12 x 30		30000	2024-07-29 00:00:00	2024-02-08 00:00:00	360.00	f	6701	1	26001	51	1	25951	151	14	8051	51	1001	51	22	401	51
+32501	Calle Mendoza entre Calle Perito Mariano Moreno y Calle Herrera	f	2023-03-16 00:00:00	f	f	11, 3 x 38,5		160000	2024-08-26 00:00:00	2024-03-14 00:00:00	435.00	f	3401	1	4651	51	1	26001	151	9	\N	51	101	301	6	401	2301
+32551	Av. C. Buchardo entre Herrera y Perito Moreno 	f	2024-12-10 00:00:00	f	f	9,60 x 25,3		58000	2024-12-10 00:00:00	2024-12-10 00:00:00	242.00	f	7401	1	18001	51	1	26051	151	14	\N	1	101	51	32	451	2301
+32601	Alberto Borattin entre el Palmar y Gottschalk	f	2023-07-03 00:00:00	f	f	10 x 30		18000	2024-08-30 00:00:00	2024-02-16 00:00:00	300.00	f	8901	1	33151	51	1	26101	51	9	\N	51	1351	301	26	201	2301
+32651	Av. 147 entre 194 y 198 -Precio bloque	f	2024-11-12 00:00:00	f	f	50 x 200		395000	2024-11-12 00:00:00	2024-11-12 00:00:00	10000.00	f	4301	1	11901	51	1	26151	151	14	\N	1	1001	51	32	451	2301
+32701	Av. 147 entre 194 y 198 -Precios unitarios	f	2024-11-12 00:00:00	f	f	50 x 200		395000	2024-11-12 00:00:00	2024-11-12 00:00:00	10000.00	f	4301	1	11901	51	1	26151	151	14	\N	1	1001	51	32	451	2301
+32751	Calle s/n esquina J.J. Urquiza- Zona Costanera-Precio conjunto	t	2024-03-13 00:00:00	f	f	54 x 117		240000	2025-03-31 00:00:00	2024-03-13 00:00:00	6295.00	f	7501	1	24451	51	1	26201	1	23	13901	51	1251	301	2	51	2301
+32801	Calle s/n esquina J.J. Urquiza- Zona Costanera-Precios individuales	t	2024-03-13 00:00:00	f	f	54 x 117		240000	2025-03-31 00:00:00	2024-03-13 00:00:00	6295.00	f	7501	1	24451	51	1	26201	1	23	13901	51	1251	301	2	51	2301
+32901	Calle Herrera entre calle Mendez y calle Rebollo	f	2024-04-25 00:00:00	f	f	10,31 x 34,67		160000	2024-04-25 00:00:00	2024-04-25 00:00:00	357.00	f	3401	1	26401	51	1	26301	151	9	\N	51	51	51	25	401	2301
+32951	Avda Quaranta Esq Calle 129-Precio conjunto	t	2022-03-07 00:00:00	f	f	34.20X42.46		190000	2024-07-16 00:00:00	2024-01-25 00:00:00	1417.00	f	8651	1	251	51	1	26351	151	9	\N	1	951	301	5	451	2301
+33001	Avda Quaranta Esq Calle 129-Precios individuales	t	2022-03-07 00:00:00	f	f	34.20X42.46		190000	2024-07-16 00:00:00	2024-01-25 00:00:00	1417.00	f	8651	1	251	51	1	26351	151	9	\N	1	951	301	5	451	2301
+33051	calle 162 esquina calle 77	t	2024-05-14 00:00:00	f	f	10 x 30,66		15000	2024-09-12 00:00:00	2024-05-14 00:00:00	307.00	f	5401	1	17351	51	1	26401	151	9	\N	51	551	301	1	451	2301
+33101	Puerto Arg. e. America Latina y Isla San Pedro	f	2023-07-07 00:00:00	f	f	8 x 38	No atiende el telefono. 14-8-24	70000	2024-08-14 00:00:00	2024-02-27 00:00:00	304.00	t	6701	1	28901	51	1	26451	151	14	12451	51	251	51	22	751	2301
+33151	Calle Colectora Leonardo Fabio esquina Cerro Corá (bloque)	t	2019-12-12 00:00:00	f	f	15x100		40000	2025-01-02 00:00:00	2023-04-14 00:00:00	1500.00	f	3101	1	37751	51	51	26501	51	2	\N	151	1351	51	11	101	2301
+33201	Colectora, entre libertad lamarque y Anibal Trolio-2 lotes-precio conjunto	f	2023-07-10 00:00:00	f	f	(20 x 50) x 2		120000	2024-08-30 00:00:00	2024-02-16 00:00:00	2000.00	f	4051	1	32551	51	1	26551	51	9	3501	1	1351	301	26	201	2301
+33251	Colectora, entre libertad lamarque y Anibal Trolio-2 lotes-precios individuales	f	2023-07-10 00:00:00	f	f	(20 x 50) x 2		120000	2024-08-30 00:00:00	2024-02-16 00:00:00	2000.00	f	4051	1	32551	51	1	26551	51	9	3501	1	1351	301	26	201	2301
+33301	Calle Irupé casi Oro verde	f	2014-01-07 00:00:00	f	f	10 x 30		16800	2014-01-07 00:00:00	2014-01-07 00:00:00	300.00	f	1051	151	301	51	51	26601	51	2	17501	51	1351	251	2	101	2301
+33351	Calle Irupé esquina Oro verde	t	2014-01-07 00:00:00	f	f	10 x 30		18250	2014-01-07 00:00:00	2014-01-07 00:00:00	300.00	f	1051	151	301	51	51	26601	51	2	17501	51	1351	251	2	101	2301
+33401	Avda Jauretche esquina calle 108	t	2022-04-13 00:00:00	f	f	10 x 30		30000	2024-07-18 00:00:00	2024-02-08 00:00:00	300.00	f	7751	1	17251	51	1	26651	151	9	\N	1	951	301	1	401	2301
+33501	Calle Antonio llamas entre calle morcillo y calle  bermudez	f	2023-04-05 00:00:00	f	f	10 x 17,32	No quiere firmar nada con ninguna inmobiliaria pero acepto que nosotros lo ayudemos a vender y cobremos sobre el precio que él tiene en venta. 10/3/25	75000	2025-03-10 00:00:00	2024-04-12 00:00:00	173.00	f	6701	1	2101	51	1	26751	151	9	16951	51	351	51	6	401	3551
+33601	Calle 180 y calle 178a	t	2024-08-09 00:00:00	f	f	10,03 x 57,91		45000	2024-11-21 00:00:00	2024-08-09 00:00:00	581.00	f	6701	1	25301	51	1	26851	151	2	12151	51	551	301	2	751	2301
+33651	España esquina C. Rebollo	t	2025-01-07 00:00:00	f	f	12 x 17,32		105000	2025-01-07 00:00:00	2025-01-07 00:00:00	208.00	f	7401	1	10201	51	1	26901	151	14	\N	51	51	301	32	401	2301
+33701	Av Constitucion entre Calle 59 y Ruiseñor	f	2024-10-08 00:00:00	f	f	10,30 x 31,30	Fallecio el titular. 14-5-25	29000	2025-05-14 00:00:00	2024-10-08 00:00:00	332.00	t	6701	1	3501	51	1	26951	151	21	3201	1	451	251	27	401	2301
+33801	Av. victor andreden entre iguazu y av.general roca 	f	2025-04-25 00:00:00	f	f	10 x 32		160000	2025-04-25 00:00:00	2025-04-25 00:00:00	320.00	f	4951	1	9651	51	1	27051	151	\N	\N	1	301	51	36	401	2301
+33851	Calle 144 entre calle Lesner y calle Semilla	f	2024-05-10 00:00:00	f	f	12 x 36		18000	2024-10-03 00:00:00	2024-05-10 00:00:00	432.00	f	4051	1	29701	51	1	27101	151	15	11901	51	801	51	25	1051	2301
+33901	Gral Ramirez entre Acevedo y Av. Centenario 	f	2024-12-17 00:00:00	f	f	10 x 56		50000	2025-04-23 00:00:00	2024-12-17 00:00:00	560.00	f	4351	1	11551	51	1	27151	151	14	\N	51	301	51	32	1051	2301
+33951	Florencio Sanchez entre av. Fco. de Haro y G. Bermudez 	f	2024-12-03 00:00:00	f	f	12,37 x 32,50		80000	2025-03-27 00:00:00	2024-12-03 00:00:00	402.00	f	601	1	9901	51	1	27201	151	14	\N	51	351	51	32	751	2301
+34001	Calle 20 A Entre Fracrán y Las Araucarias	f	2023-07-18 00:00:00	f	f	10,75 x 31,55		65000	2025-01-31 00:00:00	2024-02-16 00:00:00	340.00	f	4551	1	38701	51	1	27251	151	9	\N	51	651	301	22	401	2301
+34051	CALLE 60 ENTRE 106 Y S/N	f	2024-03-18 00:00:00	f	f	40X147.33 X 356.96X387.94		120000	2024-10-07 00:00:00	2024-03-18 00:00:00	30000.00	f	6701	1	5701	51	1	27301	151	21	20801	51	1151	1	4	\N	2301
+34101	Avda Lopez y Planes etre Avda Tomas Guido y calle Rocamora	f	2024-04-15 00:00:00	f	f	16.10x42.72x12.56x12.89x30.15		235000	2024-12-03 00:00:00	2024-04-15 00:00:00	849.00	f	6701	1	29951	51	1	27351	151	21	\N	1	301	51	25	1051	2301
+34151	Avda Alem E/Avda Santa Catalina y Avda Tomas Guido	f	2018-12-28 00:00:00	f	f	11,17 x 28 x 21 x 8 x 8,8 x 30		85000	2024-06-03 00:00:00	2024-06-03 00:00:00	494.00	f	1051	201	36251	51	51	27401	151	2	13801	1	301	\N	2	401	2301
+34301	Alberdi entre Av. Roque Perez y Coronel Alvarez 	f	2024-11-08 00:00:00	f	f	7,20 x 38,60		115000	2024-11-08 00:00:00	2024-11-08 00:00:00	278.00	f	4001	\N	4001	51	1	27501	151	14	\N	51	1	51	32	1051	2301
+34351	Av andrade entre iguazu y av Teresa de Calcuta 	f	2025-04-25 00:00:00	f	f	9,90 x 29,90		200000	2025-04-25 00:00:00	2025-04-25 00:00:00	296.00	f	8801	1	6101	51	1	27551	151	\N	\N	1	301	51	34	401	2301
+34401	Lt.H-Loteo Las Perdices-Ex Ovando-Ex Klikailo	f	2022-05-13 00:00:00	f	f	10 x 32,50		8500	2024-11-01 00:00:00	2023-12-14 00:00:00	325.00	f	1051	201	301	51	51	27601	1	14	22151	51	1251	\N	14	101	2301
+34251	Calle 119, entre Av. Bustamante y Calle 104-Precios individuales	f	2022-10-17 00:00:00	f	f	36, 80 x 36,80	No financia ni acepta permutas. 11-7-23. No se deja asesorar 18-10-23. Quiere que le llamen para asesorarlo 18-3-25	80000	2025-07-02 21:39:23.621357	2022-10-17 03:00:00	1384.00	f	6701	1	36351	51	1	27451	151	23	9251	51	751	251	16	1051	2301
+33451	Ruiz de montoya entre Av. Almafuerte y Calle 20A	f	2024-12-10 00:00:00	f	f	9,20 x 36,80		150000	2025-07-04 14:12:35.684263	2024-12-10 03:00:00	338.00	f	6701	1	8601	51	1	26701	151	15	9651	51	301	51	32	401	2901
+34451	Avda INDEPENDENCIA ENTRE MUTINELLI Y TRINCHERAS DE SAN JOSE 	f	2023-07-10 00:00:00	f	f	12,50 x 50	Tiene una casa. No acepta financiamiento, que necesita efectivo y le intera una oferta en dólares. 10-3-25	12000	2025-03-10 00:00:00	2023-09-28 00:00:00	625.00	f	6701	1	11951	51	1	27651	51	9	23251	1	1351	301	4	201	2301
+34501	Juan Ambrosetti, entre Yerbal y Estado de Israel	f	2023-06-23 00:00:00	f	f	10,22 x 29,62	No quiere que lo llamen. 19-2-24	120000	2024-02-19 00:00:00	2024-02-19 00:00:00	302.00	t	6701	1	31101	51	1	27701	151	23	11551	51	51	51	26	1101	2301
+34551	104 entre Av. Aguado y 97	t	2025-01-03 00:00:00	f	f	10 x 31		50000	2025-01-03 00:00:00	2025-01-03 00:00:00	312.00	f	901	1	14051	51	1	27751	151	14	\N	51	751	51	32	751	2301
+34601	Avda Alma fuerte entre calle ruiz de montoya y calle padre serrano	f	2023-11-23 00:00:00	f	f	9,20 x 36,81		200000	2025-03-21 00:00:00	2024-04-10 00:00:00	338.00	f	6701	1	18701	51	1	27801	151	23	19251	1	301	51	24	401	2301
+34651	Padre Serrano entre Av. Almafuerte y Calle 20A-2 Lotes-Precio bloque	f	2024-12-06 00:00:00	f	f	(9,2 x 36,81) x 2		350000	2024-12-06 00:00:00	2024-12-06 00:00:00	676.00	f	4151	1	6401	51	1	27851	151	14	\N	51	301	301	32	401	2301
+34701	Padre Serrano entre Av. Almafuerte y Calle 20A-2 Lotes-Precios individuales	f	2024-12-06 00:00:00	f	f	(9,2 x 36,81) x 2		360000	2024-12-06 00:00:00	2024-12-06 00:00:00	676.00	f	4151	1	6401	51	1	27851	151	14	\N	51	301	301	32	401	2301
+34751	Polaco Goyeneche, entre Hugo del Carril y Julio Sosa-Precio conjunto	f	2022-04-12 00:00:00	f	f	20 x 50	Boleto. No Conoce al titular registral	17000	2024-10-04 00:00:00	2022-04-12 00:00:00	100.00	t	6701	1	36301	51	1	27901	51	14	22651	51	1351	301	5	201	751
+34801	Polaco Goyeneche, entre Hugo del Carril y Julio Sosa-Precios individuales	f	2022-04-12 00:00:00	f	f	20 x 50	Boleto. No Conoce al titular registral	17000	2024-10-04 00:00:00	2022-04-12 00:00:00	100.00	t	6701	1	36301	51	1	27901	51	14	22651	51	1351	301	5	201	751
+34851	Avda Tambor de Tacuarí esquina Lucas B. Areco-Precio bloque	t	2023-06-21 00:00:00	f	f	Frente 47,6x39x76 -(costado der.) Contra frente 50,6 x 43,30 (costado izq.)		320000	2024-04-23 00:00:00	2024-04-23 00:00:00	2160.00	f	7751	1	28551	51	1	27951	151	9	\N	1	651	51	22	751	2301
+34901	Avda Tambor de Tacuarí esquina Lucas B. Areco-Precio conjunto	t	2023-06-21 00:00:00	f	f	Frente 47,6x39x76 -(costado der.) Contra frente 50,6 x 43,30 (costado izq.)		320000	2024-10-23 00:00:00	2024-04-23 00:00:00	2160.00	f	7751	1	28551	51	1	27951	151	9	\N	1	651	51	22	751	2301
+34951	Cuenca Cbo. Primero e. Almeida y Giachino	f	2023-07-07 00:00:00	f	f	10 x 30	No atiende el telefono. 10-4-24	20000	2023-11-10 00:00:00	2023-11-10 00:00:00	300.00	t	3501	1	31601	51	1	28001	151	21	\N	51	251	51	22	1051	2301
+35001	Calle Humberto Pérez e/ calle 148 A y calle 150	t	2024-08-13 00:00:00	f	f	10,66 x 30,61		22000	2024-08-29 00:00:00	2024-08-13 00:00:00	319.00	f	8751	1	24651	51	1	28051	151	23	\N	51	801	301	2	401	2301
+35101	Calle Catalano esquina Magaldi	t	2025-04-28 00:00:00	f	f	(9,2 x 36,81)		55000	2025-04-28 00:00:00	2025-04-28 00:00:00	338.00	f	2301	1	27901	51	1	28101	151	\N	\N	51	851	51	36	451	2301
+35151	Coronel Alvarez casi Clotilde Fernandez	f	2025-05-07 00:00:00	f	f	9 x 27,30		120000	2025-05-07 00:00:00	2025-05-07 00:00:00	245.00	f	4501	1	9351	51	1	28151	151	\N	\N	51	301	51	34	401	2301
+35201	Roque Gonzalez, Entre Av. Roque Perez y Cnel. Alvarez	f	2023-05-09 00:00:00	f	f	14 x 45		360000	2024-10-03 00:00:00	2024-04-04 00:00:00	630.00	f	6751	1	31651	51	1	28201	151	21	12001	51	1	51	26	1051	2301
+35251	AV URUGUAY ALTURA 4.000, CON SALIDA EN CALLE NEUQUEN. POSADAS	t	2025-05-06 00:00:00	f	f	PARCELA 20:  26.50 X 10 mtrs y PARCELA 03: 6.60 X 17.30 mtrs		210000	2025-05-06 00:00:00	2025-05-06 00:00:00	379.00	f	5451	1	33451	51	1	28251	151	\N	\N	1	51	51	35	1101	2301
+35301	Florentino Ameghino entre Av. Santa Catalina y Amalia Vera 	f	2024-11-25 00:00:00	f	f	9,80 x 39		110000	2024-11-25 00:00:00	2024-11-25 00:00:00	382.00	f	6201	1	17701	51	1	28301	151	14	\N	51	351	301	32	751	2301
+35351	Calle 67 Entre Av Jose Cabrera y Calle 150	f	2023-11-08 00:00:00	f	f	11,74 x 29,44	Tiene una construccion a terminar importante (30%). Tiene boleto de POEA. Quiere vender asi nomas. 9-1-24	15000	2024-01-09 00:00:00	2024-01-09 00:00:00	345.00	t	6701	1	28701	51	1	28351	151	21	16301	51	551	301	24	451	551
+35401	Francisco de Haro esq Suecia	t	2022-04-08 00:00:00	f	f	10,80 x 43,30		100000	2022-06-23 00:00:00	2022-06-23 00:00:00	467.00	f	1051	101	36201	51	1	28401	151	23	8551	1	401	301	5	401	2651
+35451	Avda de las Americas, entre Leopoldo Lugones y Calle sin nombre	f	2023-07-10 00:00:00	f	f	25 x 100		100000	2024-08-30 00:00:00	2024-02-16 00:00:00	2500.00	f	4051	1	32551	51	1	28451	51	9	3501	1	1351	301	26	201	2301
+35501	Sgto. Acosta esq. Golfo San Matias	t	2024-04-11 00:00:00	f	f	7.76X36X12X31.76X6		20000	2025-03-10 00:00:00	2024-04-11 00:00:00	423.00	f	6701	1	1401	51	1	28501	151	9	10651	51	551	101	22	1051	2301
+35551	Sgto. Acosta casi Golfo San Matias	t	2024-04-11 00:00:00	f	f	7.76X36X12X31.76X6		18000	2025-03-10 00:00:00	2024-04-11 00:00:00	423.00	f	6701	1	1401	51	1	28501	151	9	10651	51	551	101	22	1051	2301
+35601	Calle Pachecho esquina flores-precio bloque	t	2023-12-18 00:00:00	f	f	50 x 50		24750	2024-06-27 00:00:00	2024-03-19 00:00:00	2500.00	f	1051	201	15051	51	1	28551	51	21	16251	51	1351	301	22	201	2301
+35651	Calle Pachecho esquina flores-precios individuales	t	2023-12-18 00:00:00	f	f	50 x 50		24750	2024-06-27 00:00:00	2024-03-19 00:00:00	2500.00	f	1051	201	15051	51	1	28551	51	21	16251	51	1351	301	22	201	2301
+35701	LIBANO ENTRE ALEMANIA Y NORUEGA-SALEN 8 LOTES DE  375M2 C/U -Precio conjunto	t	2023-05-11 00:00:00	f	f	25 x 124	No definen el precio. 9-11-23	790000	2023-11-09 00:00:00	2023-11-09 00:00:00	3108.00	t	4051	1	10551	51	1	28601	151	23	7301	51	101	\N	4	451	1
+35751	LIBANO ENTRE ALEMANIA Y NORUEGA-SALEN 8 LOTES DE  375M2 C/U -Precios individuales	t	2023-05-11 00:00:00	f	f	25 x 124	No definen el precio. 9-11-23	790000	2023-11-09 00:00:00	2023-11-09 00:00:00	3108.00	t	4051	1	10551	51	1	28601	151	23	7301	51	101	\N	4	451	1
+35801	Avda Lopez torres y calle zuiza casi calle bolivia	f	2023-11-08 00:00:00	f	f	16 x 25	Torres es el escribano que hizo la escritura. Se pidio antecedentes	100000	2024-02-08 00:00:00	2024-02-08 00:00:00	415.00	t	6701	1	2851	51	1	28651	151	23	9451	1	101	51	24	451	2301
+35901	Av kolping entre av centernario y maliche 	f	2025-04-28 00:00:00	f	f	13.36x38.05		90000	2025-04-28 00:00:00	2025-04-28 00:00:00	508.00	f	2451	1	4551	51	1	28751	151	\N	\N	1	851	51	36	401	2301
+35951	AV. MONTEAGUDO, EN ESQUINA CON CALLE LIBANO. POSADAS	t	2025-05-06 00:00:00	f	f	23,30 x 23,30		250000	2025-05-06 00:00:00	2025-05-06 00:00:00	582.00	f	7701	1	36951	51	1	28801	151	\N	\N	1	101	51	35	401	2301
+36001	B° Costa Mango-Condominio	f	2024-02-06 00:00:00	f	f	21 x 60		45000	2024-06-18 00:00:00	2024-06-18 00:00:00	1220.00	f	2401	1	21151	51	1	28851	151	9	\N	51	1151	301	22	\N	\N
+36051	Calle 137 casi Av. Quaranta	f	2023-06-01 00:00:00	f	f	15 x 20		30000	2024-08-29 00:00:00	2024-06-12 00:00:00	300.00	f	6701	1	27801	51	1	28901	151	14	24201	51	1001	301	22	401	2301
+36101	Benavidez esquina Lanusse	t	2022-05-13 00:00:00	f	f	8.66x27.42 	No quiere dar autorizacion. 20-8-24	210000	2024-12-04 00:00:00	2024-03-19 00:00:00	237.00	f	6701	1	21501	51	1	28951	151	21	21001	51	1	51	13	1251	2301
+36151	Calle 20 de Junio entre Av. Santa Catalina y Gral Ramìrez	f	2024-04-16 00:00:00	f	f	11,10 x 39,50		100000	2024-12-04 00:00:00	2024-04-16 00:00:00	438.00	f	6701	1	11051	51	1	29001	151	21	\N	51	301	51	25	1051	2301
+36201	CALLE 44 ENTRE LAVALLE Y BRITEZ	f	2023-12-01 00:00:00	f	f	12 x 27,35		70000	2024-04-10 00:00:00	2024-04-10 00:00:00	328.00	f	1051	51	16301	51	1	29051	151	4	21801	51	301	301	4	751	2301
+36251	Apóstoles, esquina San Ignacio-Precio conjunto	t	2023-06-07 00:00:00	f	f	TOTAL:35x35   LOTE 1: 11.66x35. Lote 2: 11.66x35. Lote 3: 11.66x35	Nos bloqueo el telefono. 5-12-24	20000	2024-12-05 00:00:00	2024-04-16 00:00:00	1050.00	t	6701	1	37801	51	1	29101	51	14	11701	51	1351	51	26	101	2301
+36301	Apóstoles, esquina San Ignacio-Precios individuales	t	2023-06-07 00:00:00	f	f	TOTAL:35x35   LOTE 1: 11.66x35. Lote 2: 11.66x35. Lote 3: 11.66x35	Nos bloqueo el telefono. 5-12-24	20000	2024-12-05 00:00:00	2024-04-16 00:00:00	1050.00	t	6701	1	37801	51	1	29101	51	14	11701	51	1351	51	26	101	2301
+36351	CALLE 180 ENTRE 147 Y 143 	f	2024-03-01 00:00:00	f	f	10,73 x 26,57		18000	2024-03-01 00:00:00	2024-03-01 00:00:00	285.00	f	1051	201	15601	51	1	29151	151	2	14401	51	1001	301	4	451	2301
+36551	Av Monseñor de Andrea entre calle 56 y calle Gobernador Bareiro	f	2025-04-29 00:00:00	f	f	14 x 25		38000	2025-04-29 00:00:00	2025-04-29 00:00:00	351.00	f	6701	1	16351	51	1	29401	151	\N	7401	1	701	51	33	751	2301
+36601	Av. Maipu entre Humboldt y calle 25	f	2023-06-06 00:00:00	f	f	20 x 20		110000	2023-10-02 00:00:00	2023-10-02 00:00:00	400.00	t	6901	1	28751	51	1	29451	151	21	14201	51	51	251	22	1051	4051
+36701	Soria esquina Luchessi-precio bloque	t	2024-12-17 00:00:00	f	f	15,56 (6) x 32,56 x 19.8 x 36,8		70000	2024-12-17 00:00:00	2024-12-17 00:00:00	720.00	t	6701	1	4351	51	1	29551	151	9	18801	51	701	51	32	451	2801
+36751	Soria esquina Luchessi-precios individuales	t	2024-12-17 00:00:00	f	f	15,56 (6) x 32,56 x 19.8 x 36,8		70000	2024-12-17 00:00:00	2024-12-17 00:00:00	720.00	t	6701	1	4351	51	1	29551	151	9	18801	51	701	51	32	451	2801
+36801	Avda ALMIRANTE BROWN 28 DE JULIO Y 133A-PRECIO BLOQUE	f	2024-05-10 00:00:00	f	f	18,40 x 36,80		68000	2024-05-10 00:00:00	2024-05-10 00:00:00	677.00	f	1051	151	17601	51	1	29601	151	9	7101	1	901	251	4	751	2301
+36851	Avda ALMIRANTE BROWN 28 DE JULIO Y 133A-PRECIO INDIVIDUAL	f	2024-05-10 00:00:00	f	f	9,20 x 36,80		40000	2024-05-10 00:00:00	2024-05-10 00:00:00	338.50	f	1051	151	17601	51	1	29601	151	9	7101	1	901	251	4	751	2301
+36901	Derqui entre Av. Justo Jose de Urquiza y Brasil 	f	2024-12-06 00:00:00	f	f	9 x 52		130000	2024-12-06 00:00:00	2024-12-06 00:00:00	468.00	f	2401	1	19401	51	1	29651	151	14	\N	51	301	51	32	451	2301
+36951	Av. Almirante Brown entre calle 127 y Av Monseñor de Andrea	f	2025-04-28 00:00:00	f	f	11 x 18,6		30000	2025-04-28 00:00:00	2025-04-28 00:00:00	205.00	f	2401	1	19401	51	1	29701	151	\N	\N	1	901	51	33	401	2301
+37001	Avda Ctes. e. Pedrozo y Arroyo del Medio-Precio bloque	f	2023-07-14 00:00:00	f	f	25 x 50		25000	2024-12-12 00:00:00	2024-05-13 00:00:00	1250.00	f	3101	1	20901	51	1	29751	51	23	\N	1	1351	51	22	201	2301
+37051	Avda Ctes. e. Pedrozo y Arroyo del Medio-Precios individuales	f	2023-07-14 00:00:00	f	f	25 x 50		25000	2024-12-12 00:00:00	2024-05-13 00:00:00	1250.00	f	3101	1	20901	51	1	29751	51	23	\N	1	1351	51	22	201	2301
+37151	Avda Alem, entre Pedro Morcillo y LAvdaalle	f	2023-09-01 00:00:00	f	f	11,50 x 43,30		130000	2025-01-17 00:00:00	2023-11-13 00:00:00	498.00	f	5101	1	34751	51	1	29851	151	2	\N	1	301	301	16	451	2301
+37201	Avda LAvdaalle esquina Chubut 	t	2024-07-30 00:00:00	f	f	15 x 36,60		140000	2024-11-05 00:00:00	2024-07-30 00:00:00	550.00	f	4051	1	28801	51	1	29901	151	2	1351	1	401	51	27	401	2301
+37301	Calle Ayacucho entre Belgrano y Alvear	f	2022-03-22 00:00:00	f	f	10 x 43,30		520000	2024-09-16 00:00:00	2024-04-16 00:00:00	433.00	f	4051	1	34651	51	1	30001	151	23	5601	51	1	51	5	551	2301
+37351	Calle San Martin entre Ayacucho y Junin	f	2023-06-09 00:00:00	f	f	14,44 x32		550000	2025-01-02 00:00:00	2023-10-25 00:00:00	466.00	f	5551	1	101	51	1	30051	151	2	10901	51	1	51	22	401	2301
+37401	Avda CABO DE HORNOS ESQUINA GUEMES (75b)	t	2022-11-03 00:00:00	f	f	10,36 x 30		55000	2024-12-10 00:00:00	2024-02-29 00:00:00	310.00	f	7701	1	11501	51	1	30101	151	15	\N	1	551	51	13	751	2301
+37451	Calle 172A Esquina calle 85	f	2023-05-30 00:00:00	f	f	26 x 16	Contesta mal y no muestra los papeles. Mala predispocion. Se desidentifica-7-11-23	19500	2023-11-07 00:00:00	2023-11-07 00:00:00	427.00	t	4051	1	27551	51	1	30151	151	23	20451	51	801	51	26	1051	2301
+37551	Avda Iguazu entre Curupayti y Arroyo San Juan 	f	2024-08-28 00:00:00	f	f	12 x 36		21000	2025-01-02 00:00:00	2024-08-28 00:00:00	432.00	f	401	1	32951	51	1	30251	1	2	\N	1	1251	51	27	101	2301
+60474	178A y Calle sin nombre	f	2025-06-27 11:43:45.161477	f	f	9 x 30		18000	2025-06-27 11:43:45.178993	2025-06-27 11:43:45.179004	270.00	f	9356	1	12001	51	1	49915	151	9	24752	51	801	51	36	401	2301
+37601	Calle 55 entree Calle 246 y C 248	f	2023-11-30 00:00:00	f	f	14,34 x 40,27	Sucesion en trámite. Fallecio otro heredero. 9-5-24	19000	2024-05-09 00:00:00	2024-05-09 00:00:00	577.00	t	6701	1	2901	51	1	30301	151	21	401	51	501	51	24	751	3501
+37651	3 DE FEBRERO ENTRE MITRE Y SANTIAGO DEL ESTERO	f	2023-12-04 00:00:00	f	f	11 x 23,65		160000	2025-03-10 00:00:00	2024-06-28 00:00:00	260.00	f	6701	1	13851	51	1	30351	151	14	24351	51	1	301	4	851	3251
+37701	COLECTORA ACCESO SUR ENTRE GATTI Y PARAISOS	f	2023-12-19 00:00:00	f	f	10 x 30		50000	2024-08-28 00:00:00	2024-05-06 00:00:00	300.00	f	1251	1	32501	51	1	30401	51	15	\N	151	1351	51	4	51	2301
+37751	COLECTORA ACCESO SUR ENTRE GATTI Y PARAISOS	t	2023-12-19 00:00:00	f	f	10 x 30		70000	2024-08-28 00:00:00	2024-05-06 00:00:00	300.00	f	1251	1	32501	51	1	30401	51	15	\N	151	1351	51	4	51	2301
+37801	Avda MARTIN FIERRO ENTRE CALLE 93 Y GOTTSCHALK (97) - BARRIO LOS JILGUEROS-S/Avda	f	2022-11-03 00:00:00	f	f	10,29 x 26		50000	2025-03-21 00:00:00	2024-05-06 00:00:00	270.00	f	8901	1	19501	51	1	30451	151	15	\N	1	701	51	13	451	2301
+37851	Calle 178 entre 147 y 143 	f	2025-01-10 00:00:00	f	f	11,25 x 30		18000	2025-03-10 00:00:00	2025-01-10 00:00:00	337.50	f	6701	201	1751	51	1	30501	151	23	23751	51	1001	251	27	451	151
+37901	Calle Herrera entre Ameghino y Ambrosetti	f	2024-05-17 00:00:00	f	f	15 x 9,45		70000	2024-10-29 00:00:00	2024-05-17 00:00:00	141.00	f	6701	1	15751	51	1	30551	151	21	18851	51	51	251	22	1101	51
+37951	Capital Federal, entre AV Andres Guacurari-Precio bloque	f	2023-08-30 00:00:00	f	f	30 x 48		65000	2024-10-10 00:00:00	2024-01-09 00:00:00	1440.00	f	4051	1	25401	51	1	30601	51	2	14951	51	1351	301	1	401	2301
+38001	Capital Federal, entre AV Andres Guacurari-Precios individuales	f	2023-08-30 00:00:00	f	f	30 x 48		65000	2024-10-10 00:00:00	2024-01-09 00:00:00	1440.00	f	4051	1	25401	51	1	30601	51	2	14951	51	1351	301	1	401	2301
+38051	Av De Las Americas entre Santa Ines y Kelsey 	f	2025-01-16 00:00:00	f	f	10x60x38,37x10x40,17x60,11 (poligono irregular)		32000	2025-01-16 00:00:00	2025-01-16 00:00:00	862.00	f	1051	201	23051	51	1	30651	51	25	6201	1	1351	1	25	201	2301
+38101	Calle sin nombre casi los Jazmines 	f	2022-09-06 00:00:00	f	f	10 x 30	Sacaron de la venta hasta 2025. 2-9-24	13000	2024-09-02 00:00:00	2023-11-10 00:00:00	300.00	t	6551	1	2751	51	1	30701	51	14	\N	51	1351	51	13	101	2301
+38151	Calle sin nombre esquina los Jazmines 	t	2022-09-06 00:00:00	f	f	10 x 30	Sacaron de la venta hasta 2025. 2-9-24	13000	2024-09-02 00:00:00	2023-11-10 00:00:00	300.00	t	6551	1	2751	51	1	30701	51	14	\N	51	1351	51	13	101	2301
+38201	Ruiz de Montoya, entre Almafuerte y calle 20a	f	2022-01-31 00:00:00	f	f	9,20 x 36,80		100000	2022-11-22 00:00:00	2022-11-22 00:00:00	339.00	f	1051	51	34301	51	1	30751	151	1	19651	51	301	301	5	401	2301
+38301	Felix Bogado, entre España y Libano	f	2022-04-21 00:00:00	f	f	8,90 x 43,30		100000	2023-09-20 00:00:00	2023-09-20 00:00:00	385.00	t	6251	1	37001	51	1	30851	151	23	\N	101	51	51	5	451	1901
+38351	Calle 179 esquina calle 136-3 Lotes-Precios individuales	t	2024-04-29 00:00:00	f	f	15 x 38		15000	2024-04-29 00:00:00	2024-04-29 00:00:00	570.00	f	4051	1	17501	51	1	30901	151	9	12651	51	1151	51	1	\N	2551
+38401	Avda lopez y planes entre  calle 117 y Avda areco	f	2023-03-29 00:00:00	f	f	6 x 7.55 x 36.81 x 10.09 x 33,27	No atiende el telefono. 10-4-24	75000	2023-11-27 00:00:00	2023-11-27 00:00:00	414.00	t	3501	1	10251	51	1	30951	151	23	\N	1	701	301	6	751	2301
+38451	Morcillo entre Parodi y Florencio Sanchez 	f	2024-12-02 00:00:00	f	f	10 x 43,3		75000	2025-03-10 00:00:00	2024-12-02 00:00:00	433.00	f	6701	1	15501	51	1	31001	151	15	2751	51	351	51	32	751	3051
+38501	Avda Martin Fierro y calle 97A	t	2024-04-16 00:00:00	f	f	9 x 26	Quieren cambiar por una casa/depto. No quieren vender por ahora por cuestiones de salud de la señora. Van a ver mas adelante. 23-1-25	58000	2025-01-23 00:00:00	2024-05-30 00:00:00	234.00	t	6701	1	15151	51	1	31051	151	9	19151	1	701	51	25	451	2301
+38551	Avda Costanera esquina Avda Buchardo	t	2019-03-15 00:00:00	f	f	10x 35	pretende billete dólar ya rechazo oferta de U$S 130.000	195000	2025-03-28 00:00:00	2024-03-26 00:00:00	350.00	f	1451	1	38901	51	1	31101	151	15	\N	1	101	51	19	751	2301
+38601	Calle 124 entre Av Lopez Torres y Av Costanera  	f	2024-12-27 00:00:00	f	f	10 x 30	Al parecer según Guillermo tiene problemas de turbación. 27-3-25	65000	2025-03-27 00:00:00	2024-12-27 00:00:00	300.00	f	1	1	27451	51	1	31151	151	2	2151	51	101	51	27	751	2301
+38651	Kardek entre calle Misiones y calle Humboldt-Precio bloque	t	2025-04-28 00:00:00	f	f	20 x 40		220000	2025-04-28 00:00:00	2025-04-28 00:00:00	800.00	f	7851	1	13751	51	1	31201	151	\N	\N	51	51	51	33	1051	2301
+38701	Kardek entre calle Misiones y calle Humboldt-Precio individual	t	2025-04-28 00:00:00	f	f	10 x 40		120000	2025-04-28 00:00:00	2025-04-28 00:00:00	400.00	f	7851	1	13751	51	1	31201	151	\N	\N	51	51	51	33	1051	2301
+38751	Kardek entre calle Misiones y calle Humboldt-Precio individual	f	2025-04-28 00:00:00	f	f	10 x 40		110000	2025-04-28 00:00:00	2025-04-28 00:00:00	400.00	f	7851	1	13751	51	1	31201	151	\N	\N	51	51	51	33	1051	2301
+38801	CALLE 124 ENTRE PERITO MORENO Y 49A	f	2023-07-07 00:00:00	f	f	9,23 x 32,50	No atiende el telefono. 10-4-24	42000	2024-04-10 00:00:00	2024-04-10 00:00:00	299.00	t	3501	1	22051	51	1	31251	151	23	\N	101	101	301	4	1051	2301
+38851	Calle 93 esquina calle 80	t	2024-06-24 00:00:00	f	f	10,4 x 26		70000	2024-10-04 00:00:00	2024-05-30 00:00:00	270.00	f	4051	1	18151	51	1	31301	151	23	17051	51	701	51	25	401	2301
+38901	Ayacucho entre Belgrano y Alvear	f	2022-05-30 00:00:00	f	f	8 x 32,90	Oferta rechazada-Se ofrecio-Entrega lote de martín fierro + usd30.000 + 6 x usd5.000-Aceptarían el terreno + usd75.000 contado o bien todo en efectivo usd135.000-20/3/23.Los 75.000 podrían recibir 40.000 y saldo hasta en 3 cuotas	150000	2023-12-21 00:00:00	2023-12-21 00:00:00	263.00	f	8751	1	35401	51	1	31351	151	15	\N	101	1	301	5	551	2301
+39001	25 de mayo entre Calle Stgo del estero y Av Mitre	f	2023-12-07 00:00:00	f	f	12 x 43,30		150000	2024-04-10 00:00:00	2024-04-10 00:00:00	519.00	f	1051	51	15801	51	1	31451	151	4	13101	101	1	301	24	851	4601
+39051	Maipu entre Av Manuel Belgrano y Pellegrini 	f	2024-07-31 00:00:00	f	f	17,50 x 25		12000	2024-11-28 00:00:00	2024-07-31 00:00:00	437.00	f	951	1	4401	51	1	31501	1	2	\N	51	1251	301	27	51	2301
+39101	Avda BELGRANO Y CALLE SIN NOMBRE 	t	2023-11-08 00:00:00	f	f	19 x 30	No quiere trabajar con inmobiliarias. 22-10-24	45000	2024-10-22 00:00:00	2024-03-19 00:00:00	570.00	f	4051	1	14551	51	1	31551	1	2	251	1	1251	301	4	51	51
+39201	Calle Carmelo Magri entre entre Acevedo y 22 de Diciembre	f	2023-06-22 00:00:00	f	f	10 x 39	No quiere trabajar con inmobiliarias. 23-8-23	90000	2024-09-16 00:00:00	2023-08-23 00:00:00	390.00	t	4051	1	26301	51	1	31651	151	14	16501	101	301	301	6	751	2301
+39301	 Calle 92 entre Av. Zapiola y Los Espinillos	f	2025-01-23 00:00:00	f	f	10,40 x 27,95		37000	2025-01-23 00:00:00	2025-01-23 00:00:00	290.00	f	7951	1	18351	51	1	31751	151	14	\N	51	751	51	32	451	2301
+39351	Avda San Martín casi Calle 104-Lt. 12F	f	2024-04-09 00:00:00	f	f	12,36 x 31	No quiere trabajar con inmobiliarias. 6-11-24	90000	2025-03-11 00:00:00	2024-06-10 00:00:00	372.00	t	6701	1	1801	51	1	31801	151	23	15151	1	401	301	25	751	2301
+39401	Avda San Martín y Calle 104-Lt. 12C	t	2024-04-09 00:00:00	f	f	12 x 31	No quiere trabajar con inmobiliarias. 6-11-24. Tiene reservado el lote. No quiere contactos con inmobiliarias. 11-3-25	85000	2025-03-11 00:00:00	2024-06-10 00:00:00	372.00	t	6701	1	1801	51	1	31801	151	23	15151	1	401	301	25	751	2301
+39451	Calle 104 casi Avda San Martín-Lt. 12D	t	2024-04-09 00:00:00	f	f	14,04 x 24,36	No quiere trabajar con inmobiliarias. 6-11-24. Tiene reservado el lote. No quiere contactos con inmobiliarias. 11-3-25	70000	2025-03-11 00:00:00	2024-04-09 00:00:00	342.00	t	6701	1	1801	51	1	31801	151	23	15151	1	401	301	25	751	2301
+39501	Avda Monseñor de Andrea Pasando Urquiza-4 lotes-Precios individuales	f	2022-10-21 00:00:00	f	f	10 x 46,40		120000	2024-08-28 00:00:00	2024-04-05 00:00:00	464.00	f	5551	1	9951	51	1	31851	151	15	\N	1	651	301	5	401	2301
+39551	MUÑECA CORTI ENTRE MONTES Y BARCARCE-3 Lotes-Precios individuales	f	2024-02-05 00:00:00	f	f	17 x 30	Tiene cadena de boletos. 23-5-24	6000	2024-05-23 00:00:00	2024-05-23 00:00:00	510.00	t	6701	1	5001	51	1	31901	51	23	2401	51	1351	301	4	351	1151
+39601	Hipólito Irigoyen esquina Chacabuco	t	2025-05-12 00:00:00	f	f	10 x 32,50		8000	2025-05-12 00:00:00	2025-05-12 00:00:00	325.00	f	1051	201	23101	51	51	31951	1	9	1	1	1251	251	9	51	2301
+39651	Hipólito Irigoyen entre Chacabuco y Lavalle	t	2025-05-12 00:00:00	f	f	10 x 32,50		7000	2025-05-12 00:00:00	2025-05-12 00:00:00	325.00	f	1051	201	23101	51	51	31951	1	9	1	1	1251	251	9	51	2301
+39701	Guavirá casi palo rosa	f	2025-05-06 00:00:00	f	f	11 x 24		15000	2025-05-06 00:00:00	2025-05-06 00:00:00	264.00	f	6701	1	16601	51	1	32001	51	\N	21351	51	1351	301	34	151	2301
+39751	calle 24 esquina AV.Aguado	t	2025-05-07 00:00:00	f	f	17,32 x 73,64		70000	2025-05-07 00:00:00	2025-05-07 00:00:00	1275.00	f	4251	1	10601	51	1	32051	151	\N	\N	51	651	51	34	401	2301
+39801	C.22 entre Amalia vera y Montero 	f	2024-11-13 00:00:00	f	f	12,25 x 24,54		100000	2024-11-13 00:00:00	2024-11-13 00:00:00	300.00	f	8851	1	7401	51	1	32101	151	14	4201	51	301	301	32	401	2301
+39951	Calle Bolivia entre Libano e Israel	f	2023-06-08 00:00:00	f	f	8 x 34,5		60000	2023-08-16 00:00:00	2023-08-16 00:00:00	276.00	t	6701	1	6251	51	1	32251	151	21	22251	51	101	51	22	401	4001
+40051	ESTADO DE ISRAEL Y SAN JUAN	t	2023-07-06 00:00:00	f	f	11,25 x 20		48000	2024-11-21 00:00:00	2024-03-06 00:00:00	222.00	f	2401	1	25451	51	1	32351	151	15	\N	51	101	301	4	401	2301
+40101	Junin entre Belgrano y Alvear	f	2022-05-23 00:00:00	f	f	9,80 x 43,30		380000	2024-05-09 00:00:00	2024-05-09 00:00:00	424.00	f	5701	1	7751	51	1	32401	151	2	\N	51	1	51	13	951	2301
+40151	Calle Misiones entre Cdte. Espora y Japón	f	2023-09-25 00:00:00	f	f	10 x 36		56000	2023-09-25 00:00:00	2023-09-25 00:00:00	360.00	f	1051	151	32851	51	1	32451	151	2	1701	51	101	51	22	1051	2301
+40201	calle 124 entre Av. Uruguay y Av. Rademacher	f	2025-04-30 00:00:00	f	f	15 x 37		78000	2025-01-27 00:00:00	2025-04-30 00:00:00	551.00	f	8751	1	31951	51	1	32501	151	\N	\N	51	101	301	34	1051	2301
+40251	Zona El Puma calle Paseo Costero 	f	2024-04-18 00:00:00	f	f	10 x 30		18000	2025-01-27 00:00:00	2024-04-18 00:00:00	300.00	f	4051	1	27401	51	1	32551	1	2	17351	51	1251	301	25	101	2301
+40401	Calle Chubut entre calle 31ª y Av. Lopez Torres pasaje interno	f	2024-04-11 00:00:00	f	f	17,50 x 35		85000	2024-08-28 00:00:00	2024-04-11 00:00:00	612.00	f	4051	1	27551	51	1	32701	151	15	15501	51	101	51	25	401	2301
+40451	Av. Roca entre Hernandez e Ivanowski	f	2022-05-26 00:00:00	f	f	17,30 x 30,30		186000	2025-04-23 00:00:00	2024-04-24 00:00:00	530.00	f	3451	1	201	51	1	32751	151	9	\N	51	1	301	13	1051	2651
+40501	Calle 248 y Calle 87 -Precio bloque	t	2023-11-15 00:00:00	f	f	3Lotes (12x36)		40000	2025-01-23 00:00:00	2023-11-15 00:00:00	1296.00	f	4501	1	15851	51	1	32801	151	2	\N	51	1051	51	24	\N	2301
+40551	Calle 248 y Calle 87 -Precios individuales	t	2023-11-15 00:00:00	f	f	3Lotes (12x36)		40000	2025-01-23 00:00:00	2023-11-15 00:00:00	1296.00	f	4501	1	15851	51	1	32801	151	2	\N	51	1051	51	24	\N	2301
+40601	Avda San Martin esquina Calle 120	t	2023-06-26 00:00:00	f	f	15 x 36		170000	2024-10-24 00:00:00	2024-03-12 00:00:00	540.00	f	7351	1	30651	51	1	32851	151	2	\N	1	751	301	22	751	2301
+40651	Sarmiento entre 25 de Mayo y 3 de Febrero	f	2022-05-24 00:00:00	f	f	13,3 x 21		130000	2023-09-14 00:00:00	2023-09-14 00:00:00	273.00	f	1051	201	18651	51	1	32901	151	21	12601	51	1	51	13	501	4251
+40701	Avdaenida Bustamante entre apostoles y calle 87	f	2024-04-08 00:00:00	f	f	9,20 x 36,80		70000	2024-08-15 00:00:00	2024-04-08 00:00:00	338.00	f	7651	1	20101	51	1	32951	151	15	\N	1	751	51	25	401	3451
+40801	Nicomedes Castro entre moritan y cnel alvarez	f	2025-04-21 00:00:00	f	f	18 x 23,30		110000	2025-04-21 00:00:00	2025-04-21 00:00:00	419.40	f	801	1	28351	51	1	33051	151	\N	\N	51	1	51	34	1051	2301
+40301	CALLE MISIONES ENTRE MENDOZA Y MONTEAGUDO	f	2023-02-24 00:00:00	f	f	10,51 x 30		180000	2025-07-04 13:58:24.249114	2023-02-24 03:00:00	315.00	f	6701	1	13151	51	1	32601	151	14	6651	51	101	301	4	751	4151
+40851	Avda LAvdaalle esquina A.de Llamas	t	2022-05-31 00:00:00	f	f	11x18.6y16x19.5		370000	2022-05-31 00:00:00	2022-05-31 00:00:00	516.00	f	6701	1	10051	51	1	33101	151	9	3851	1	351	51	13	401	2301
+40951	CALLE SIN NOMBRE ( ZONA EL PALMAR )	f	2023-07-07 00:00:00	f	f	17,50 x 45	Esta cerrado con muro y tiene una casa techada de 4 x 4. 20-3-25	60000	2025-03-20 00:00:00	2024-03-21 00:00:00	787.00	f	6701	1	13601	51	1	33201	1	23	24051	51	1251	301	4	101	2301
+41001	Colon entre Alvear y Roque Perez	f	2023-06-13 00:00:00	f	f	11,80x43,26		680000	2024-10-04 00:00:00	2024-03-19 00:00:00	510.00	f	6701	1	28101	51	1	33251	151	21	11501	51	1	51	22	551	1851
+41051	Avda Rademacher entre Japón y Newbery	f	2024-11-14 00:00:00	f	f	17,94x 38,97 	Acepta un dúplex en parte de pago	150000	2024-11-14 00:00:00	2024-11-14 00:00:00	700.00	f	1051	151	7601	51	1	33301	151	14	1451	1	101	301	32	451	2301
+41101	Avda LAvdaALLE ENTRE Avda ALEM Y BERON DE ASTRADA-PRECIO BLOQUE	f	2024-03-07 00:00:00	f	f	21,65 x 43,30		200000	2024-12-10 00:00:00	2024-03-07 00:00:00	938.00	f	6251	1	17701	51	1	33351	151	15	\N	1	301	301	4	451	2301
+41151	Avda LAvdaALLE ENTRE Avda ALEM Y BERON DE ASTRADA-PRECIOS INDIVIDUALES	f	2024-03-07 00:00:00	f	f	21,65 x 43,30		200000	2024-12-10 00:00:00	2024-03-07 00:00:00	938.00	f	6251	1	17701	51	1	33351	151	15	\N	1	301	301	4	451	2301
+41201	Calle Posadas entre 9 de julio y Wanda	f	2024-04-05 00:00:00	f	f	9 x46,25		8500	2024-04-30 00:00:00	2024-04-30 00:00:00	416.25	f	1051	151	20501	51	1	33401	51	23	19601	51	1351	251	23	101	1101
+41251	Avda San Martin entre Mariano Moreno y Manuel Belgrano	f	2021-08-09 00:00:00	f	f	14,33 x 50	Libre de todo gasto. No contesta el telefono. 23-10-23	25000	2023-10-23 00:00:00	2023-10-23 00:00:00	716.50	t	6701	1	18051	51	1	33451	1	23	15101	1	1251	51	1	51	2301
+41301	Carlos Paz entre Trincheras de San Jose y Av Misiones-Condominio Pueblo de GARUPÁ	f	2024-11-26 00:00:00	f	f	10 x 20		6500	2024-11-26 00:00:00	2024-11-26 00:00:00	200.00	f	6701	201	1901	51	1	33501	51	15	23401	51	1351	251	27	201	201
+41351	Calle 10 de junio entre Isla San Pedro y Calle Gral Belgrano 	f	2024-05-28 00:00:00	f	f	10 x 40		24000	2024-05-28 00:00:00	2024-05-28 00:00:00	400.00	f	4051	1	\N	51	1	33551	151	9	9201	51	251	301	1	751	901
+60202	Calle 22 entre Braulio Areco y Zapiola-Son 3 lotes-Precios individuales	f	2025-05-29 09:38:39.303436	f	f	10.40 X 32.05		80000	2025-05-29 09:38:39.313078	2025-05-29 09:38:39.313078	333.32	f	9252	1	39852	51	1	49702	151	9	24752	51	651	301	36	401	\N
+60203	Calle 22 entre Braulio Areco y Zapiola-Son 3 lotes-Precios individuales	f	2025-05-29 09:42:19.897383	f	f	11,13 X 31,20		70000	2025-05-29 09:42:19.903383	2025-05-29 09:42:19.903383	347.26	f	9252	1	39852	51	1	49702	151	9	24752	51	651	301	36	401	\N
+60204	calle 178 y calle 121 (itaembe mini)	t	2025-05-29 09:54:45.113627	f	f	10 x 30		20000	2025-05-29 09:54:45.119628	2025-05-29 09:54:45.119628	300.00	f	6701	1	39853	51	1	49703	151	9	19101	51	801	301	34	1051	\N
+60206	COLECTORA ACCESO SUR, EN ESQUINA CALLE S/N.	t	2025-05-29 10:06:20.172827	f	f	10 x 30,19		60000	2025-05-29 10:06:20.176876	2025-05-29 10:06:20.176876	301.00	f	6701	1	39855	51	1	49705	51	9	24753	51	1351	301	35	51	\N
+60208	Av monsñor de andrea entre c 122 y av quaranta-B° El Yerbal-Precio bloque	f	2025-05-29 10:11:46.128747	f	f	37 x 37		200000	2025-05-29 10:11:46.131753	2025-05-29 10:11:46.131753	1369.00	f	6051	1	9501	51	1	49707	151	9	24752	1	751	301	36	1051	\N
+60209	Av monsñor de andrea entre c 122 y av quaranta-B° El Yerbal-Precios unitarios	f	2025-05-29 10:12:42.862601	f	f	37 x 37		200000	2025-05-29 10:12:42.866605	2025-05-29 10:12:42.866605	1369.00	f	6051	1	9501	51	1	49707	151	9	24752	1	751	301	36	1051	\N
+60211	Calle 75A entre Sgto. Acosta y 75A	f	2025-05-29 10:18:25.340425	f	f	11 x 30		35000	2025-05-29 10:18:25.344054	2025-05-29 10:18:25.344054	330.00	f	6701	1	39857	51	1	49709	151	9	24754	51	551	301	33	751	\N
+60212	calle saltos del mocona entre las rosas y roque gonzales	f	2025-05-29 10:20:42.917682	f	f	10 x 50		15998	2025-05-29 10:20:42.921679	2025-05-29 10:20:42.921679	500.00	f	6051	1	9501	51	1	49710	51	9	24752	51	1351	301	36	51	\N
+60213	calle 122 entre av zapiola y c 105-son 2 lotes precio bloque	f	2025-05-29 10:23:06.690126	f	f	(9,20 x 36,80) x 2		40000	2025-05-29 10:23:06.694126	2025-05-29 10:23:06.694126	677.00	f	6051	1	9501	51	1	49711	151	9	24752	51	751	301	36	1051	\N
+60214	calle 122 entre av zapiola y c 105-son 2 lotes precios individuales	f	2025-05-29 10:23:38.453833	f	f	(9,20 x 36,80) x 2		40000	2025-05-29 10:23:38.458831	2025-05-29 10:23:38.458831	677.00	f	6051	1	9501	51	1	49711	151	9	24752	51	751	301	36	1051	\N
+60215	ingreso entrada a barrio la colina y los arroyos	f	2025-05-29 10:36:05.54944	f	f	37 x 132		60000	2025-05-29 10:36:05.552441	2025-05-29 10:36:05.552441	4884.00	f	6051	1	9501	51	1	49712	1	9	24752	51	1251	301	36	51	\N
+60216	CALLE 210, ENTRE CALLE 47 A Y CALLE S/N. LOTEO ALTOS DE FATIMA. DETRÁS DE LOS SUPERMERCADOS YAGUAR Y MAKRO	f	2025-05-29 10:43:14.570707	f	f	10 x 35	Entrega  20% y saldo hasta 36 meses	22000	2025-05-29 10:43:14.574709	2025-05-29 10:43:14.574709	350.00	f	5101	1	39858	51	1	16001	151	9	24752	51	501	301	35	401	\N
+60218	CALLE 210, ENTRE CALLE 47 A Y CALLE S/N. LOTEO ALTOS DE FATIMA. DETRÁS DE LOS SUPERMERCADOS YAGUAR Y MAKRO	f	2025-05-29 10:44:03.471919	f	f	10 x 35	Entrega  20% y saldo hasta 36 meses	25000	2025-05-29 10:47:52.874942	2025-05-29 13:44:03.471	350.00	f	5101	1	39858	51	1	16001	151	9	24752	51	501	301	35	401	\N
+60217	CALLE 210, ENTRE CALLE 47 A Y CALLE S/N. LOTEO ALTOS DE FATIMA. DETRÁS DE LOS SUPERMERCADOS YAGUAR Y MAKRO	f	2025-05-29 10:43:34.449469	f	f	10 x 35	Entrega  20% y saldo hasta 36 meses	23000	2025-05-29 10:47:06.722767	2025-05-29 13:43:34.449	350.00	f	5101	1	39858	51	1	16001	151	9	24752	51	501	301	35	401	\N
+41401	Avda Santa Catalina casi Tambor de Tacuarì	f	2024-04-29 00:00:00	f	f	8,85 x 21,65		60000	2025-04-23 00:00:00	2024-04-29 00:00:00	173.00	f	1451	1	30201	51	1	33601	151	2	\N	1	301	51	25	751	2301
+41501	Calle solomon amiel casi ruta 12	f	2023-11-27 00:00:00	f	f	18,75 x 25	Se va a acercar a la empresa para hablar y informarse sobre los precio y cuanto puede pedir el terreno. 13-3-25 	15000	2025-03-13 00:00:00	2024-01-26 00:00:00	468.00	f	6701	1	9251	51	1	33701	1	21	7151	51	1251	301	24	51	2301
+60219	CALLE 210, ENTRE CALLE 47 A Y CALLE S/N. LOTEO ALTOS DE FATIMA. DETRÁS DE LOS SUPERMERCADOS YAGUAR Y MAKRO	f	2025-05-29 10:44:42.769621	f	f	10 x 35	Entrega  20% y saldo hasta 36 meses	26000	2025-05-29 10:48:32.677112	2025-05-29 13:44:42.769	350.00	f	5101	1	39858	51	1	16001	151	9	24752	51	501	301	35	401	\N
+41551	Avda Trincheras de San Jose entre Avda Lopez Torres y Calle San Marcos	f	2019-12-09 00:00:00	f	f	11x45	No pasan la documentacion de la sucesion. No se ponen de acuerdo con el precio. 11-12-24	150000	2024-12-11 00:00:00	2023-09-04 00:00:00	495.00	t	6701	1	29801	51	51	33751	151	14	16551	1	51	51	17	451	4351
+41601	Ruta 105, entre Eva Peron y Don Claudio	f	2022-04-29 00:00:00	f	f	11,30 x 35	No se ponen de acuerdo para poner en venta con nosotros. 28-10-24	22000	2024-12-27 00:00:00	2023-09-05 00:00:00	395.00	f	6701	1	22201	51	1	33801	51	21	9601	151	1351	51	5	251	4151
+41651	Calle Nicolas Avellaneda entre 168 y calle 170	f	2024-04-29 00:00:00	f	f	15 x 40		45000	2024-04-29 00:00:00	2024-04-29 00:00:00	600.00	f	2601	1	12901	51	1	33851	151	9	\N	51	551	51	25	751	2301
+41701	Calle Perito Moreno entre calle Noruega y Alemania	f	2024-04-19 00:00:00	f	f	21,65 x 21,65		70000	2024-09-16 00:00:00	2024-04-19 00:00:00	468.00	f	4101	1	30801	51	1	33901	151	15	\N	51	101	51	25	401	2301
+41751	Avda Blas Pareras, entre Avda Zapiola y Calle 103	f	2023-03-09 00:00:00	f	f	9 x 40		40000	2024-09-16 00:00:00	2024-05-09 00:00:00	360.00	f	6251	1	20351	51	1	33951	151	15	5401	1	701	51	16	751	2301
+41801	Calle Posadas entre Calle Santa Ana y calle Loreto	f	2024-07-10 00:00:00	f	f	15,70 x 46,25	Le pasa un arroyo x el medio. La dueña vive en españa. La hermana lo ofrece sin poder de venta. 9/9/24	14000	2024-09-09 00:00:00	2024-07-10 00:00:00	726.00	t	6701	1	36501	51	1	34001	51	9	601	51	1351	251	25	101	2301
+41851	Meza entre Gotischalk y Posadas-Precio Bloque	f	2024-11-19 00:00:00	f	f	18,40 x 36,80	Boleto de compraventa con titulares fallecidos. 19-12-24	120000	2024-12-19 00:00:00	2024-11-19 00:00:00	677.12	t	2951	1	21101	51	1	34051	151	9	13751	51	651	51	32	401	351
+41901	Meza entre Gotischalk y Posadas-Precios Individuales	f	2024-11-19 00:00:00	f	f	18,40 x 36,80	Boleto de compraventa con titulares fallecidos. 19-12-24	120000	2024-12-19 00:00:00	2024-11-19 00:00:00	677.12	t	2951	1	21101	51	1	34051	151	9	13751	51	651	51	32	401	351
+41951	Calle serrano entre C. 82 y C. 84	f	2023-11-24 00:00:00	f	f	9,80 x 41	No responde el telefono. 26-2-24	45000	2024-02-26 00:00:00	2024-02-26 00:00:00	402.00	t	8801	1	6101	51	1	34101	151	23	\N	51	351	51	24	1051	2301
+42001	Calle 180B entre 129 y Almte. Brown -Son 2 lotes - precios individuales 	f	2025-01-08 00:00:00	f	f	9 x 30		17000	2025-01-08 00:00:00	2025-01-08 00:00:00	270.00	f	1051	151	20001	51	1	34151	151	21	201	51	801	301	32	1051	2301
+42051	Soldado Argentino, entre 10 de junio y Malvinas Argentina	f	2023-06-22 00:00:00	f	f	12,5x35	No responde el telefono. 29-7-24	27000	2024-07-29 00:00:00	2024-01-17 00:00:00	438.00	t	6701	1	31851	51	1	34201	151	23	9501	51	251	51	26	751	2301
+42151	Calle 160 e/ calle 89 y calle 91-Precio bloque	f	2024-04-30 00:00:00	f	f	87,95 x 113,75		380000	2025-03-28 00:00:00	2024-04-30 00:00:00	10004.00	f	2001	1	24251	51	1	34301	151	2	\N	51	801	301	2	401	2301
+42201	Calle 160 e/ calle 89 y calle 91-Precios individuales	f	2024-04-30 00:00:00	f	f	87,95 x 113,75		380000	2025-03-28 00:00:00	2024-04-30 00:00:00	10004.00	f	2001	1	24251	51	1	34301	151	2	\N	51	801	301	2	401	2301
+42251	cataratas del iguazu entre mburucuya y las flores	f	2025-05-07 00:00:00	f	f	10 x 50	Entrega 35% saldo 12 meses	11000	2025-05-07 00:00:00	2025-05-07 00:00:00	500.00	f	4051	1	15701	51	1	34351	51	\N	5751	51	1351	51	36	51	2301
+42301	PERITO MORENO ENTRE FELIX AGUIRRE Y FELIX BOGADO	f	2022-05-31 00:00:00	f	f	8,66 x 26		100000	2024-12-10 00:00:00	2024-02-29 00:00:00	225.00	f	4051	1	13201	51	1	34401	151	15	13501	51	51	51	13	451	2301
+42351	Av Bustamante entre C. Miño y Serrano-Lts A y B-Precio conjunto	f	2024-11-29 00:00:00	f	f	Lote A: 11 x 42,53      Lote B: 10,80 x 42,41    		150000	2025-03-12 00:00:00	2024-11-29 00:00:00	926.00	f	6701	1	36751	51	1	34451	151	15	3301	1	401	51	32	451	2301
+42401	Av Bustamante entre C. Miño y Serrano-Lts A y B-Precios individuales	f	2024-11-29 00:00:00	f	f	Lote A: 11 x 42,53      Lote B: 10,80 x 42,41    		150000	2025-03-12 00:00:00	2024-11-29 00:00:00	926.00	f	6701	1	36751	51	1	34451	151	15	3301	1	401	51	32	451	2301
+42501	BARRIO CERRADO SANTA CECILIA	f	2023-12-01 00:00:00	f	f	30 x 40		44000	2024-12-10 00:00:00	2024-04-08 00:00:00	1200.00	f	8201	1	7251	51	1	34551	1	15	\N	51	1251	301	4	1	2301
+42551	Avda Almte Brown esquina Avda Vivanco-Pcio conjunto	t	2021-08-25 00:00:00	f	f	18,40 x 36,80		70000	2022-08-02 00:00:00	2022-08-02 00:00:00	677.12	f	1051	101	17301	51	1	34601	151	9	4551	1	901	\N	1	451	\N
+42601	Avda Almte Brown esquina Avda Vivanco-Pcios individuales	t	2021-08-25 00:00:00	f	f	18,40 x 36,80		70000	2022-08-02 00:00:00	2022-08-02 00:00:00	677.12	f	1051	101	17301	51	1	34601	151	9	4551	1	901	\N	1	451	\N
+42651	Roque perez entre Av. Roca y nicomedes castro 	f	2025-04-16 00:00:00	f	f	12,99 x 43,30		250000	2025-04-16 00:00:00	2025-04-16 00:00:00	562.00	f	2351	1	21301	51	1	34651	151	\N	\N	1	1	301	34	1051	2301
+42751	Golfo San Carlos entre 10 de junio y Cap Giachino	f	2025-05-07 00:00:00	f	f	10 x 50		22000	2025-05-07 00:00:00	2025-05-07 00:00:00	500.00	f	1051	\N	\N	51	1	34751	151	23	2901	51	251	251	23	451	2301
+60220	CALLE 210, ENTRE CALLE 47 A Y CALLE S/N. LOTEO ALTOS DE FATIMA. DETRÁS DE LOS SUPERMERCADOS YAGUAR Y MAKRO	f	2025-05-29 10:45:21.681858	f	f	10 x 35	Entrega  20% y saldo hasta 36 meses	20000	2025-05-29 10:45:21.681859	2025-05-29 10:45:21.681859	350.00	f	5101	1	39858	51	1	16001	151	9	24752	51	501	301	35	401	\N
+60223	Buenos aires entre catamarca y salta 	f	2025-05-29 11:00:44.188116	f	f	10,35 x 43	Le afecta un arroyo	140000	2025-05-29 11:00:44.192494	2025-05-29 11:00:44.192494	445.00	f	9253	1	39860	51	1	49714	151	9	24752	51	1	301	36	601	\N
+60224	Avda Mitre entre hungria y av rademarcher	f	2025-05-29 11:03:39.452539	f	f	9,50 x 20		125000	2025-05-29 11:03:39.455538	2025-05-29 11:03:39.455538	190.00	f	6701	1	39861	51	1	49715	151	9	24755	1	51	301	36	401	\N
+60225	Hernandez entre alberdi y leonadro troazzi	f	2025-05-29 11:06:02.305837	f	f	45 x 45		4000000	2025-05-29 11:06:02.307837	2025-05-29 11:06:02.307837	2025.00	f	6051	1	9501	51	1	49716	151	9	24752	51	1	301	36	1051	\N
+60226	C E. semilla entre C 148A Y C144-son 3 lotes precios unitarios	f	2025-05-29 11:08:09.159552	f	f	10 x 56		26000	2025-05-29 11:08:09.160552	2025-05-29 11:08:09.160552	560.00	f	6051	1	9501	51	1	49717	151	9	24752	51	801	301	36	401	\N
+60227	Martin miguel de guemes esquina calle 53	t	2025-05-29 11:11:44.792738	f	f	22 x 33	Muro perimetral	60000	2025-05-29 11:11:44.794739	2025-05-29 11:11:44.794739	726.00	f	4051	1	39862	51	1	49718	151	9	24756	51	501	301	33	401	\N
+51	Calle Hungria entre Calle Ojo de Agua y Av Trinchera del San Jose	f	2023-06-16 00:00:00	f	f	21,65 x 38,97		220000	2024-11-28 00:00:00	2024-02-23 00:00:00	843.00	f	2001	1	24251	51	1	51	151	14	\N	51	51	251	1	401	4151
+101	Calle Las Azaleas e/ calle Tierra Colorada y calle Primavera-Precio Conjunto	f	2023-03-10 00:00:00	f	f	100 x 50		250000	2025-01-17 00:00:00	2024-04-15 00:00:00	5000.00	f	8251	1	38801	51	1	101	51	14	\N	51	1351	301	2	51	2301
+151	Calle Las Azaleas e/ calle Tierra Colorada y calle Primavera-Precios individuales	f	2023-03-10 00:00:00	f	f	100 x 50		250000	2025-01-17 00:00:00	2024-04-15 00:00:00	5000.00	f	8251	1	38801	51	1	101	51	14	\N	51	1351	301	2	51	2301
+201	CALLE SIN NOMBRE ENTRE MONSEÑOR DE ANDREA Y JAURETCHE	f	2024-07-15 00:00:00	f	f	13,8 x 18,4		25000	2024-11-21 00:00:00	2024-07-15 00:00:00	253.00	f	4051	1	3651	51	1	151	151	9	22401	51	951	301	4	401	51
+251	Calle 111 e/ Montecarlo y calle 128.Lt. 13	f	2024-08-27 00:00:00	f	f	10 x 30		26000	2024-08-27 00:00:00	2024-08-27 00:00:00	300.00	f	4051	1	25601	51	1	201	151	23	4301	51	801	251	2	401	3701
+301	Calle 111 e/ Montecarlo y calle 128.Lt. 14	f	2024-08-27 00:00:00	f	f	15 x 30 x 10 x 30,41		34000	2024-08-27 00:00:00	2024-08-27 00:00:00	456.00	f	4051	1	25601	51	1	201	151	23	4301	51	801	251	2	401	3701
+351	Avda 213 y calle 152	t	2024-07-22 00:00:00	f	f	12 x 40		55000	2024-11-22 00:00:00	2024-07-22 00:00:00	480.00	f	8251	1	38801	51	1	251	151	2	\N	1	551	51	27	451	2301
+33751	CALLE PASEO COSTERO, ZONA EL PUMA	f	2025-05-02 00:00:00	f	f	10 x 30		0	2025-05-02 00:00:00	2025-05-02 00:00:00	300.00	f	951	1	38351	1	1	27001	1	\N	\N	51	1251	301	35	1	2301
+60210	Sgo Cabral  entre Luis Dellpiane y calle sin nombre - Barrio los potrillos	f	2025-05-29 10:15:44.619621	f	f	10 x 40		0	2025-05-29 10:15:44.621622	2025-05-29 10:15:44.621622	400.00	f	6701	1	39856	1	1	49708	51	9	8601	51	1351	301	33	201	\N
+41451	Gdor. Barreiro e. Calle 127 y L. Pérez	f	2023-06-29 00:00:00	f	f	9,20 x 36,80	Boleto de boleto. Sucesion no iniciada. 27_10-23	0	2023-10-24 00:00:00	2023-10-24 00:00:00	339.00	t	6701	1	28501	1	1	33651	151	21	1851	51	901	51	22	401	301
+42451	B° Los Arroyos	f	2021-08-11 00:00:00	f	f	10 x 35		0	2024-09-16 00:00:00	2024-05-14 00:00:00	350.00	f	951	1	6701	1	1	34501	1	15	\N	51	1251	51	1	51	2301
+42701	Calle Jose Ramallo entre Calle gomez y romero(B.El Chogui)	f	2023-11-01 00:00:00	f	f	14,50 x 40		0	2024-01-09 00:00:00	2024-01-09 00:00:00	680.00	f	6701	1	19351	1	1	34701	51	9	7951	51	1351	51	24	351	2301
+60221	calle sin nombre entre cacique y pugliese - barrio la esperanza-Son 2 lotes	f	2025-05-29 10:51:40.163115	f	f	(15 x 40) x 2		0	2025-05-29 10:51:40.167113	2025-05-29 10:51:40.167113	1200.00	f	6701	1	39859	1	1	49713	51	9	14601	51	1351	301	33	51	\N
+60222	calle sin nombre entre cacique y pugliese - barrio la esperanza-Son 2 lotes	f	2025-05-29 10:52:59.891999	f	f	(15 x 40) x 2		0	2025-05-29 10:52:59.897	2025-05-29 10:52:59.897	1200.00	f	6701	1	39859	1	1	49713	51	9	14601	51	1351	301	33	51	\N
+47701	Calle 104 entre Av Aguado y Gotischalk (97)	f	2022-09-01 00:00:00	f	f	20 x 31,18		0	2024-12-10 00:00:00	2024-03-12 00:00:00	623.00	f	2701	1	10501	1	1	38651	151	15	\N	51	751	301	13	751	2301
+5601	Loteo Privado "La Candelaria" -UF XX-Conjunto Inmobiliario-2Lotes distinto precio	f	2024-02-16 00:00:00	f	f	24,41 x 39,70 x 22,79 x 35,70	Quieren ofrecerlo ellos por privado. 8-5-24	18000	2025-05-12 00:00:00	2024-05-08 00:00:00	813.00	f	6701	1	38951	51	1	4451	1	2	3451	51	1251	251	2	101	2301
+5651	Loteo Privado "La Candelaria" -UF XX-Conjunto Inmobiliario-2Lotes distinto precio	f	2024-02-16 00:00:00	f	f	24,41 x 39,70 x 22,79 x 35,70	Quieren ofrecerlo ellos por privado. 8-5-24	20000	2025-05-12 00:00:00	2024-05-08 00:00:00	813.00	f	6701	1	38951	51	1	4451	1	2	3451	51	1251	251	2	101	2301
+5701	Avda Tambor deTacuari entre Avda Zapiola y Calle 105	f	2024-09-09 00:00:00	f	f	14,43 x 36,3		100000	2024-09-09 00:00:00	2024-09-09 00:00:00	524.00	f	5151	1	13551	51	1	4501	151	9	\N	1	651	301	1	751	2301
+7001	Avda 147 entre 176 y 180 lote 13 - Mz b (Con construccion a terminar-6x20)	t	2021-05-03 00:00:00	f	f	10,00 x 30		30000	2024-11-01 00:00:00	2023-12-14 00:00:00	300.00	f	1051	201	\N	51	1	5501	151	2	17901	1	1001	\N	12	451	2301
+7051	Avda 147 entre 176 y 180 lote 17 - Mz C -Esquina	t	2018-09-25 00:00:00	f	f	10,50 x 33		35000	2024-11-01 00:00:00	2023-12-14 00:00:00	346.50	f	1051	201	\N	51	1	5501	151	2	17851	1	1001	\N	12	451	2301
+40751	Avda Idependencia esquina Trinchera de San Jose	t	2021-07-30 00:00:00	f	f	12,5 x 50		0	2025-03-19 00:00:00	2023-10-09 00:00:00	625.00	f	6701	1	16401	1	1	33001	51	21	19501	1	1351	51	1	201	1701
+40901	Calle Paraguay entre Bermejo y Rio Colorado Santa Helena	f	2024-08-13 00:00:00	f	f	13,50 x 36,15	Tiene Boleto. 21-3-25	0	2025-03-21 00:00:00	2024-08-13 00:00:00	488.00	t	6701	1	3201	1	1	33151	51	9	4001	51	1351	301	25	151	51
+10301	Los Paraisos y Timbo entre Cataratas del Iguazu y Av Alberto Roth-Loteo-Precios unitarios-Lt24	t	2024-08-23 00:00:00	f	f	10 x 50	No quiere trabajar con inmobilairias. 17/1/25	10000000	2025-07-11 14:27:35.975316	2024-08-23 03:00:00	500.00	t	6701	1	25951	1	1	7751	51	14	22901	51	1351	301	27	51	2301
+10351	Los Paraisos y Timbo entre Cataratas del Iguazu y Av Alberto Roth-Loteo-Precios unitarios-Lts.5y6	f	2024-08-23 00:00:00	f	f	10 x 50	No quiere trabajar con inmobilairias. 17/1/25	6000000	2025-07-11 14:28:14.607934	2024-08-23 03:00:00	500.00	t	6701	1	25951	1	1	7751	51	14	22901	51	1351	301	27	51	2301
+60205	Ernesto che Guevara y entrar calle interna sin nombre - barrio los potrillos	f	2025-05-29 10:01:05.234874	f	f	10 x 45		0	2025-05-29 10:01:05.239874	2025-05-29 10:01:05.239874	449.00	f	6701	1	39854	1	1	49704	51	9	14301	51	1351	301	33	201	\N
+60207	Antonio alvarez jonte entre sangento acosta y c 176	f	2025-05-29 10:09:25.438059	f	f	11 x 30		0	2025-05-29 10:09:25.440063	2025-05-29 10:09:25.440063	330.00	f	5101	1	9151	1	1	49706	151	9	24752	51	551	301	36	751	\N
+44301	Calle SN Mz. 76 lotes 21 y 22 - La Esperanza-Precios individuales	f	2024-04-18 00:00:00	f	f	2 x (20 x 32)	Boleto con titulares fallecidos. 27-6-24	0	2024-06-27 00:00:00	2024-04-18 00:00:00	1280.00	t	6701	1	21251	1	1	36151	51	23	15601	51	1351	251	22	351	251
+44351	Calle 170 y Castro Barro (Z/ Cocomarola y Cabo de Hornos)-La medida es x medio terreno-el original es 16 x 36	t	2024-04-19 00:00:00	f	f	16 x 37		0	2025-05-09 00:00:00	2024-04-19 00:00:00	592.00	f	6701	1	30801	1	1	36201	151	21	13451	51	551	301	25	751	2301
+44401	Rocamora entre Lopez y Planes y Carcaman (58 A) 	f	2022-06-30 00:00:00	f	f	12 x 38,97	No atiende los llamados de actualizacion y se enoja con las consultas	0	2022-06-30 00:00:00	2022-06-30 00:00:00	468.00	t	2101	1	10451	1	1	36251	151	21	\N	51	351	301	13	451	2651
+50201	Calle 82 entre Av. Tomas Guido y Comandante Miño 	f	2024-12-03 00:00:00	f	f	8,87 x 36,21	Solo cuenta con boleto de compra venta, ya que son 6 hermanos y todos están de acuerdo en la venta del lote. Dice que el titulo esta hecho pero su madre nunca fue a retirarlo y ella ahora se encuentra fallecida.	0	2025-03-18 00:00:00	2024-12-03 00:00:00	321.00	t	6701	1	5901	1	1	41101	151	15	9851	51	351	51	32	1051	51
+58601	Florentin Ameghino y Mariano Moreno-Precios individuales	t	2024-09-27 00:00:00	f	f	22 x 33		0	2024-09-27 00:00:00	2024-09-27 00:00:00	726.00	t	6701	1	38001	1	1	48301	1	14	2001	51	1251	301	27	51	3451
+58651	ruta 12 entre- C 12 de octubre y C justo jose de urquiza -Lts 19 y 20-Precio bloque	f	2025-04-10 00:00:00	f	f	20 x 52		0	2025-04-10 00:00:00	2025-04-10 00:00:00	1040.00	f	951	1	33651	1	1	48351	1	\N	\N	151	1251	301	36	51	2301
+58701	ruta 12 entre- C 12 de octubre y C justo jose de urquiza -Lts 19 y 20-Precios individuales	f	2025-04-10 00:00:00	f	f	20 x 52		0	2025-04-10 00:00:00	2025-04-10 00:00:00	1040.00	f	951	1	33651	1	1	48351	1	\N	\N	151	1251	301	36	51	2301
+10201	Los Paraisos y Timbo entre Cataratas del Iguazu y Av Alberto Roth-Loteo-Precios unitarios.Lts.1,2,3y4	f	2024-08-23 00:00:00	f	f	10 x 50	No quiere trabajar con inmobilairias. 17/1/25	0	2025-01-17 00:00:00	2024-08-23 00:00:00	500.00	t	6701	1	25951	1	1	7751	51	14	22901	51	1351	301	27	51	2301
+10551	Avda Juan Manuel Fangio entre calle 79 calle 89B y Calle 180A-Precio x 2 hectareas	t	2025-04-07 00:00:00	f	f	(73.32 X  77.56 X 126.2 X 130.34) x 2 hectareas		0	2025-04-07 00:00:00	2025-04-07 00:00:00	20000.00	f	251	1	34951	1	1	7951	151	\N	\N	1	551	301	35	751	2301
+10801	Avda Bustamante y calle semilla	t	2022-02-01 00:00:00	f	f	10 x 31,80		0	2024-08-15 00:00:00	2024-04-10 00:00:00	318.00	f	5801	1	9501	1	1	8151	151	9	\N	1	751	\N	1	1051	\N
+11051	calle rio paraguay entre rio iguazu y pilcomayo	f	2022-04-28 00:00:00	f	f	13,5 x 37,26	Tiene problemas juridicos	0	2022-12-28 00:00:00	2022-12-28 00:00:00	503.00	t	6701	1	26101	1	1	8351	51	2	3951	51	1351	301	1	151	4801
+11201	Maipú esquina Tarelli-Precio bloque	t	2025-04-08 00:00:00	f	f	20 x 35		0	2025-04-08 00:00:00	2025-04-08 00:00:00	700.00	f	951	1	\N	1	1	8451	1	\N	\N	51	1251	301	35	1	2301
+11251	Maipú esquina Tarelli-Precios individuales (2 Lotes)	t	2025-04-08 00:00:00	f	f	20 x 35		0	2025-04-08 00:00:00	2025-04-08 00:00:00	700.00	f	951	1	\N	1	1	8451	1	\N	\N	51	1251	301	35	1	2301
+11851	Colectora Ruta 12 a 800 mts de entra a B° del Lago-B°Las Perdices (Son 2 lotes precio bloque)	f	2025-04-09 00:00:00	f	f	(22,40 x 89,86) x 2		0	2025-04-09 00:00:00	2025-04-09 00:00:00	4025.73	f	601	1	9901	1	1	8851	1	\N	\N	1	1251	301	33	101	2301
+12401	CALLE 122 ENTRE 31B Y 35A	f	2023-07-24 00:00:00	f	f	8.75X8.75X25.24X28.92		0	2023-07-24 00:00:00	2023-07-24 00:00:00	237.00	f	1051	51	3551	1	1	9301	151	1	1001	51	101	301	1	751	2301
+60228	Calle sin nombre entre Eliana krawczyk y sarandi	t	2025-05-29 11:16:11.219457	f	f	10 x 35		0	2025-05-29 11:16:11.222457	2025-05-29 11:16:11.222457	350.00	f	6701	1	39863	1	1	49719	1	9	24757	51	1251	301	33	51	\N
+12601	Salomon Amiel casi colectora Ruta-Detrás de la YPF de candelaria-Lote esquina-Calles sin nombre	t	2025-04-10 00:00:00	f	f	18 x 25		0	2025-04-10 00:00:00	2025-04-10 00:00:00	450.00	f	951	1	20951	1	1	9501	1	\N	\N	51	1251	301	33	51	2301
+1601	calle los espinillos esquina calle 34 A	f	2023-03-06 00:00:00	f	f	11,54 x 36,80	Sigue en sucesion. 6-8-24. La sucesión esta parada. 7-10-24	48000	2025-07-02 21:24:38.54869	2023-03-06 03:00:00	425.00	f	6701	1	19801	51	1	1001	151	15	13301	51	651	301	6	451	4151
+3201	Roque gonzalez entre Perito Moreno y Felix Azara 	f	2025-05-07 00:00:00	f	f	10 x 50		53000000	2025-07-11 13:28:25.603293	2025-05-07 03:00:00	500.00	f	6701	1	2451	1	1	2501	51	9	20201	51	1351	51	34	51	51
+3351	Calle el palmar entre juan lavalle y luis dellepiane	f	2022-02-09 00:00:00	f	f	10 x 40	No atiende el telefono- 27-6-24. No atiende el telefono- 7-10-24	3500000	2025-07-11 13:29:28.156642	2022-02-09 03:00:00	400.00	t	501	1	1051	1	1	2651	51	15	24752	51	1351	301	1	201	2301
+4101	COLECTORA RUTA 105 Y CALLE S/N KM 2  - LOTES INTERNOS 11X33.50 	f	2020-10-06 00:00:00	f	f	11 x 33,50		15880000	2025-07-11 13:30:37.978816	2020-10-06 03:00:00	368.50	f	3751	1	10401	1	1	3301	51	14	22101	151	1351	301	4	1201	2301
+4151	COLECTORA RUTA 105 Y CALLE S/N KM 2  - LOTES SOBRE COLECTORA 20X65	f	2020-10-06 00:00:00	f	f	20x 65		65150000	2025-07-11 13:31:29.480807	2020-10-06 03:00:00	1300.00	f	3751	1	10401	1	1	3301	51	14	22101	151	1351	301	4	1201	2301
+7601	Av. Gral Las Heras entre Luchessi y Florentino Ameghino 	f	2024-12-16 00:00:00	f	f	10 x 36,80		60000000	2025-07-11 14:21:22.869908	2024-12-16 03:00:00	368.00	f	2651	1	15001	1	1	5751	151	15	12001	1	701	51	32	451	2301
+8601	AV ROQUE GONZALEZ ENTRE AV CHACABUCO Y LAVALLE. CANDELARIA	f	2025-04-03 00:00:00	f	f	10 x 50		49500000	2025-07-11 14:21:55.270689	2025-04-03 03:00:00	500.00	f	951	1	38351	1	1	6551	1	9	24752	1	1251	301	35	51	2301
+13451	Avda Ituzaingo entre Avda Monseñor de Andrea y Calle 127	f	2023-02-27 00:00:00	f	f	10 x 37,3	No tiene plano. Y no puede resolver 3/3/23. El precio no me supo decir tiene que ver, no acepta financiamiento, pero el tema legal todavía no está resuelto, tiene la cadena de boletos, impuestos al día, compra venta original por escribano, pero todavía no se dio inicio a la sucesión. Tiene que venir la hija del dueño de Buenos Aires xq lo quiere hacer, en un tiempo más que lo llamen que no hay problema. 19-3-25	0	2025-03-19 00:00:00	2023-02-27 00:00:00	373.00	t	6701	1	33401	1	1	10101	151	15	5051	1	951	301	5	401	701
+14001	Avda Urquiza y esq. Amalia Vera	t	2020-06-23 00:00:00	f	f	12,27 x 24,54	Es una sucesión. Uno de los herederos no quiere vender. Otro objeta el precio. No se ponen de acuerdo. Tienen declaratoria. 25-10-21. Pidieron que los llamemos en mar/23. No quieren dar información. 20-3-25. Sucesion con declaratoria. Estan en juicio porque tiene usurpadores 23-4-25	0	2025-04-23 00:00:00	2022-12-28 00:00:00	301.00	t	6701	1	34851	1	1	10501	151	15	23651	1	301	51	14	401	3301
+15351	Gomez, ante-esquina Rosario Lopez-Precios individuales	t	2023-07-11 00:00:00	f	f	10 x 30 x 2		0	2024-11-26 00:00:00	2023-11-22 00:00:00	600.00	f	4051	1	29601	1	1	11551	51	23	3401	51	1351	301	26	351	2301
+15401	Gomez, esquina Rosario Lopez-2 Lotes-Precio conjunto	t	2023-07-11 00:00:00	f	f	10 x 30 x 2		0	2024-11-26 00:00:00	2023-11-22 00:00:00	600.00	f	4051	1	29601	1	1	11551	51	23	3401	51	1351	301	26	351	2301
+15501	Candelaria, entre Alba Pose y  irupé-3 lotes-Precio bloque	t	2023-07-05 00:00:00	f	f	10 x 30 x 3	Por ahora sacaron de la venta. 19-12-24	0	2024-12-19 00:00:00	2024-04-16 00:00:00	900.00	t	4051	1	32801	1	1	11651	51	14	21301	51	1351	301	26	101	2301
+16901	Quaranta esquina Avda Zapiola- (lotes 19, 20 y 021)-Precios en bloque	t	2023-03-09 00:00:00	f	f	(9 X 29.80) x 2 + (6.67x29.80x10.20x26.27x5.80)		0	2025-03-12 00:00:00	2024-07-11 00:00:00	840.00	f	6701	1	35801	1	1	12651	151	15	7551	1	751	\N	5	1051	\N
+18751	calle Carlos lineo entre primavera y juncal	f	2025-04-15 00:00:00	f	f	10 x 30		0	2025-04-15 00:00:00	2025-04-15 00:00:00	300.00	f	8051	1	10801	1	1	13851	51	\N	\N	51	1351	301	34	51	2301
+21351	Avda roque gonzalez entre chacabuco y Lavalle-Son 3 lotes-sevende individualmente-Precios individuales	f	2023-07-20 00:00:00	f	f	(11 x 50)		0	2025-03-31 00:00:00	2024-04-23 00:00:00	550.00	f	951	1	4401	1	1	16501	1	9	\N	1	1251	301	1	51	2301
+21701	Oceano Atlantico, entre Cap. Giachino y 10 de Junio	f	2021-11-05 00:00:00	f	f	10 x 50	Tiene un proyecto de deptos-pre-aprobado-Libre de todo gasto.	0	2025-03-13 00:00:00	2024-04-10 00:00:00	500.00	f	6701	1	6551	1	1	16801	151	2	8151	51	251	301	16	751	2301
+22851	CALLE VALLE PUNILLA Y MANUEL DORREGO	f	2023-03-03 00:00:00	f	f	10 x 50	No contesta el telefono. 4/10/23	0	2023-10-04 00:00:00	2023-10-04 00:00:00	500.00	t	4051	1	6751	1	1	17851	51	15	18901	51	1351	301	6	251	51
+22951	El Palmar-Candelaria-5 hectareas-Detrás de cerámica García-Loteo s/ Servicios	t	2021-09-23 00:00:00	f	f	10 x 30	Analizan lotear por cuenta propia en el futuro. No quieren vender en bloque ni asociarse	0	2024-07-15 00:00:00	2024-04-05 00:00:00	300.00	f	2801	1	36401	1	1	17951	1	9	8651	51	1251	251	21	\N	2301
+23001	El Palmar-Candelaria-5 hectareas-Detrás de cerámica García-Loteo s/ Servicios	t	2021-09-23 00:00:00	f	f	10 x 33	Analizan lotear por cuenta propia en el futuro. No quieren vender en bloque ni asociarse	0	2024-07-15 00:00:00	2024-04-05 00:00:00	330.00	f	2801	1	36401	1	1	17951	1	9	8651	51	1251	251	21	\N	2301
+23201	Calle Mariano Moreno y Calle Aviador Candelaria	t	2021-09-27 00:00:00	f	f	20 x 33	Situación jurídica complicada. Quiso abrir la sucesión pero como su abuela falleció en buenos aires tiene que hacer los trámites allá. Por eso vende así y el que compra que se haga cargo de hacer la posesión veinteanial. 18/11/21	0	2024-08-30 00:00:00	2023-08-25 00:00:00	660.00	t	6701	1	37251	1	1	18151	1	21	22601	51	1301	51	16	51	2101
+23901	CHAVELA VARGAS ENTRE EL CACIQUE Y PUGLIESE	f	2024-03-06 00:00:00	f	f	15,50 x 39,40	Al mencionar las calles que se tiene registrado dijo que queda en santa Inés el lugar. Cuenta con luz y agua, también cuenta con parada de colectivo. Menciono que es una zona nueva y que de a poco se está armando/poblando ya que hay varios terrenos en venta y también terrenos ya vendidos. Cuenta con boleta de compra y venta (la señora que le vendió a este cliente tiene varios terrenos a la venta que era del esposo y aseguro que no va a pasar nada). Pero en general no sabe bien el precio que pedir. 7-3-25	0	2025-03-07 00:00:00	2024-05-23 00:00:00	610.00	f	6701	1	13951	1	1	18751	51	23	21201	101	1351	301	4	351	51
+24751	LAVALLE, ENTRE AV. ROQUE GONZALEZ Y CALLE TARELLI.	f	2025-04-16 00:00:00	f	f	10 x 33		0	2025-04-16 00:00:00	2025-04-16 00:00:00	330.00	f	951	1	38351	1	1	19501	1	\N	\N	51	1251	301	35	51	2301
+25701	Avda Alberto Roth, esquina C. Irupe	t	2023-10-09 00:00:00	f	f	10 x 30	Sucesión finalizada no acepta financiación. 19-3-25	0	2025-03-19 00:00:00	2024-06-24 00:00:00	300.00	f	6701	1	11301	1	1	20351	51	9	11601	1	1351	51	26	51	3651
+26601	Calle 137 entre 196A y 194 	f	2024-11-28 00:00:00	f	f	11,21 x 27,50		0	2024-11-28 00:00:00	2024-11-28 00:00:00	308.00	f	4051	1	6051	1	1	21201	151	14	10201	51	1001	301	32	451	2301
+28501	Calle s/n cercano a calle Cabrera y Av. Roque Gonzalez	f	2024-03-28 00:00:00	f	f	15 x 50	Tiene problemas de papeles y no los muestra. 30-7-24- Sin dar detalles dice que va a venir a la oficina. 20-3-25	0	2025-03-20 00:00:00	2024-03-28 00:00:00	750.00	t	6701	1	20551	1	1	22851	1	15	10001	51	1251	301	22	51	4751
+29201	CALLE DELIA PARODI A 2KM DE RUTA 105. GARUPA-Son 5 lotes-Precios unitarios	f	2025-04-25 00:00:00	f	f	LOTES 14 AL 18: (10 X 42.50 mtrs) y LOTE 02: (10.50 X 40 mtrs)		0	2025-04-25 00:00:00	2025-04-25 00:00:00	425.00	f	301	1	33751	1	1	23551	51	\N	\N	51	1351	301	35	301	2301
+16801	Gallardo esquina Weber 	t	2024-11-14 00:00:00	f	f	25 x 4 x 75 x 65 (Triangulo con ochava en esquina)	No quiere trabajar con inmobiliaria. 14-11-24. No contesta los mensajes. 17-1-25	9000000	2025-07-07 12:24:52.346146	2024-11-14 03:00:00	789.00	t	6701	1	16951	1	1	12551	51	9	11051	51	1351	301	25	201	51
+26151	calle s/n casi ruta 105 	f	2023-04-28 00:00:00	f	f	15 x 35		15000000	2025-07-07 12:45:05.538393	2023-04-28 03:00:00	525.00	t	6701	1	13401	1	1	20751	51	21	16201	51	1351	251	16	351	951
+31101	Calle 49 Entre calle 160 y calle 162 ( 4 Lotes)-bloque	t	2019-02-02 00:00:00	f	f	(10,82 x 33,30) x 4	Tiene plano aprobado Agrim. Yamato - de Contado / Financia entrega 50% saldo en 2 ctas. Acepta materiales de construccion en parte de pago. / Acepta oferta de contado hasta $1.200.000 (16/6/2020)	0	2024-09-05 00:00:00	2024-03-08 00:00:00	1441.20	f	401	1	1001	1	51	24901	151	23	\N	51	451	51	19	451	2301
+32851	COLECTORA AV. ALICIA MOREAU DE JUSTO, ENTRE AV DE LAS AMERICAS Y CALLE SAAVEDRA. 	f	2025-05-02 00:00:00	f	f	12,5 x 46		0	2025-05-02 00:00:00	2025-05-02 00:00:00	581.00	f	6701	1	36851	1	1	26251	151	\N	11601	1	551	301	35	451	2301
+33551	Calle guembe entre calle tierra roja y calle cataratas del iguazu	f	2023-03-21 00:00:00	f	f	10 x 50	Los dueños estan en España y no quieren firmar un poder. 16/2/24	0	2024-02-16 00:00:00	2024-02-16 00:00:00	500.00	t	4051	1	14851	1	1	26801	51	21	15601	51	1351	51	6	51	2301
+36451	calle Lavalle entre calle Bº DE Simon y calle Uruguay	f	2024-05-16 00:00:00	f	f	13 x 48	No acepta financiacion, pero puede aceptar su terreno por otro terreno, que este ubicado entre rotonda hasta mitre y lavalle hasta lopez torrez, tiene para la diferencia de precio un vehículo, se le puede llamar dentro de un tiempo para preguntar por si terreno. 13-3-25	0	2025-03-13 00:00:00	2024-05-16 00:00:00	624.00	f	6701	1	5751	1	1	29301	1	23	1751	51	1251	301	25	51	2301
+36651	Av. Padre Juan Markievich entre calle 82 y calle 78 A	f	2025-04-25 00:00:00	f	f	10 x 30		0	2025-04-25 00:00:00	2025-04-25 00:00:00	300.00	f	6701	1	2151	1	1	29501	151	\N	10701	1	901	301	33	451	2301
+37101	RUTA 105 ENTRE DON CLAUDIO Y SAN PATRICIO 	f	2022-11-22 00:00:00	f	f	31 x 50	VENDEN LA MEDIDA DE TERRENO QUE LE PIDAN, CROQUIS A MANO. PLANO EN TRAMITE. No contesta los mensajes, clava el visto. No atiende llamadas. 18/4/23. No atiende llamadas 6/9/23	0	2023-09-06 00:00:00	2023-09-06 00:00:00	1550.00	t	4701	1	4151	1	1	29801	51	23	\N	151	1351	301	13	251	51
+37251	Puerto Lagier	f	2023-12-05 00:00:00	f	f	22 x 65		0	2024-09-16 00:00:00	2024-05-14 00:00:00	1430.00	f	951	1	37851	1	1	29951	1	15	\N	51	1251	301	22	51	2301
+38251	Calle Vasconcellos Esquina Magaldi	t	2023-07-03 00:00:00	f	f	9,20 x 36,80	Tiene una casa de madera prefabricada. Conflicto familiar no se ponen de acuerdo con la venta. 12-12-23	0	2023-12-12 00:00:00	2023-12-12 00:00:00	338.00	t	6701	1	30151	1	1	30801	151	21	17551	101	851	51	22	451	2301
+39151	Av 117 entre Calle 178B y 178C	f	2025-01-08 00:00:00	f	f	11,00 x 50	Tiene un local adelante y atrás una casa, acepta parte de pago auto camioneta y diferencia de dinero. La medida es 11×50. 12-3-25	0	2025-03-12 00:00:00	2025-01-08 00:00:00	550.00	f	6701	1	21401	1	1	31601	151	15	13951	1	801	251	32	1051	5001
+39251	GARUAPE ENTRE ARISTOBULO Y APOSTOLES 	f	2024-02-01 00:00:00	f	f	10 x 37	No atiende el teléfono. 24-10-24	0	2024-10-24 00:00:00	2024-06-27 00:00:00	370.00	t	4051	1	18501	1	1	31701	51	23	5251	51	1351	301	4	101	1151
+39901	Calle Sin nombre - Detrás Hipodromo 	f	2019-04-15 00:00:00	f	f	12,25 x 34	Acepta auto como parte de pago, titulo esc romero/pretende monto limpio en mano/puede llegar a bajar precio/escucha ofertas de financiación. Es un condominio indiviso. Sin croquis	0	2024-10-22 00:00:00	2022-03-07 00:00:00	450.00	t	4051	1	751	1	51	32201	151	2	11351	51	1151	251	12	\N	2351
+40001	Calle Eva Perón entre calle Pedro Fernandez y calle Barrios	f	2024-04-18 00:00:00	f	f	10 x 33,90	No responde llamadas ni mensajes. 4-10-24	0	2024-10-04 00:00:00	2024-04-18 00:00:00	339.00	t	6701	1	26551	1	1	32301	51	14	18201	51	1351	301	25	251	2301
+40351	CALLE 177 ENTRE 138 Y 136-Condominio	f	2024-02-08 00:00:00	f	f	10 x 40	No quiere trabajar con inmobiliarias. 27-6-24	0	2024-06-27 00:00:00	2024-02-08 00:00:00	400.00	t	4051	1	4451	1	1	32651	151	23	16501	51	1151	301	4	1601	2301
+15301	Candelaria - Lote La Colina - 5 Lotes 	f	2018-07-24 00:00:00	f	f	10 x 30		0	2023-04-27 00:00:00	2023-04-27 00:00:00	300.00	f	1051	51	551	1	1	11501	1	2	23201	51	1251	\N	23	51	2301
+17501	Calle 195 entre calle 112 y calle 114	f	2024-06-05 00:00:00	f	f	12,25 x 43,13		20000	2024-10-03 00:00:00	2024-06-05 00:00:00	528.34	f	4051	1	7001	51	1	13101	151	9	15501	51	1151	301	1	\N	2301
+17601	MBURUCUYA ENTRE LOS TEALES Y PERITO MORENO	f	2022-11-30 00:00:00	f	f	10 x 50		15000	2024-10-16 00:00:00	2024-05-14 00:00:00	500.00	f	4051	1	15451	51	1	13201	51	2	6001	51	1351	51	13	51	2301
+20151	Av. Almirante Brown entre Pedro Morcillo y Gomez Portiño 	f	2024-12-04 00:00:00	f	f	9,50 x 36,80		120000	2024-12-04 00:00:00	2024-12-04 00:00:00	350.00	f	4951	1	4701	51	1	15401	151	14	19201	1	401	\N	32	751	\N
+35051	Calle Humberto Pérez e/ calle 148 A y calle 150	f	2024-08-13 00:00:00	f	f	10,66 x 30,61		18000	2024-08-29 00:00:00	2024-08-13 00:00:00	319.00	f	8751	1	24651	51	1	28051	151	23	\N	51	801	301	2	401	2301
+42101	Puerto Mbiguá-Lt.6-Sec.B3. U.F. 151	f	2024-03-01 00:00:00	f	f	15 x 40		17000	2024-03-01 00:00:00	2024-03-01 00:00:00	600.00	f	1051	1	14901	51	51	34251	101	9	1951	51	1451	251	9	\N	51
+49401	Calle 133 e/ calle Los Lapachos y calle 156- 3 Lotes-Precios unitarios	f	2024-04-12 00:00:00	f	f	10 x 30		13000	2024-08-22 00:00:00	2024-04-12 00:00:00	300.00	f	7351	1	24851	51	1	40251	151	2	16151	51	1001	301	2	401	2301
+50051	AV MARTIN FIERRO  E/ 93 Y 97 	f	2023-04-17 00:00:00	f	f	10,40 x 26		52000	2024-08-14 00:00:00	2024-04-09 00:00:00	270.00	f	8901	1	19501	51	1	40951	151	15	\N	51	701	301	4	451	2301
+42851	Colectora Ruta 12 esquina Calle 246 (bloque)	t	2019-08-27 00:00:00	f	f	17,17 x 43	Contado preferentemente acepta propuesta 	160000	2024-10-09 00:00:00	2023-08-30 00:00:00	738.00	f	4051	1	18851	51	51	34851	151	2	23551	151	501	51	4	751	2301
+29951	12 DE OCTIBRE ENTRE RUTA 12 Y PRINGLES-3 lts. Precios unitarios - Precio conjunto	f	2024-01-22 00:00:00	f	f	(10 x 30) x 3		60000000	2025-07-04 13:01:51.834977	2024-01-22 03:00:00	900.00	f	6701	1	18301	1	1	24101	1	21	11601	51	1251	301	4	51	2301
+36501	Calle 90 esquina Av. Las Heras	t	2025-01-02 00:00:00	f	f	9,20 x 36,80	Tiene todo en orden se va a comunicar con su escribano y se va a comunicar con nosotros. 10-3-25. 11-07-2025 Se llego a un acuerdo con el propietario para publicarlo (Autorización)	0	2025-01-02 03:00:00	2025-01-02 03:00:00	338.00	f	6701	101	19001	1	1	29351	151	15	9751	1	751	51	32	401	2301
+42901	a 2 cuadras de ruta 204 atrás de la ypf de candelaria-No Esquina s/tierra	f	2021-08-19 00:00:00	f	f	10,81 x 43,75		7800	2024-10-03 00:00:00	2024-05-09 00:00:00	472.00	f	7701	1	17451	51	1	34901	1	15	\N	51	1251	301	1	51	2301
+43001	Calle Nuestra señora de rosario Esquina los paraísos 	t	2025-05-07 00:00:00	f	f	10 x 33		110000	2025-05-07 00:00:00	2025-05-07 00:00:00	330.00	f	5251	1	3701	51	1	35001	51	\N	\N	51	1351	51	36	51	2301
+43051	Bº del Lago Rio Uruguay esquina Arroyo Santa Ana-Precio conjunto	t	2021-08-20 00:00:00	f	f	25 x 50	Oferta-USD14800+10x$250.000-24-5-22. NuevaOfertaUSDUSD14.000+10x$350.000. Rechazado quiere USD 30000 Ctdo. 	30000	2024-02-08 00:00:00	2024-02-08 00:00:00	1250.00	f	4901	1	9201	51	1	35051	1	15	\N	51	1251	51	1	101	2301
+43101	Bº del Lago Rio Uruguay esquina Arroyo Santa Ana-Precios individuales	t	2021-08-20 00:00:00	f	f	25 x 50	Oferta-USD14800+10x$250.000-24-5-22. NuevaOfertaUSDUSD14.000+10x$350.000. Rechazado quiere USD 30000 Ctdo. 	30000	2024-02-08 00:00:00	2024-02-08 00:00:00	1250.00	f	4901	1	9201	51	1	35051	1	15	\N	51	1251	51	1	101	2301
+43151	Avda LAS HERAS ESQUINA FELIPE TAMAREU	t	2022-09-20 00:00:00	f	f	15 x 33		45000	2024-05-07 00:00:00	2024-05-07 00:00:00	495.00	f	651	1	2951	51	1	35101	151	9	6301	1	701	301	13	401	2301
+43201	Avda Costanera eSquina Avda Trincheras (Morinigo)	t	2022-06-07 00:00:00	f	f	10.64X28.86		350000	2024-12-13 00:00:00	2024-04-08 00:00:00	307.00	f	8751	1	10901	51	1	35151	151	23	\N	1	51	51	13	751	2301
+43251	Calle Bosetti entre Av las heras y apostoles	f	2023-11-09 00:00:00	f	f	8,20 x 36,80		50000	2024-08-28 00:00:00	2024-04-16 00:00:00	301.00	f	4051	1	11701	51	1	35201	151	23	4951	51	701	51	24	401	2301
+43301	Avda Comandante Espora entre Perito Moreno y Herrera	f	2022-06-07 00:00:00	f	f	9,24 x 24,84	Titulo de Torres con Poder-Aparentemente fraudulento	60000	2023-09-13 00:00:00	2023-09-13 00:00:00	230.00	t	6701	1	16451	51	1	35251	151	21	7451	1	101	51	13	1051	4951
+43351	Las Magnolias entre calle los cardenales y las golordrinas	f	2023-12-04 00:00:00	f	f	10 x 23	Imposible la comunicación. 14-10-24	22000	2024-10-14 00:00:00	2023-12-04 00:00:00	230.00	t	3551	1	10101	51	1	35301	151	14	\N	51	1201	301	24	1351	2301
+43401	Avda CORRIENTES CASI Avda AMERICAS	f	2024-01-23 00:00:00	f	f	10 x 30		12000	2024-10-10 00:00:00	2024-06-19 00:00:00	300.00	f	3101	1	5801	51	1	35351	51	15	\N	1	1351	301	4	201	2301
+43451	Sargento Acosta esquina Rio Colorado	t	2024-05-02 00:00:00	f	f	12 x 36		18000	2024-10-04 00:00:00	2024-05-02 00:00:00	432.00	f	4051	1	29051	51	1	35401	151	23	10351	51	551	301	25	1051	2301
+59951	Calle interna - z/ Av braulio areco entre calle 24 y calle 20a	f	2025-05-14 00:00:00	f	f	30 x 42		200000	2025-05-14 00:00:00	2025-05-14 00:00:00	1267.00	f	5551	1	39451	51	1	49401	151	\N	\N	1	651	301	33	401	2301
+60001	CALLE 71, ENTRE CALLE COLOMBRES Y CALLE JOSE SERRANO. POSADAS	f	2025-05-20 00:00:00	f	f	11 x 31		22500	2025-05-20 00:00:00	2025-05-20 00:00:00	341.00	f	6701	1	39501	51	1	49451	151	\N	24701	51	551	301	35	451	2301
+60051	CALLE 92, ENTRE CALLE 113 Y CALLE LOS ESPINILLOS. SON 2 LOTES-PRECIOS UNITARIOS	f	2025-05-20 00:00:00	f	f	12 x 26		42000	2025-05-20 00:00:00	2025-05-20 00:00:00	312.00	f	6051	1	34651	51	1	49501	151	\N	\N	51	751	301	35	401	2301
+60101	Calle 97 entre calle 80 y Av Martin Fierro	f	2025-05-21 00:00:00	f	f	10 x 26		55000	2025-05-21 00:00:00	2025-05-21 00:00:00	260.00	f	5551	1	39451	51	1	49551	151	\N	\N	51	701	301	33	451	2301
+60151	CALLE BRASIL, ENTRE AV. SANTA CATALINA Y CALLE CHILE. 	f	2025-05-21 00:00:00	f	f	10,80 x38		180000	2025-05-21 00:00:00	2025-05-21 00:00:00	410.00	f	301	1	39551	51	1	49601	151	\N	\N	51	301	301	35	401	2301
+60201	CALLE EL CEIBO, ENTRE CALLE CATARATAS DEL IGUAZU Y CALLE TIERRA ROJA	f	2025-05-21 00:00:00	f	f	10 x 30		12000	2025-05-21 00:00:00	2025-05-21 00:00:00	300.00	f	5551	1	39451	51	1	49651	51	\N	\N	51	1351	301	35	51	2301
+2301	Ruiz de Montoya entre Maipú y Chacabuco	f	2025-05-05 00:00:00	f	f	10 x 42,5		8000	2025-05-05 00:00:00	2025-05-05 00:00:00	425.00	f	1051	201	\N	51	51	\N	1	21	12351	1	1251	251	21	51	2301
+60459	Calle Jardín América, entre calle Fachinal y calle Puerto Rico	f	2025-06-25 12:31:44.034668	f	f	10 x 36		18000	2025-07-03 14:44:34.373421	2025-06-25 15:31:44.034	360.00	f	6701	1	40055	51	1	4201	51	35	24856	51	1351	301	35	101	2301
+60462	CALLE ROSARIO VERA PEÑALOSA, ENTRE RUTA 206 Y CALLE ANTONIO BALCARCE	f	2025-06-25 13:57:07.436696	f	f	13 x 58		12000000	2025-06-25 13:57:07.453638	2025-06-25 13:57:07.45365	754.00	f	6701	1	40058	1	1	49905	51	9	24858	51	1351	301	35	301	151
+60465	Esquina corpus y ivira pita - zona residencia de gobernacion-Precios individuales	t	2025-06-25 14:42:50.503504	f	f	21,65 x 43,05		130000	2025-06-25 14:42:50.521695	2025-06-25 14:42:50.521709	932.00	f	2001	1	26901	51	1	49907	151	9	24752	51	801	301	33	401	2301
+60469	CALLE CASTRO BARROS, ENTRE CALLE SERRANO Y CALLE JOSE COLOMBRES.	f	2025-06-26 14:35:18.359768	f	f	10,60 x 30		24000	2025-06-26 14:35:18.380645	2025-06-26 14:35:18.380656	318.00	f	9355	1	40060	51	1	49911	151	9	24752	51	551	301	35	451	2301
+60470	CALLE CHARLES THAYS, ENTRE CALLE MARIO KEMPES Y CALLE S/N	f	2025-06-26 14:37:50.188554	f	f	16 x 39,50		10000000	2025-06-26 14:37:50.301832	2025-06-26 14:37:50.301854	632.00	f	8801	1	40061	1	1	49912	151	9	24752	51	1351	301	35	351	2301
+60475	CALLE FELIPE TAMAREU, EN ESQUINA CON CALLE L. PEREZ (129). POSADAS	t	2025-06-27 11:47:08.966765	f	f	15 x 30		42000000	2025-06-27 11:47:09.057194	2025-06-27 11:47:09.057205	450.00	f	6701	1	40063	1	1	49916	151	9	8051	51	901	301	35	451	2301
+60478	calle 178 esquina Avda almirante brawn	t	2025-06-27 12:04:11.557903	f	f	9 x 30		18000000	2025-06-27 12:04:11.57919	2025-06-27 12:04:11.579203	270.00	f	6701	1	40065	1	1	49919	151	9	11501	51	801	51	36	401	2301
+60479	Calle 176 entre Calle 123 y Calle 125	f	2025-06-27 12:09:00.992566	f	f	10 x 30		30000000	2025-06-27 12:09:01.013297	2025-06-27 12:09:01.013307	300.00	f	6701	1	40066	1	1	49920	151	9	13951	51	801	51	36	401	2301
+60483	esquina 10 de junio y General belgrano	t	2025-06-27 13:07:12.26013	f	f	11 x 32		28000	2025-06-27 13:07:12.294234	2025-06-27 13:07:12.294246	352.00	f	6701	1	40068	51	1	49922	151	9	24861	51	251	301	33	751	2301
+16101	Avda Independencia entre Avda Costanera y calle 25 de mayo	f	2025-03-18 00:00:00	f	f	10 x 32,68		8400	2025-06-18 14:38:39.186791	2025-03-18 03:00:00	326.80	f	1051	151	35951	51	51	\N	51	2	24852	1	1351	251	2	201	2301
+60460	calle 119 entre 146 y 142 	f	2025-06-25 13:35:40.555285	f	f	13,33 x 40,5		22000	2025-06-25 13:35:40.580444	2025-06-25 13:35:40.580466	540.00	f	6701	1	40056	51	1	49903	151	9	24857	51	801	51	36	401	2301
+60463	CALLE RUIZ DE MONTOYA, ENTRE CALLE MEZA Y CALLE 20 A. POSADAS	f	2025-06-25 14:25:19.024024	f	f	11,93 x 36,40		200000	2025-06-25 14:25:19.041666	2025-06-25 14:25:19.041678	434.00	f	2251	1	34251	51	1	49906	151	9	24752	51	301	301	35	401	2301
+60466	Colectora nacional 105 entre brown y peru-2 Lotes-Precios individuales	f	2025-06-25 14:50:10.268096	f	f	10 x 40		35000	2025-06-25 14:50:10.289796	2025-06-25 14:50:10.289814	400.00	f	6701	1	40059	51	1	49908	51	9	24859	51	1351	301	33	251	2301
+60471	CALLE CHARLES THAYS, ENTRE CALLE MARIO KEMPES Y CALLE S/N	f	2025-06-26 14:43:25.48441	f	f	16 x 39,50		10000000	2025-06-26 14:43:25.507146	2025-06-26 14:43:25.507164	632.00	f	8801	1	40061	1	1	49913	151	9	24752	51	1351	301	35	351	2301
+60476	Barrio privado Santa Cecilia - esquina-Lt 158	t	2025-06-27 11:55:54.567502	f	f	26.38x13.04x31.73x4.59x17.07x45.45		40000	2025-06-27 11:55:54.586273	2025-06-27 11:55:54.586283	1208.00	f	8801	1	40061	51	1	49917	1	9	24752	51	1251	301	33	1651	2301
+60480	Calle 176 entre Calle 123 y Calle 125	f	2025-06-27 12:12:44.795576	f	f	10 x 30		30000000	2025-06-27 12:12:44.820868	2025-06-27 12:12:44.820881	300.00	f	6701	1	40066	1	1	49920	151	9	13951	51	801	51	36	401	2301
+60484	CALLE 150, EN ESQUINA CON CALLE 67. 	t	2025-06-27 13:10:04.129502	f	f	15 x 30		30000	2025-06-27 13:10:04.245368	2025-06-27 13:10:04.245381	450.00	f	6701	1	40069	51	1	49923	151	9	15951	51	551	301	35	451	2301
+60456	Calle Gomez, entre calle Leonardo Soza y calle Malveira	f	2025-06-24 11:16:30.486591	f	f	10 x 30 mtrs		6000	2025-07-02 18:23:28.179495	2025-06-24 14:16:30.486	300.00	f	6701	201	40052	51	1	1	51	35	24853	51	1351	301	35	351	151
+60487	Calle 80 entre semilla y Avda Aguado	f	2025-07-02 19:08:09.804708	f	f	14.70 x 24.50 		42000	2025-07-02 19:08:09.824262	2025-07-02 19:08:09.824274	360.00	f	4051	1	40072	51	1	49926	151	9	24863	51	701	301	33	1051	2301
+60489	CALLE 168, EN ESQUINA CALLE ANTONIO ALVAREZ CONTE.-Son 2 lotes venta conjunta	t	2025-07-02 19:21:09.926694	f	f	(16 x 37) x 2		40000	2025-07-02 19:21:09.942561	2025-07-02 19:21:09.942575	1184.00	f	9358	1	39651	51	1	29251	151	9	24752	51	551	51	35	751	2301
+60402	rio uruguay entre curupayti y arroyo san juan	f	2025-06-13 19:01:57.871757	f	f	15 x 50		30000000	2025-07-02 19:27:53.176747	2025-06-13 22:01:57.871	750.00	f	6701	1	40002	1	1	49852	1	9	19351	51	1251	301	36	101	2301
+60501	comandante miño entre C.20 A Y AV.alma fuerte	f	2025-07-02 20:54:20.105334	f	f	9,20 x 36,80		220000	2025-07-02 20:54:20.136249	2025-07-02 20:54:20.136262	337.00	f	6601	1	40080	51	1	49935	151	9	24752	51	301	301	36	401	2301
+60404	Laureano Mardona entre Arroyo del monte y Leopoldo Ramos -2 lotes-precios unitarios	f	2025-06-13 19:30:31.687096	f	f	25 x 50		8000	2025-07-02 19:46:52.136387	2025-06-13 22:30:31.687	1250.00	f	3101	1	37701	51	1	49854	51	23	24752	51	1351	301	36	201	2301
+60493	Esquina Av centenario y beethoven	t	2025-07-02 20:02:26.344684	f	f	10 x 30		180000	2025-07-02 20:02:26.374931	2025-07-02 20:02:26.374942	300.00	f	9359	1	40074	51	1	49928	151	9	24752	1	301	301	33	751	2301
+60495	Avda 200 entre c 147 y 137 A	f	2025-07-02 20:14:10.814499	f	f	50 x 200		190000	2025-07-02 20:14:10.841541	2025-07-02 20:14:10.841556	10000.00	f	9360	1	40076	51	1	49930	151	9	24752	1	1001	301	36	451	2301
+5901	Calle Iguajay entre Urunday y Chivato	f	2024-10-10 00:00:00	f	f	10 x 30	Esta interesado quiere nuestros servicios, quiere saber los porcentajes que le cobramos por nuestro servicio, (tiene titulo cedido para la venta, no me supo decir que tipo de documentos) tiene servicio de agua, pilar pero no bajo la luz, y el precio es 15.000 dólares, pero no lo actualizo, quiere saber cuanto vale y actualizar el terreno, además edifico algo en el terreno. 7/3/25	25000000	2025-07-02 21:17:05.38486	2024-10-10 03:00:00	300.00	f	6701	1	8251	1	1	4651	51	15	23701	51	1351	301	25	151	2301
+1451	Calle sin nombre Las Colinas Garupa	f	2024-11-22 00:00:00	f	f	15,50 x 39,40	Esta por su cuenta ofreciendo, tiene todos los papeles, y si no puede vender se comunicara con nosotros, no acepta financiamiento. 7/3/25	6000000	2025-07-02 21:22:46.42028	2024-11-22 03:00:00	610.00	f	6701	1	32151	1	1	851	51	15	22801	51	1351	1	25	351	2301
+60503	Av. Comodoro Rivadavia, entre calle Coronel Álvarez (24) y calle Moritan (22)	f	2025-07-03 14:34:31.464848	f	f	12.27 X 36.81		300000	2025-07-03 14:41:35.115776	2025-07-03 17:34:31.464	452.00	f	9361	1	40081	51	1	1551	151	35	24866	1	301	301	35	401	2301
+10851	Av. 131 e/ calle 164 y calle 162-Lotes internos-Precios individuales	f	2024-02-27 00:00:00	f	f	10 x 30		26000	2025-07-02 21:59:39.89688	2024-02-27 03:00:00	300.00	f	3351	1	23151	51	1	8201	151	23	1101	51	1001	301	2	401	2501
+60457	Calle 117 A, entre Av. López y Planes y calle Gobernador Barreiro	f	2025-06-24 11:25:16.149077	f	f	9.55 x 25.05 mtrs		40000	2025-07-03 14:43:14.6334	2025-06-24 14:25:16.149	239.00	f	9352	1	40053	51	1	1501	151	35	24854	51	701	201	35	1051	2301
+60499	Calle Juncal entre los paraísos y mamerto gatti 	f	2025-07-02 20:30:15.017564	f	f	10x30		12000	2025-07-03 11:41:03.516091	2025-07-02 23:30:15.017	300.00	f	2001	1	40077	51	1	49933	51	33	24752	51	1351	301	33	51	1
+60505	sobre yguajay entre nogal y calle sin nombre	f	2025-07-03 19:58:30.669245	f	f	10.60 x 23.95	No quiere trabajar con inmobiliaria y tampoco quiere bajar el precio	13000	2025-07-03 20:01:12.954797	2025-07-03 22:58:30.669	253.87	f	6701	1	40082	51	1	49936	51	9	24867	51	1351	301	33	151	51
+5751	Monte Caceros esquina 25 de Mayo-Precio bloque	t	2024-12-17 00:00:00	f	f	20 x 30		13000	2025-07-04 11:27:21.953484	2024-12-17 03:00:00	600.00	f	6701	1	13001	51	1	4551	51	2	24754	51	1351	301	27	201	2301
+25101	San Jose entre Av. Chacabuco y Calle 84	f	2024-12-17 00:00:00	f	f	10 x 36,81	Titulo en sucesión, no acepta financiación, ya está con otra inmobiliaria pero quiere si se comunique un asesor de carles. Manifiesta que la venta es porque no quiere vivir más en el lugar, terreno muy grande. 7/3/25	45000	2025-07-04 11:43:22.70885	2024-12-17 03:00:00	368.00	f	6701	1	18201	51	1	19801	151	15	11851	51	701	51	32	451	2751
+20351	Calle Beethoven esquina Marcelo T. de Alvear	f	2024-12-17 00:00:00	f	f	15 x 30		90000	2025-07-04 11:46:09.632346	2024-12-17 03:00:00	450.00	f	6701	1	6501	51	1	15551	151	14	14351	51	301	51	32	751	2301
+34201	Calle 119, entre Av. Bustamante y Calle 104-Precio en bloque	f	2022-10-17 00:00:00	f	f	36, 80 x 36,80	No financia ni acepta permutas. 11-7-23. No se deja asesorar 18-10-23. Quiere que le llamen para asesorarlo 18-3-25	80000	2025-07-02 21:37:33.950538	2022-10-17 03:00:00	1384.00	f	6701	1	36351	51	1	27451	151	23	9251	51	751	251	16	1051	2301
+60461	Calle 123 entre 154 y los lapachos	f	2025-06-25 13:39:59.267064	f	f	10 x 36		12000	2025-06-25 13:39:59.298664	2025-06-25 13:39:59.298678	360.00	f	9353	1	40057	51	1	49904	151	9	24752	51	801	301	36	751	2301
+60464	Esquina corpus y ivira pita - zona residencia de gobernacion-Precio Bloque	t	2025-06-25 14:42:05.221503	f	f	21,65 x 43,05		130000	2025-06-25 14:42:05.240975	2025-06-25 14:42:05.240985	932.00	f	2001	1	26901	51	1	49907	151	9	24752	51	801	301	33	401	2301
+60467	calle 91 entre calle 160 y 162- barrio la viña-3 lotes-Precios individuales	f	2025-06-26 14:19:23.387498	f	f	11 x 35		22500	2025-06-26 14:19:23.419447	2025-06-26 14:19:23.419459	385.00	f	2001	1	26901	51	1	49909	151	9	24752	51	801	301	33	401	2301
+60468	esquina dutra y av san martin	f	2025-06-26 14:26:45.027565	f	f	9,20 x 36,81		90000	2025-06-26 14:26:45.05791	2025-06-26 14:26:45.057921	337.00	f	9354	1	20351	51	1	49910	151	9	24752	51	701	301	33	401	2301
+17251	LAS ARAUCARIAS ENTRE 104 Y 106	f	2024-01-22 00:00:00	f	f	10 x 36,18		50000	2025-07-04 11:42:02.736556	2024-01-22 03:00:00	362.00	f	6701	1	40084	51	1	12901	151	2	14101	51	751	301	4	751	2301
+60477	calle 178 entre 85 y 89	f	2025-06-27 12:01:00.033394	f	f	10 x 30		30000	2025-06-27 12:01:00.12151	2025-06-27 12:01:00.121524	300.00	f	6701	1	40064	51	1	49918	151	9	24860	51	801	51	36	401	2301
+60481	Calle 182 y Calle 123	t	2025-06-27 12:50:53.799181	f	f	fondo 22.68 / costado derecho 34.98 /  costado izquierdo 30 / frente 4.69 		24000	2025-06-27 12:50:53.937415	2025-06-27 12:50:53.937428	410.00	f	9357	1	40067	51	1	49921	151	9	24752	51	801	301	36	401	2301
+60490	CALLE 168, EN ESQUINA CALLE ANTONIO ALVAREZ CONTE.-Son 2 lotes venta conjunta	t	2025-07-02 19:23:30.238776	f	f	(16 x 37) x 2		40000	2025-07-02 19:23:30.335991	2025-07-02 19:23:30.33601	1184.00	f	9358	1	39651	51	1	29251	151	9	24752	51	551	51	35	751	2301
+60485	AV. DE LAS AMERICAS, ENTRE CALLE 67 Y CALLE 69. POSADAS	f	2025-07-02 18:57:45.113044	f	f	12.06 X 32.71		25000	2025-07-02 18:57:45.1289	2025-07-02 18:57:45.128911	395.00	f	6701	1	40070	51	1	49924	151	9	24752	1	551	301	35	451	2301
+60486	AV. DE LAS AMERICAS, EN ESQUINA CON CALLE 75B. 	f	2025-07-02 19:03:30.259486	f	f	10 x 35		16000	2025-07-02 19:03:30.282454	2025-07-02 19:03:30.282471	350.00	f	6701	1	40071	51	1	49925	151	9	24862	1	551	301	35	451	5102
+60488	AV. CHACABUCO, ENTRE CALLE SORIA Y CALLE SAN JOSE. POSADAS	f	2025-07-02 19:10:51.501702	f	f	10 x 36,80		45000	2025-07-02 19:10:51.518932	2025-07-02 19:10:51.518944	368.00	f	5051	1	40073	51	1	29201	151	9	24752	1	701	51	35	451	2301
+60403	Almada entre Ruiz Diaz y Ruta 105-Villalonga	f	2025-06-13 19:24:08.617638	f	f	10 x 30		18000	2025-07-02 19:30:53.148349	2025-06-13 22:24:08.617	300.00	f	3101	1	37701	51	1	49853	51	23	24752	51	1351	301	36	251	2301
+60492	Sobre calle sin nombre y calle 195 - Pueblo chico-4 lotes precios individuales	f	2025-07-02 19:56:25.93441	f	f	12 x 34		21000	2025-07-02 19:56:25.95983	2025-07-02 19:56:25.959841	380.00	f	5101	1	9151	51	1	49927	151	9	24752	51	1151	301	33	1501	2301
+60494	Calle sin nombre y jose ramallo - El chogui-Son 2 lotes-Precios unitarios	t	2025-07-02 20:08:54.30452	f	f	12,26 x 42,50	Entrega 50% saldo 6 meses. Tiene un arroyo que le afecta\n	5000000	2025-07-02 20:08:54.324617	2025-07-02 20:08:54.324631	521.00	f	6701	1	40075	1	1	49929	151	9	24864	51	1351	301	33	351	2301
+60497	Fachinal y Garuape-B° Nuevo Garupá	f	2025-07-02 20:19:38.801259	f	f	10 x 36		13000000	2025-07-02 20:19:38.827055	2025-07-02 20:19:38.827073	360.00	f	4051	1	40078	1	1	49932	51	9	24865	51	1351	251	36	251	51
+60500	SAN MARCOS ENTRE OJO DE AGUA Y SAN MARCOS 	f	2025-07-02 20:39:04.935817	f	f	10 x 33		72000	2025-07-02 20:39:04.953028	2025-07-02 20:39:04.953042	333.00	f	8401	1	40079	51	1	49934	151	9	24752	51	51	301	36	751	2301
+3501	Avda Mitre e/ Avda Corrientes y calle Jujuy	f	2024-08-08 00:00:00	f	f	4,5 x 24,30	Quiere que ofrezcamos en redes, pero no hace contrato de exclusividad ni ningún contrato. 7-3-25	120000	2025-07-02 21:10:13.961055	2024-08-08 03:00:00	109.00	f	6701	1	24701	51	1	2801	151	23	8401	1	1	251	2	901	3351
+60458	Calle San Marcos, entre calle San Ramon y calle La Plaza	f	2025-06-24 13:57:29.161802	f	f	20 x 40		30000000	2025-07-03 14:44:03.777042	2025-06-24 16:57:29.161	800.00	f	6701	1	40054	1	1	1751	51	35	24855	51	1351	51	35	251	2301
+30601	Juan Franco entre Pedro Isaza y Romero 	f	2024-12-23 00:00:00	f	f	15 x 40		15000000	2025-07-04 12:29:14.509418	2024-12-23 03:00:00	600.00	f	6701	1	21051	1	1	24651	51	23	7851	51	1351	301	27	351	2301
+60502	Calle Sarandi, entre calle S/N y calle Guemes 	t	2025-07-03 14:29:59.393737	f	f	10 x 39		15000000	2025-07-03 14:40:56.382374	2025-07-03 17:29:59.393	390.00	f	9361	1	40081	1	1	501	1	35	24866	51	1251	301	35	51	2301
+60472	Calle Artigas, entre calle Lorenzini y calle Japon	f	2025-06-26 14:51:28.894391	f	f	9.20 x 36.81		35000	2025-07-03 14:44:57.763992	2025-06-26 17:51:28.894	338.00	f	8401	1	40062	51	1	8101	151	35	24752	51	751	301	35	751	2301
+60506	pringles entre uruguay y balbin	f	2025-07-03 20:16:39.456862	f	f	10x37.5		12000	2025-07-03 20:16:39.474893	2025-07-03 20:16:39.474905	375.00	f	8301	1	40083	51	1	49937	1	9	24752	51	1251	301	33	51	1
+39851	Calle Malinche entre Av Centenario y Calle 38 	f	2024-11-05 00:00:00	f	f	13,38 x 38,05	Solo Contado. 7-3-25	65000	2025-07-04 13:53:59.079811	2024-11-05 03:00:00	508.00	f	6701	1	16501	51	1	32151	151	15	15251	51	851	51	32	401	2301
+42801	SAN MARCOS ENTRE LORENZINI Y CALLE 114A	f	2022-06-02 00:00:00	f	f	10 x 50	No tienen apuro. Son 4 hermanos uno vive en buenos aires. Estan dispuestos a trabajar con nosotros. Nos conocen. 8/11/23. Chris	75000	2025-07-04 12:44:31.773425	2022-06-02 03:00:00	500.00	f	6701	1	18601	51	1	34801	151	9	18101	51	101	51	13	1051	4151
+54801	Calle 25 de Mayo entre Tucumán y Santiago del Estero	f	2024-06-27 00:00:00	f	f	11 x 21		130000	2025-07-04 12:55:54.932372	2024-06-27 03:00:00	234.00	f	6701	1	5651	51	1	44951	151	21	651	51	1	51	22	851	2651
+52901	Calle 154 entre Figueredo y Av. 117-Precio conjunto	f	2025-01-09 00:00:00	f	f	20,44 x 55		35000	2025-07-04 14:39:48.577546	2025-01-09 03:00:00	1124.00	f	6701	1	30851	51	1	43301	151	15	19901	51	801	51	32	751	2301
+35851	Colon Entre Salta y Catamarca	f	2023-06-06 00:00:00	f	f	8 x 23,30+8 x 9	Aceptan que ofrezcamos la propiedad	150000	2025-07-04 13:08:48.852097	2023-06-06 03:00:00	258.00	f	6701	1	22551	51	1	28701	151	9	11651	51	1	51	22	601	2301
+37501	Loreto entre Fachinal y Campo Grande  	f	2025-01-13 00:00:00	f	f	10,44 x 34,5		12000000	2025-07-04 13:10:30.149523	2025-01-13 03:00:00	360.00	f	6701	201	26151	1	1	30201	51	21	18751	51	1351	1	27	101	2301
+43501	Avda LAS HERAS ENTRE LOPEZ Y PLANES Y PABLO ALLAIN	f	2024-04-18 00:00:00	f	f	11,23 x 43,30	Puede haber financiación. 11-3-25	70000	2025-07-04 14:00:47.528252	2024-04-18 03:00:00	486.00	f	6701	1	11151	51	1	35451	151	14	12501	1	651	301	4	1051	2301
+23101	Calle 44b casi Calle 166	f	2023-10-02 00:00:00	f	f	15 x 100 x 99 (Triangulo)		45000	2025-07-04 14:09:15.640365	2023-10-02 03:00:00	780.00	f	6951	1	31251	51	1	18051	151	23	18451	51	201	51	22	1051	2301
+51951	Iguajay entre Nogal y Calle sin nombre	f	2024-08-29 00:00:00	f	f	10 x 24		9000000	2025-07-04 14:14:11.741254	2024-08-29 03:00:00	240.00	f	6701	1	30751	1	1	42601	51	21	18601	51	1351	301	27	151	51
+56051	Av. Los Horneros entre Las Camelias y Los Jazmines	f	2025-01-23 00:00:00	f	f	9,80 x 30		28000	2025-07-04 14:21:57.400289	2025-01-23 03:00:00	298.00	f	6701	1	23551	51	1	46051	151	15	20601	1	1201	51	32	401	2301
+60507	Esquina estado de israel y suecia	t	2025-07-04 20:57:42.197502	f	f	16.20x20		120000	2025-07-04 20:57:42.229556	2025-07-04 20:57:42.229568	324.00	f	4051	1	40085	51	1	49938	151	9	24868	51	101	301	33	401	1
+60508	Juncal entre los paraisos y mamerto gatti	f	2025-07-04 21:07:07.434477	f	f	10x30 c/u	12.000 c/u o el bloque a USD 24000	12000	2025-07-04 21:07:07.486254	2025-07-04 21:07:07.486265	300.00	f	2001	1	40086	51	1	49931	51	9	24752	51	1351	301	33	51	1
+14801	calle 18 de agosto entre ruta 105 y calle constitucion	f	2022-09-02 00:00:00	f	f	10 x 33,90		14000000	2025-07-07 11:40:15.412576	2022-09-02 03:00:00	339.00	f	6701	1	36101	1	1	11151	51	9	22751	51	1351	201	21	251	2301
+18301	Calle Cordoba y Costanera - Candelaria - Bloque	t	2019-02-14 00:00:00	f	f	60 x 54	Contado / Financia entrega 70% saldo a 6 meses/ofrece solo el bloque/quiere que le quede limpio ese monto	130000	2025-07-07 11:43:30.897002	2019-02-14 03:00:00	3240.00	f	7051	1	22701	51	51	13801	1	2	15651	51	1251	251	21	51	2301
+58251	Calle 146 (Laprida) entre calle 73A y Av Juan Jose Paso -Lt9	f	2024-09-17 00:00:00	f	f	12.65 x 36.50		15000	2025-07-07 11:48:07.932851	2024-09-17 03:00:00	461.00	f	6701	1	28451	51	1	48001	151	21	9701	51	551	1	27	451	2301
+19551	COLECTORA RUTA 12 - LAS PERDICES-4 Lotes - Precios individuales	t	2023-03-10 00:00:00	f	f	 2 LOTES 21X43 C/U ( SALEN 4 LOTES DE 10,5X43) C/U	OfertaUSD18000+6*USD2500-Rechazo 10/3/23va a ver autorizacion. No responde 22/8/23	24000	2025-07-07 12:32:56.065943	2023-03-10 03:00:00	1800.00	f	6701	1	9551	51	1	14851	1	14	24151	151	1251	301	4	101	2301
+60509	calle 180 entre calle 147 y callen 143	f	2025-07-10 18:16:47.907875	f	f	10.73 x 26.57		16000	2025-07-10 18:16:47.932322	2025-07-10 18:16:47.932341	285.00	f	2401	1	25451	51	1	49939	151	9	24752	51	1001	301	33	451	1
+60510	calle 24 entre av aguado y gotichalk	f	2025-07-10 18:21:17.797128	f	f	10.52x31.80		95000	2025-07-10 18:21:17.828381	2025-07-10 18:21:17.828385	335.00	f	2401	1	19251	51	1	49940	151	9	24752	51	651	301	33	401	1
+9551	Calle Garuhape entre fachinal y Ruiz de Montoya	f	2022-01-27 00:00:00	f	f	10 x 36	No quiere que le llamemos mas, ni trabajar con inmobiliarias 19-10-22	27000	2025-07-11 14:23:11.204564	2022-01-27 03:00:00	360.00	t	6701	1	36651	51	1	7151	51	2	1801	51	1351	301	16	101	51
+10101	CALLE OBERA E/ WANDA Y 9 DE JULIO	f	2022-12-23 00:00:00	f	f	17 x 46	No le afecta el arroyo de al lado. No acepta la llamada. 5-6-24. Corta la llamada. 30/8/24	2350000	2025-07-11 14:25:27.188192	2022-12-23 03:00:00	786.00	t	6701	1	14001	1	1	7651	51	9	2451	51	1351	301	4	101	451
+10251	Los Paraisos y Timbo entre Cataratas del Iguazu y Av Alberto Roth-Loteo-Precios unitarios-Lt.23	f	2024-08-23 00:00:00	f	f	10 x 50	No quiere trabajar con inmobilairias. 17/1/25	10000000	2025-07-11 14:27:10.53564	2024-08-23 03:00:00	500.00	t	6701	1	25951	1	1	7751	51	14	22901	51	1351	301	27	51	2301
+\.
+
+
+--
+-- Data for Name: locality; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.locality (id, name) FROM stdin;
+1	CANDELARIA
+51	GARUPÁ
+101	ITUZAINGÓ
+151	POSADAS
+\.
+
+
+--
+-- Data for Name: locality_statistic; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.locality_statistic (total, locality_id, statistic_report_id) FROM stdin;
+457	151	1
+120	51	1
+82	1	1
+462	151	51
+108	51	51
+73	1	51
+484	151	101
+117	51	101
+80	1	101
+510	151	151
+127	51	151
+89	1	151
+531	151	201
+126	51	201
+98	1	201
+547	151	251
+133	51	251
+103	1	251
+602	151	301
+138	51	301
+111	1	301
+629	151	351
+143	51	351
+111	1	351
+668	151	401
+144	51	401
+108	1	401
+664	151	451
+144	51	451
+116	1	451
+663	151	501
+146	51	501
+119	1	501
+676	151	551
+152	51	551
+111	1	551
+681	151	601
+157	51	601
+101	1	601
+686	151	651
+162	51	651
+95	1	651
+666	151	701
+153	51	701
+98	1	701
+627	151	751
+156	51	751
+98	1	751
+608	151	801
+149	51	801
+98	1	801
+631	151	851
+145	51	851
+97	1	851
+639	151	901
+151	51	901
+100	1	901
+665	151	951
+158	51	951
+111	1	951
+711	151	1001
+175	51	1001
+116	1	1001
+724	151	1051
+184	51	1051
+121	1	1051
+753	151	1101
+182	51	1101
+124	1	1101
+716	151	1151
+190	51	1151
+128	1	1151
+744	151	1201
+193	51	1201
+116	1	1201
+753	151	1251
+182	51	1251
+118	1	1251
+754	151	1301
+174	51	1301
+120	1	1301
+752	151	1351
+175	51	1351
+116	1	1351
+739	151	1401
+182	51	1401
+120	1	1401
+733	151	1451
+183	51	1451
+124	1	1451
+736	151	1501
+186	51	1501
+127	1	1501
+764	151	1551
+187	51	1551
+127	1	1551
+795	151	1601
+189	51	1601
+125	1	1601
+798	151	1651
+188	51	1651
+125	1	1651
+812	151	1701
+202	51	1701
+128	1	1701
+796	151	1751
+209	51	1751
+128	1	1751
+796	151	1801
+212	51	1801
+124	1	1801
+783	151	1851
+212	51	1851
+124	1	1851
+122	1	1852
+209	51	1852
+1	101	1852
+796	151	1852
+137	1	1902
+236	51	1902
+2	101	1902
+873	151	1902
+137	1	1952
+236	51	1952
+2	101	1952
+873	151	1952
+137	1	2002
+236	51	2002
+2	101	2002
+873	151	2002
+137	1	2052
+236	51	2052
+2	101	2052
+873	151	2052
+137	1	2102
+236	51	2102
+2	101	2102
+873	151	2102
+137	1	2152
+236	51	2152
+2	101	2152
+873	151	2152
+137	1	2202
+236	51	2202
+2	101	2202
+873	151	2202
+137	1	2252
+236	51	2252
+2	101	2252
+873	151	2252
+137	1	2302
+236	51	2302
+2	101	2302
+873	151	2302
+137	1	2352
+236	51	2352
+2	101	2352
+873	151	2352
+137	1	2402
+236	51	2402
+2	101	2402
+873	151	2402
+137	1	2452
+236	51	2452
+2	101	2452
+873	151	2452
+137	1	2502
+236	51	2502
+2	101	2502
+873	151	2502
+137	1	2552
+236	51	2552
+2	101	2552
+873	151	2552
+137	1	2602
+236	51	2602
+2	101	2602
+873	151	2602
+137	1	2652
+236	51	2652
+2	101	2652
+873	151	2652
+137	1	2702
+236	51	2702
+2	101	2702
+873	151	2702
+138	1	2752
+238	51	2752
+2	101	2752
+872	151	2752
+\.
+
+
+--
+-- Data for Name: particular; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.particular (id, name) FROM stdin;
+24701	Núñez, Emanuel (Familiar del dueño)
+24751	Temporetti-Martinez
+24756	Bobadilla, Manuela
+24757	Villareal, Micaela
+24802	Toledo, Facundo
+24807	Albi
+24752	\N
+24803	Maidana, Sergio
+24808	Marilina
+24753	Ordoñez, Modesto
+24804	Racalde, Toribio Esteban
+24809	Susana
+24754	Hugo
+24805	Caltillo, Maxi
+1	´Barthe, Félix-Acosta, María Teresa
+51	Abente, Daniela
+101	Abrahamson, Carolina
+151	Acosta, Marian
+201	Acosta, Patricia
+251	Acuña, Facundo
+301	Adrian
+351	Aguirre, Antonio
+401	Aguirre, Aurora
+451	Alarcon, Elisa
+501	Alberino, Lucas
+551	Albertella, Ricardo y Diego
+601	Albornoz, Maria Belen
+651	Aldo
+701	Alfredo (familiar de los herederos)
+751	Almeida, Lucas
+801	Alonso, Carolina
+851	Alvez, Daniel
+901	Amores, Lautaro
+951	Andrea
+1001	Angel Cardozo Inmobiliaria
+1051	Angela
+1101	Antunez, José
+1151	Antunez, Vilma
+1201	Aragones, Maria Eugenia
+1251	Arce, Gabriela
+1301	Arquin Inmobiliaria
+1351	Arza, Claudio
+1401	Ayala, Alba
+1451	Ayala, Angel Ramón
+1501	Baez Benitez-Trinidad
+1551	Baez, Alejandro
+1601	Baez, Victoria
+1651	Balbuena, Felix
+1701	Baldoneyro, Hugo
+1751	Barrientos, Gabriel
+1801	Barrios
+1851	Barrios, Bernardina
+1901	Batista, Horacio
+1951	Beighbeder, Carlos María
+2001	Belén
+2051	Benitez, Andres
+2101	Benjamín
+2151	Beretta, Diana
+2201	Berozub, Raúl
+2251	Blanc, Maria Angeles
+2301	Blanco, Dani
+2351	Blanco, Manuel
+2401	Blaszcyk, Javier
+2451	Bodanof, Natalia
+2501	Bodnar, Marcio (Esposo)-Velazquez, Yanina (dueña)
+2551	Bogado, Jose
+2601	Bogado, Lucas
+2651	Bogarín, José María
+2701	Bordón, Dario
+2751	Bordon, Yuri
+2801	Borowski, Diego
+2851	Botelli, Sandro
+2901	Botelli, Sandro-Gonzalez, Manira
+2951	Braetz, Sonia (Kruk, Martín)
+3001	Branchesi
+3051	Britez, Claudio
+3101	Broemser, Alberto
+3151	Burgo, Abelardo
+3201	Bustamante
+3251	Cabrera, Gladys
+3301	Cabrera, Iko e Hijo
+3351	Caceres, Remigio Carlos
+3401	Cañete, Walter
+3451	Caramuto, Gisela
+3501	Cardozo, Pablo
+3551	Cardozo, Patricia
+3601	Cardozo, Victor
+3651	Careaga, Ester
+3701	Carlés C&T
+3751	Carneiro, Nicolás
+3801	Carrizo, Belen
+3851	Carro, Juan Manuel
+3901	Caruza, Hugo
+3951	Casti, German
+4001	Casti, Germán
+4051	Castillo de Dominguez, Rosa
+4101	Castro, Mario
+4151	Cecchini, Anita
+4201	Centurión, Joaquín
+4251	César
+4301	Cesar Rolando (Abogado de la familia)
+4351	Chas, Matías
+4401	Chas, Mauricio
+4451	Chavez, Rosaura
+4501	Chemes, Roberto Nicolas
+4551	Cima, Gabriela-Ortiz, JAvdaier
+4601	Clerici, Rocío
+4651	Coco
+4701	Colman, Esther
+4751	Congos, Enrique (Abogado y esposo de una de las propietarias)
+4801	Conrado, Miguel
+4851	Construyendo Activos SRL
+4901	Cornier Terrazas, Nilia
+4951	Costa, Vicente
+5001	Cristaldo, Marcelino
+5051	Cristian
+5101	Cristian (Pareja)
+5151	Cubas, Ignacio
+5201	Cura, Edgardo
+5251	Da Rosa, Jose Israel
+5301	Da Silva, Irene
+5351	Da Silva, Roberto
+5401	Dahir, Lionel
+5451	Dam
+5501	Damian
+5551	Damián
+5601	Daniel
+5651	Daniel Acosta
+5701	Daniela
+5751	David Gonzalez
+5801	Daviña Inmobiliaria
+5851	De Lima, Sebastián
+5901	De Olivera, José Fransisco
+5951	De Olivera, Mateo
+6001	Delebec
+6051	Delgado Ignacio
+6101	Delro, Gabriel
+6151	Demetria Agaliotis
+6201	Deusich, Jhonantan
+6251	Dhamer, Luis
+6301	Di Gilio, Andabel-Propietaria(3764737094)
+6351	Dominguez Rodriguez, Manuel
+6401	Dominguez, Facu
+6451	Dominguez, Mariana
+6501	Dos Santos, Ariel
+6551	Dra. Saenz (Abogada)
+6601	Drocina, Claudia
+6651	Duarte, Pablo
+6701	Durán, Laura
+6751	Eduardo
+6801	Elmer Irizaga y Raul    
+6851	Elmo
+6901	Encina, Claudia
+6951	Enriquez, Arturo
+7001	Ernesto
+7051	Espindola, Welly
+7101	Espinoza, Cecilia
+7151	Espinoza, Juan
+7201	Espinoza, Oscar
+7251	Esponda, Eduardo
+7301	Estudio Fernandez Pillado-Sebastian Carrion
+7351	Eva
+7401	Ezequiel
+7451	Fabián
+7501	Fabiana
+7551	Falcon
+7601	Familia Pauluk
+7651	Fazio, Leonardo
+7701	Félix
+7751	Fénix Inmobiliaria
+7801	Fénix Inmobiliaria-Rubleski, Rubén
+7851	Fernanda
+7901	Fernandez, Cesar (Abogado)
+7951	Fernandez, Gustavo
+8001	Fernandez, Juan Jose
+8051	Fernando
+8101	Ferndandez, Diego
+8151	Ferreira Esteban
+8201	Ferrer, Miguel
+8251	Filich, Claudia
+8301	Fiorino, Agustin
+8351	Fisher, Andres Sebastián
+8401	Fleitas, Graciela
+8451	Flia Medvedeff
+8501	Flia Perez
+8551	Flia Señuka-Saul (marido de una de las dueñas, son 3 dueñas)
+8601	Florencia
+8651	Fontana, Mariela
+8701	Forestal La Rama (Balmaceda, Alice)
+8751	Fretes, Luis Emilio
+8801	Gabriel
+8851	Gabriel Gonzales/ Arce Inmobiliaria
+8901	Gabriela
+8951	Gabriele, Mariano
+9001	Gadea, Ariel
+9051	Gadea, Margarita
+9101	Galeano, Marta
+9151	Garay, Cristian 
+9201	Garayglugue, Sergio
+9251	Garcia, Ricardo
+9301	Gerónimo
+9351	Giacosa, Ricardo
+9401	Gimenez, Fabio
+9451	Gimenez, Fernando
+9501	Glinka, Lucas
+9551	Godoy, Jose
+9601	Godoy, Olga
+9651	Gomez, Alberto
+9701	Gomez, Norma
+9751	Gonzalez , Ruben
+9801	Gonzalez Medina, Fernando
+9851	Gonzalez, Alberto
+9901	Gonzalez, Carlos
+9951	Gonzalez, Diego
+10001	Gonzalez, Gisella
+10051	Gonzalez, Matías
+10101	Gonzalez, Raul (Abogado)
+10151	Gonzalez, Santi
+10201	Gregorio, Juan
+10251	Griselda, Noemi
+10301	Gueret, Carlos
+10351	Gueret, Emilio
+10401	Gueret, marcelo
+10451	Guidura, Ihan
+10501	Guidura, Juan
+10551	Hahn, Rodolfo
+10601	Halty, Claudia y Quiroz, Ernesto
+10651	Hector
+10701	Héctor
+10751	Hernan Emilio
+10801	Hernan Rivero y Hornos
+10851	Hernan, Hermano de la propietaria
+10901	Hernandez, Melisa
+10951	Hoekstra, Cristian
+11001	Husto, Nicolás
+11051	Ibarra, Leonardo
+11101	Iberti, Cristina
+11151	Imlauer, Federico (Sonia)
+11201	Imlauer, Gustavo
+11251	Jaque, Gabriel
+11301	Javier
+11351	Javier Borges do Canto
+11401	Joaquín y Luciana
+11451	Jobornicki, Juan (El numero es de la hija)
+11501	Jorge
+11551	Jose
+11601	José
+11651	Juan
+11701	Juan (Encargado de la venta)
+11751	Juan Carlos
+11801	Juan Daniel
+11851	Juana
+11901	Judkevich, Pablo
+11951	Julia
+12001	Julio
+12051	Karuchek, Matías
+12101	Kebedo, Sergio
+12151	Kener, Mario
+12201	Kijko, Alejandro
+12251	Kitegroski, José
+12301	Kluger, Viviana
+12351	Kosachek, Liliana (Sedko Propiedades-Eldorado)
+12401	Kowaleski, Luis
+12451	Kowalewski, Hector
+12501	Krutki, Alejandro
+12551	Kunraht, Dante
+12601	Kuzniruk, Marcelo
+12651	La Iglesia, Mario
+12701	Lafert, Adrián
+12751	Lafuente, patricia
+12801	Lansky, Juanjo
+12851	Laudín Negocios inmobiliarios
+12901	Laura
+12951	Lavalleja, Guillermo
+13001	Lawchoski, Valeria
+13051	Ledesma, Jorge
+13101	Leiva & Hidalgo Inmobiliaria
+13151	Leiva y Hidalgo Inmobiliaria
+13201	Lemes, Angelo
+13251	Lemos, Rocío
+13301	Lezcano, Cristina
+13351	Lili
+13401	Lindheimer, Jorge
+13451	Linkoniene, Paula
+13501	Lisandro
+13551	LitorCol
+13601	Lopez Ramirez, Marcelo
+13651	Lopez, Alan Matías
+13701	Lopez, Sofía
+13751	Lorena (Propietaria)
+13801	Lorena Valiente
+13851	Loteo 208 lotes
+13901	Lucas
+13951	Luis
+14001	Macena, Josefina
+14051	Machado, Margarita
+14101	Madelaire, Iris
+14151	Magali
+14201	Manuel
+14251	Marcela 
+14301	Marcelo
+14351	Marcelo (Amigo del dueño)
+14401	Marchesini, Jose María
+14451	Marcos
+14501	Maria Eugenia
+14551	Mariana Losavio
+14601	Mariela
+14651	Marlene
+14701	Martinez Canteros, Claudia
+14751	Martinez, Daniel
+14801	Martínez, Emilia
+14851	Martinez, Lorena
+14901	Martínez, María de los Angeles
+14951	Marylin
+15001	Masso, Cecilia-Masso, Luis
+15051	Matías
+15101	Matias 
+15151	Mazal, Agustina
+15201	Mazal, Samuel
+15251	Medina, Carlos
+15301	Medina, Carlos Javier
+15351	Melanie
+15401	Mendieta, mario
+15451	Meneses, Vanesa
+15501	Mereles, Rubén
+15551	Merlo, Claudia
+15601	Miguel
+15651	Mirta y Julio Fernandez
+15701	Mision Inmobiliaria
+15751	Mision Servicios Inmobiliarios
+15801	Modgans, Erica
+15851	Molas, Adolfo
+15901	Monsú propiedades
+15951	Monzón, Patricia
+16001	Natanael
+16051	Negro, Daiana
+16101	Nelson
+16151	Neschuk, Natalia
+16201	Nestor
+16251	Nezechuk, Loreley
+16301	Nimeth, Jorge
+16351	Noe Clelia Almada/ Lucia Aide Almada 
+16401	Nolasco ,Pedro-Rey, José
+16451	Nora
+16501	Norberto
+16551	Norma
+16601	Novaresio, Agustín
+16651	Nuñez, Alberto
+16701	Obdulio
+16751	Ojeda, Roberto
+16801	Oleksow, Natalia
+16851	Olivera, Natalia
+16901	Olivero
+16951	Olmo, Jose
+17001	Oria, Renzo
+17051	Ortellado, Germán
+17101	Ortigoza Peralta, Mario
+17151	Ortiz, Rosana
+17201	Ortiz, Silvina
+17251	Oscar
+17301	Oscar José
+17351	Pablo
+17401	Paola
+17451	Paola y Elio
+17501	Pared, Ramón
+17551	Paredes De Cardozo, Gladys
+17601	Pautsch, Germán
+17651	Pegels, Ignacio
+17701	Pereira, Gustavo
+17751	Perez, Claudia
+17801	Perren, Gabriel (Fernando)
+17851	Perren, Gabriel (Flavia)
+17901	Perren, Gabriel (Gabriel)
+17951	Perren, Gabriel (Mirta)
+18001	Piñeiro - Martins
+18051	Piris, Mauricio
+18101	Piris, Victor 
+18151	Pohorylow, Jorge
+18201	Portillo, Juan
+18251	Poterala, Sonia
+18301	Prieto, Sebastián
+18351	Procachi, Guillermo
+18401	Propietaria Yanina  Cel. 4432010
+18451	Propietario: Ibarra, Nico
+18501	Propietario:De Silvestre, Natalia
+18551	Quetglas, Nahuel
+18601	Quiñones, Kevin
+18651	Quintana, Augusto
+18701	Quiroz, Walter
+18751	Ramirez, José
+18801	Ramirez, Sonia
+18851	Ramos, Claudio
+18901	Rasgido, Jhon
+18951	Rasguido, Jean Paul
+19001	Raul (Drones Posadas)
+19051	Reichelt, Tamara
+19101	Ricardo
+19151	Riera, Alejandro
+19201	Rina
+19251	Roa, Gerardo (Hijo del propietario)
+19301	Roa, Rolo
+19351	Roberto
+19401	Rocabert, Cacho
+19451	Rodolfo
+19501	Rodriguez, Abraham
+19551	Rodriguez, Erica
+19601	Rodriguez, Héctor
+19651	Rodriguez, José
+19701	Rodriguez, Mario
+19751	Rodriguez, Martín
+19801	Rojas, Adrián
+19851	Rojas, Aldo
+19901	Rolando
+19951	Rolón, Manu
+20001	Romero, Hugo
+20051	Romilda Alvez Fernandez
+20101	Romualdo
+20151	Rosa (la señora de dominguez)
+20201	Rosa, Sonia
+20251	Rossana
+20301	Rotela Martillero/Nuñez, Gisela Intermediaria
+20351	Ruben
+20401	Rubén
+20451	Ruben Amigo del dueño
+20501	Rubén Osvaldo
+20551	Rubleski, Martín
+20601	Rudi
+20651	Ruiz
+20701	Ruiz Diaz, Ernesto
+20751	Ruiz, Claudio
+20801	Salerno, Fernando
+20851	Salvador, Monica
+20901	Sanche<, Ulisses
+20951	Sanchez, Alejandro
+21001	Sanchez, Gustavo
+21051	Santander Fretes, José
+21101	Sarasua, Victor
+21151	Sarmsla, Daniel
+21201	Savini, Lorena
+21251	Schelske, Rodolfo
+21301	Schroder, Barbara
+21351	Sebastián
+21401	Sena, Daniel
+21451	Sergio (Abogado)
+21501	Sergio. El propietario no esta aca. Esta ofreciendo el amigo
+21551	Sesmero, Luis
+21601	Shrimmer, Eduardo
+21651	Silva, Martín
+21701	Silva, Sebastián
+21751	Silveira, Adrián
+21801	Singular Inmobiliaria
+21851	Sladic, Mario
+21901	Solari Bienes Raices
+21951	Solis, Mabel
+22001	Solís, Marcelo
+22051	Sorzana, Rodriguez
+22101	Sosa, Juan Pablo
+22151	Soto Wipplinger74%-Carlés C&T26%
+22201	Sra Scarso
+22251	Suarez, Fransisco
+22301	Suárez, Juan Carlos
+22351	Suarez, Julio
+22401	Suarez, Mariano
+22451	Suboski, Gerardo
+22501	Taborda, Dario Javier
+22551	Tabossi, Horacio
+22601	Tajes, Oscar
+22651	Tamara
+22701	Tartile
+22751	Tedier, Nair
+22801	Texeira, Claudio
+22851	Texeira, Ruben
+22901	Tico Maderas
+22951	Torreani, Nicolas
+23001	Trevisan Inmobiliaria
+23051	Turano, Adrián
+23101	Ulises
+23151	Urbanija, Martín-Vassiliades, Carola
+23201	Valenzuela, Horacio
+23251	Vallejos, Carlos
+23301	Vangeli, Miguel
+23351	Vargas, Gustavo Fabián
+23401	Velazquez, Marcelo
+23451	Viana, Carlos
+23501	Viana, Daniel
+23551	Viana, Nestor
+23601	Vier, Yolanda
+23651	Villalba ariel
+23701	Villalba, Manuel
+23751	Villalba, RaulRolón, Carina
+23801	Villamil, Miguel Angel 
+23851	Villarreal, Maria José
+23901	Vir
+23951	Vitores
+24001	Vogel, Fernando
+24051	Vuotto, Denis
+24101	Walter
+24151	Weyreuter Collantes, Orlando Michel 
+24201	Wodiak, Estela
+24251	Yavorski, Esteban
+24301	Yunis, Amin
+24351	Zach, Mario
+24401	Zampaza, Miguel (Amigo del propietario)
+24451	Zar, Adrian
+24501	Zararías, Federico
+24551	Zensinski, Victor
+24601	Zunino, Alejandro
+24651	Zylberman, Pablo
+24755	Verónica
+24806	Octacio, Manuel
+24852	Sorzana, Rodrigo
+24853	Sena Juan (Propietario)
+24854	Veronica Flores (Corredora Inmobiliaria)
+24855	Sin Nombre
+24856	Zulema (Propietaria)
+24857	Galeano, Faustino
+24858	Mauricio
+24859	María
+24860	Violeta
+24861	Ale
+24862	Saturnino
+24863	Carola
+24864	Obregón, Tati
+24865	Nuñez, Micaela
+24866	Ruth Huntter
+24867	Elisabeth
+24868	Maria llaraburu
+\.
+
+
+--
+-- Data for Name: permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.permission (id, permission) FROM stdin;
+1	CREATE
+2	READ
+\.
+
+
+--
+-- Data for Name: road_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.road_type (id, name) FROM stdin;
+1	AVDA
+51	CALLE
+101	CALLE 
+151	RUTA
+\.
+
+
+--
+-- Data for Name: role; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role (id, name) FROM stdin;
+1	ADMIN
+2	USER
+\.
+
+
+--
+-- Data for Name: role_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.role_permission (role_id, permission_id) FROM stdin;
+1	1
+1	2
+2	2
+\.
+
+
+--
+-- Data for Name: section; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.section (id, name) FROM stdin;
+1	1
+51	2
+101	3
+151	4
+201	5
+251	6
+301	7
+351	8
+401	9
+451	10
+501	11
+551	12
+601	13
+651	14
+701	15
+751	16
+801	17
+851	18
+901	19
+951	20
+1001	21
+1051	22
+1101	23
+1151	25
+1201	27
+1251	Candelaria
+1301	Candelaria 
+1351	Garupá
+1401	Ituzaingo
+1451	Ituzaingó
+\.
+
+
+--
+-- Data for Name: setting; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.setting (name, value) FROM stdin;
+particularValidity	60
+agencyValidity	120
+unworkableValidity	365
+businessEvaluationCheapFlag	-10
+businessEvaluationExpFlag	10
+maxDeviation	20
+statisticTopLimit	180
+statisticBottomLimit	90
+rePricingPercentaje	-5
+\.
+
+
+--
+-- Data for Name: source; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.source (id, name) FROM stdin;
+1	BITRIX
+51	CARTEL
+101	DIARIO
+151	LLAMADA
+201	MARKETPLACE
+251	VISITA
+301	WEB
+351	WEB/CARTEL
+\.
+
+
+--
+-- Data for Name: statistic_report; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.statistic_report (id, with_title, average_value, below_max_limit, below_min_limit, creation_date, over_limits, total_agencies, total_carles, total_carles_red, total_greens, total_land_surveys, total_normals, total_owners, total_reds, total_unworkable) FROM stdin;
+1	536	\N	223	367	2021-09-30 00:00:00	69	387	59	6	173	659	164	213	316	\N
+51	526	\N	65	538	2021-10-31 00:00:00	40	386	65	13	146	643	142	192	342	\N
+101	560	\N	82	593	2021-11-30 00:00:00	6	409	75	14	146	681	182	197	339	\N
+151	597	88730	219	502	2021-12-31 00:00:00	5	442	74	19	112	726	165	210	430	\N
+201	619	\N	228	525	2022-01-31 00:00:00	2	456	78	17	113	755	184	221	441	\N
+251	645	\N	237	543	2022-02-28 00:00:00	3	475	79	21	115	783	196	229	451	\N
+301	700	\N	199	640	2022-03-31 00:00:00	12	525	82	21	122	851	210	244	498	\N
+351	716	\N	333	499	2022-04-30 00:00:00	51	548	88	14	140	883	220	247	509	\N
+401	749	\N	374	488	2022-05-31 00:00:00	58	568	90	13	153	920	244	262	510	\N
+451	751	\N	285	529	2022-06-30 00:00:00	110	551	93	68	196	924	84	280	576	\N
+501	761	\N	318	534	2022-07-31 00:00:00	76	557	93	5	350	928	214	278	359	\N
+551	770	\N	352	470	2022-08-31 00:00:00	117	571	92	0	463	939	200	276	276	\N
+601	769	\N	340	500	2022-09-30 00:00:00	99	553	94	25	200	939	199	292	515	\N
+651	767	\N	238	606	2022-10-31 00:00:00	99	550	96	24	179	943	207	297	533	\N
+701	740	\N	298	511	2022-11-30 00:00:00	108	528	107	26	197	917	183	282	511	\N
+751	705	89769	330	468	2022-12-31 00:00:00	83	499	107	31	200	881	196	275	454	\N
+801	677	\N	328	437	2023-01-31 00:00:00	90	489	98	18	238	855	196	268	403	\N
+851	688	\N	331	448	2023-02-28 00:00:00	94	493	106	21	239	873	195	274	418	\N
+901	705	\N	298	484	2023-03-31 00:00:00	108	504	103	10	276	890	232	283	372	\N
+951	745	\N	247	578	2023-04-30 00:00:00	109	531	101	10	302	934	233	302	389	\N
+1001	804	\N	284	610	2023-05-31 00:00:00	108	566	101	10	320	1002	245	335	427	\N
+1051	821	\N	282	619	2023-06-30 00:00:00	128	582	110	13	341	1029	244	337	431	\N
+1101	841	\N	216	676	2023-07-31 00:00:00	167	609	115	14	359	1059	250	335	436	\N
+1151	830	\N	256	685	2023-08-31 00:00:00	93	581	131	35	301	1034	219	322	479	\N
+1201	844	\N	339	648	2023-09-30 00:00:00	66	594	146	38	284	1053	255	313	476	\N
+1251	844	89653	340	649	2023-10-31 00:00:00	64	584	150	28	291	1053	246	319	488	\N
+1301	844	89613	220	704	2023-11-30 00:00:00	124	582	148	123	140	1048	83	318	702	\N
+1351	835	90808	308	641	2023-12-31 00:00:00	94	594	142	98	159	1043	118	307	668	\N
+1401	825	89954	285	642	2024-01-31 00:00:00	114	587	148	91	175	1041	157	306	618	\N
+1451	811	87778	352	563	2024-02-29 00:00:00	125	582	140	41	235	1040	228	318	536	\N
+1501	815	87389	466	457	2024-03-31 00:00:00	126	588	141	42	226	1049	240	320	541	235
+1551	830	88499	339	556	2024-04-30 00:00:00	183	600	134	38	231	1078	243	344	566	235
+1601	851	88819	357	540	2024-05-31 00:00:00	212	602	144	43	235	1109	244	363	587	235
+1651	856	89007	330	570	2024-06-30 00:00:00	211	609	150	35	261	1111	256	352	559	235
+1701	885	90128	318	591	2024-07-31 00:00:00	233	638	155	34	253	1142	277	349	578	246
+1751	877	86034	212	712	2024-08-31 00:00:00	209	623	161	22	283	1133	273	349	555	239
+1801	879	85321	4	738	2024-09-30 00:00:00	390	618	156	18	280	1132	301	358	533	241
+1851	879	85644	-9	738	2024-10-07 00:00:00	390	619	152	18	280	1119	288	348	533	241
+1852	877	980235	0	1128	2024-12-20 11:36:05.075686	0	968	155	2	0	1128	1030	364	96	0
+1902	1102	203329	0	219	2025-06-11 08:11:03.106228	970	1106	140	0	0	1248	1236	370	10	175
+1952	1102	203329	0	219	2025-06-11 11:17:11.1491	970	1106	140	0	0	1248	1236	370	10	175
+2002	1102	203329	0	219	2025-06-11 11:38:06.455128	970	1106	140	0	0	1248	1236	370	10	175
+2052	1102	3095897	0	219	2025-06-11 11:40:21.977502	970	1106	140	2	0	1248	1141	370	103	175
+2102	1102	3095897	0	219	2025-06-11 11:41:25.897022	970	1106	140	2	0	1248	1141	370	103	175
+2152	1102	96181	0	219	2025-06-11 11:57:30.841889	970	1106	140	0	0	1248	1244	370	2	175
+2202	1102	93639	0	219	2025-06-12 09:13:20.14126	973	738	140	0	0	1248	1244	370	2	175
+2252	1102	93637	0	219	2025-06-12 09:15:27.9173	973	738	140	0	0	1248	1244	370	2	175
+2302	1102	93637	0	219	2025-06-12 09:25:04.877271	973	738	140	0	0	1248	1244	370	2	175
+2352	1102	93637	0	219	2025-06-12 09:39:50.281721	973	738	140	56	0	1248	1244	370	2	175
+2402	1102	93637	0	219	2025-06-12 10:14:19.953608	973	738	140	56	0	1248	1244	370	751	175
+2452	1102	93637	0	219	2025-06-12 10:24:58.4291	973	738	140	56	0	1248	165	370	751	175
+2502	1102	93637	0	219	2025-06-12 10:29:25.922269	973	738	140	56	0	1248	221	370	751	175
+2552	1102	93637	0	219	2025-06-12 10:45:04.341728	973	738	140	56	217	1248	221	370	751	175
+2602	1102	93637	0	344	2025-06-12 10:46:19.774424	712	738	140	56	217	1248	221	370	751	175
+2652	1102	93637	192	344	2025-06-12 10:54:33.606851	712	738	140	56	217	1248	221	370	751	175
+2702	1017	93637	192	344	2025-06-12 10:57:43.252275	712	738	140	56	217	1248	221	370	751	175
+2752	1019	93533	201	318	2025-06-17 14:10:53.325389	731	740	140	56	217	1250	222	370	752	175
+\.
+
+
+--
+-- Data for Name: title; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.title (id, situation) FROM stdin;
+1	A escriturar
+51	Boleto
+101	Boleto a nombre de la inmobilairia que compraron
+151	Boleto Carlés
+201	Boleto Carlés-Condominio
+251	Boleto con titular muerto
+301	Boleto de boleto. Sucesion no iniciada
+351	Boleto de compraventa con titulares fallecidos
+401	Boleto de Ratti
+451	Boleto escribania Fretes. Cadena de boletos
+501	Boleto escritura en Lombardi
+551	Boleto POEA
+601	Boleto y poder
+651	Boleto. Conoce al titular
+701	Boleto. El propietario firma
+751	Boleto. No Conoce al titular registral
+801	Boleto. No Conoce al titular registral. El titulo esta en una inmobiliaria por Salta esta en trámite
+851	Boleto. No tienen contacto con el firmante de la escritura
+901	Boleto. Plano en proceso
+951	Boleto. Problemas jurídicos
+1001	Boleto. Puede hacer que firme el propietario
+1051	Boleto. Sin Plano aprobado
+1101	Boleto+Poder
+1151	Cadena de boletos
+1201	Cadena de boletos 
+1251	Cesion de derechos posesorios. Hay que hacer posecion veinteñal
+1301	Condominio Carlés
+1351	Condominio indiviso
+1401	Declaratoria de herederos por salir
+1451	Declaratoria de herederos.
+1501	Declaratoria de herederos. 
+1551	Declaratoria de herederos. Listo para transferir
+1601	Declaratoria de herederos. Son 4
+1651	Declaratorio de herederos. Uno solo
+1701	Fallecio la esposa y tiene q hacer sucesion
+1751	No
+1801	No tiene titulo. A retirar de Iprodha
+1851	Poder
+1901	Posecion veinteñal en trámite
+1951	Posesion veinteañal
+2001	Posesion veinteañal en trámite
+2051	Posesión Veinteañal en trámite
+2101	Posesion veinteañal por iniciar
+2151	Problemas jurídicos
+2201	Reserva fiscal
+2251	Sentencia judicial de usucapión (No inscripta en el Registro)
+2301	Si
+2351	Sí porción indivisa
+2401	Si. A subdividir
+2451	Si. No estan de acuerdo todos las hermanas y viven en el exterior
+2501	Si. No tiene plano aprobado
+2551	Si. Plano en tramite
+2601	Si. Subdivision en trámite
+2651	Sucesion
+2701	Sucesión
+2751	Sucesion a adjudicar
+2801	Sucesion a iniciar
+2851	Sucesión a punto de salir
+2901	Sucesión a terminar
+2951	Sucesión abierta
+3001	Sucesión adjudicada con sentencia
+3051	Sucesión con 6 herederos dispuestos a ceder derechos
+3101	Sucesion con adjudicacion. Listo para escriturar
+3151	Sucesión con declaratoria de herederos
+3201	Sucesion con declaratoria de herederos y tasa de justicia pagada
+3251	Sucesión con declaratoria de herederos. Son 2 herederos
+3301	Sucesion con declaratoria. Estan en juicio porque tiene usurpadores
+3351	Sucesion con declaratorio
+3401	Sucesion en trámite
+3451	Sucesión en trámite
+3501	Sucesión en trámite. Fallecio otro heredero
+3551	Sucesion finalizada
+3601	Sucesión finalizada.
+3651	Sucesion finalizada. 3 hermanos
+3701	Sucesión finalizada. 5 Herederos
+3751	Sucesion Iniciada
+3801	Sucesion no iniciada. Firman cesion de derechos los herederos para que otro haga el juicio de sucesion
+3851	Sucesion no terminada
+3901	Sucesion por terminar. Tiene declaratoria de herederos
+3951	Sucesion recien iniciada. Son 8 hermanos
+4001	Sucesion sin finalizar
+4051	Sucesion sin iniciar
+4101	Sucesion sin terminar
+4151	Sucesion terminada
+4201	Sucesion terminada c/ Autorizacion judicial para vender
+4251	Sucesion terminada con adjudicacion
+4301	Sucesion terminada listo para escriturar
+4351	Sucesión terminada.
+4401	Sucesion terminada. (Falta Adjudicacion)
+4451	Sucesion terminada. Listo para escriturar a nombre del comprador
+4501	Sucesión terminada. Listo para escriturar por tracto abreviado
+4551	Sucesión terminada. Son 7 herederos
+4601	Sucesorio con declaratoria de herederos. Escritura de tracto abreviado
+4651	Sucesorio listo para transferir
+4701	Tiene boleto y tiene que iniciar usucapión
+4751	Tiene problemas de papeles y no los muestra
+4801	Tiene problemas juridicos. Tiene boleto y entro en sucesion. No la iniciaron. Quieren vender asi
+4851	Tienen que hacer sucesion
+4901	Titulo  Judicial provisorio, el registro le hizo observaciones que no arreglaron aun
+4951	Titulo de Torres con Poder-Aparentemente fraudulento
+5001	Titulo en trámite
+5051	Titulo en trámite. Posesion 20anial. 1 año de tramites pendientes
+5101	Visita
+5102	Boleto. Inmobiliaria Marini
+\.
+
+
+--
+-- Data for Name: update_report; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.update_report (id, creation_date) FROM stdin;
+1	2025-06-17
+\.
+
+
+--
+-- Data for Name: user_account; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_account (id, account_not_expired, account_not_locked, credential_not_expired, email, enabled, first_name, last_name, password) FROM stdin;
+5	t	t	t	agustin@carles.com.ar	f	Agustín	x	$2a$10$HzYlFniOjXiVDMDP13jzWO3i8ueFlB4O1xJODV5DAnpdNv0TYs5dC
+3	t	t	t	matiasb@carles.com.ar	t	Matias	Benegas	$2a$10$ZpH90g83eIjMkMA5l1/6xuEzrs4tmSfYrEXHJUBMfj2T4bupenZhi
+9	t	t	t	christian@carles.com.ar	t	Christian	Carles	$2a$10$qdq4WZlx8cPgpPAWCIbx7ukD8XaXOuLvhrwByUWIgQsl0Lfn0n2Xa
+20	t	t	t	luis@carles.com.ar	f	Luis	x	$2a$10$X5nzPZRqJFyoJ9MLoEoBH.yGG7uCfribUWu56QXd6.YwvKe2Okk3i
+6	t	t	t	alejandro@carles.com.ar	f	Alejandro	x	$2a$10$M.BhJJmU6casIo.fOQ6X0.8AvZZXaQ2EaGBNHhdvLYo3bEuaRYcdK
+10	t	t	t	claudio@carles.com.ar	f	Claudio	Carles	$2a$10$1rbiZRNeCGYvo99BslzCY.aCztrEgw5VcH9lWq9kdF0nekrey5yRW
+11	t	t	t	dario@carles.com.ar	f	Dario	x	$2a$10$/CIJ99Z0Y6L7PstYXvru.e7kCSozocF73ou076U6jvT5/oT4/M2tC
+12	t	t	t	fernando@carles.com.ar	f	Fernando	x	$2a$10$xGwx6hCVuPAaawP3b.2ELOUBUSaPIWAwmT4HcNfZpA83N1AZ5oc1u
+16	t	t	t	jhonathan@carles.com.ar	f	Jhonatan	x	$2a$10$GpVpVV50p0aGxN6906uH7uGGzMm/oZB8JFbecQ3EQntGn2vAh9fta
+17	t	t	t	joserivas@carles.com.ar	f	José	Rivas	$2a$10$9FE1D0oq0EtKs.n0KSWOnesxWGsQQ9OWssaSC9lsxxEePo8EqOHmG
+22	t	t	t	pablo@carles.com.ar	f	Pablo	x	$2a$10$CqpN.yB6Hzp85NJoCa6oie8VNBHaocD2gNi.uFFpGTGMEM4elIfT.
+24	t	t	t	santiago@carles.com.ar	f	Santiago	x	$2a$10$9m391SP3rXfnktpEJqMZzuOeIpBFDQ3PiDhFQHbCmhT/Q8VCP4j4y
+26	t	t	t	ulises@carles.com.ar	f	Ulises	x	$2a$10$WVleEFmFcK7qLeHbWOSyR.uUSNb0877R6YTzJ93ZTIMkMH24FDPnG
+19	t	t	t	leandro@carles.com.ar	f	Leandro	x	$2a$10$ePVvrT3fL5O.TP446I/B..fIZu1UrjgtZrb6/XrwK5JAD8.I3XLGi
+18	t	t	t	juanpablo@carles.com.ar	f	Juan Pablo	x	$2a$10$yvwrJHUm6T6dKRhKyPXACuIEogk53GtnOzoED8SbV8TyFB1eDk0Ry
+25	t	t	t	solange@carles.com.ar	f	Solange	Buks	$2a$10$73JnLRHRcdnk3yWIOzb1E.KiES6DUydCzDl5aB6kpBgvslzdS.cyW
+32	t	t	t	lautaro@carles.com.ar	f	Lautaro	Barreyro	$2a$10$oXNNbhmfavyUmCKdpXcdQ.D2HHOgXbs2HCtk.nRbKrlbJm.pkf.WO
+2	t	t	t	victor@carles.com.ar	t	Victor	Cristaldo	$2a$10$XKpAFtuajRgpbpq7ZvM78eONgvkmoakAYZN6gz3mOysz2IoUsnpSe
+21	t	t	t	matias@carles.com.ar	t	Matias	Friedrich	$2a$10$Hj.mN0WuHbvExjZZiG50SeeX9ySiim8EypysnsY65YPboqzVyTIZO
+23	t	t	t	paolo@carles.com.ar	t	Paolo	Fassa	$2a$10$4gJiBbqlFK9JQ0aEopa.8OzFBzk2vMd5cFKRTDNr9Iotjef16oUWG
+7	t	t	t	amilcar@carles.com.ar	f	Amilcar	Servin	$2a$10$ZRcOIFzu/TdFPHnRIn4OJus/yRqQTf7lkYU2.nBaZs9l3lyCLpadC
+27	t	t	t	yamila@carles.com.ar	f	Yamila	Rotta	$2a$10$LG77f6IS9W6SC3OcyWk5Ru3BnTZxOTWn0CxIEnMo//SBcYEW7czV6
+13	t	t	t	giuliana@carles.com.ar	f	Giuliana	Reyes	$2a$10$.AI1LlxtSopAALqKL8u91eDAsYd3WghW1tAP/UTm8cAir8.ysCwnu
+36	t	t	t	maximiliano@carles.com.ar	t	Maximiliano	Pereira	$2a$10$knDwLRP3aPlri1ZY7Y.HSOzzCf1NdXTv8agsR4gqJSl5Axs103DVS
+1	t	t	t	emanuel@carles.com.ar	f	Emanuel	x	$2a$10$U9UYgD5gX84uHVKTtbBede4YLJ5xPLCywZLPvyU0j7bACXYT2U9UO
+34	t	t	t	ezequiel@carles.com.ar	f	Ezequiel	x	$2a$10$ygSjd3/3DHqFB08IgGBhruohvKZLJoWw/HGcMHVhxZGeuLXku8x6C
+4	t	t	t	juanjose@carles.com.ar	f	Juanjo	x	$2a$10$gYbwlWhE9wf8KY2pE.UfDuQOZLv6.4Jmf3qZljl2ee6ptyGOQFQq.
+35	t	t	t	juanramon@carles.com.ar	t	Juan Ramón	Pucheta	$2a$10$mnoYfcmCo9YW42X/Kg7V.esYP70aSKQFimBovsaU/jETXiyHs2YzW
+33	t	t	t	brian@carles.com.ar	t	Brian	Gallego	$2a$10$qdC0cza3NcQqUetM1oVDpeCO0GBb9cRWKgwFRwuK6GoYNSe18EGvO
+14	t	t	t	guillermo@carles.com.ar	f	Guillermo	Carles	$2a$10$yD4gQnnWYo.C4cZ9JILxzO0i6SVw2TcAqM8d9a9VTOFm6IOfDOZ6O
+15	t	t	t	gustavo@carles.com.ar	f	Gustavo	Carles	$2a$10$htYvsl4J9MRLll4BpOMLTuEiFwmCS7MPOwq4mKes0jodH/BNb7f9a
+\.
+
+
+--
+-- Data for Name: user_report; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_report (id, over_bottom_limit, over_mid_limit, over_top_limit, update_report_id, user_id) FROM stdin;
+1	55	137	7	1	2
+2	0	0	0	1	3
+3	45	111	11	1	9
+4	50	31	14	1	21
+5	49	111	15	1	23
+6	50	104	11	1	15
+7	0	17	0	1	1
+8	0	6	0	1	4
+9	54	116	0	1	14
+10	0	0	0	1	33
+11	0	0	0	1	34
+12	0	0	0	1	35
+13	0	0	0	1	36
+\.
+
+
+--
+-- Data for Name: user_role; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.user_role (user_id, role_id) FROM stdin;
+3	2
+3	1
+4	2
+5	2
+6	2
+9	1
+11	2
+12	2
+14	2
+15	2
+16	2
+17	2
+18	2
+19	2
+20	2
+22	2
+24	2
+26	2
+25	2
+10	2
+1	2
+32	2
+34	2
+2	2
+21	1
+23	1
+7	2
+27	2
+13	2
+36	2
+35	2
+33	2
+\.
+
+
+--
+-- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.zone (id, name) FROM stdin;
+1	1
+51	2
+101	3
+151	4
+201	5
+251	6
+301	7
+351	9
+401	A
+451	B
+501	B1
+551	B2
+601	B3
+651	B4
+701	Barrio Pellegrini
+751	C
+801	C1
+851	C2
+901	C3
+951	C4
+1001	Costamango
+1051	D
+1101	E
+1151	F
+1201	Garupá
+1251	H
+1301	I
+1351	Itaembé Guazú
+1401	Loteo Las Calandrias
+1451	Nemesio Parma
+1501	Pueblo chico
+1551	Santa Clara
+1601	Tacuaritas
+1651	Santa Cecilia
+1851	Candelaria
+\.
+
+
+--
+-- Name: agency_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.agency_seq', 9401, true);
+
+
+--
+-- Name: classification_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.classification_seq', 301, true);
+
+
+--
+-- Name: contact_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.contact_seq', 40101, true);
+
+
+--
+-- Name: currency_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.currency_seq', 51, true);
+
+
+--
+-- Name: file_type_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.file_type_seq', 51, true);
+
+
+--
+-- Name: folder_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.folder_seq', 49951, true);
+
+
+--
+-- Name: land_survey_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.land_survey_seq', 60551, true);
+
+
+--
+-- Name: locality_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.locality_seq', 101, true);
+
+
+--
+-- Name: particular_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.particular_seq', 24901, true);
+
+
+--
+-- Name: permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.permission_id_seq', 2, true);
+
+
+--
+-- Name: road_type_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.road_type_seq', 151, true);
+
+
+--
+-- Name: role_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.role_id_seq', 2, true);
+
+
+--
+-- Name: section_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.section_seq', 1451, true);
+
+
+--
+-- Name: source_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.source_seq', 351, true);
+
+
+--
+-- Name: statistic_report_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.statistic_report_seq', 2801, true);
+
+
+--
+-- Name: title_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.title_seq', 5151, true);
+
+
+--
+-- Name: update_report_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.update_report_seq', 1, true);
+
+
+--
+-- Name: user_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_account_id_seq', 36, true);
+
+
+--
+-- Name: user_report_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.user_report_seq', 51, true);
+
+
+--
+-- Name: zone_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.zone_seq', 1951, true);
+
+
+--
+-- Name: agency agency_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agency
+    ADD CONSTRAINT agency_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: assessment assessment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assessment
+    ADD CONSTRAINT assessment_pkey PRIMARY KEY (assessor_id, landsurvey_id);
+
+
+--
+-- Name: classification classification_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classification
+    ADD CONSTRAINT classification_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contact contact_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact
+    ADD CONSTRAINT contact_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: currency currency_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.currency
+    ADD CONSTRAINT currency_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: file_type file_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.file_type
+    ADD CONSTRAINT file_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: folder folder_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.folder
+    ADD CONSTRAINT folder_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: land_survey land_survey_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT land_survey_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locality locality_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locality
+    ADD CONSTRAINT locality_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: locality_statistic locality_statistic_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locality_statistic
+    ADD CONSTRAINT locality_statistic_pkey PRIMARY KEY (locality_id, statistic_report_id);
+
+
+--
+-- Name: particular particular_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.particular
+    ADD CONSTRAINT particular_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: permission permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permission
+    ADD CONSTRAINT permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: road_type road_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.road_type
+    ADD CONSTRAINT road_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: role_permission role_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permission
+    ADD CONSTRAINT role_permission_pkey PRIMARY KEY (role_id, permission_id);
+
+
+--
+-- Name: role role_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT role_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: section section_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.section
+    ADD CONSTRAINT section_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: setting setting_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.setting
+    ADD CONSTRAINT setting_pkey PRIMARY KEY (name);
+
+
+--
+-- Name: source source_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.source
+    ADD CONSTRAINT source_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: statistic_report statistic_report_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.statistic_report
+    ADD CONSTRAINT statistic_report_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: title title_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.title
+    ADD CONSTRAINT title_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: title uk1cugy3b16uptw26kxoilghsdn; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.title
+    ADD CONSTRAINT uk1cugy3b16uptw26kxoilghsdn UNIQUE (situation);
+
+
+--
+-- Name: particular uk3qvvqjrf6d7kwl1hafmvy5tca; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.particular
+    ADD CONSTRAINT uk3qvvqjrf6d7kwl1hafmvy5tca UNIQUE (name);
+
+
+--
+-- Name: source uk4a1uurs8rtj4xnah2j9uguec0; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.source
+    ADD CONSTRAINT uk4a1uurs8rtj4xnah2j9uguec0 UNIQUE (name);
+
+
+--
+-- Name: road_type uk5hu8hlw9h6kwft751d1h8vy4e; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.road_type
+    ADD CONSTRAINT uk5hu8hlw9h6kwft751d1h8vy4e UNIQUE (name);
+
+
+--
+-- Name: agency uk6m6c3mscbn3eohv8sslxlp12c; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.agency
+    ADD CONSTRAINT uk6m6c3mscbn3eohv8sslxlp12c UNIQUE (name);
+
+
+--
+-- Name: role uk8sewwnpamngi6b1dwaa88askk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role
+    ADD CONSTRAINT uk8sewwnpamngi6b1dwaa88askk UNIQUE (name);
+
+
+--
+-- Name: permission uk9kwkevw5na26e6qb4cbcbxaa4; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.permission
+    ADD CONSTRAINT uk9kwkevw5na26e6qb4cbcbxaa4 UNIQUE (permission);
+
+
+--
+-- Name: currency ukh84pd2rtr12isnifnj655rkra; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.currency
+    ADD CONSTRAINT ukh84pd2rtr12isnifnj655rkra UNIQUE (code);
+
+
+--
+-- Name: folder ukhh0ddrd3mu1gaedy4hcgjwxfw; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.folder
+    ADD CONSTRAINT ukhh0ddrd3mu1gaedy4hcgjwxfw UNIQUE (code);
+
+
+--
+-- Name: user_account ukhl02wv5hym99ys465woijmfib; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_account
+    ADD CONSTRAINT ukhl02wv5hym99ys465woijmfib UNIQUE (email);
+
+
+--
+-- Name: contact ukn07fa8c8nqso88ftmqd0t50uh; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.contact
+    ADD CONSTRAINT ukn07fa8c8nqso88ftmqd0t50uh UNIQUE (phone);
+
+
+--
+-- Name: classification ukn19o0ksh0l34qwdw0r95n985e; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classification
+    ADD CONSTRAINT ukn19o0ksh0l34qwdw0r95n985e UNIQUE (name);
+
+
+--
+-- Name: file_type uko112kjnl2a1i33m11aqfu9290; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.file_type
+    ADD CONSTRAINT uko112kjnl2a1i33m11aqfu9290 UNIQUE (name);
+
+
+--
+-- Name: update_report update_report_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.update_report
+    ADD CONSTRAINT update_report_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_account user_account_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_account
+    ADD CONSTRAINT user_account_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_report user_report_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_report
+    ADD CONSTRAINT user_report_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_role user_role_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT user_role_pkey PRIMARY KEY (user_id, role_id);
+
+
+--
+-- Name: zone zone_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.zone
+    ADD CONSTRAINT zone_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: assessment fk4txh5dxmasjb81vcl0ehiv067; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assessment
+    ADD CONSTRAINT fk4txh5dxmasjb81vcl0ehiv067 FOREIGN KEY (assessor_id) REFERENCES public.user_account(id);
+
+
+--
+-- Name: user_report fk5s4vtoeyteuoj0jb9cjetyin0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_report
+    ADD CONSTRAINT fk5s4vtoeyteuoj0jb9cjetyin0 FOREIGN KEY (user_id) REFERENCES public.user_account(id);
+
+
+--
+-- Name: user_role fk7ojmv1m1vrxfl3kvt5bi5ur73; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT fk7ojmv1m1vrxfl3kvt5bi5ur73 FOREIGN KEY (user_id) REFERENCES public.user_account(id);
+
+
+--
+-- Name: land_survey fk7yn1ua6606dnnaynffxbckvig; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fk7yn1ua6606dnnaynffxbckvig FOREIGN KEY (manager_id) REFERENCES public.user_account(id);
+
+
+--
+-- Name: land_survey fk80l7vcgthwvul0n8e1hmgkipy; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fk80l7vcgthwvul0n8e1hmgkipy FOREIGN KEY (source) REFERENCES public.source(id);
+
+
+--
+-- Name: land_survey fk8f9fyrin47ha6229nw0vohxmj; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fk8f9fyrin47ha6229nw0vohxmj FOREIGN KEY (classification) REFERENCES public.classification(id);
+
+
+--
+-- Name: land_survey fk9q215wg2xccobwk1pc2pr3eww; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fk9q215wg2xccobwk1pc2pr3eww FOREIGN KEY (agency_id) REFERENCES public.agency(id);
+
+
+--
+-- Name: user_role fka68196081fvovjhkek5m97n3y; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_role
+    ADD CONSTRAINT fka68196081fvovjhkek5m97n3y FOREIGN KEY (role_id) REFERENCES public.role(id);
+
+
+--
+-- Name: role_permission fka6jx8n8xkesmjmv6jqug6bg68; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permission
+    ADD CONSTRAINT fka6jx8n8xkesmjmv6jqug6bg68 FOREIGN KEY (role_id) REFERENCES public.role(id);
+
+
+--
+-- Name: land_survey fkah79webi6fs167y7e0e5kwk8; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkah79webi6fs167y7e0e5kwk8 FOREIGN KEY (currency_id) REFERENCES public.currency(id);
+
+
+--
+-- Name: land_survey fkbcrlycib06onanpne2p8ox0j2; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkbcrlycib06onanpne2p8ox0j2 FOREIGN KEY (particular_id) REFERENCES public.particular(id);
+
+
+--
+-- Name: locality_statistic fkbp7uebrou5bst1gq2yw7w8gq; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locality_statistic
+    ADD CONSTRAINT fkbp7uebrou5bst1gq2yw7w8gq FOREIGN KEY (statistic_report_id) REFERENCES public.statistic_report(id);
+
+
+--
+-- Name: assessment fke7r71off4e6474qfidup9lpd3; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assessment
+    ADD CONSTRAINT fke7r71off4e6474qfidup9lpd3 FOREIGN KEY (currency_id) REFERENCES public.currency(id);
+
+
+--
+-- Name: role_permission fkf8yllw1ecvwqy3ehyxawqa1qp; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.role_permission
+    ADD CONSTRAINT fkf8yllw1ecvwqy3ehyxawqa1qp FOREIGN KEY (permission_id) REFERENCES public.permission(id);
+
+
+--
+-- Name: land_survey fkgmxbnrb4gqwj8v9qden54n1li; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkgmxbnrb4gqwj8v9qden54n1li FOREIGN KEY (section_id) REFERENCES public.section(id);
+
+
+--
+-- Name: land_survey fkj8vggm92ndbw59jndurx6i87u; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkj8vggm92ndbw59jndurx6i87u FOREIGN KEY (surveyor_id) REFERENCES public.user_account(id);
+
+
+--
+-- Name: land_survey fkjqysghjwdf6s1l1l7a9u0yl3r; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkjqysghjwdf6s1l1l7a9u0yl3r FOREIGN KEY (zone_id) REFERENCES public.zone(id);
+
+
+--
+-- Name: land_survey fkk54lgjbd05a0gbfu3sqxpqkr0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkk54lgjbd05a0gbfu3sqxpqkr0 FOREIGN KEY (file_type) REFERENCES public.file_type(id);
+
+
+--
+-- Name: land_survey fkl5r2ltx33evt2ywlxc1i5ouvq; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkl5r2ltx33evt2ywlxc1i5ouvq FOREIGN KEY (locality_id) REFERENCES public.locality(id);
+
+
+--
+-- Name: user_report fklh1uy3sna80qa4hdp9vorf09h; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_report
+    ADD CONSTRAINT fklh1uy3sna80qa4hdp9vorf09h FOREIGN KEY (update_report_id) REFERENCES public.update_report(id);
+
+
+--
+-- Name: land_survey fkli64srmpmt7oaa34w2tx3neu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkli64srmpmt7oaa34w2tx3neu FOREIGN KEY (road_type) REFERENCES public.road_type(id);
+
+
+--
+-- Name: assessment fknwg6bynmm5axow9vsnj786fw0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assessment
+    ADD CONSTRAINT fknwg6bynmm5axow9vsnj786fw0 FOREIGN KEY (landsurvey_id) REFERENCES public.land_survey(id);
+
+
+--
+-- Name: land_survey fkq7vxrty9retja65rw2ompsn7t; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkq7vxrty9retja65rw2ompsn7t FOREIGN KEY (contact_id) REFERENCES public.contact(id);
+
+
+--
+-- Name: locality_statistic fkrmulsuo03bm93ma5qdfiw330b; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.locality_statistic
+    ADD CONSTRAINT fkrmulsuo03bm93ma5qdfiw330b FOREIGN KEY (locality_id) REFERENCES public.locality(id);
+
+
+--
+-- Name: land_survey fksatu3kkv9yvpai45lq2xpipws; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fksatu3kkv9yvpai45lq2xpipws FOREIGN KEY (folder_id) REFERENCES public.folder(id);
+
+
+--
+-- Name: land_survey fkscifobbj181moghtvwstk0h9x; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.land_survey
+    ADD CONSTRAINT fkscifobbj181moghtvwstk0h9x FOREIGN KEY (title_id) REFERENCES public.title(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
