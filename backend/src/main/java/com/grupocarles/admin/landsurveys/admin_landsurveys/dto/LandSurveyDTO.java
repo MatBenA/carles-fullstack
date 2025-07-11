@@ -31,6 +31,5 @@ public record LandSurveyDTO(long id,
                             Long price,
                             String currency,
                             String folder,
-                            Long repricing,
                             List<AssessmentDTO> assessmentList) {
 }

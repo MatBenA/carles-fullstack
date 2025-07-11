@@ -33,9 +33,9 @@ public class CurrencyController {
         return service.getAllCurrencies();
     }
 
-    @GetMapping("/{id}")
-    public Currency getCurrencyById(@PathVariable long id) {
-        return service.getCurrencyById(id);
+    @GetMapping("/{code}")
+    public Currency getCurrencyById(@PathVariable String code) {
+        return service.getCurrencyByCode(code);
     }
 
     @PutMapping("/update/{id}")

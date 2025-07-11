@@ -2,6 +2,7 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service;
 
 import java.util.List;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +23,13 @@ public class CurrencyServiceImp implements CurrencyService {
     @Override
     public void deleteCurrency(long id) {
         repository.deleteById(id);
-        ;
     }
 
     @Override
-    public Currency getCurrencyById(long id) {
-        return repository.findById(id).orElse(null);
+    public Currency getCurrencyByCode(String code) {
+        return repository
+                .findByCode(code)
+                .orElseThrow(() -> new EntityNotFoundException("Currency not found for code: " + code));
     }
 
     @Override

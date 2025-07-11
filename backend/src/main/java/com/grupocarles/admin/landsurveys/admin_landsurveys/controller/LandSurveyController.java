@@ -4,6 +4,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.HomeDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.LandSurveyDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.LandSurvey;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.CurrencyRepository;
+import com.grupocarles.admin.landsurveys.admin_landsurveys.service.SettingService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,9 @@ public class LandSurveyController {
 
     @Autowired
     private CurrencyRepository currencyRepository;
+
+    @Autowired
+    private SettingService settingService;
 
     @PostMapping("/create")
     public LandSurveyDTO createLandSurvey(@RequestBody LandSurveyDTO landSurvey) {
@@ -71,7 +75,8 @@ public class LandSurveyController {
                 landSurveyFilteredPage.getTotalElements(),
                 currencyRepository.findByCode("USD")
                         .orElseThrow(EntityNotFoundException::new)
-                        .getExchangeReference()
+                        .getExchangeReference(),
+                settingService.getSettingByName("rePricingPercentaje")
         );
     }
 

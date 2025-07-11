@@ -9,9 +9,9 @@ public interface CurrencyService {
 
     List<Currency> getAllCurrencies();
 
-    Currency getCurrencyById(long id);
-
     Currency updateCurrency(long id, Currency newCurrency);
 
     void deleteCurrency(long id);
+
+    Currency getCurrencyByCode(String code);
 }

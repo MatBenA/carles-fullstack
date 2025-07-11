@@ -83,7 +83,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setPriceVerificationDate(LocalDateTime.now());
         landSurvey.setReassessmentDate(LocalDateTime.now());
 
-        return adaptToDTO(saveSecure(landSurvey), 0L);
+        return adaptToDTO(saveSecure(landSurvey));
     }
 
     private LandSurvey DTOToLandSurvey(LandSurveyDTO landSurveyDTO) {
@@ -199,7 +199,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
 
     @Override
     public LandSurveyDTO getLandSurveyById(Long id) {
-        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")), 0L);
+        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
     }
 
     @Override
@@ -240,8 +240,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         );
 
         Page<LandSurvey> landSurveyList = landSurveyRepository.findAll(specification, PageRequest.of(pageNumber, 100));
-        Long rePricing = settingService.getSettingByName("rePricingPercentaje");
-        return landSurveyList.map(landSurvey -> adaptToDTO(landSurvey, rePricing));
+        return landSurveyList.map(landSurvey -> adaptToDTO(landSurvey));
     }
 
     @Override
@@ -351,10 +350,10 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return adaptToDTO(saveSecure(landSurvey), 0L);
+        return adaptToDTO(saveSecure(landSurvey));
     }
 
-    public LandSurveyDTO adaptToDTO(LandSurvey landSurvey, Long rePricing){
+    public LandSurveyDTO adaptToDTO(LandSurvey landSurvey){
 
         List<AssessmentDTO> assessmentList = landSurvey.getAssessmentList()
                 .stream()
@@ -399,7 +398,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getPrice(),
                 landSurvey.getCurrency().getCode(),
                 landSurvey.getFolder().getCode(),
-                rePricing,
                 assessmentList);
     }
 

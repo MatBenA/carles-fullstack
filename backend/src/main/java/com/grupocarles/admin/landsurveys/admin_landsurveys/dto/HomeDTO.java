@@ -6,6 +6,7 @@ public record HomeDTO(
         List<LandSurveyDTO> landSurveys,
         Integer totalPages,
         Long totalElements,
-        Double dollarRate
+        Double dollarRate,
+        Long rePricing
         ) {
 }
