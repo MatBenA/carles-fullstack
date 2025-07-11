@@ -17,7 +17,7 @@ const fetchLandSurveys = async (
         });
         console.log(response.data);
         const landSurveys: Array<LandSurvey> = adaptLandSurvey(
-            response.data.landSurveys
+            response.data.landSurveys, response.data.dollarRate, response.data.rePricing
         );
         return landSurveys;
     } catch (err) {

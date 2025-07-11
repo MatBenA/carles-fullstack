@@ -25,7 +25,7 @@ const Notifications = () => {
 
             if (isMounted) {
                 console.log(response.data)
-                setLandSurveys(adaptLandSurvey(response.data));
+                setLandSurveys(adaptLandSurvey(response.data, 1295, -5));
             }
         };
 

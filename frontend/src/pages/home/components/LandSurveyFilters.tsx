@@ -35,6 +35,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [folder, setFolder] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
     const [title, setTitle] = useState<InputOption | null>(null);
+    //const [contact, setContact] = useState<InputOption | null>(null);
     const [address, setAddress] = useState<string>();
     const [rescinded, setRescinded] = useState<boolean>(false);
 
@@ -263,6 +264,18 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <label htmlFor="showMine">Relevamientos propios</label>
                     </div>
                 )}
+                {/*
+                <div>
+                    <label htmlFor="contact">Telefono</label>
+                    <Select
+                        id="contact"
+                        styles={select2Styles}
+                        options={useFetchOptions("/contacts/options")}
+                        value={contact}
+                        onChange={setContact}
+                        placeholder={"+00 000 0000"}
+                        isClearable/>    
+                </div>*/}
             </div>
 
             <div>

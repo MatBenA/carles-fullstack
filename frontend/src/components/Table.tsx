@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LandSurvey from "../models/LandSurvey";
 import Select from "react-select";
@@ -6,7 +6,6 @@ import { InputOption } from "../models/InputOption";
 import makeAnimated from "react-select/animated";
 import columnOptions from "../utilities/columns";
 import "../assets/styles/landsurvey-table.css"
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 interface Props {
     landSurveys: LandSurvey[] | undefined;
@@ -19,37 +18,6 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
     const [columnList, setColumnList] = useState<InputOption[]>();
     const animatedComponents = makeAnimated();
     const isSelected = (columnName: string) => columnList?.some(column => column.value === columnName)
-
-    const axiosPrivate = useAxiosPrivate();
-    const [rePricing, setRepricing] = useState<number>(0);
-
-    useEffect(() => {
-        const controller = new AbortController();
-        let isMounted = true;
-
-        const getRepricingPercentage = async () => {
-            try {
-                const response = await axiosPrivate.get(
-                    "/settings/rePricingPercentaje",
-                    { signal: controller.signal }
-                );
-
-                if (isMounted) {
-                    console.log(response);
-                    setRepricing(response.data);
-                }
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getRepricingPercentage();
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        };
-    }, [axiosPrivate]);
     
     return (
         <div>
@@ -106,9 +74,6 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                     <tbody>
                         {landSurveys.map((landSurvey, i) => (
                             <tr key={i} className={landSurvey.classification == "IMPOSIBILIDAD DE TRABAJAR" ? "red-font" : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" : ""}>
-                                {/* {Object.values(landSurvey).map((data, j) => (
-                                    <td key={j}>{data}</td>
-                                ))} */}
                                 <td>
                                     <Link
                                         to="/land-surveys/detail"
@@ -140,17 +105,19 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Verificación precio")}>{landSurvey.priceVerificationDate}</td>
                                 <td hidden={isSelected("Dias ultima Verificación")}>{landSurvey.daysSincePriceVerification}</td>
                                 <td hidden={isSelected("Re-Tasación fecha")}>{landSurvey.reassessmentDate}</td>
-                                <td hidden={isSelected("Pretendido")}>{landSurvey.price}</td>
+                                <td hidden={isSelected("Pretendido")}>{`${landSurvey.currency} ${landSurvey.price}`}</td>
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
-                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd * (1 + rePricing / 100))}</td>
-                                <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd * (1 + rePricing / 100))}</td>
-                                <td hidden={isSelected("Evaluación")} className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>{Math.round(landSurvey.businessEvaluation * (1 + rePricing / 100))}</td>
+                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd)}</td>
+                                <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd)}</td>
+                                <td hidden={isSelected("Evaluación")} 
+                                    className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>
+                                        {Math.round(landSurvey.businessEvaluation)}
+                                </td>
                                 <td hidden={isSelected("Clasificacion")}>{landSurvey.classification}</td>
-                                <td hidden={isSelected("Valor maximo")}>{landSurvey.maxPrice}</td>
+                                <td hidden={isSelected("Valor máximo")}>{landSurvey.maxPrice}</td>
                                 <td hidden={isSelected("Valor mínimmo")}>{landSurvey.minPrice}</td>
                                 <td hidden={isSelected("% Desvío")}>{landSurvey.deviation}</td>
                                 <td hidden={isSelected("Observaciones")}>{landSurvey.observation}</td>
-                                
                             </tr>
                         ))}
                     </tbody>

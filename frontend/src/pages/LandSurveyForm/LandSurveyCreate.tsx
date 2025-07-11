@@ -47,6 +47,7 @@ const LandSurveyCreate = () => {
     ]);
     const [maxDeviation, setMaxDeviation] = useState<number>(10);
     const [rePricing, setRepricing] = useState<number>(0)
+    const [usdExchangerate, setUsdExchangerate] = useState<number>(1295);
 
     const userOptions: Array<InputOption> = useFetchOptions("/users/options");
     const axiosPrivate = useAxiosPrivate();
@@ -69,6 +70,34 @@ const LandSurveyCreate = () => {
         };
 
         getMaxDeviation();
+
+        return () => {
+            isMounted = false;
+            controller.abort();
+        };
+    }, [axiosPrivate]);
+
+    useEffect(() => {
+        const controller = new AbortController();
+        let isMounted = true;
+
+        const getRepricingPercentage = async () => {
+            try {
+                const response = await axiosPrivate.get(
+                    "/currencies/USD",
+                    { signal: controller.signal }
+                );
+
+                if (isMounted) {
+                    console.log(response.data);
+                    setUsdExchangerate(response.data.exchangeReference);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getRepricingPercentage();
 
         return () => {
             isMounted = false;
@@ -170,10 +199,10 @@ const LandSurveyCreate = () => {
                 <div className="dflex gap-30">
                     {/* CODE - DATE */}
                     <div>
-                        <label htmlFor="folder">Carpeta</label>
+                        <label htmlFor="folder">Carpetas Libres</label>
                         <CreatableSelect id="folder"
                                 styles={select2Styles}
-                                options={useFetchOptions("/folder/options")}
+                                options={useFetchOptions("/folder/options/free")}
                                 value={folder}
                                 onChange={setFolder}
                                 placeholder="V"
@@ -423,7 +452,7 @@ const LandSurveyCreate = () => {
                         </label>
                         <input
                             type="text"
-                            value={"$" + Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100))}
+                            value={"$" + Math.round(averageAssessment(assessmentList, rePricing, usdExchangerate))}
                             disabled
                         />
                     </div>
@@ -433,13 +462,13 @@ const LandSurveyCreate = () => {
                     <label htmlFor="deviation">Porcentaje de desvío</label>
                     <input
                         className={
-                            assessmentDeviation(assessmentList) > maxDeviation
+                            assessmentDeviation(assessmentList, usdExchangerate) > maxDeviation
                                 ? "error-input"
                                 : ""
                         }
                         type="text"
                         id="deviation"
-                        value= {assessmentDeviation(assessmentList) + "%"}
+                        value= {assessmentDeviation(assessmentList, usdExchangerate) + "%"}
                         disabled
                     />
                     {/* TODO add calculated value */}
@@ -568,7 +597,7 @@ const LandSurveyCreate = () => {
                         <input
                             type="number"
                             id="minAssessment"
-                            value={minPrice(assessmentList)}
+                            value={minPrice(assessmentList, usdExchangerate)}
                             disabled
                         />
                     </div>
@@ -577,7 +606,7 @@ const LandSurveyCreate = () => {
                         <input
                             type="number"
                             id="maxAssessment"
-                            value={maxPrice(assessmentList)}
+                            value={maxPrice(assessmentList, usdExchangerate)}
                             disabled
                         />
                     </div>
@@ -589,9 +618,7 @@ const LandSurveyCreate = () => {
                     <input
                         type="number"
                         id="pricePerSquareMeter"
-                        value={currency == "ARS" ? 
-                            priceXMeterSquared((price / 1165), surface) : 
-                            priceXMeterSquared(price, surface)}
+                        value={priceXMeterSquared(price, "USD", surface, usdExchangerate)}
                         disabled
                     />
                 </div>
@@ -603,8 +630,10 @@ const LandSurveyCreate = () => {
                         type="number"
                         id="averageAssessmentUsd"
                         value={priceXMeterSquared(
-                            Math.round(averageAssessment(assessmentList) * (1 + rePricing / 100)),
-                            surface
+                            Math.round(averageAssessment(assessmentList, rePricing, usdExchangerate)),
+                            "USD",
+                            surface, 
+                            usdExchangerate
                         )}
                         disabled
                     />
@@ -722,9 +751,9 @@ const LandSurveyCreate = () => {
                     <div>Estado</div>
                     <div>
                         <p>Evaluación de negocio</p>
-                        {Math.round(businessEvaluation(
-                            currency == "ARS" ? (price / 1165) : price,
-                            averageAssessment(assessmentList) * (1 + rePricing / 100)
+                        {Math.round(businessEvaluation(price, currency,
+                            averageAssessment(assessmentList, rePricing, usdExchangerate),
+                            usdExchangerate
                         )) + "%"}
                     </div>
                 </div>
