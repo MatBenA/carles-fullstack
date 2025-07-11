@@ -18,7 +18,7 @@ public class notificationController {
     private NotificationService notificationService;
 
     @GetMapping("/{setting}")
-    public List<LandSurveyDTO> getNotification (@PathVariable String setting) {
-        return notificationService.notificationBySetting(setting);
+    public void getNotification (@PathVariable String setting) {
+        //return notificationService.notificationBySetting(setting);
     }
 }

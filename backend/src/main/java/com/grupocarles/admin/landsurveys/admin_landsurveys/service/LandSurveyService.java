@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 public interface LandSurveyService {
     LandSurveyDTO createLandSurvey(LandSurveyDTO landSurvey);
 
-    List<LandSurveyDTO> getAllLandSurveys();
-
     Page<LandSurveyDTO> searchLandSurveys(Integer minPrice,
                                           Integer maxPrice,
                                           String address,
@@ -32,10 +30,6 @@ public interface LandSurveyService {
     LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO);
 
     String deleteLandSurvey(Long id);
-
-    Page<LandSurveyDTO> getPaginatedLandSurveys(Pageable pageable);
-
-    LandSurveyDTO adaptToDTO(LandSurvey landSurvey);
 
     Boolean switchRescind(Long id);
 

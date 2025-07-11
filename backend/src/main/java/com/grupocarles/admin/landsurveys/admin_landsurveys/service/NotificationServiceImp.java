@@ -22,20 +22,4 @@ public class NotificationServiceImp implements  NotificationService{
 
     @Autowired
     private LandSurveyService landSurveyService;
-
-    @Override
-    public List<LandSurveyDTO> notificationBySetting(String selectedSetting) {
-
-        String settingValue = settingRepository
-                .findById(selectedSetting)
-                .orElseThrow(() -> new NullPointerException("Setting " + selectedSetting + " not found"))
-                .getValue();
-
-        Integer settingDouble = Integer.parseInt(settingValue);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -settingDouble);
-        LocalDateTime cutoffDate = LocalDateTime.ofInstant(calendar.getTime().toInstant(), ZoneId.systemDefault());
-        return landSurveyRepository.findNotificationsDays(cutoffDate).stream().map(landsurvey -> landSurveyService.adaptToDTO(landsurvey)).toList();
-    }
 }

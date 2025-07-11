@@ -83,7 +83,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         landSurvey.setPriceVerificationDate(LocalDateTime.now());
         landSurvey.setReassessmentDate(LocalDateTime.now());
 
-        return adaptToDTO(saveSecure(landSurvey));
+        return adaptToDTO(saveSecure(landSurvey), 0L);
     }
 
     private LandSurvey DTOToLandSurvey(LandSurveyDTO landSurveyDTO) {
@@ -198,18 +198,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    public Page<LandSurveyDTO> getPaginatedLandSurveys(Pageable pageable) {
-        return landSurveyRepository.findAll(pageable).map(this::adaptToDTO);
-    }
-
-    @Override
     public LandSurveyDTO getLandSurveyById(Long id) {
-        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
-    }
-
-    @Override
-    public List<LandSurveyDTO> getAllLandSurveys() {
-        return landSurveyRepository.findAll().stream().map(this::adaptToDTO).toList();
+        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")), 0L);
     }
 
     @Override
@@ -250,8 +240,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
         );
 
         Page<LandSurvey> landSurveyList = landSurveyRepository.findAll(specification, PageRequest.of(pageNumber, 100));
-        Page<LandSurveyDTO> landSurveyListDTO = landSurveyList.map(this::adaptToDTO);
-        return landSurveyListDTO;
+        Long rePricing = settingService.getSettingByName("rePricingPercentaje");
+        return landSurveyList.map(landSurvey -> adaptToDTO(landSurvey, rePricing));
     }
 
     @Override
@@ -361,11 +351,10 @@ public class LandSurveyServiceImp implements LandSurveyService {
                     .build());
         }
 
-        return adaptToDTO(saveSecure(landSurvey));
+        return adaptToDTO(saveSecure(landSurvey), 0L);
     }
 
-    @Override
-    public LandSurveyDTO adaptToDTO(LandSurvey landSurvey){
+    public LandSurveyDTO adaptToDTO(LandSurvey landSurvey, Long rePricing){
 
         List<AssessmentDTO> assessmentList = landSurvey.getAssessmentList()
                 .stream()
@@ -410,6 +399,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getPrice(),
                 landSurvey.getCurrency().getCode(),
                 landSurvey.getFolder().getCode(),
+                rePricing,
                 assessmentList);
     }
 
