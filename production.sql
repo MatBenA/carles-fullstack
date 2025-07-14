@@ -3816,7 +3816,7 @@ COPY public.contact (id, phone) FROM stdin;
 
 COPY public.currency (id, code, exchange_reference) FROM stdin;
 1	ARS	1
-51	USD	1295
+51	USD	1300
 \.
 
 
@@ -4907,6 +4907,9 @@ COPY public.folder (id, code) FROM stdin;
 49938	V1071
 49939	1097
 49940	1096
+49952	1102
+49953	V1103
+49954	V1104
 \.
 
 
@@ -6199,6 +6202,9 @@ COPY public.land_survey (id, address, corner, creation_date, is_archived, is_res
 9551	Calle Garuhape entre fachinal y Ruiz de Montoya	f	2022-01-27 00:00:00	f	f	10 x 36	No quiere que le llamemos mas, ni trabajar con inmobiliarias 19-10-22	27000	2025-07-11 14:23:11.204564	2022-01-27 03:00:00	360.00	t	6701	1	36651	51	1	7151	51	2	1801	51	1351	301	16	101	51
 10101	CALLE OBERA E/ WANDA Y 9 DE JULIO	f	2022-12-23 00:00:00	f	f	17 x 46	No le afecta el arroyo de al lado. No acepta la llamada. 5-6-24. Corta la llamada. 30/8/24	2350000	2025-07-11 14:25:27.188192	2022-12-23 03:00:00	786.00	t	6701	1	14001	1	1	7651	51	9	2451	51	1351	301	4	101	451
 10251	Los Paraisos y Timbo entre Cataratas del Iguazu y Av Alberto Roth-Loteo-Precios unitarios-Lt.23	f	2024-08-23 00:00:00	f	f	10 x 50	No quiere trabajar con inmobilairias. 17/1/25	10000000	2025-07-11 14:27:10.53564	2024-08-23 03:00:00	500.00	t	6701	1	25951	1	1	7751	51	14	22901	51	1351	301	27	51	2301
+60561	Lote 50 y 83 Panambí Country Club	f	2025-07-11 19:39:44.786795	f	f	15x20 c/u	Entrega del 50% y el saldo en cómodas cuotas en dólares.	43000	2025-07-11 19:39:44.811932	2025-07-11 19:39:44.811949	300.00	f	5651	1	5851	51	1	49952	151	9	24752	51	801	301	37	451	51
+60562	Barrio Costa Mango con salida al rio 	f	2025-07-11 20:12:06.457805	f	f	19x49	Se acepta departamento, casa como parte de pago. financiación mínima 	160000	2025-07-11 20:12:06.481775	2025-07-11 20:12:06.48179	931.00	f	4301	1	11901	51	1	49953	151	9	24752	51	1151	301	37	1001	51
+60563	Calle 84 esq calle sin nombre/detras de YPF Av San Martin y Av Chacabuco	t	2025-07-11 21:43:15.565706	f	f	10,85 x 16,64		25000	2025-07-11 21:43:15.578485	2025-07-11 21:43:15.578501	180.00	f	5101	1	9151	51	1	49954	151	9	24752	51	351	301	37	1051	5152
 \.
 
 
@@ -7235,6 +7241,7 @@ COPY public.title (id, situation) FROM stdin;
 5051	Titulo en trámite. Posesion 20anial. 1 año de tramites pendientes
 5101	Visita
 5102	Boleto. Inmobiliaria Marini
+5152	con titulo es un condominio
 \.
 
 
@@ -7283,6 +7290,7 @@ COPY public.user_account (id, account_not_expired, account_not_locked, credentia
 33	t	t	t	brian@carles.com.ar	t	Brian	Gallego	$2a$10$qdC0cza3NcQqUetM1oVDpeCO0GBb9cRWKgwFRwuK6GoYNSe18EGvO
 14	t	t	t	guillermo@carles.com.ar	f	Guillermo	Carles	$2a$10$yD4gQnnWYo.C4cZ9JILxzO0i6SVw2TcAqM8d9a9VTOFm6IOfDOZ6O
 15	t	t	t	gustavo@carles.com.ar	f	Gustavo	Carles	$2a$10$htYvsl4J9MRLll4BpOMLTuEiFwmCS7MPOwq4mKes0jodH/BNb7f9a
+37	t	t	t	amarillaf@carles.com.ar	t	Fernando	Amarilla	$2a$10$RIGOOoJ4b05BhFGKIa41J.FRx63OrKMAsHvDN/i7Tatx/sHkC2RKu
 \.
 
 
@@ -7344,6 +7352,7 @@ COPY public.user_role (user_id, role_id) FROM stdin;
 36	2
 35	2
 33	2
+37	2
 \.
 
 
@@ -7429,14 +7438,14 @@ SELECT pg_catalog.setval('public.file_type_seq', 51, true);
 -- Name: folder_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.folder_seq', 49951, true);
+SELECT pg_catalog.setval('public.folder_seq', 50001, true);
 
 
 --
 -- Name: land_survey_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.land_survey_seq', 60551, true);
+SELECT pg_catalog.setval('public.land_survey_seq', 60601, true);
 
 
 --
@@ -7499,7 +7508,7 @@ SELECT pg_catalog.setval('public.statistic_report_seq', 2801, true);
 -- Name: title_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.title_seq', 5151, true);
+SELECT pg_catalog.setval('public.title_seq', 5201, true);
 
 
 --
@@ -7513,7 +7522,7 @@ SELECT pg_catalog.setval('public.update_report_seq', 1, true);
 -- Name: user_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.user_account_id_seq', 36, true);
+SELECT pg_catalog.setval('public.user_account_id_seq', 37, true);
 
 
 --
