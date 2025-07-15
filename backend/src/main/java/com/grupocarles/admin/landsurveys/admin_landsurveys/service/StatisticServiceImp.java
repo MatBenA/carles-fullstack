@@ -202,11 +202,8 @@ public class StatisticServiceImp implements StatisticService{
         return toDTO(statisticRepository.save(statisticReport));
     }
 
-    @Overridekjkjk
-
-
-
-qqq    public StatisticDTO toDTO(StatisticReport statisticReport) {
+    @Override
+    public StatisticDTO toDTO(StatisticReport statisticReport) {
         LocalityStatistic posadas = statisticReport
                 .getLocalityStatisticList().stream()
                 .filter(locality -> Objects.equals(locality.getLocality().getName(), "POSADAS"))
