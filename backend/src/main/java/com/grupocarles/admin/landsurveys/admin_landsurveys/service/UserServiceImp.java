@@ -65,6 +65,11 @@ public class UserServiceImp implements UserService{
 
     @Override
     public SelectOptionDTO userToOption(UserSec userSec) {
+
+        if (userSec == null) {
+            return new SelectOptionDTO("null", "null");
+        }
+
         return new SelectOptionDTO(
                 userSec.getEmail(),
                 userSec.getLastName() + ", " + userSec.getFirstName());

@@ -239,8 +239,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 expensiveFlag
         );
 
-        Page<LandSurvey> landSurveyList = landSurveyRepository.findAll(specification, PageRequest.of(pageNumber, 100));
-        return landSurveyList.map(landSurvey -> adaptToDTO(landSurvey));
+        Page<LandSurvey> landSurveyList = landSurveyRepository.findAll(specification, PageRequest.of(pageNumber, Integer.MAX_VALUE));
+        return landSurveyList.map(this::adaptToDTO);
     }
 
     @Override
@@ -357,25 +357,14 @@ public class LandSurveyServiceImp implements LandSurveyService {
 
         List<AssessmentDTO> assessmentList = landSurvey.getAssessmentList()
                 .stream()
-                .map(assessment -> assessmentService.adaptToDTO(assessment))
+                .map(assessmentService::adaptToDTO)
                 .toList();
-
-        if (landSurvey.getAgency() == null){ landSurvey.setAgency(new Agency()); }
-        if (landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
-        if (landSurvey.getContact() == null){ landSurvey.setContact(new Contact()); }
-        if (landSurvey.getParticular() == null){ landSurvey.setParticular(new Particular()); }
-        if (landSurvey.getZone() == null){ landSurvey.setZone(new Zone()); }
-        if (landSurvey.getManager() == null){ landSurvey.setManager(new UserSec()); }
-        if (landSurvey.getSource() == null){ landSurvey.setSource(new Source()); }
-        if (landSurvey.getSection() == null){ landSurvey.setSection(new Section()); }
-        if (landSurvey.getFolder() == null){ landSurvey.setFolder(new Folder()); }
-        if (landSurvey.getTitle() == null){ landSurvey.setTitle(new Title()); }
 
         return new LandSurveyDTO(landSurvey.getId(),
                 landSurvey.getCreationDate(),
                 landSurvey.getAddress(),
                 landSurvey.getCorner(),
-                landSurvey.getTitle().getSituation(),
+                landSurvey.getTitle() != null ? landSurvey.getTitle().getSituation() : null,
                 landSurvey.getMeasurements(),
                 landSurvey.getSurface(),
                 landSurvey.getPriceVerificationDate(),
@@ -385,19 +374,19 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getIsArchived(),
                 userService.userToOption(landSurvey.getSurveyor()),
                 userService.userToOption(landSurvey.getManager()),
-                landSurvey.getFileType().getName(),
-                landSurvey.getRoadType().getName(),
-                landSurvey.getLocality().getName(),
-                landSurvey.getSection().getName(),
-                landSurvey.getZone().getName(),
-                landSurvey.getSource().getName(),
-                landSurvey.getClassification().getName(),
-                landSurvey.getAgency().getName(),
-                landSurvey.getParticular().getName(),
-                landSurvey.getContact().getPhone(),
+                landSurvey.getFileType() != null ? landSurvey.getFileType().getName() : null,
+                landSurvey.getRoadType() != null ? landSurvey.getRoadType().getName() : null,
+                landSurvey.getLocality() != null ? landSurvey.getLocality().getName() : null,
+                landSurvey.getSection() != null ? landSurvey.getSection().getName() : null,
+                landSurvey.getZone() != null ? landSurvey.getZone().getName() : null,
+                landSurvey.getSource() != null ? landSurvey.getSource().getName() : null,
+                landSurvey.getClassification() != null ? landSurvey.getClassification().getName() : null,
+                landSurvey.getAgency() != null ? landSurvey.getAgency().getName() : null,
+                landSurvey.getParticular() != null ? landSurvey.getParticular().getName() : null,
+                landSurvey.getContact() != null ? landSurvey.getContact().getPhone() : null,
                 landSurvey.getPrice(),
-                landSurvey.getCurrency().getCode(),
-                landSurvey.getFolder().getCode(),
+                landSurvey.getCurrency() != null ? landSurvey.getCurrency().getCode() : null,
+                landSurvey.getFolder() != null ? landSurvey.getFolder().getCode() : null,
                 assessmentList);
     }
 

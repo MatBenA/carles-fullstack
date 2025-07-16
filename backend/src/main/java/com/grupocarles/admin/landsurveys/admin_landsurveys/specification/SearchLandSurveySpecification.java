@@ -25,7 +25,6 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private Boolean rescinded;
     private String folder;
     private String title;
-
     private Long cheapFlag;
     private Long expensiveFlag;
 
@@ -33,93 +32,188 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     public Predicate toPredicate(Root<LandSurvey> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicateList = new ArrayList<>();
 
-        if (minPrice != null && minPrice > 0){
-            Predicate priceGreaterThanEqualPredicate = criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice);
-            predicateList.add(priceGreaterThanEqualPredicate);
+        // Add fetch joins to prevent N+1 queries (only for select queries, not count queries)
+        if (Long.class != query.getResultType()) {
+            addFetchJoins(root);
+        }
+
+        // Price filters
+        addPriceFilters(predicateList, root, criteriaBuilder);
+
+        // Address filter
+        addAddressFilter(predicateList, root, criteriaBuilder);
+
+        // Business evaluation filter
+        addBusinessEvaluationFilter(predicateList, root, query, criteriaBuilder);
+
+        // Entity filters with joins
+        addEntityFilters(predicateList, root, criteriaBuilder);
+
+        // Boolean filters
+        addBooleanFilters(predicateList, root, criteriaBuilder);
+
+        // Folder filter (special handling)
+        addFolderFilter(predicateList, root, criteriaBuilder);
+
+        // Ordering
+        addOrdering(root, query, criteriaBuilder);
+
+        return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
+    }
+
+    private void addFetchJoins(Root<LandSurvey> root) {
+        // Add fetch joins for commonly accessed relationships
+        root.fetch("assessmentList", JoinType.LEFT);
+        root.fetch("agency", JoinType.LEFT);
+        root.fetch("particular", JoinType.LEFT);
+        root.fetch("contact", JoinType.LEFT);
+        root.fetch("zone", JoinType.LEFT);
+        root.fetch("manager", JoinType.LEFT);
+        root.fetch("source", JoinType.LEFT);
+        root.fetch("section", JoinType.LEFT);
+        root.fetch("folder", JoinType.LEFT);
+        root.fetch("title", JoinType.LEFT);
+        root.fetch("surveyor", JoinType.LEFT);
+        root.fetch("fileType", JoinType.LEFT);
+        root.fetch("roadType", JoinType.LEFT);
+        root.fetch("locality", JoinType.LEFT);
+        root.fetch("classification", JoinType.LEFT);
+        root.fetch("currency", JoinType.LEFT);
+    }
+
+    private void addPriceFilters(List<Predicate> predicateList, Root<LandSurvey> root, CriteriaBuilder criteriaBuilder) {
+        if (minPrice != null && minPrice > 0) {
+            predicateList.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), minPrice));
         }
 
         if (maxPrice != null && maxPrice > 0) {
-            Predicate priceLessThanEqualPredicate = criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice);
-            predicateList.add(priceLessThanEqualPredicate);
+            predicateList.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), maxPrice));
         }
+    }
 
+    private void addAddressFilter(List<Predicate> predicateList, Root<LandSurvey> root, CriteriaBuilder criteriaBuilder) {
         if (StringUtils.hasText(address)) {
             Expression<String> addressToUpperCase = criteriaBuilder.upper(root.get("address"));
             Predicate addressLikePredicate = criteriaBuilder.like(addressToUpperCase, "%" + address.toUpperCase() + "%");
             predicateList.add(addressLikePredicate);
         }
+    }
 
-        if (StringUtils.hasText(businessEvaluation) && "cheapFilter".equals(businessEvaluation)) {
-            Join<LandSurvey, Assessment> assessmentJoin = root.join("assessmentList");
-            query.groupBy(root.get("id"));
-            Predicate avgPricePredicate = criteriaBuilder.gt(
-                    criteriaBuilder.avg(assessmentJoin.get("price")),
-                    10.0
-            );
-            query.having(avgPricePredicate);
+    private void addBusinessEvaluationFilter(List<Predicate> predicateList, Root<LandSurvey> root,
+                                             CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        if (StringUtils.hasText(businessEvaluation)) {
+            switch (businessEvaluation.toLowerCase()) {
+                case "cheapfilter":
+                    addCheapFilter(predicateList, root, query, criteriaBuilder);
+                    break;
+                case "expensivefilter":
+                    addExpensiveFilter(predicateList, root, query, criteriaBuilder);
+                    break;
+                // Add more cases as needed
+            }
         }
+    }
 
+    private void addCheapFilter(List<Predicate> predicateList, Root<LandSurvey> root,
+                                CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        Join<LandSurvey, Assessment> assessmentJoin = root.join("assessmentList", JoinType.LEFT);
+        query.groupBy(root.get("id"));
+
+        // Use cheapFlag if available, otherwise use hardcoded value
+        double threshold = cheapFlag != null ? cheapFlag.doubleValue() : 10.0;
+
+        Predicate avgPricePredicate = criteriaBuilder.gt(
+                criteriaBuilder.avg(assessmentJoin.get("price")),
+                threshold
+        );
+        query.having(avgPricePredicate);
+    }
+
+    private void addExpensiveFilter(List<Predicate> predicateList, Root<LandSurvey> root,
+                                    CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        Join<LandSurvey, Assessment> assessmentJoin = root.join("assessmentList", JoinType.LEFT);
+        query.groupBy(root.get("id"));
+
+        // Use expensiveFlag if available, otherwise use hardcoded value
+        double threshold = expensiveFlag != null ? expensiveFlag.doubleValue() : 100.0;
+
+        Predicate avgPricePredicate = criteriaBuilder.lt(
+                criteriaBuilder.avg(assessmentJoin.get("price")),
+                threshold
+        );
+        query.having(avgPricePredicate);
+    }
+
+    private void addEntityFilters(List<Predicate> predicateList, Root<LandSurvey> root, CriteriaBuilder criteriaBuilder) {
+        // Section filter
         if (StringUtils.hasText(section)) {
-            Join<LandSurvey, Section> landSurveySectionJoin = root.join("section");
-            Expression<String> sectionNameToUpperCase = criteriaBuilder.upper(landSurveySectionJoin.get("name"));
-            Predicate sectionNameLikePredicate = criteriaBuilder.equal(sectionNameToUpperCase, section.toUpperCase());
-            predicateList.add(sectionNameLikePredicate);
+            Join<LandSurvey, Section> sectionJoin = root.join("section", JoinType.LEFT);
+            Expression<String> sectionNameUpper = criteriaBuilder.upper(sectionJoin.get("name"));
+            predicateList.add(criteriaBuilder.equal(sectionNameUpper, section.toUpperCase()));
         }
 
+        // Zone filter
         if (StringUtils.hasText(zone)) {
-            Join<LandSurvey, Zone> landSurveyZoneJoin = root.join("zone");
-            Expression<String> zoneNameToUpperCase = criteriaBuilder.upper(landSurveyZoneJoin.get("name"));
-            Predicate zoneNameLikePredicate = criteriaBuilder.equal(zoneNameToUpperCase, zone.toUpperCase());
-            predicateList.add(zoneNameLikePredicate);
+            Join<LandSurvey, Zone> zoneJoin = root.join("zone", JoinType.LEFT);
+            Expression<String> zoneNameUpper = criteriaBuilder.upper(zoneJoin.get("name"));
+            predicateList.add(criteriaBuilder.equal(zoneNameUpper, zone.toUpperCase()));
         }
 
+        // Agency filter
         if (StringUtils.hasText(agency)) {
-            Join<LandSurvey, Agency> landSurveyAgencyJoin = root.join("agency");
-            Expression<String> agencyNameToUpperCase = criteriaBuilder.upper(landSurveyAgencyJoin.get("name"));
-            Predicate agencyNameLikePredicate = criteriaBuilder.like(agencyNameToUpperCase, "%" + agency.toUpperCase() + "%");
-            predicateList.add(agencyNameLikePredicate);
+            Join<LandSurvey, Agency> agencyJoin = root.join("agency", JoinType.LEFT);
+            Expression<String> agencyNameUpper = criteriaBuilder.upper(agencyJoin.get("name"));
+            predicateList.add(criteriaBuilder.like(agencyNameUpper, "%" + agency.toUpperCase() + "%"));
         }
 
+        // Particular filter
         if (StringUtils.hasText(particular)) {
-            //This Left Join is necessary cause otherwise LandSurveys with null Particular would not be retrieved
-            Join<LandSurvey, Particular> landSurveyParticularJoin = root.join("particular", JoinType.LEFT);
-            Expression<String> particularNameToUpperCase = criteriaBuilder.upper(landSurveyParticularJoin.get("name"));
-            Predicate particularNameLikePredicate = criteriaBuilder.like(particularNameToUpperCase, "%" + particular.toUpperCase() + "%");
-            predicateList.add(particularNameLikePredicate);
+            Join<LandSurvey, Particular> particularJoin = root.join("particular", JoinType.LEFT);
+            Expression<String> particularNameUpper = criteriaBuilder.upper(particularJoin.get("name"));
+            predicateList.add(criteriaBuilder.like(particularNameUpper, "%" + particular.toUpperCase() + "%"));
         }
 
-        if (StringUtils.hasText(classification)){
-            Join<LandSurvey, Classification> landSurveyClassificationJoin = root.join("classification");
-            Expression<String> classificationNameToUpperCase = criteriaBuilder.upper(landSurveyClassificationJoin.get("name"));
-            Predicate classifiactionNameLikePredicate = criteriaBuilder.like(classificationNameToUpperCase, "%" + classification.toUpperCase() + "%");
-            predicateList.add(classifiactionNameLikePredicate);
-        }
-        if (title != null){
-            Join<LandSurvey, Title> landSurveyTitleJoin = root.join("title");
-            Predicate titleSituationLikePredicate = criteriaBuilder.equal(landSurveyTitleJoin.get("situation"), title);
-            predicateList.add(titleSituationLikePredicate);
+        // Classification filter
+        if (StringUtils.hasText(classification)) {
+            Join<LandSurvey, Classification> classificationJoin = root.join("classification", JoinType.LEFT);
+            Expression<String> classificationNameUpper = criteriaBuilder.upper(classificationJoin.get("name"));
+            predicateList.add(criteriaBuilder.like(classificationNameUpper, "%" + classification.toUpperCase() + "%"));
         }
 
-        if (managerEmail != null){
-            Join<LandSurvey, UserSec> landSurveyManagerJoin = root.join("manager");
-            Predicate managerEmailLikePredicate = criteriaBuilder.like(landSurveyManagerJoin.get("email"), managerEmail);
-            predicateList.add(managerEmailLikePredicate);
+        // Title filter
+        if (StringUtils.hasText(title)) {
+            Join<LandSurvey, Title> titleJoin = root.join("title", JoinType.LEFT);
+            predicateList.add(criteriaBuilder.equal(titleJoin.get("situation"), title));
         }
 
+        // Manager email filter
+        if (StringUtils.hasText(managerEmail)) {
+            Join<LandSurvey, UserSec> managerJoin = root.join("manager", JoinType.LEFT);
+            predicateList.add(criteriaBuilder.like(managerJoin.get("email"), "%" + managerEmail + "%"));
+        }
+    }
+
+    private void addBooleanFilters(List<Predicate> predicateList, Root<LandSurvey> root, CriteriaBuilder criteriaBuilder) {
         if (rescinded != null) {
-            Predicate isRescindedPredicate = criteriaBuilder.equal(root.get("isRescinded"), rescinded);
-            predicateList.add(isRescindedPredicate);
+            predicateList.add(criteriaBuilder.equal(root.get("isRescinded"), rescinded));
         }
+    }
 
-        Join<LandSurvey, Folder> landSurveyFolderJoin = root.join("folder");
-        if(folder != null){
-            predicateList.clear();
-            Predicate folderPredicate = criteriaBuilder.equal(landSurveyFolderJoin.get("code"), folder);
-            predicateList.add(folderPredicate);
+    private void addFolderFilter(List<Predicate> predicateList, Root<LandSurvey> root, CriteriaBuilder criteriaBuilder) {
+        // Always join folder for ordering
+        Join<LandSurvey, Folder> folderJoin = root.join("folder", JoinType.LEFT);
+
+        // FIXED: Don't clear all predicates when folder filter is applied
+        if (StringUtils.hasText(folder)) {
+            predicateList.add(criteriaBuilder.equal(folderJoin.get("code"), folder));
         }
+    }
 
-        query.orderBy(criteriaBuilder.asc(landSurveyFolderJoin.get("id")));
-
-        return criteriaBuilder.and(predicateList.toArray(new Predicate[0]));
+    private void addOrdering(Root<LandSurvey> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+        // Only add ordering for select queries, not count queries
+        if (Long.class != query.getResultType()) {
+            Join<LandSurvey, Folder> folderJoin = root.join("folder", JoinType.LEFT);
+            query.orderBy(criteriaBuilder.asc(folderJoin.get("id")));
+        }
     }
 }

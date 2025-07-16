@@ -225,18 +225,18 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         onChange={(e) => setClassification(e.target.value)}
                     >
                         <option value="">Seleccione opcion</option>
-                        <option value="Dato Completo">Dato Completo</option>
-                        <option value="Identificado">Identificado</option>
-                        <option value="Autorizado para publicar">
+                        <option value="DATO COMPLETO">Dato Completo</option>
+                        <option value="IDENTIFICADOS">Identificado</option>
+                        <option value="AUTORIZACIÓN PARA PUBLICAR">
                             Autorizado para publicar
                         </option>
-                        <option value="Sin exclusividad">
+                        <option value="AUTORIZACIÓN DE VENTA SIN EXCLUSIVIDAD">
                             Sin exclusividad
                         </option>
-                        <option value="Con exclusividad">
+                        <option value="AUTORIZACIÓN DE VENTA CON EXCLUSIVIDAD">
                             Con exclusividad
                         </option>
-                        <option value="No Trabajable">No Trabajable</option>
+                        <option value="NO TRABAJABLE">No Trabajable</option>
                     </select>
                 </div>
 
