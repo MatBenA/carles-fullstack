@@ -37,7 +37,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
             <table>
                 <thead>
                     <tr>
-                        <th>Acción</th>
+                        <th>Total: {landSurveys?.length}</th>
                         <th hidden={isSelected("Carpeta")}>Carpeta</th>
                         <th hidden={isSelected("Fecha")} className="date">Fecha</th>
                         <th hidden={isSelected("Relevó")} className="surveyor">Relevó</th>
