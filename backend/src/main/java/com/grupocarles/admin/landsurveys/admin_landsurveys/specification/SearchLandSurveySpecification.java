@@ -22,6 +22,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
     private String particular;
     private String classification;
     private String managerEmail;
+    private String surveyorEmail;
     private Boolean rescinded;
     private String folder;
     private String title;
@@ -69,6 +70,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
         root.fetch("contact", JoinType.LEFT);
         root.fetch("zone", JoinType.LEFT);
         root.fetch("manager", JoinType.LEFT);
+        root.fetch("surveyor", JoinType.LEFT);
         root.fetch("source", JoinType.LEFT);
         root.fetch("section", JoinType.LEFT);
         root.fetch("folder", JoinType.LEFT);
@@ -190,6 +192,12 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
         if (StringUtils.hasText(managerEmail)) {
             Join<LandSurvey, UserSec> managerJoin = root.join("manager", JoinType.LEFT);
             predicateList.add(criteriaBuilder.like(managerJoin.get("email"), "%" + managerEmail + "%"));
+        }
+
+        // Surveyor email filter
+        if (StringUtils.hasText(surveyorEmail)) {
+            Join<LandSurvey, UserSec> surveyorJoin = root.join("surveyor", JoinType.LEFT);
+            predicateList.add(criteriaBuilder.like(surveyorJoin.get("email"), "%" + surveyorEmail + "%"));
         }
     }
 

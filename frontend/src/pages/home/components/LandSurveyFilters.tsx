@@ -29,6 +29,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [zone, setZone] = useState<InputOption | null>(null);
     const [agency, setAgency] = useState<InputOption | null>(null);
     const [manager, setManager] = useState<InputOption | null>(null);
+    const [surveyor, setSurveyor] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [folder, setFolder] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
@@ -55,6 +56,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     agency: agency?.label,
                     particular: particular?.label,
                     managerEmail: manager?.value,
+                    surveyorEmail: surveyor?.value,
                     folder: folder?.value,
                     classification,
                     title: title?.label,
@@ -72,7 +74,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             isMounted = false;
             controller.abort();
         };
-    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value]);
+    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value, surveyor?.value]);
 
     /*const handleSetManager = () => {
         console.log(manager);
@@ -246,6 +248,19 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                             value={manager}
                             onChange={setManager}
                             placeholder="Encargado"
+                            isClearable
+                        />
+                    </div>
+                    
+                    <div>
+                        <label htmlFor="surveyor">Relevador</label>
+                        <Select
+                            id="surveyor"
+                            styles={select2Styles}
+                            options={userOptions}
+                            value={surveyor}
+                            onChange={setSurveyor}
+                            placeholder="Relevador"
                             isClearable
                         />
                     </div>
