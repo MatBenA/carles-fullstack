@@ -73,7 +73,10 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                 {landSurveys ? (
                     <tbody>
                         {landSurveys.map((landSurvey, i) => (
-                            <tr key={i} className={landSurvey.classification == "IMPOSIBILIDAD DE TRABAJAR" ? "red-font" : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" : ""}>
+                            <tr key={i} className={
+                                landSurvey.classification == "NO TRABAJABLE" ? "red-font" 
+                                : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" 
+                                : ""}>
                                 <td>
                                     <Link
                                         to="/land-surveys/detail"
