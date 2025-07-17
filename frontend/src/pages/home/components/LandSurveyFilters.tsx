@@ -9,17 +9,15 @@ import select2Styles from "../../../styled-components/select2style";
 import useFetchOptions from "../../../services/useFetchOptions";
 import evaluationOptions from "../../../utilities/businessEvaluationOptions";
 import LandSurvey from "../../../models/LandSurvey";
-import useAuth from "../../../hooks/useAuth";
-import useIsAdmin from "../../../hooks/useIsAdmin";
 
 type LandSurveyFiltersProps = {
     setLandSurveys: React.Dispatch<React.SetStateAction<LandSurvey[]>>;
 };
 
 const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
-    const { auth } = useAuth();
-    const isAdmin: boolean = useIsAdmin();
-    const userEmail: string | undefined = auth?.email;
+    //const { auth } = useAuth();
+    //const isAdmin: boolean = useIsAdmin();
+    //const userEmail: string | undefined = auth?.email;
     const userOptions = useFetchOptions("/users/options");
 
     const axiosPrivate = useAxiosPrivate();
@@ -76,14 +74,14 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
         };
     }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value]);
 
-    const handleSetManager = () => {
+    /*const handleSetManager = () => {
         console.log(manager);
         if (manager?.value) {
             setManager(null);
         } else {
             setManager({ value: userEmail, label: "" });
         }
-    };
+    };*/
 
     return (
         <section className="filters">
@@ -239,8 +237,6 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <option value="NO TRABAJABLE">No Trabajable</option>
                     </select>
                 </div>
-
-                {isAdmin ? (
                     <div>
                         <label htmlFor="manager">Encargado</label>
                         <Select
@@ -253,17 +249,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                             isClearable
                         />
                     </div>
-                ) : (
-                    <div className="dflex gap-10">
-                        <input
-                            id="showMine"
-                            type="checkbox"
-                            checked={!!manager}
-                            onChange={handleSetManager}
-                        />
-                        <label htmlFor="showMine">Relevamientos propios</label>
-                    </div>
-                )}
+                
                 {/*
                 <div>
                     <label htmlFor="contact">Telefono</label>
