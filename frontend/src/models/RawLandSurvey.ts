@@ -6,6 +6,7 @@ export default interface RawLandSurvey {
     date: string;
     address: string;
     corner: boolean;
+    unworkable: boolean;
     title: boolean;
     titleSituation: string;
     measurements: string;
@@ -39,6 +40,7 @@ export const emptyRawLandSurvey = (): RawLandSurvey => {
     date: "",
     address: "",
     corner: false,
+    unworkable: false,
     title: false,
     titleSituation: "",
     measurements: "",
