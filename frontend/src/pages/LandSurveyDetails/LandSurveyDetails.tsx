@@ -985,7 +985,7 @@ const LandSurveyDetails = () => {
                             Volver
                         </button>
                     </Link>
-                    {isAdmin || userEmail === originalManager?.value ? (
+                    
                         <button
                             className={`f-stretch ${
                                 toDelete ? "green-btn" : "red-btn"
@@ -995,10 +995,8 @@ const LandSurveyDetails = () => {
                         >
                             {toDelete ? "Cancelar baja" : "Dar de baja"}
                         </button>
-                    ) : (
-                        <></>
-                    )}
-                    {isAdmin || userEmail === originalManager?.value ? (
+                    
+                    
                         <button
                             className={`f-stretch ${
                                 isRescinded
@@ -1010,9 +1008,7 @@ const LandSurveyDetails = () => {
                         >
                             {isRescinded ? "Restablecer" : "Rescindir"}
                         </button>
-                    ) : (
-                        <></>
-                    )}
+                    
                 </div>
                 <div className="dflex gap-30">
                     {/* isAdmin || userEmail === originalManager?.value ? */ (
@@ -1024,8 +1020,7 @@ const LandSurveyDetails = () => {
                     ) */}
                 </div>
                 <div className="dflex gap-30">
-                    {(isAdmin || userEmail === originalManager?.value) &&
-                    toDelete ? (
+                    {toDelete ? (
                         <button
                             className="red-btn"
                             type="button"
