@@ -131,7 +131,7 @@ const AssessmentList = ({ userOptions, assessmentList, setAssessmentList }: Asse
                                 removeAssessment(assessment.assessor.value)
                             }
                         >
-                            Remover
+                            <span className="material-icons" style={{ fontSize: "26px"}}>delete</span>
                         </button>
                     )}
                 </div>

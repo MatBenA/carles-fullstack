@@ -155,6 +155,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
 
         landSurvey.setAddress(landSurveyDTO.address());
         landSurvey.setCorner(landSurveyDTO.corner());
+        landSurvey.setUnworkable(landSurveyDTO.unworkable());
         landSurvey.setTitle(title);
         landSurvey.setMeasurements(landSurveyDTO.measurements());
         landSurvey.setSurface(landSurveyDTO.surface());
@@ -318,6 +319,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
 
         landSurvey.setAddress(newLandSurveyDTO.address());
         landSurvey.setCorner(newLandSurveyDTO.corner());
+        landSurvey.setUnworkable(newLandSurveyDTO.unworkable());
         landSurvey.setTitle(title);
         landSurvey.setMeasurements(newLandSurveyDTO.measurements());
         landSurvey.setSurface(newLandSurveyDTO.surface());
