@@ -74,7 +74,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             isMounted = false;
             controller.abort();
         };
-    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value, surveyor?.value]);
+    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value, surveyor]);
 
     /*const handleSetManager = () => {
         console.log(manager);

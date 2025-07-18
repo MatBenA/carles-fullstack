@@ -366,6 +366,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
                 landSurvey.getCreationDate(),
                 landSurvey.getAddress(),
                 landSurvey.getCorner(),
+                landSurvey.getUnworkable(),
                 landSurvey.getTitle() != null ? landSurvey.getTitle().getSituation() : null,
                 landSurvey.getMeasurements(),
                 landSurvey.getSurface(),

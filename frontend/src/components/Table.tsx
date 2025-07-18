@@ -74,7 +74,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                     <tbody>
                         {landSurveys.map((landSurvey, i) => (
                             <tr key={i} className={
-                                landSurvey.classification == "NO TRABAJABLE" ? "red-font" 
+                                landSurvey.unworkable ? "red-font" 
                                 : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" 
                                 : ""}>
                                 <td>
