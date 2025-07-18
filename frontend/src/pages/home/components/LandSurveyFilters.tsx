@@ -9,17 +9,15 @@ import select2Styles from "../../../styled-components/select2style";
 import useFetchOptions from "../../../services/useFetchOptions";
 import evaluationOptions from "../../../utilities/businessEvaluationOptions";
 import LandSurvey from "../../../models/LandSurvey";
-import useAuth from "../../../hooks/useAuth";
-import useIsAdmin from "../../../hooks/useIsAdmin";
 
 type LandSurveyFiltersProps = {
     setLandSurveys: React.Dispatch<React.SetStateAction<LandSurvey[]>>;
 };
 
 const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
-    const { auth } = useAuth();
-    const isAdmin: boolean = useIsAdmin();
-    const userEmail: string | undefined = auth?.email;
+    //const { auth } = useAuth();
+    //const isAdmin: boolean = useIsAdmin();
+    //const userEmail: string | undefined = auth?.email;
     const userOptions = useFetchOptions("/users/options");
 
     const axiosPrivate = useAxiosPrivate();
@@ -31,6 +29,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
     const [zone, setZone] = useState<InputOption | null>(null);
     const [agency, setAgency] = useState<InputOption | null>(null);
     const [manager, setManager] = useState<InputOption | null>(null);
+    const [surveyor, setSurveyor] = useState<InputOption | null>(null);
     const [particular, setParticular] = useState<InputOption | null>(null);
     const [folder, setFolder] = useState<InputOption | null>(null);
     const [classification, setClassification] = useState<string>();
@@ -57,6 +56,7 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                     agency: agency?.label,
                     particular: particular?.label,
                     managerEmail: manager?.value,
+                    surveyorEmail: surveyor?.value,
                     folder: folder?.value,
                     classification,
                     title: title?.label,
@@ -74,16 +74,16 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
             isMounted = false;
             controller.abort();
         };
-    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value]);
+    }, [maxPrice, minPrice, address, businessEvaluation, section?.label, zone?.label, agency?.label, axiosPrivate, classification, particular?.label, setLandSurveys, title?.label, manager, rescinded, folder?.value, title?.value, surveyor]);
 
-    const handleSetManager = () => {
+    /*const handleSetManager = () => {
         console.log(manager);
         if (manager?.value) {
             setManager(null);
         } else {
             setManager({ value: userEmail, label: "" });
         }
-    };
+    };*/
 
     return (
         <section className="filters">
@@ -239,8 +239,6 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                         <option value="NO TRABAJABLE">No Trabajable</option>
                     </select>
                 </div>
-
-                {isAdmin ? (
                     <div>
                         <label htmlFor="manager">Encargado</label>
                         <Select
@@ -253,17 +251,20 @@ const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
                             isClearable
                         />
                     </div>
-                ) : (
-                    <div className="dflex gap-10">
-                        <input
-                            id="showMine"
-                            type="checkbox"
-                            checked={!!manager}
-                            onChange={handleSetManager}
+                    
+                    <div>
+                        <label htmlFor="surveyor">Relevador</label>
+                        <Select
+                            id="surveyor"
+                            styles={select2Styles}
+                            options={userOptions}
+                            value={surveyor}
+                            onChange={setSurveyor}
+                            placeholder="Relevador"
+                            isClearable
                         />
-                        <label htmlFor="showMine">Relevamientos propios</label>
                     </div>
-                )}
+                
                 {/*
                 <div>
                     <label htmlFor="contact">Telefono</label>

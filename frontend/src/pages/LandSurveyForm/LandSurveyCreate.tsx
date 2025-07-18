@@ -731,10 +731,10 @@ const LandSurveyCreate = () => {
                                     type="radio"
                                     name="classification"
                                     id="imposibilidadDeTrabajar"
-                                    value="IMPOSIBILIDAD DE TRABAJAR"
+                                    value="NO TRABAJABLE"
                                     checked={
                                         classification ===
-                                        "IMPOSIBILIDAD DE TRABAJAR"
+                                        "NO TRABAJABLE"
                                     }
                                     onChange={(e) =>
                                         setClassification(e.target.value)

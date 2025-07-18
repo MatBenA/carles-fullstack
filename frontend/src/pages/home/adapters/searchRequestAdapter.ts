@@ -11,6 +11,7 @@ export function searchRequestAdapter({
     particular,
     classification,
     managerEmail,
+    surveyorEmail,
     title,
     rescinded,
     folder
@@ -33,6 +34,7 @@ export function searchRequestAdapter({
         particular,
         classification,
         managerEmail,
+        surveyorEmail,
         title,
         rescinded,
         folder

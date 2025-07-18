@@ -11,6 +11,7 @@ export default interface LandSurvey {
     classification: string;
     contact: string;
     corner: boolean;
+    unworkable: boolean;
     currency: string;
     date: string;
     daysSincePriceVerification: number;
@@ -52,6 +53,7 @@ export const landSurveyEmpty = (): LandSurvey => {
         classification: "",
         contact: "",
         corner: false,
+        unworkable: false,
         currency: "",
         date: "",
         daysSincePriceVerification: 0,
