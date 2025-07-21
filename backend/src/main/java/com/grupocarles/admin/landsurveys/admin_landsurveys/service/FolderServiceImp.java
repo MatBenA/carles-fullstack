@@ -50,6 +50,6 @@ public class FolderServiceImp implements FolderService{
 
     public SelectOptionDTO toDto(Folder folder){
         return new SelectOptionDTO(
-                folder.getId().toString(),
+                folder.getCode().toString(),
                 folder.getCode().toString());}
 }
