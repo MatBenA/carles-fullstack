@@ -8,6 +8,6 @@ import java.util.List;
 public interface FolderService {
     List<SelectOptionDTO> getFolderOptions();
     Folder createFolder();
-    void deleteFolder(String code);
+    void deleteFolder(Long code);
     List<SelectOptionDTO> getFreeFolderOptions();
 }

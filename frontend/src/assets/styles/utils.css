@@ -93,3 +93,7 @@
 .alignself-end{
     align-self: end;
 }
+
+.bold{
+    font-weight: bold;
+}

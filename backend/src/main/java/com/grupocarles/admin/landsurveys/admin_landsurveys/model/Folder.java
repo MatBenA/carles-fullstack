@@ -17,5 +17,5 @@ public class Folder {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String code;
+    private Long code;
 }

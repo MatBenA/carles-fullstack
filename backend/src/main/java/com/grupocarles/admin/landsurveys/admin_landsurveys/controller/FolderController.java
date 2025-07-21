@@ -31,7 +31,7 @@ public class FolderController {
     }
 
     @DeleteMapping("/delete/{code}")
-    public ResponseEntity<String> deleteFolder(@PathVariable String code){
+    public ResponseEntity<String> deleteFolder(@PathVariable Long code){
         try {
             folderService.deleteFolder(code);
             return ResponseEntity.ok("Folder deleted successfully.");

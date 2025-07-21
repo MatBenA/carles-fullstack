@@ -25,27 +25,16 @@ public class FolderServiceImp implements FolderService{
 
     @Override
     public Folder createFolder() {
-        // Find the folder with the highest code
-        String maxCode = folderRepository.findMaxCode();
-        String newCode;
+        Long maxCode = folderRepository.findMaxCode();
+        long newCode = (maxCode != null ? maxCode : 0) + 1;
 
-        if (maxCode != null && maxCode.startsWith("V")) {
-            // Extract the numeric part and increment it
-            int numericPart = Integer.parseInt(maxCode.substring(1));
-            newCode = "V" + (numericPart + 1);
-        } else {
-            // Default starting code if no folders exist
-            newCode = "V1";
-        }
-
-        // Create and save the new folder
         Folder newFolder = new Folder();
         newFolder.setCode(newCode);
         return folderRepository.save(newFolder);
     }
 
     @Override
-    public void deleteFolder(String code) {
+    public void deleteFolder(Long code) {
         Long folderId = folderRepository.findByCode(code).orElseThrow(EntityNotFoundException::new).getId();
         folderRepository.deleteById(folderId);
     }
@@ -59,5 +48,8 @@ public class FolderServiceImp implements FolderService{
                 .toList();
     }
 
-    public SelectOptionDTO toDto(Folder folder){return new SelectOptionDTO(folder.getCode(), folder.getCode());}
+    public SelectOptionDTO toDto(Folder folder){
+        return new SelectOptionDTO(
+                folder.getId().toString(),
+                folder.getCode().toString());}
 }

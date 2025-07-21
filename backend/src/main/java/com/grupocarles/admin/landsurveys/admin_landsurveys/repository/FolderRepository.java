@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface FolderRepository extends JpaRepository<Folder, Long> {
-    Optional<Folder> findByCode(String code);
+    Optional<Folder> findByCode(Long code);
     Folder findFirstByOrderByIdDesc();
 
-    @Query("SELECT f.code FROM Folder f ORDER BY LENGTH(f.code) DESC, f.code DESC LIMIT 1")
-    String findMaxCode();
+    @Query("SELECT MAX(f.code) FROM Folder f")
+    Long findMaxCode();
 
     @Query("SELECT f FROM Folder f WHERE NOT EXISTS (SELECT ls FROM LandSurvey ls WHERE ls.folder = f)")
     List<Folder> findFolderWithoutLandSurvey();

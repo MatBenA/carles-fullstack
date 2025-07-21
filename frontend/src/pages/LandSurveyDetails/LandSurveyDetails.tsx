@@ -685,7 +685,7 @@ const LandSurveyDetails = () => {
                                     type="radio"
                                     id="fisico"
                                     name="fileType"
-                                    value="FISICO"
+                                    value="FÍSICO"
                                     checked={fileType === "FÍSICO"}
                                     onChange={(e) =>
                                         setFileType(e.target.value)

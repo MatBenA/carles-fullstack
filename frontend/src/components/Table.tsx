@@ -75,7 +75,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                         {landSurveys.map((landSurvey, i) => (
                             <tr key={i} className={
                                 landSurvey.classification == "NO TRABAJABLE" ? "red-font" 
-                                : landSurvey.classification == "IDENTIFICADOS" ? "blue-font" 
+                                : landSurvey.classification == "IDENTIFICADOS" ? "blue-font bold" 
                                 : ""}>
                                 <td>
                                     <Link
@@ -88,7 +88,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                         <button>Detalles</button>
                                     </Link>
                                 </td>
-                                <td hidden={isSelected("Carpeta")}>{landSurvey.folder}</td>
+                                <td hidden={isSelected("Carpeta")}>V{landSurvey.folder}</td>
                                 <td hidden={isSelected("Fecha")}>{landSurvey.date}{/* new Date(landSurvey.date).toLocaleDateString("es-AR") */}</td>
                                 <td hidden={isSelected("Relevó")}>{landSurvey.surveyor.label}</td>
                                 <td hidden={isSelected("Encargado")}>{landSurvey.manager.label}</td>

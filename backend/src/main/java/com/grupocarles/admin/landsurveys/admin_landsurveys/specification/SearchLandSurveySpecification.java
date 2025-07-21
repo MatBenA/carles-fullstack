@@ -221,7 +221,7 @@ public class SearchLandSurveySpecification implements Specification<LandSurvey> 
         // Only add ordering for select queries, not count queries
         if (Long.class != query.getResultType()) {
             Join<LandSurvey, Folder> folderJoin = root.join("folder", JoinType.LEFT);
-            query.orderBy(criteriaBuilder.asc(folderJoin.get("id")));
+            query.orderBy(criteriaBuilder.asc(folderJoin.get("code")));
         }
     }
 }
