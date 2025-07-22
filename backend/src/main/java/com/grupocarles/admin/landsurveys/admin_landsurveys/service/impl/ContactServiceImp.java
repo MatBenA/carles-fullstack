@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.SelectOptionDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.ContactService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Contact;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.ContactRepository;
 
+@RequiredArgsConstructor
 @Service
 public class ContactServiceImp implements ContactService {
 
-    @Autowired
-    private ContactRepository repository;
+    private final ContactRepository repository;
 
     @Override
     public Contact createContact(Contact contact) {

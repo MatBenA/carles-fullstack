@@ -3,17 +3,18 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl;
 import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.ClassificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Classification;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.ClassificationRepository;
 
+@RequiredArgsConstructor
 @Service
 public class ClassificationServiceImp implements ClassificationService {
 
-    @Autowired
-    private ClassificationRepository repository;
+    private final ClassificationRepository repository;
 
     @Override
     public Classification createClassification(Classification classification) {

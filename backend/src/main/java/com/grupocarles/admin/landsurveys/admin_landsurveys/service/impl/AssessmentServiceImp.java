@@ -11,27 +11,20 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.UserReposi
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.AssessmentService;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.AssessmentRepository;
 
+@RequiredArgsConstructor
 @Service
 public class AssessmentServiceImp implements AssessmentService {
-    @Autowired
-    private AssessmentRepository repository;
 
-    @Autowired
-    private CurrencyRepository currencyRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SettingRepository settingRepository;
+    private final AssessmentRepository repository;
+    private final CurrencyRepository currencyRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public AssessmentDTO createAssessment(Assessment assessment) {

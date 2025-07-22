@@ -3,17 +3,18 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl;
 import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.FileTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.FileType;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.FileTypeRepository;
 
+@RequiredArgsConstructor
 @Service
 public class FileTypeServiceImp implements FileTypeService {
 
-    @Autowired
-    private FileTypeRepository repository;
+    private final FileTypeRepository repository;
 
     @Override
     public FileType createFileType(FileType fileType) {

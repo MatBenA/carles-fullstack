@@ -6,6 +6,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Role;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.UserRepository;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.util.JwtUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,17 +25,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 public class UserDetailsServiceImp implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final JwtUtils jwtUtils;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

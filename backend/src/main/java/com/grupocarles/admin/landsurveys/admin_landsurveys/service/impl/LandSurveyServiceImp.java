@@ -2,7 +2,6 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.*;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.*;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.*;
@@ -12,72 +11,37 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.service.SettingServic
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserService;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.specification.SearchLandSurveySpecification;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
 @Service
 public class LandSurveyServiceImp implements LandSurveyService {
-
-    @Autowired
-    private LandSurveyRepository landSurveyRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private AssessmentService assessmentService;
-
-    @Autowired
-    private FileTypeRepository fileTypeRepository;
-
-    @Autowired
-    private RoadTypeRepository roadTypeRepository;
-
-    @Autowired
-    private LocalityRepository localityRepository;
-
-    @Autowired
-    private SectionRepository sectionRepository;
-
-    @Autowired
-    private ZoneRepository zoneRepository;
-
-    @Autowired
-    private SourceRepository sourceRepository;
-
-    @Autowired
-    private ClassificationRepository classificationRepository;
-
-    @Autowired
-    private AgencyRepository agencyRepository;
-
-    @Autowired
-    private ParticularRepository particularRepository;
-
-    @Autowired
-    private ContactRepository contactRepository;
-
-    @Autowired
-    private CurrencyRepository currencyRepository;
-
-    @Autowired
-    private SettingService settingService;
-
-    @Autowired
-    private SettingRepository settingRepository;
-
-    @Autowired
-    private FolderRepository folderRepository;
-
-    @Autowired
-    private TitleRepository titleRepository;
+    private final LandSurveyRepository landSurveyRepository;
+    private final UserRepository userRepository;
+    private final UserService userService;
+    private final AssessmentService assessmentService;
+    private final FileTypeRepository fileTypeRepository;
+    private final RoadTypeRepository roadTypeRepository;
+    private final LocalityRepository localityRepository;
+    private final SectionRepository sectionRepository;
+    private final ZoneRepository zoneRepository;
+    private final SourceRepository sourceRepository;
+    private final ClassificationRepository classificationRepository;
+    private final AgencyRepository agencyRepository;
+    private final ParticularRepository particularRepository;
+    private final ContactRepository contactRepository;
+    private final CurrencyRepository currencyRepository;
+    private final SettingService settingService;
+    private final SettingRepository settingRepository;
+    private final FolderRepository folderRepository;
+    private final TitleRepository titleRepository;
 
     @Override
+    @Transactional
     public LandSurveyDTO createLandSurvey(LandSurveyDTO landSurveyDTO) {
 
         LandSurvey landSurvey = DTOToLandSurvey(landSurveyDTO);
@@ -196,17 +160,20 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
+    @Transactional
     public String deleteLandSurvey(Long id) {
         landSurveyRepository.deleteById(id);
         return "delete successfully";
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LandSurveyDTO getLandSurveyById(Long id) {
         return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<LandSurveyDTO> searchLandSurveys(Integer minPrice,
                                                  Integer maxPrice,
                                                  String address,
@@ -250,6 +217,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
+    @Transactional
     public LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO) {
 
         LandSurvey landSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
@@ -399,6 +367,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
+    @Transactional
     public Boolean switchRescind(Long id) {
         LandSurvey landSurvey = landSurveyRepository
                 .findById(id)
@@ -410,6 +379,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
+    @Transactional
     public LandSurvey saveSecure(LandSurvey landSurvey) {
 
         /*if (landSurvey.getAssessmentList().size() < 2){

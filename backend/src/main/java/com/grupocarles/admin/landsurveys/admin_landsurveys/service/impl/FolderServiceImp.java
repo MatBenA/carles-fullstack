@@ -5,16 +5,16 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Folder;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.FolderRepository;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.FolderService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class FolderServiceImp implements FolderService {
 
-    @Autowired
-    private FolderRepository folderRepository;
+    private final FolderRepository folderRepository;
 
     @Override
     public List<SelectOptionDTO> getFolderOptions() {

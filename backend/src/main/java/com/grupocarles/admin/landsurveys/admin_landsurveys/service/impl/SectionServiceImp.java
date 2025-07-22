@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.SelectOptionDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.SectionService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Section;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.SectionRepository;
 
+@RequiredArgsConstructor
 @Service
 public class SectionServiceImp implements SectionService {
 
-    @Autowired
-    private SectionRepository repository;
+    private final SectionRepository repository;
 
     @Override
     public Section createSection(Section section) {

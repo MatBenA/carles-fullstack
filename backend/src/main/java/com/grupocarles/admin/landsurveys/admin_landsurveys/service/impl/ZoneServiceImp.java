@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.SelectOptionDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.ZoneService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Zone;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.ZoneRepository;
 
+@RequiredArgsConstructor
 @Service
 public class ZoneServiceImp implements ZoneService {
 
-    @Autowired
-    private ZoneRepository repository;
+    private final ZoneRepository repository;
 
     @Override
     public Zone createZone(Zone zone) {

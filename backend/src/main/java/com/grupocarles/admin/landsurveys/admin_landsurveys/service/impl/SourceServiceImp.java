@@ -3,17 +3,18 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl;
 import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.SourceService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Source;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.SourceRepository;
 
+@RequiredArgsConstructor
 @Service
 public class SourceServiceImp implements SourceService {
 
-    @Autowired
-    private SourceRepository repository;
+    private final SourceRepository repository;
 
     @Override
     public Source createSource(Source source) {

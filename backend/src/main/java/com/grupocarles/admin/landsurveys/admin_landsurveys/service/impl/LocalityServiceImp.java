@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.SelectOptionDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.LocalityService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Locality;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.LocalityRepository;
 
+@RequiredArgsConstructor
 @Service
 public class LocalityServiceImp implements LocalityService {
 
-    @Autowired
-    private LocalityRepository repository;
+    private final LocalityRepository repository;
 
     @Override
     public Locality createLocality(Locality locality) {

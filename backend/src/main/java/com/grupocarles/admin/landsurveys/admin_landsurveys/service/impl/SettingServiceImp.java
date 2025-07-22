@@ -5,6 +5,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Setting;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.SettingRepository;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.SettingService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.InvalidParameterException;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class SettingServiceImp implements SettingService {
 
-    @Autowired
-    private SettingRepository settingRepository;
+    private final SettingRepository settingRepository;
 
     @Override
     @Transactional

@@ -11,6 +11,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.RoleService;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,13 +20,12 @@ import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.UserRepository;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImp implements UserService {
-    @Autowired
-    private UserRepository repository;
 
-    @Autowired
-    private RoleService roleService;
+    private final UserRepository repository;
+    private final RoleService roleService;
 
     @Override
     public UserDTO createUser(UserSec userSec) {

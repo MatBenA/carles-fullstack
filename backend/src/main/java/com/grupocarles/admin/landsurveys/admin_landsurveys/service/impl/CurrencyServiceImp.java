@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.CurrencyService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Currency;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.CurrencyRepository;
 
+@RequiredArgsConstructor
 @Service
 public class CurrencyServiceImp implements CurrencyService {
 
-    @Autowired
-    private CurrencyRepository repository;
+    private final CurrencyRepository repository;
 
     @Override
     public Currency createCurrency(Currency currency) {

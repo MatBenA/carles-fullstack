@@ -9,6 +9,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.StatisticR
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.AssessmentService;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.CurrencyService;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.StatisticService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +19,16 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Service
 public class StatisticServiceImp implements StatisticService {
 
-    @Autowired
-    private StatisticRepository statisticRepository;
-
-    @Autowired
-    private LandSurveyRepository landSurveyRepository;
-
-    @Autowired
-    private SettingRepository settingRepository;
-
-    @Autowired
-    private AssessmentService assessmentService;
-
-    @Autowired
-    private LocalityRepository localityRepository;
-
-    @Autowired
-    private CurrencyService currencyService;
+    private final StatisticRepository statisticRepository;
+    private final LandSurveyRepository landSurveyRepository;
+    private final SettingRepository settingRepository;
+    private final AssessmentService assessmentService;
+    private final LocalityRepository localityRepository;
+    private final CurrencyService currencyService;
 
     @Override
     public List<StatisticDTO> getAllAsDTO() {

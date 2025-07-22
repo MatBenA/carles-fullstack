@@ -9,6 +9,7 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserReport;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.UserSec;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.*;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UpdateReportService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
@@ -18,22 +19,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UpdateReportServiceImp implements UpdateReportService {
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UpdateReportRepository updateReportRepository;
-
-    @Autowired
-    private UserReportRepository userReportRepository;
-
-    @Autowired
-    private LandSurveyRepository landSurveyRepository;
-
-    @Autowired
-    private SettingRepository settingRepository;
+    private final UserRepository userRepository;
+    private final UpdateReportRepository updateReportRepository;
+    private final UserReportRepository userReportRepository;
+    private final LandSurveyRepository landSurveyRepository;
+    private final SettingRepository settingRepository;
 
     @Override
     public UpdateReportDTO generate() {

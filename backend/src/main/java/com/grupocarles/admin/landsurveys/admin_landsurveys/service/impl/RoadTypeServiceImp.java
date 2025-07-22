@@ -3,17 +3,18 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl;
 import java.util.List;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.RoadTypeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.RoadType;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.RoadTypeRepository;
 
+@RequiredArgsConstructor
 @Service
 public class RoadTypeServiceImp implements RoadTypeService {
 
-    @Autowired
-    private RoadTypeRepository repository;
+    private final RoadTypeRepository repository;
 
     @Override
     public RoadType createRoadType(RoadType roadType) {
@@ -23,7 +24,6 @@ public class RoadTypeServiceImp implements RoadTypeService {
     @Override
     public void deleteRoadType(long id) {
         repository.deleteById(id);
-        ;
     }
 
     @Override

@@ -5,15 +5,17 @@ import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Title;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.TitleRepository;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.TitleService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class TitleServiceImp implements TitleService {
-    @Autowired
-    public TitleRepository repository;
+
+    public final TitleRepository repository;
 
     @Override
     public Title createTitleBySituation(String situation) {

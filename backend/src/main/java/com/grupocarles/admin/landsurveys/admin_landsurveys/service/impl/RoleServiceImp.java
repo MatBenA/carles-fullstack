@@ -5,17 +5,18 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.service.RoleService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.model.Role;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.repository.RoleRepository;
 
+@RequiredArgsConstructor
 @Service
 public class RoleServiceImp implements RoleService {
-    
-    @Autowired
-    private RoleRepository repository;
+
+    private final RoleRepository repository;
 
     @Override
     public Role createRole(Role role) {
