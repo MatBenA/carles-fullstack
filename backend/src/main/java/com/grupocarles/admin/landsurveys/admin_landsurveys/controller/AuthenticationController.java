@@ -2,7 +2,7 @@ package com.grupocarles.admin.landsurveys.admin_landsurveys.controller;
 
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.AuthLoginRequestDTO;
 import com.grupocarles.admin.landsurveys.admin_landsurveys.dto.AuthResponseDTO;
-import com.grupocarles.admin.landsurveys.admin_landsurveys.service.UserDetailsServiceImp;
+import com.grupocarles.admin.landsurveys.admin_landsurveys.service.impl.UserDetailsServiceImp;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
