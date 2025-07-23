@@ -56,13 +56,20 @@ public class LandSurveyServiceImp implements LandSurveyService {
     private LandSurvey DTOToLandSurvey(LandSurveyDTO landSurveyDTO) {
 
         LandSurvey landSurvey = new LandSurvey();
-        UserSec surveyor = userRepository.findUserEntityByEmail(landSurveyDTO.surveyor().value()).orElseThrow(EntityNotFoundException::new);
-        UserSec manager = userRepository.findUserEntityByEmail(landSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
-        FileType fileType = fileTypeRepository.findByName(landSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
-        RoadType roadType = roadTypeRepository.findByName(landSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
-        Source source = sourceRepository.findByName(landSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
-        Classification classification = classificationRepository.findByName(landSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
-        Currency currency = currencyRepository.findByCode(landSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
+        UserSec surveyor = userRepository.findUserEntityByEmail(landSurveyDTO.surveyor().value())
+                .orElseThrow(() -> new EntityNotFoundException("User not found for email: " + landSurveyDTO.surveyor().value()));
+        UserSec manager = userRepository.findUserEntityByEmail(landSurveyDTO.manager().value())
+                .orElseThrow(() -> new EntityNotFoundException("User not found for email: " + landSurveyDTO.manager().value()));
+        FileType fileType = fileTypeRepository.findByName(landSurveyDTO.fileType())
+                .orElseThrow(() -> new EntityNotFoundException("FileType not found for name: " + landSurveyDTO.fileType()));
+        RoadType roadType = roadTypeRepository.findByName(landSurveyDTO.roadType())
+                .orElseThrow(() -> new EntityNotFoundException("RoadType not found for name: " + landSurveyDTO.roadType()));
+        Source source = sourceRepository.findByName(landSurveyDTO.source())
+                .orElseThrow(() -> new EntityNotFoundException("Source not found for name: " + landSurveyDTO.source()));
+        Classification classification = classificationRepository.findByName(landSurveyDTO.classification())
+                .orElseThrow(() -> new EntityNotFoundException("Classification not found for name: " + landSurveyDTO.classification()));
+        Currency currency = currencyRepository.findByCode(landSurveyDTO.currency())
+                .orElseThrow(() -> new EntityNotFoundException("Currency not found for code: " + landSurveyDTO.currency()));
 
         Agency agency = agencyRepository.findByName(landSurveyDTO.agency())
                 .orElseGet(() -> {
@@ -169,7 +176,8 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Override
     @Transactional(readOnly = true)
     public LandSurveyDTO getLandSurveyById(Long id) {
-        return adaptToDTO(landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
+        return adaptToDTO(landSurveyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found")));
     }
 
     @Override
@@ -220,16 +228,25 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Transactional
     public LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO) {
 
-        LandSurvey landSurvey = landSurveyRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
+        LandSurvey landSurvey = landSurveyRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("LandSurvey with id " + id + " not found"));
 
-        UserSec surveyor = userRepository.findUserEntityByEmail(newLandSurveyDTO.surveyor().value()).orElseThrow(EntityNotFoundException::new);
-        UserSec manager = userRepository.findUserEntityByEmail(newLandSurveyDTO.manager().value()).orElseThrow(EntityNotFoundException::new);
-        FileType fileType = fileTypeRepository.findByName(newLandSurveyDTO.fileType()).orElseThrow(EntityNotFoundException::new);
-        RoadType roadType = roadTypeRepository.findByName(newLandSurveyDTO.roadType()).orElseThrow(EntityNotFoundException::new);
-        Source source = sourceRepository.findByName(newLandSurveyDTO.source()).orElseThrow(EntityNotFoundException::new);
-        Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification()).orElseThrow(EntityNotFoundException::new);
-        Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency()).orElseThrow(EntityNotFoundException::new);
-        Folder folder = folderRepository.findByCode(newLandSurveyDTO.folder()).orElseThrow(EntityNotFoundException::new);
+        UserSec surveyor = userRepository.findUserEntityByEmail(newLandSurveyDTO.surveyor().value())
+                .orElseThrow(() -> new EntityNotFoundException("User not found for email: " + newLandSurveyDTO.surveyor().value()));
+        UserSec manager = userRepository.findUserEntityByEmail(newLandSurveyDTO.manager().value())
+                .orElseThrow(() -> new EntityNotFoundException("User not found for email: " + newLandSurveyDTO.manager().value()));
+        FileType fileType = fileTypeRepository.findByName(newLandSurveyDTO.fileType())
+                .orElseThrow(() -> new EntityNotFoundException("FileType not found for name: " + newLandSurveyDTO.fileType()));
+        RoadType roadType = roadTypeRepository.findByName(newLandSurveyDTO.roadType())
+                .orElseThrow(() -> new EntityNotFoundException("RoadType not found for name: " + newLandSurveyDTO.roadType()));
+        Source source = sourceRepository.findByName(newLandSurveyDTO.source())
+                .orElseThrow(() -> new EntityNotFoundException("Source not found for name: " + newLandSurveyDTO.source()));
+        Classification classification = classificationRepository.findByName(newLandSurveyDTO.classification())
+                .orElseThrow(() -> new EntityNotFoundException("Classification not found for name: " + newLandSurveyDTO.classification()));
+        Currency currency = currencyRepository.findByCode(newLandSurveyDTO.currency())
+                .orElseThrow(() -> new EntityNotFoundException("Currency not found for code: " + newLandSurveyDTO.currency()));
+        Folder folder = folderRepository.findByCode(newLandSurveyDTO.folder())
+                .orElseThrow(() -> new EntityNotFoundException("Folder not found for code: " + newLandSurveyDTO.folder()));
 
         LocalDateTime priceVerificationDate;
         if (landSurvey.getPrice() != newLandSurveyDTO.price()){
@@ -369,8 +386,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
     @Override
     @Transactional
     public Boolean switchRescind(Long id) {
-        LandSurvey landSurvey = landSurveyRepository
-                .findById(id)
+        LandSurvey landSurvey = landSurveyRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Relevamiento con id " + id + " no encontrado"));
         landSurvey.setIsRescinded(!landSurvey.getIsRescinded());
         landSurvey.setFolder(null);
