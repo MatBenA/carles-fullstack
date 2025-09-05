@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import LandSurvey from "../../models/LandSurvey";
-import useAxiosPrivate from "../../hooks/axiosPrivate";
 import Select from "react-select";
 import notifcationCategories from "./assets/notificationCategories";
 import LandSurveyTable from "../../components/Table";
 import adaptLandSurvey from "../home/adapters/landSurveysAdapter";
 import select2Styles from "../../styled-components/select2style";
 import { InputOption } from "../../models/InputOption";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 
 const Notifications = () => {
     const [landSurveys, setLandSurveys] = useState<LandSurvey[]>();
