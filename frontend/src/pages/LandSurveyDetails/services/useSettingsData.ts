@@ -1,90 +1,104 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
+import { AxiosError } from "axios";
 
-type ErrorType = Error | null
-type Number = number | null
+type ErrorType = Error | null;
+type Number = number | null;
 
 interface Props {
-    usdExchangeRate: Number,
-    repricing: Number,
-    maxDeviation: Number,
-    loading: boolean,
-    error: ErrorType,
-} 
+  usdExchangeRate: Number;
+  repricing: Number;
+  maxDeviation: Number;
+  loading: boolean;
+  error: ErrorType;
+}
 
-const useSettingsData = (): Props => {
-    const axiosPrivate = useAxiosPrivate();
-    const [usdExchangeRate, setUsdExchangeRate] = useState<Number>(null);
-    const [repricing, setRepricing] = useState<Number>(null);
-    const [maxDeviation, setMaxDeviation] = useState<Number>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<ErrorType>(null);
+export const useSettingsData = (): Props => {
+  const axiosPrivate = useAxiosPrivate();
+  const [usdExchangeRate, setUsdExchangeRate] = useState<Number>(null);
+  const [repricing, setRepricing] = useState<Number>(null);
+  const [maxDeviation, setMaxDeviation] = useState<Number>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<ErrorType>(null);
 
-    useEffect(() => {
-        const controller = new AbortController()
-        setLoading(true)
-        let isMounted = true
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    let isMounted = true;
 
-        const getUsdExchangeRate = async () => {
-            try {
-                const response = await axiosPrivate.get("/currencies/USD", {
-                    signal: controller.signal
-                })
+    const getUsdExchangeRate = async () => {
+      try {
+        const response = await axiosPrivate.get("/currencies/USD", {
+          signal: controller.signal,
+        });
 
-                if(response.data.error){
-                    throw new Error("Error en la peticion")
-                }
-
-                if(isMounted){
-                    setUsdExchangeRate(response.data.exchangeReference)
-                }
-            } catch (err) {
-                setError(err)
-            }
-            finally{
-                setLoading(false)
-            }
+        if (response.data.error) {
+          throw new Error("Error en la peticion");
         }
 
-        const getRepricing = async () => {
-            try {
-                const response = await axiosPrivate.get("/settings/rePricingPercentaje", {
-                    signal: controller.signal
-                })
+        if (isMounted) {
+          setUsdExchangeRate(response.data.exchangeReference);
+        }
+      } catch (err) {
+        setError(err as AxiosError);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                if(response.data.error){
-                    throw new Error("Error en la petición.")
-                }
+    const getRepricing = async () => {
+      try {
+        const response = await axiosPrivate.get(
+          "/settings/rePricingPercentaje",
+          {
+            signal: controller.signal,
+          }
+        );
 
-                if(isMounted){
-                    setRepricing(response.data)
-                }
-            } catch (err) {
-                setError(err)
-            }
-            finally{
-                setLoading(false)
-            }
+        if (response.data.error) {
+          throw new Error("Error en la petición.");
         }
 
-        const getMaxDeviation = async () => {
-            try {
-                const response = await axiosPrivate.get("/settings/maxDeviation",
-                    signal: controller.signal
-                )
-            } catch (err) {
-                setError(err)
-            } finally {
-                setLoading(true)
-            }
+        if (isMounted) {
+          setRepricing(response.data);
+        }
+      } catch (err: unknown) {
+        setError(err as AxiosError);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const getMaxDeviation = async () => {
+      try {
+        const response = await axiosPrivate.get("/settings/maxDeviation", {
+          signal: controller.signal,
+        });
+
+        if (response.data.error) {
+          throw new Error("Error en la petición.");
         }
 
-        return () => {
-            controller.abort()
-            isMounted = false
-        };
-    
-    }, [axiosPrivate]);
+        if (isMounted) {
+          setMaxDeviation(response.data);
+        }
+        return response.data;
+      } catch (err: unknown) {
+        setError(err as AxiosError);
+      } finally {
+        setLoading(true);
+      }
+    };
 
-    return {usdExchangeRate, repricing, maxDeviation, loading, error}
+    getUsdExchangeRate();
+    getRepricing();
+    getMaxDeviation();
+
+    return () => {
+      controller.abort();
+      isMounted = false;
+    };
+  }, [axiosPrivate]);
+
+  return { usdExchangeRate, repricing, maxDeviation, loading, error };
 };
