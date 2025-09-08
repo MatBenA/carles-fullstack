@@ -1,8 +1,8 @@
-import useAuth from "./useAuth";
+import useAuthStore from "./useAuthStore";
 
 const useIsAdmin = (): boolean => {
-    const {auth} = useAuth();
-    return !!auth?.roles?.find((role) => role.name === "ADMIN");
-}
+  const { roleSet } = useAuthStore((state) => state);
+  return !!roleSet?.find((role) => role.name === "ADMIN");
+};
 
 export default useIsAdmin;

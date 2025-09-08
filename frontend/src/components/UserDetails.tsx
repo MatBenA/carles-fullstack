@@ -2,13 +2,13 @@ import "../assets/styles/userDetails.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { User } from "../models/UserType";
 import { FormEvent, useState } from "react";
-import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import useAuth from "../hooks/useAuth";
 import { toast } from "sonner";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useAuthStore from "../hooks/useAuthStore";
 
 const UserDetails = () => {
-    const { auth } = useAuth();
-    const isAdmin: boolean = auth.roles.some((role) => role.name === "ADMIN");
+    const { roleSet, } = useAuthStore( state => state);
+    const isAdmin = roleSet?.some((role) => role.name === "ADMIN");
     const location = useLocation();
     const navigate = useNavigate();
     const user: User = location.state;

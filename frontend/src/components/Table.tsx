@@ -110,16 +110,16 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 <td hidden={isSelected("Re-Tasación fecha")}>{landSurvey.reassessmentDate}</td>
                                 <td hidden={isSelected("Pretendido")}>{`${landSurvey.currency} ${landSurvey.price}`}</td>
                                 <td hidden={isSelected("pretendido m2")}>{landSurvey.pricePerSquareMeter}</td>
-                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd)}</td>
-                                <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd)}</td>
+                                <td hidden={isSelected("Tasacion promedio ajustada")}>{Math.round(landSurvey.averageAssessmentUsd) || "-"}</td>
+                                <td hidden={isSelected("Promedio asesores m2")}>{Math.round(landSurvey.assessmentsPerSquareMeterUsd) || "-"}</td>
                                 <td hidden={isSelected("Evaluación")} 
                                     className={landSurvey.businessEvaluation < -10 ? "green-font" : landSurvey.businessEvaluation > 10 ? "red-font" : ""}>
-                                        {Math.round(landSurvey.businessEvaluation)}
+                                        {Math.round(landSurvey.businessEvaluation) || "-"}
                                 </td>
                                 <td hidden={isSelected("Clasificacion")}>{landSurvey.classification}</td>
                                 <td hidden={isSelected("Valor máximo")}>{landSurvey.maxPrice}</td>
                                 <td hidden={isSelected("Valor mínimmo")}>{landSurvey.minPrice}</td>
-                                <td hidden={isSelected("% Desvío")}>{landSurvey.deviation}</td>
+                                <td hidden={isSelected("% Desvío")}>{landSurvey.deviation || "-"}</td>
                                 <td hidden={isSelected("Observaciones")}>{landSurvey.observation}</td>
                             </tr>
                         ))}

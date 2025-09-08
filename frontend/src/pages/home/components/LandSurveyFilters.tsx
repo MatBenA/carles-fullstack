@@ -15,9 +15,6 @@ type LandSurveyFiltersProps = {
 };
 
 const LandSurveyFilters = ({ setLandSurveys }: LandSurveyFiltersProps) => {
-    //const { auth } = useAuth();
-    //const isAdmin: boolean = useIsAdmin();
-    //const userEmail: string | undefined = auth?.email;
     const userOptions = useFetchOptions("/users/options");
 
     const axiosPrivate = useAxiosPrivate();
