@@ -1,7 +1,7 @@
 import "../../assets/styles/utils.css";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate.tsx";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { Statistic } from "../statisticReport/models/Statistic.ts";
 import { toast } from "sonner";
 import useIsAdmin from "../../hooks/useIsAdmin.ts";

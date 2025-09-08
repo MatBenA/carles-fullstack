@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "../../assets/styles/utils.css";
 import "./styles/settings.css";
 import { Setting, emptySetting } from "./model/Setting.ts";
-import useAxiosPrivate from "../../hooks/useAxiosPrivate.tsx";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { toast } from "sonner";
 
 const Settings = () => {
