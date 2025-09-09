@@ -44,7 +44,6 @@ const Settings = () => {
                 if (isMounted && result.data) {
                     const data: Setting[] = result.data;
 
-                    console.log(data);
                     //TODO IMPLEMENT ENUM INSTEAD OF STRING IN FINDSETTING PARAMETER
                     const findSetting = (name: string): Setting =>
                         data.find((item) => item.name === name)!;

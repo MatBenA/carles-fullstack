@@ -17,7 +17,6 @@ const useGetLandSurvey = (id: number): RawLandSurvey => {
                 });
 
                 if (isMounted && response.data != null) {
-                    console.log(response.data);
                     setLandsurvey(response.data);
                 }
             } catch (error) {

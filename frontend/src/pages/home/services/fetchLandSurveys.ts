@@ -15,7 +15,6 @@ const fetchLandSurveys = async (
             signal: controller.signal,
             params: cleanSearchRequest
         });
-        console.log(response.data);
         const landSurveys: Array<LandSurvey> = adaptLandSurvey(
             response.data.landSurveys, response.data.dollarRate, response.data.rePricing
         );

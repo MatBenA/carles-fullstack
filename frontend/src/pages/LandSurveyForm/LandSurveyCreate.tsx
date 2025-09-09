@@ -89,7 +89,6 @@ const LandSurveyCreate = () => {
                 );
 
                 if (isMounted) {
-                    console.log(response.data);
                     setUsdExchangerate(response.data.exchangeReference);
                 }
             } catch (error) {
@@ -131,8 +130,6 @@ const LandSurveyCreate = () => {
             controller.abort();
         };
     }, [axiosPrivate]);
-
-    useEffect(() => {console.log(currency)}, [currency]);
 
     const handleSubmit = async (
         event: FormEvent<HTMLFormElement>

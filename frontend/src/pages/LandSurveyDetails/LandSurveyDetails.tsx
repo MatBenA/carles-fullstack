@@ -137,7 +137,6 @@ const LandSurveyDetails = () => {
 
         if (isMounted && response.data != null) {
           const landsurvey = response.data;
-          console.log(landsurvey);
           setDate(new Date(landsurvey.date));
           setManager(landsurvey.manager);
           setOriginalManager(landsurvey.manager);

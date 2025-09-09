@@ -27,7 +27,6 @@ const UpdateReports = () => {
                     signal: controller.signal,
                 });
                 if (isMounted) {
-                    console.log(response)
                     setUpdateReportGroups(response.data);
                 }
             } catch (error) {
@@ -88,8 +87,8 @@ const UpdateReports = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {updateReportGroups.map((reportGroup) => (
-                        <tr>
+                    {updateReportGroups.map((reportGroup, index) => (
+                        <tr key={index}>
                             <td>
                                 <button
                                     onClick={() =>

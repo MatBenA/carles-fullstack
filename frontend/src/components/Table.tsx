@@ -79,7 +79,7 @@ const LandSurveyTable = ({ landSurveys }: Props) => {
                                 : ""}>
                                 <td>
                                     <Link
-                                        to="/land-surveys/detail"
+                                        to="/land-surveys/detail/"
                                         state={landSurvey.id}
                                         onClick={() =>
                                             window.scrollTo({ top: 0 })

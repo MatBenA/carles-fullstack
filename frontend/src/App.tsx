@@ -18,127 +18,59 @@ import UpdateReportDetail from "./pages/updateReportDetail/UpdateReportDetail";
 import UpdateReportTable from "./pages/updateReportTable/UpdateReportTable";
 
 const ROLES = {
-    USER: "USER",
-    EDITOR: "EDITOR",
-    ADMIN: "ADMIN",
+  USER: "USER",
+  EDITOR: "EDITOR",
+  ADMIN: "ADMIN",
 };
 
 function App() {
-    return (
-        <Routes>
-            <Route path="/" element={<Layout />}>
-                {/* Rutas publicas */}
-                <Route path="login" element={<Login />} />
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* Public */}
+        <Route path="login" element={<Login />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
 
-                <Route path="unauthorized" element={<Unauthorized />} />
+        {/* USER + ADMIN */}
+        <Route
+          element={<RequireAuth allowedRoles={[ROLES.USER, ROLES.ADMIN]} />}
+        >
+          <Route index element={<LandSurveys />} />
 
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.USER, ROLES.ADMIN]} />
-                    }
-                >
-                    <Route path="/" element={<LandSurveys />} />
-                </Route>
+          <Route path="land-surveys">
+            <Route index element={<LandSurveys />} />
+            <Route path="detail" element={<LandSurveyDetails />} />
+            <Route path="create" element={<LandSurveyCreate />} />
+          </Route>
 
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.USER, ROLES.ADMIN]} />
-                    }
-                >
-                    <Route path="/land-surveys" element={<LandSurveys />} />
-                </Route>
+          <Route path="statistics">
+            <Route index element={<StatisticTable />} />
+            <Route path="report" element={<StatisticReport />} />
+          </Route>
 
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.USER, ROLES.ADMIN]} />
-                    }
-                >
-                    <Route
-                        path="/land-surveys/detail"
-                        element={<LandSurveyDetails />}
-                    />
-                </Route>
+          <Route path="notifications" element={<Notifications />} />
 
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.USER, ROLES.ADMIN]} />
-                    }
-                >
-                    <Route
-                        path="/land-surveys/create"
-                        element={<LandSurveyCreate />}
-                    />
-                </Route>
+          <Route path="update-reports">
+            <Route index element={<UpdateReportTable />} />
+            <Route path="details" element={<UpdateReportDetail />} />
+          </Route>
+        </Route>
 
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-                    <Route path="/users" element={<Users />} />
-                </Route>
+        {/* ADMIN */}
+        <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
+          <Route path="users">
+            <Route index element={<Users />} />
+            <Route path="detail" element={<UserDetails />} />
+            <Route path="create" element={<UserCreate />} />
+          </Route>
+          <Route path="settings" element={<Settings />} />
+        </Route>
 
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-                    <Route path="/users/detail" element={<UserDetails />} />
-                </Route>
-
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-                    <Route path="/users/create" element={<UserCreate />} />
-                </Route>
-
-                <Route element={<RequireAuth allowedRoles={[ROLES.ADMIN]} />}>
-                    <Route path="/settings" element={<Settings />} />
-                </Route>
-
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
-                    }
-                >
-                    <Route path="/statistics" element={<StatisticTable />} />
-                </Route>
-
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
-                    }
-                >
-                    <Route
-                        path="/statistics/report"
-                        element={<StatisticReport />}
-                    />
-                </Route>
-
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
-                    }
-                >
-                    <Route path="/notifications" element={<Notifications />} />
-                </Route>
-
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
-                    }
-                >
-                    <Route
-                        path="/update-reports"
-                        element={<UpdateReportTable />}
-                    />
-                </Route>
-
-                <Route
-                    element={
-                        <RequireAuth allowedRoles={[ROLES.ADMIN, ROLES.USER]} />
-                    }
-                >
-                    <Route
-                        path="/update-reports/details"
-                        element={<UpdateReportDetail />}
-                    />
-                </Route>
-
-                <Route path="*" element={<Missing />} />
-            </Route>
-        </Routes>
-    );
+        {/* Fallback */}
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

@@ -20,7 +20,6 @@ export const usePostLandSurvey = (rawLandsurvey: RawLandSurvey) => {
                 );
 
                 if (isMounted && response.data) {
-                    console.log(response);
                     setData(response.data);
                 }
             } catch (error) {
