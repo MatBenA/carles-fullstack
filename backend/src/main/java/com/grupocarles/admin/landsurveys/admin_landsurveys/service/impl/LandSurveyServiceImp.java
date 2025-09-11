@@ -225,7 +225,6 @@ public class LandSurveyServiceImp implements LandSurveyService {
     }
 
     @Override
-    @Transactional
     public LandSurveyDTO updateLandSurvey(Long id, LandSurveyDTO newLandSurveyDTO) {
 
         LandSurvey landSurvey = landSurveyRepository.findById(id)
@@ -248,12 +247,7 @@ public class LandSurveyServiceImp implements LandSurveyService {
         Folder folder = folderRepository.findByCode(newLandSurveyDTO.folder())
                 .orElseThrow(() -> new EntityNotFoundException("Folder not found for code: " + newLandSurveyDTO.folder()));
 
-        LocalDateTime priceVerificationDate;
-        if (landSurvey.getPrice() != newLandSurveyDTO.price()){
-            priceVerificationDate = LocalDateTime.now();
-        } else {
-            priceVerificationDate = newLandSurveyDTO.priceVerificationDate();
-        }
+        LocalDateTime priceVerificationDate = newLandSurveyDTO.priceVerificationDate();
 
         Agency agency = agencyRepository.findByName(newLandSurveyDTO.agency())
                 .orElseGet(() -> {

@@ -75,14 +75,13 @@ const LandSurveyDetails = () => {
     const controller = new AbortController();
     let isMounted = true;
 
-    const getRepricingPercentage = async () => {
+    const getExchangerate = async () => {
       try {
         const response = await axiosPrivate.get("/currencies/USD", {
           signal: controller.signal,
         });
 
         if (isMounted) {
-          console.log(response.data);
           setUsdExchangerate(response.data.exchangeReference);
         }
       } catch (error) {
@@ -90,7 +89,7 @@ const LandSurveyDetails = () => {
       }
     };
 
-    getRepricingPercentage();
+    getExchangerate();
 
     return () => {
       isMounted = false;
@@ -137,6 +136,7 @@ const LandSurveyDetails = () => {
 
         if (isMounted && response.data != null) {
           const landsurvey = response.data;
+          console.log(landsurvey)
           setDate(new Date(landsurvey.date));
           setManager(landsurvey.manager);
           setOriginalManager(landsurvey.manager);
@@ -186,10 +186,10 @@ const LandSurveyDetails = () => {
           setObservation(landsurvey.observation);
           setAssessmentList(landsurvey.assessmentList);
           setPriceVerificationDate(
-            new Date(landsurvey.priceVerificationDate && landsurvey.date)
+            new Date(landsurvey.priceVerificationDate)
           );
           setReassessmentDate(
-            new Date(landsurvey.reassessmentDate && landsurvey.date)
+            new Date(landsurvey.reassessmentDate)
           );
           setIsRescinded(landsurvey.isRescinded);
         }
