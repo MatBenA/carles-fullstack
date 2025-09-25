@@ -25,7 +25,7 @@ const useAxiosPrivate = () => {
       async (error: AxiosError<ApiErrorResponse>) => {
         if (error.response?.data.trace.includes("TokenExpiredException")) {
           clearAuth();
-          navigate("/login", { replace: true });
+        navigate("/login", { replace: true });
         }
 
         return Promise.reject(error);

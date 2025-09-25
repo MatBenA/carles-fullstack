@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import useIsAdmin from "../../hooks/useIsAdmin";
 import CreatableSelect from "react-select/creatable";
 import useAuthStore from "../../hooks/useAuthStore";
+import axios from "axios";
 
 const LandSurveyDetails = () => {
   const navigate = useNavigate();
@@ -85,7 +86,11 @@ const LandSurveyDetails = () => {
           setUsdExchangerate(response.data.exchangeReference);
         }
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          console.error(error);
+        }
       }
     };
 
@@ -112,7 +117,11 @@ const LandSurveyDetails = () => {
           setRepricing(response.data);
         }
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          console.error(error);
+        }
       }
     };
 
@@ -136,7 +145,7 @@ const LandSurveyDetails = () => {
 
         if (isMounted && response.data != null) {
           const landsurvey = response.data;
-          console.log(landsurvey)
+          console.log(landsurvey);
           setDate(new Date(landsurvey.date));
           setManager(landsurvey.manager);
           setOriginalManager(landsurvey.manager);
@@ -185,16 +194,16 @@ const LandSurveyDetails = () => {
           setClassification(landsurvey.classification);
           setObservation(landsurvey.observation);
           setAssessmentList(landsurvey.assessmentList);
-          setPriceVerificationDate(
-            new Date(landsurvey.priceVerificationDate)
-          );
-          setReassessmentDate(
-            new Date(landsurvey.reassessmentDate)
-          );
+          setPriceVerificationDate(new Date(landsurvey.priceVerificationDate));
+          setReassessmentDate(new Date(landsurvey.reassessmentDate));
           setIsRescinded(landsurvey.isRescinded);
         }
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          console.error(error);
+        }
       }
     };
 
@@ -219,7 +228,11 @@ const LandSurveyDetails = () => {
           setMaxDeviation(response.data);
         }
       } catch (error) {
-        console.error(error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          console.error(error);
+        }
       }
     };
 
@@ -276,7 +289,11 @@ const LandSurveyDetails = () => {
       const response = await updateLandSurvey;
       console.log(response.data);
     } catch (error) {
-      console.error(error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -301,7 +318,11 @@ const LandSurveyDetails = () => {
       console.log(result);
       setIsRescinded(result.data);
     } catch (error) {
-      console.error(error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        console.error(error);
+      }
     }
   };
 
@@ -321,7 +342,11 @@ const LandSurveyDetails = () => {
       await deleteLandSurvey;
       navigate("/land-surveys");
     } catch (error) {
-      console.error(error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        console.error(error);
+      }
     }
   };
 
