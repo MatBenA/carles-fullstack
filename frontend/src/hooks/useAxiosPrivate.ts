@@ -1,49 +1,44 @@
 import { useEffect } from "react";
 import { axiosPrivate } from "../api/axios";
-import useRefreshToken from "./useRefreshToken";
 import useAuthStore from "./useAuthStore";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
+import { ApiErrorResponse } from "../models/ApiErrorResponse";
 
 const useAxiosPrivate = () => {
-    const refresh = useRefreshToken();
-    const token = useAuthStore(state => state.accessToken);
+  const navigate = useNavigate();
+  const { accessToken, clearAuth } = useAuthStore((state) => state);
 
-    useEffect(() => {
-        const requestIntercept = axiosPrivate.interceptors.request.use(
-            (config) => {
-                if (!config.headers["Authorization"]) {
-                    config.headers["Authorization"] = `Bearer ${token}`;
-                }
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
+  useEffect(() => {
+    const requestIntercept = axiosPrivate.interceptors.request.use(
+      (config) => {
+        if (!config.headers["Authorization"]) {
+          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-        const responseIntercept = axiosPrivate.interceptors.response.use(
-            (response) => response,
+    const responseIntercept = axiosPrivate.interceptors.response.use(
+      (response) => response,
+      async (error: AxiosError<ApiErrorResponse>) => {
+        if (error.response?.data.trace.includes("TokenExpiredException")) {
+          clearAuth();
+          navigate("/login", { replace: true });
+        }
 
-            async (error) => {
-                const prevRequest = error?.config;
-                if (error.response?.status === 403 && !prevRequest?.sent) {
-                    prevRequest.sent = true;
-                    const token = await refresh();
+        return Promise.reject(error);
+      }
+    );
 
-                    prevRequest.headers[
-                        "Authorization"
-                    ] = `Bearer ${token}`;
-                    return axiosPrivate(prevRequest);
-                }
+    return () => {
+      axiosPrivate.interceptors.request.eject(requestIntercept);
+      axiosPrivate.interceptors.response.eject(responseIntercept);
+    };
+  }, [accessToken, clearAuth, navigate]);
 
-                return Promise.reject(error);
-            }
-        );
-
-        return () => {
-            axiosPrivate.interceptors.request.eject(requestIntercept);
-            axiosPrivate.interceptors.response.eject(responseIntercept);
-        };
-    }, [refresh, token]);
-
-    return axiosPrivate;
+  return axiosPrivate;
 };
 
 export default useAxiosPrivate;

@@ -7,9 +7,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.Date;
 import java.util.Map;
@@ -39,25 +41,19 @@ public class JwtUtils {
                 .withSubject(username)
                 .withClaim("authorities", authorities)
                 .withIssuedAt(new Date())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000)) //JWT LASTS FOR 1 WEEK (7days)
+                .withExpiresAt(new Date(System.currentTimeMillis() + 15L * 24 * 60 * 60 * 1000)) // JWT LASTS FOR 15 DAYS
                 .withJWTId(UUID.randomUUID().toString())
                 .withNotBefore(new Date(System.currentTimeMillis()))
                 .sign(algorithm);
     }
 
     public DecodedJWT validateToken(String token){
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withIssuer(this.userGenerator)
-                    .build();
+        Algorithm algorithm = Algorithm.HMAC256(this.privateKey);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withIssuer(this.userGenerator)
+                .build();
 
-            return verifier.verify(token);
-        }
-
-        catch (JWTVerificationException exception){
-            throw new JWTVerificationException("Invalid token. Not authorized");
-        }
+        return verifier.verify(token);
     }
 
     public String extractUsername(DecodedJWT decodedJWT){
